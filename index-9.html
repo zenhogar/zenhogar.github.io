@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#eef7f4" />
+  <meta name="color-scheme" content="light" />
+  <meta name="description" content="Gestión simple de productos, ventas, stock, caja y reportes de Zen Hogar." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Zen Hogar" />
+  <title>Zen Hogar · Gestión</title>
+  <style>
+:root{
+  --bg:#f7f8f6;
+  --panel:rgba(255,255,255,.88);
+  --panel-solid:#ffffff;
+  --ink:#27342f;
+  --ink-soft:#3f514a;
+  --muted:#7d8a85;
+  --line:#e6ebe8;
+  --accent:#6f9e8e;
+  --accent-dark:#4f7e6f;
+  --accent-soft:#deeee8;
+  --mint:#edf7f3;
+  --blue:#eef4f9;
+  --lilac:#f3f0f8;
+  --peach:#fbf1e8;
+  --danger:#a45151;
+  --danger-soft:#fae8e7;
+  --shadow:0 18px 55px rgba(70,91,84,.08);
+  --shadow-soft:0 10px 32px rgba(70,91,84,.06);
+  --nav-h:76px;
+  --radius-xl:28px;
+  --radius-lg:22px;
+  --radius-md:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;font-family:"Avenir Next",Avenir,"Segoe UI",Inter,system-ui,-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#fafbf9 0%,#f4f7f5 100%);color:var(--ink);min-height:100vh;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(111,158,142,.22);outline-offset:2px}
+.ambient{position:fixed;pointer-events:none;border-radius:999px;filter:blur(1px);opacity:.55;z-index:-1}.ambient-one{width:380px;height:380px;right:-170px;top:-120px;background:radial-gradient(circle,#e9f3ef 0%,rgba(233,243,239,0) 72%)}.ambient-two{width:360px;height:360px;left:-200px;bottom:8%;background:radial-gradient(circle,#eef0f7 0%,rgba(238,240,247,0) 72%)}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
+.sidebar{background:rgba(245,249,247,.88);border-right:1px solid rgba(223,232,227,.9);padding:28px 18px 22px;display:flex;flex-direction:column;gap:32px;position:sticky;top:0;height:100vh;z-index:30;backdrop-filter:blur(18px)}
+.brand{display:flex;gap:13px;align-items:center;padding:0 8px}.brand-mark{width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#7fae9e,#5e8e7e);box-shadow:0 10px 24px rgba(79,126,111,.2);display:grid;place-items:center;color:#fff}.brand-mark span{font-size:14px;font-weight:800;letter-spacing:.04em}.brand-copy strong,.brand-copy small{display:block}.brand-copy strong{font-size:17px;letter-spacing:-.02em}.brand-copy small{color:var(--muted);margin-top:3px;font-size:12px}
+.desktop-nav{display:grid;gap:7px}.nav-btn{border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:14px;color:#61716b;cursor:pointer;min-height:48px;display:flex;align-items:center;gap:12px;font-weight:650;transition:.18s ease}.nav-btn:hover{background:rgba(255,255,255,.65);color:var(--ink)}.nav-btn.active{background:#fff;color:var(--accent-dark);box-shadow:var(--shadow-soft)}.nav-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:rgba(111,158,142,.08);font-size:17px}.nav-btn.active .nav-icon{background:var(--accent-soft)}
+.sidebar-status{margin-top:auto;display:flex;gap:10px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.72)}.status-dot{width:9px;height:9px;border-radius:50%;background:#79aa91;box-shadow:0 0 0 5px rgba(121,170,145,.12)}.sidebar-status strong,.sidebar-status small{display:block}.sidebar-status strong{font-size:12px}.sidebar-status small{font-size:10px;color:var(--muted);margin-top:2px}
+.main{min-width:0;padding:28px 34px 40px;max-width:1500px;width:100%;margin:0 auto}.topbar{display:flex;align-items:center;gap:16px;margin-bottom:24px;min-height:72px}.topbar-copy{min-width:0}.eyebrow,.section-kicker,.hero-kicker{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800;color:#8a9993}.topbar h1{margin:5px 0 0;font-size:28px;line-height:1.12;letter-spacing:-.035em;font-weight:720}.topbar p{margin:5px 0 0;color:var(--muted);font-size:13px}.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.connection-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.72);font-size:11px;color:var(--muted)}.connection-pill span{width:7px;height:7px;border-radius:50%;background:#79aa91}.connection-pill.offline span{background:#d48b76}.menu-btn,.settings-mobile{display:none;border:0;background:#fff;padding:10px 12px;border-radius:13px;box-shadow:var(--shadow-soft);min-width:44px;min-height:44px;color:var(--ink)}
+.primary,.secondary,.danger,.file-btn,.hero-action{border:0;border-radius:14px;padding:12px 16px;cursor:pointer;font-weight:750;min-height:46px;transition:transform .12s ease,box-shadow .18s ease,background .18s ease}.primary{background:linear-gradient(135deg,#78a897,#648f81);color:#fff;box-shadow:0 9px 22px rgba(86,132,116,.19)}.primary:hover,.hero-action:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(86,132,116,.24)}.primary:active,.hero-action:active{transform:translateY(0)}.primary.compact{min-height:42px;padding:10px 14px;font-size:13px}.secondary,.file-btn{background:#f1f6f3;color:var(--ink-soft);border:1px solid #e2ebe6;text-align:center}.danger{background:var(--danger-soft);color:#8d4949}.full{width:100%}
+.view{display:none}.view.active{display:block;animation:fadeIn .24s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.hero-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#e8f4ef 0%,#eef5f6 52%,#f5f0f7 100%);border:1px solid rgba(216,229,223,.9);border-radius:30px;padding:26px 28px;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:18px;box-shadow:var(--shadow-soft)}.hero-card:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-60px;top:-80px;border:1px solid rgba(255,255,255,.75);box-shadow:0 0 0 30px rgba(255,255,255,.16),0 0 0 60px rgba(255,255,255,.1)}.hero-card>div,.hero-action{position:relative;z-index:1}.hero-card h2{font-size:25px;margin:7px 0 5px;letter-spacing:-.035em}.hero-card p{margin:0;color:#72827c;font-size:13px}.hero-action{background:rgba(255,255,255,.82);color:var(--accent-dark);box-shadow:0 10px 30px rgba(76,118,104,.09);white-space:nowrap}.hero-action span{margin-left:9px}
+.cards{display:grid;gap:14px;margin-bottom:18px}.cards.four{grid-template-columns:repeat(4,minmax(0,1fr))}.cards.three{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:var(--panel);border:1px solid rgba(226,233,229,.96);border-radius:var(--radius-lg);padding:19px;box-shadow:var(--shadow-soft);backdrop-filter:blur(14px)}.stat{min-height:137px;display:flex;flex-direction:column;justify-content:space-between}.stat.mint{background:linear-gradient(145deg,#f9fcfb,#edf7f3)}.stat.blue{background:linear-gradient(145deg,#fbfcfd,#edf4f9)}.stat.lilac{background:linear-gradient(145deg,#fdfcfe,#f2eff8)}.stat.peach{background:linear-gradient(145deg,#fffdfb,#fbf0e6)}.stat-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.stat span{display:block;color:#71817a;font-size:12px;font-weight:650}.stat strong{display:block;font-size:27px;margin:12px 0 4px;letter-spacing:-.045em}.stat small{font-size:10px;color:#95a09b}.mini-icon{width:29px;height:29px;border-radius:10px;background:rgba(255,255,255,.68);display:grid!important;place-items:center;color:#7d9188!important;font-size:13px!important;box-shadow:0 5px 16px rgba(80,103,95,.06)}
+.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.surface-card{background:rgba(255,255,255,.84)}.card h2{font-size:17px;margin:4px 0 16px;letter-spacing:-.025em}.card-copy{color:var(--muted);font-size:13px;line-height:1.5;margin-top:-6px}.card-head{display:flex;align-items:center;justify-content:space-between}.section-intro{display:flex;justify-content:space-between;align-items:flex-end;margin:4px 0 18px}.section-intro h2{margin:5px 0 3px;font-size:24px;letter-spacing:-.035em}.section-intro p{margin:0;color:var(--muted);font-size:13px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px}.toolbar-end{justify-content:flex-end}.search-field{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding-left:12px;color:#8a9892}.search-field input{border:0!important;padding-left:0!important;box-shadow:none!important}.toolbar>select,.form-grid input,.form-grid select,.form-grid textarea,.search-field input{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:rgba(255,255,255,.96);color:var(--ink);min-height:46px}.toolbar>select{width:auto;min-width:185px}.toolbar input:focus,.toolbar select:focus,.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:2px solid rgba(111,158,142,.18);border-color:#b9d0c7}.search-field input:focus{outline:0}
+.table-wrap{overflow:auto;padding:0}table{border-collapse:collapse;width:100%;min-width:780px}th,td{padding:14px 15px;border-bottom:1px solid #edf0ee;text-align:left;font-size:13px}th{background:rgba(246,249,247,.82);color:#83918b;font-weight:750;font-size:11px;text-transform:uppercase;letter-spacing:.05em}tr:last-child td{border-bottom:0}.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:#e6f1ec;font-size:11px;font-weight:800;color:#557e70}.badge.low{background:#fae9dc;color:#9a633f}.action-btn{border:0;background:#f4f7f5;cursor:pointer;padding:8px;border-radius:10px;min-width:38px;min-height:38px;margin-left:4px}.empty{color:var(--muted);padding:25px;text-align:center;font-size:13px}.list-row{display:flex;justify-content:space-between;gap:14px;padding:12px 1px;border-bottom:1px solid #edf0ee;align-items:center}.list-row:last-child{border-bottom:0}.list-row strong{font-size:13px}.list-row small{color:var(--muted);font-size:11px}.stack{display:grid;gap:9px}.danger-zone{border-color:#f0d9d8;background:linear-gradient(145deg,#fff,#fdf6f6)}.danger-kicker{color:#b78383}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid label{font-size:11px;font-weight:800;color:#75837d;letter-spacing:.02em}.form-grid label input,.form-grid label select,.form-grid label textarea{margin-top:6px}.form-grid .full{grid-column:1/-1}.positive{color:#4f886e}.negative{color:#a85a5a}
+.settings-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}.install-card{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;background:linear-gradient(135deg,#eef7f3 0%,#f5f2f8 100%)}.install-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(145deg,#80ad9e,#628f80);display:grid;place-items:center;color:#fff;box-shadow:0 12px 28px rgba(79,126,111,.2)}.install-icon span{font-weight:850;font-size:17px;letter-spacing:.04em}.install-copy h2{margin:4px 0 4px}.install-copy p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+dialog{border:0;background:transparent;padding:0;max-width:650px;width:calc(100% - 28px)}dialog::backdrop{background:rgba(35,49,44,.34);backdrop-filter:blur(7px)}.modal-card{background:rgba(255,255,255,.98);padding:22px;border-radius:26px;box-shadow:0 25px 80px rgba(32,50,44,.22)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}.modal-head h2{margin:4px 0 0;font-size:20px}.icon-btn{border:0;background:#f3f6f4;border-radius:12px;padding:8px 10px;cursor:pointer;min-width:42px;min-height:42px;color:#6e7d77}.sale-preview{margin:14px 0;padding:13px 14px;background:linear-gradient(135deg,#f0f7f4,#f5f5f9);border:1px solid #e6ece8;border-radius:14px;font-size:13px;color:#61716a}.modal-primary{margin-top:4px}
+.mobile-nav,.mobile-fab{display:none}
+
+@media(max-width:1080px){.cards.four{grid-template-columns:repeat(2,1fr)}.grid.two{grid-template-columns:1fr}.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;left:-280px;width:260px;transition:.25s;box-shadow:20px 0 45px rgba(0,0,0,.08)}.sidebar.open{left:0}.main{padding:22px}.menu-btn{display:block}.topbar .compact{display:none}.settings-grid{grid-template-columns:1fr}}
+
+@media(max-width:700px){
+  body{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));overflow-x:hidden;background:#f7f8f6}
+  .sidebar{display:none}.main{padding:0 14px 20px;max-width:none}
+  .topbar{position:sticky;top:0;z-index:15;margin:0 -14px 14px;padding:13px 14px 11px;background:rgba(247,248,246,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(229,235,231,.82);gap:10px;min-height:69px}.menu-btn{display:none}.settings-mobile{display:grid;place-items:center;margin-left:auto;background:rgba(255,255,255,.85);box-shadow:none;border:1px solid var(--line)}.connection-pill{display:none}.topbar-actions{margin-left:auto}.eyebrow{display:none}.topbar h1{font-size:20px;line-height:1.15;margin:0}.topbar p{font-size:10px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:245px;text-transform:capitalize}
+  .hero-card{border-radius:23px;padding:20px;margin-bottom:12px;align-items:flex-start;min-height:145px}.hero-card h2{font-size:21px;max-width:240px}.hero-card p{font-size:12px;max-width:210px}.hero-action{position:absolute;bottom:18px;right:18px;min-height:40px;padding:9px 12px;font-size:11px}.hero-card:after{width:170px;height:170px;right:-75px;top:-55px}
+  .cards.four,.cards.three{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cards{margin-bottom:12px}.card{border-radius:19px;padding:15px;box-shadow:0 8px 22px rgba(62,82,75,.05)}.stat{min-height:126px}.stat span{font-size:11px}.stat strong{font-size:22px;margin:10px 0 2px}.stat small{font-size:9px}.mini-icon{width:27px;height:27px;font-size:12px!important}
+  .grid.two{gap:11px}.card h2{font-size:16px;margin-bottom:12px}.section-kicker{font-size:9px}.section-intro{margin:4px 2px 13px}.section-intro h2{font-size:21px}.section-intro p{font-size:11px;max-width:270px;line-height:1.4}.dashboard-grid{gap:11px}
+  .toolbar{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:11px}.toolbar>*{width:100%!important}.toolbar .primary{display:none}.search-field{min-height:46px}.toolbar-end{display:none}
+  .table-wrap{padding:0;background:transparent;border:0;box-shadow:none;overflow:visible}table{min-width:0;width:100%;display:block}thead{display:none}tbody{display:grid;gap:10px;width:100%}tr{display:grid;width:100%;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:18px;padding:12px 13px;box-shadow:0 6px 18px rgba(58,78,70,.05)}td{border:0!important;padding:5px 0;display:flex;justify-content:space-between;gap:14px;align-items:center;font-size:12px;text-align:right}td::before{content:attr(data-label);color:#87938f;font-weight:750;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em}td[data-label="Producto"]{font-size:14px;padding-bottom:9px;border-bottom:1px solid #edf0ee!important;margin-bottom:2px;text-align:left}td[data-label="Producto"]::before{display:none}td[data-label="Acciones"]{justify-content:flex-end;padding-top:9px;border-top:1px solid #edf0ee!important;margin-top:3px}td[data-label="Acciones"]::before{margin-right:auto}.empty{display:block!important;text-align:center!important;padding:20px!important}.empty::before{display:none}
+  .list-row{font-size:12px;padding:11px 0}.list-row strong{font-size:12px}.list-row small{font-size:10px}.form-grid{grid-template-columns:1fr;gap:10px}.form-grid .full{grid-column:1}.form-grid label{font-size:10px}.settings-grid{grid-template-columns:1fr;gap:11px}.install-card{grid-column:auto;grid-template-columns:auto 1fr;gap:13px}.install-card .primary{grid-column:1/-1}.install-icon{width:55px;height:55px;border-radius:18px}.install-copy p{font-size:11px}
+  dialog{width:100%;max-width:none;margin:auto 0 0;border-radius:24px 24px 0 0;max-height:92dvh}dialog[open]{display:flex;align-items:flex-end}.modal-card{width:100%;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto}.modal-head{position:sticky;top:-18px;background:rgba(255,255,255,.98);padding:14px 0 10px;z-index:2}.modal-head h2{font-size:19px}.sale-preview{font-size:12px;line-height:1.5}
+  .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding:7px 5px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid rgba(225,232,228,.95);z-index:40;box-shadow:0 -8px 28px rgba(59,78,71,.08);backdrop-filter:blur(18px)}.mobile-nav button{border:0;background:transparent;color:#8a9792;font-size:9px;font-weight:750;display:grid;place-items:center;align-content:center;gap:3px;padding:4px 2px;min-width:0}.mobile-nav button .ico{font-size:19px;line-height:1;width:31px;height:27px;border-radius:10px;display:grid;place-items:center}.mobile-nav button.active{color:var(--accent-dark)}.mobile-nav button.active .ico{background:var(--accent-soft)}
+  .mobile-fab{display:flex;position:fixed;right:15px;bottom:calc(var(--nav-h) + 13px + env(safe-area-inset-bottom));z-index:35;background:linear-gradient(135deg,#78a897,#5f8c7d);color:#fff;border:0;border-radius:999px;min-height:49px;padding:0 16px;align-items:center;gap:7px;font-weight:800;font-size:13px;box-shadow:0 13px 28px rgba(69,112,97,.27)}
+}
+@media(max-width:385px){.cards.four,.cards.three{grid-template-columns:1fr 1fr}.topbar p{max-width:195px}.hero-card h2{font-size:19px}.mobile-nav button{font-size:8px}.mobile-nav button .ico{font-size:18px}.stat strong{font-size:20px}}
+@media(display-mode:standalone){body{overscroll-behavior-y:none}.topbar{padding-top:max(13px,env(safe-area-inset-top))}}
+
+/* --- Cloud authentication / setup --- */
+[hidden]{display:none!important}
+.cloud-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#f8faf8 0%,#eef5f2 46%,#f4f0f7 100%);overflow:auto}
+.gate-orb{position:absolute;border-radius:50%;filter:blur(2px);opacity:.75;pointer-events:none}.gate-orb-one{width:360px;height:360px;right:-110px;top:-120px;background:radial-gradient(circle,#dcefe7 0%,rgba(220,239,231,0) 70%)}.gate-orb-two{width:340px;height:340px;left:-120px;bottom:-120px;background:radial-gradient(circle,#ebe5f3 0%,rgba(235,229,243,0) 70%)}
+.gate-card{position:relative;width:min(100%,560px);background:rgba(255,255,255,.88);border:1px solid rgba(225,234,229,.96);border-radius:30px;padding:28px;box-shadow:0 30px 90px rgba(62,82,75,.12);backdrop-filter:blur(22px)}
+.gate-brand{display:flex;align-items:center;gap:15px;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}.gate-brand h1{font-size:24px;margin:4px 0 3px;letter-spacing:-.04em}.gate-brand p{margin:0;color:var(--muted);font-size:12px}.gate-step h2{font-size:23px;margin:8px 0 7px;letter-spacing:-.035em}.gate-step>p{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 17px}.gate-badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-dark);font-size:10px;font-weight:850;letter-spacing:.04em;text-transform:uppercase}
+.gate-form{display:grid;gap:12px}.gate-form label{font-size:11px;font-weight:800;color:#75837d}.gate-form input{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:#fff;color:var(--ink);min-height:48px}.gate-help{display:block;margin-top:13px;color:var(--muted);line-height:1.5}.gate-help code{padding:2px 5px;border-radius:6px;background:#f0f4f2;color:var(--ink-soft)}
+.text-btn{width:100%;border:0;background:transparent;color:var(--accent-dark);font-weight:800;cursor:pointer;padding:13px 6px 5px}.text-btn.subtle{font-size:11px;color:var(--muted);font-weight:700;padding-top:8px}.gate-message{margin-top:12px;padding:11px 12px;border-radius:13px;background:#f4f7f5;color:var(--ink-soft);font-size:12px;line-height:1.45}.gate-message.error{background:#fbeceb;color:#995454}.gate-message.success{background:#edf7f2;color:#4f7e6f}
+.gate-loading{text-align:center;padding:26px 0 8px;color:var(--muted);font-size:12px}.spinner{display:block;width:28px;height:28px;margin:0 auto 10px;border:3px solid #e5eeea;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.account-lines{display:grid;gap:10px;margin:12px 0 16px}.account-lines>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.account-lines span{font-size:11px;color:var(--muted)}.account-lines strong{font-size:12px;text-align:right}.role-badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--lilac);font-size:10px;font-weight:800}
+.toast{position:fixed;z-index:1200;left:50%;bottom:28px;transform:translateX(-50%);max-width:min(90vw,480px);padding:12px 16px;border-radius:14px;background:#2f4039;color:#fff;box-shadow:0 18px 45px rgba(38,57,50,.22);font-size:12px;font-weight:700;text-align:center}.toast.error{background:#8f5151}.toast.success{background:#4f7e6f}
+button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-readonly-note{padding:9px 12px;border-radius:12px;background:#fbf1e8;color:#8e674e;font-size:11px;margin-bottom:12px}
+@media(max-width:700px){.cloud-gate{padding:14px}.gate-card{border-radius:24px;padding:20px}.gate-brand{align-items:flex-start}.gate-brand h1{font-size:21px}.gate-step h2{font-size:20px}.toast{bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom))}}
+.gate-divider{display:flex;align-items:center;gap:10px;margin:17px 0 13px;color:#a0aaa6;font-size:11px}.gate-divider:before,.gate-divider:after{content:"";height:1px;background:var(--line);flex:1}.gate-divider span{padding:0 3px}.compact-form{gap:9px}.team-form{grid-template-columns:minmax(0,1fr) auto;align-items:end}.team-form button{min-height:46px}.invite-result{margin-top:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--mint),var(--lilac));border:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center}.invite-result span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:800}.invite-result strong{grid-column:1/2;font-size:24px;letter-spacing:.08em}.invite-result button{grid-row:1/3;grid-column:2;align-self:stretch}.team-card{background:linear-gradient(145deg,#fff,#f5faf7)}
+@media(max-width:700px){.team-form{grid-template-columns:1fr}.invite-result{grid-template-columns:1fr}.invite-result button{grid-row:auto;grid-column:auto}.invite-result strong{grid-column:auto;font-size:21px}}
+
+  </style>
+</head>
+<body>
+  <section class="cloud-gate" id="cloudGate">
+    <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
+    <div class="gate-card">
+      <div class="gate-brand"><div class="brand-mark"><span>ZH</span></div><div><span class="section-kicker">ZEN HOGAR</span><h1>Gestión en la nube</h1><p>Tu negocio sincronizado entre celular y computadora.</p></div></div>
+
+      <div id="configStep" class="gate-step" hidden>
+        <div class="gate-badge">1 · Conectar nube</div>
+        <h2>Conectá tu base de datos</h2>
+        <p>Ingresá la URL de tu proyecto Supabase y la Publishable/Anon key. Estos dos valores son públicos; nunca uses una <strong>service_role</strong>.</p>
+        <form id="cloudConfigForm" class="gate-form">
+          <label>Project URL<input id="cloudUrl" type="url" placeholder="https://xxxx.supabase.co" required></label>
+          <label>Publishable / Anon key<input id="cloudKey" type="password" placeholder="sb_publishable_... o eyJ..." required></label>
+          <button class="primary full" type="submit">Guardar y conectar</button>
+        </form>
+        <small class="gate-help">Primero ejecutá <code>supabase/schema.sql</code> en el SQL Editor del proyecto.</small>
+      </div>
+
+      <div id="authStep" class="gate-step" hidden>
+        <div class="gate-badge">Acceso seguro</div>
+        <h2 id="authTitle">Ingresar</h2>
+        <p id="authIntro">Usá tu cuenta para acceder a los datos de Zen Hogar.</p>
+        <form id="authForm" class="gate-form">
+          <label>Email<input id="authEmail" type="email" autocomplete="email" required></label>
+          <label>Contraseña<input id="authPassword" type="password" minlength="6" autocomplete="current-password" required></label>
+          <button class="primary full" id="authSubmit" type="submit">Ingresar</button>
+        </form>
+        <button id="toggleAuthMode" class="text-btn" type="button">Crear una cuenta nueva</button>
+        <button id="changeCloudConfig" class="text-btn subtle" type="button">Cambiar conexión de nube</button>
+        <div class="gate-message" id="authMessage" hidden></div>
+      </div>
+
+      <div id="businessStep" class="gate-step" hidden>
+        <div class="gate-badge">2 · Crear espacio</div>
+        <h2>Preparar Zen Hogar</h2>
+        <p>Este paso crea el espacio privado del negocio y te asigna como propietario.</p>
+        <form id="businessForm" class="gate-form">
+          <label>Nombre del negocio<input id="businessName" value="Zen Hogar" required></label>
+          <label>Tu nombre<input id="ownerName" placeholder="Opcional"></label>
+          <button class="primary full" type="submit">Crear espacio de trabajo</button>
+        </form>
+        <div class="gate-divider"><span>o</span></div>
+        <form id="joinBusinessForm" class="gate-form compact-form">
+          <label>Código de invitación<input id="inviteCodeInput" placeholder="Ej. 8F3A91C2D4" autocomplete="off"></label>
+          <label>Tu nombre<input id="inviteNameInput" placeholder="Opcional"></label>
+          <button class="secondary full" type="submit">Unirme con código</button>
+        </form>
+      </div>
+
+      <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p>Conectando de forma segura…</p></div>
+    </div>
+  </section>
+
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <div class="app-shell" id="appShell" hidden>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>ZH</span></div>
+        <div class="brand-copy">
+          <strong>Zen Hogar</strong>
+          <small>Gestión comercial</small>
+        </div>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <button class="nav-btn active" data-view="dashboard">
+          <span class="nav-icon">⌂</span><span>Inicio</span>
+        </button>
+        <button class="nav-btn" data-view="products">
+          <span class="nav-icon">◇</span><span>Productos</span>
+        </button>
+        <button class="nav-btn" data-view="sales">
+          <span class="nav-icon">▤</span><span>Ventas</span>
+        </button>
+        <button class="nav-btn" data-view="cash">
+          <span class="nav-icon">$</span><span>Caja diaria</span>
+        </button>
+        <button class="nav-btn" data-view="reports">
+          <span class="nav-icon">⌁</span><span>Reportes</span>
+        </button>
+        <button class="nav-btn" data-view="settings">
+          <span class="nav-icon">⚙</span><span>Configuración</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-status">
+        <span class="status-dot"></span>
+        <div><strong id="cloudStatusTitle">Nube conectada</strong><small id="cloudStatusText">Sincronización activa</small></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+        <div class="topbar-copy">
+          <span class="eyebrow">ZEN HOGAR · GESTIÓN</span>
+          <h1 id="pageTitle">Inicio</h1>
+          <p id="todayLabel"></p>
+        </div>
+        <div class="topbar-actions">
+          <span class="connection-pill" id="connectionStatus"><span></span> En línea</span>
+          <button class="primary compact" id="quickSaleBtn">+ Nueva venta</button>
+          <button class="settings-mobile" id="mobileSettingsBtn" aria-label="Configuración">⚙</button>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboard">
+        <article class="hero-card">
+          <div>
+            <span class="hero-kicker">Resumen de hoy</span>
+            <h2>Tu negocio, claro y ordenado.</h2>
+            <p>Ventas, stock y caja en un solo lugar.</p>
+          </div>
+          <button class="hero-action" id="heroSaleBtn">Registrar venta <span>→</span></button>
+        </article>
+
+        <div class="cards four stat-grid">
+          <article class="card stat mint"><div class="stat-top"><span>Ventas de hoy</span><span class="mini-icon">↗</span></div><strong id="salesToday">$0</strong><small>Facturación del día</small></article>
+          <article class="card stat blue"><div class="stat-top"><span>Ganancia estimada</span><span class="mini-icon">＋</span></div><strong id="profitToday">$0</strong><small>Según costos cargados</small></article>
+          <article class="card stat lilac"><div class="stat-top"><span>Productos</span><span class="mini-icon">◇</span></div><strong id="productCount">0</strong><small>Productos registrados</small></article>
+          <article class="card stat peach"><div class="stat-top"><span>Stock bajo</span><span class="mini-icon">!</span></div><strong id="lowStockCount">0</strong><small>Requieren reposición</small></article>
+        </div>
+
+        <div class="grid two dashboard-grid">
+          <article class="card surface-card">
+            <div class="card-head"><div><span class="section-kicker">Actividad</span><h2>Últimas ventas</h2></div></div>
+            <div id="recentSales"></div>
+          </article>
+          <article class="card surface-card">
+            <div class="card-head"><div><span class="section-kicker">Inventario</span><h2>Alertas de stock</h2></div></div>
+            <div id="stockAlerts"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="products">
+        <div class="section-intro"><div><span class="section-kicker">Inventario</span><h2>Productos</h2><p>Consultá precios, costos y niveles de stock.</p></div></div>
+        <div class="toolbar">
+          <label class="search-field"><span>⌕</span><input id="productSearch" placeholder="Buscar producto, código o categoría..." /></label>
+          <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+          <button class="primary" id="addProductBtn">+ Agregar producto</button>
+        </div>
+        <div class="card table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Costo</th><th>Precio</th><th>Stock</th><th>Mín.</th><th></th></tr></thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="view" id="sales">
+        <div class="section-intro"><div><span class="section-kicker">Movimientos</span><h2>Ventas</h2><p>Historial de operaciones registradas.</p></div></div>
+        <div class="toolbar toolbar-end"><button class="primary" id="addSaleBtn">+ Registrar venta</button></div>
+        <div class="card table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Producto</th><th>Cant.</th><th>Total</th><th>Medio</th><th>Ganancia</th><th></th></tr></thead>
+            <tbody id="salesTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="view" id="cash">
+        <div class="section-intro"><div><span class="section-kicker">Control diario</span><h2>Caja</h2><p>Resumen por medio de pago y cierre del día.</p></div></div>
+        <div class="cards three">
+          <article class="card stat mint"><div class="stat-top"><span>Efectivo hoy</span><span class="mini-icon">$</span></div><strong id="cashToday">$0</strong></article>
+          <article class="card stat blue"><div class="stat-top"><span>Transferencias</span><span class="mini-icon">↔</span></div><strong id="transferToday">$0</strong></article>
+          <article class="card stat lilac"><div class="stat-top"><span>Total del día</span><span class="mini-icon">∑</span></div><strong id="dayTotal">$0</strong></article>
+        </div>
+        <div class="grid two">
+          <article class="card surface-card">
+            <span class="section-kicker">Arqueo</span><h2>Cierre de caja</h2>
+            <form id="cashCloseForm" class="form-grid">
+              <label>Fecha<input type="date" id="cashDate" required /></label>
+              <label>Efectivo contado<input type="number" id="cashCounted" min="0" step="0.01" required /></label>
+              <label class="full">Observaciones<textarea id="cashNotes" rows="3" placeholder="Opcional"></textarea></label>
+              <button class="primary full" type="submit">Guardar cierre</button>
+            </form>
+          </article>
+          <article class="card surface-card"><span class="section-kicker">Historial</span><h2>Últimos cierres</h2><div id="cashClosings"></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="reports">
+        <div class="section-intro"><div><span class="section-kicker">Análisis</span><h2>Reportes</h2><p>Una lectura rápida de la evolución del negocio.</p></div></div>
+        <div class="cards three">
+          <article class="card stat mint"><div class="stat-top"><span>Ventas acumuladas</span><span class="mini-icon">↗</span></div><strong id="totalRevenue">$0</strong></article>
+          <article class="card stat blue"><div class="stat-top"><span>Ganancia acumulada</span><span class="mini-icon">＋</span></div><strong id="totalProfit">$0</strong></article>
+          <article class="card stat peach"><div class="stat-top"><span>Valor de stock</span><span class="mini-icon">◇</span></div><strong id="stockValue">$0</strong></article>
+        </div>
+        <div class="grid two">
+          <article class="card surface-card"><span class="section-kicker">Cobros</span><h2>Ventas por medio de pago</h2><div id="paymentReport"></div></article>
+          <article class="card surface-card"><span class="section-kicker">Ranking</span><h2>Productos más vendidos</h2><div id="topProducts"></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="settings">
+        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Instalación, copias de seguridad y mantenimiento.</p></div></div>
+        <div class="settings-grid">
+          <article class="card install-card">
+            <div class="install-icon"><span>ZH</span></div>
+            <div class="install-copy">
+              <span class="section-kicker">Aplicación</span>
+              <h2>Instalar Zen Hogar</h2>
+              <p id="installStatus">Podés instalar esta aplicación en tu celular cuando esté publicada mediante HTTPS.</p>
+            </div>
+            <button id="installAppBtn" class="primary" hidden>Instalar app</button>
+          </article>
+
+          <article class="card surface-card team-card" id="teamCard">
+            <span class="section-kicker">Equipo</span><h2>Invitar a otra persona</h2>
+            <p class="card-copy">Generá un código temporal para que un empleado o administrador se una al mismo negocio desde su propia cuenta.</p>
+            <div class="form-grid team-form">
+              <label>Rol<select id="inviteRole"><option value="employee">Empleado</option><option value="admin">Administrador</option></select></label>
+              <button class="primary" id="createInviteBtn" type="button">Generar código</button>
+            </div>
+            <div class="invite-result" id="inviteResult" hidden><span>Código válido por 7 días</span><strong id="inviteCodeValue"></strong><button class="secondary" id="copyInviteBtn" type="button">Copiar código</button></div>
+          </article>
+
+          <article class="card surface-card account-card">
+            <span class="section-kicker">Cuenta y negocio</span><h2 id="settingsBusinessName">Zen Hogar</h2>
+            <div class="account-lines">
+              <div><span>Usuario</span><strong id="settingsUserEmail">—</strong></div>
+              <div><span>Rol</span><strong id="settingsUserRole">—</strong></div>
+              <div><span>Sincronización</span><strong id="settingsSyncState">Conectada</strong></div>
+            </div>
+            <button id="signOutBtn" class="secondary full">Cerrar sesión</button>
+          </article>
+
+          <article class="card surface-card">
+            <span class="section-kicker">Respaldo</span><h2>Datos</h2>
+            <p class="card-copy">La fuente principal está en la nube. También podés descargar una copia o migrar un backup de la versión anterior.</p>
+            <div class="stack">
+              <button id="exportBtn" class="secondary">Exportar copia JSON</button>
+              <label class="file-btn">Migrar backup local a la nube<input type="file" id="importFile" accept="application/json" hidden /></label>
+              <button id="exportCsvBtn" class="secondary">Exportar productos CSV</button>
+            </div>
+          </article>
+
+          <article class="card danger-zone">
+            <span class="section-kicker danger-kicker">Dispositivo</span><h2>Caché local</h2>
+            <p class="card-copy">Borra únicamente la copia offline guardada en este dispositivo. Los datos de la nube no se eliminan.</p>
+            <button id="resetBtn" class="danger">Borrar caché local</button>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="mobile-fab" id="mobileSaleBtn" hidden aria-label="Registrar nueva venta"><span>＋</span> Venta</button>
+  <nav class="mobile-nav" id="mobileNav" hidden aria-label="Navegación móvil">
+    <button class="mobile-nav-btn active" data-view="dashboard"><span class="ico">⌂</span><span>Inicio</span></button>
+    <button class="mobile-nav-btn" data-view="products"><span class="ico">◇</span><span>Productos</span></button>
+    <button class="mobile-nav-btn" data-view="sales"><span class="ico">▤</span><span>Ventas</span></button>
+    <button class="mobile-nav-btn" data-view="cash"><span class="ico">$</span><span>Caja</span></button>
+    <button class="mobile-nav-btn" data-view="reports"><span class="ico">⌁</span><span>Reportes</span></button>
+  </nav>
+
+  <dialog id="productDialog">
+    <form method="dialog" id="productForm" class="modal-card">
+      <div class="modal-head"><div><span class="section-kicker">Inventario</span><h2 id="productModalTitle">Agregar producto</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <input type="hidden" id="productId" />
+      <div class="form-grid">
+        <label>Código<input id="pCode" required /></label>
+        <label>Producto<input id="pName" required /></label>
+        <label>Categoría<input id="pCategory" required /></label>
+        <label>Costo<input id="pCost" type="number" min="0" step="0.01" required /></label>
+        <label>Precio de venta<input id="pPrice" type="number" min="0" step="0.01" required /></label>
+        <label>Stock actual<input id="pStock" type="number" min="0" step="1" required /></label>
+        <label>Stock mínimo<input id="pMinStock" type="number" min="0" step="1" required /></label>
+      </div>
+      <button class="primary full modal-primary" value="default" type="submit">Guardar producto</button>
+    </form>
+  </dialog>
+
+  <dialog id="saleDialog">
+    <form method="dialog" id="saleForm" class="modal-card">
+      <div class="modal-head"><div><span class="section-kicker">Nueva operación</span><h2>Registrar venta</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <div class="form-grid">
+        <label class="full">Producto<select id="saleProduct" required></select></label>
+        <label>Cantidad<input id="saleQty" type="number" min="1" step="1" value="1" required /></label>
+        <label>Medio de pago<select id="salePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label>
+        <label class="full">Fecha y hora<input id="saleDate" type="datetime-local" required /></label>
+      </div>
+      <div class="sale-preview" id="salePreview"></div>
+      <button class="primary full modal-primary" value="default" type="submit">Confirmar venta</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+window.ZH_CONFIG = {
+  supabaseUrl: 'https://ouelodrmudunhxmapiaw.supabase.co',
+  supabaseKey: 'sb_publishable_0PDyUrHDKLKvuDQGM2yBbw_2EetKXXC'
+};
+
+  </script>
+  <script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const money = n => new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n||0));
+const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const localDateISO = (date = new Date()) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+const todayISO = () => localDateISO(new Date());
+const nowLocal = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,16); };
+const fmtDate = v => new Intl.DateTimeFormat('es-AR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v));
+const saleLocalDate = s => localDateISO(new Date(s.soldAt));
+const roleLabel = r => ({owner:'Propietario',admin:'Administrador',employee:'Empleado'})[r] || r || '—';
+
+const state = {
+  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],channel:null,
+  authMode:'signin', reloadTimer:null
+};
+
+function toast(message,type=''){
+  const el=$('#toast'); el.textContent=message; el.className=`toast ${type}`.trim(); el.hidden=false;
+  clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,3200);
+}
+function setGateStep(id){
+  ['configStep','authStep','businessStep','gateLoading'].forEach(x=>$('#'+x).hidden=x!==id);
+  $('#cloudGate').hidden=false;
+}
+function setGateMessage(message,type=''){
+  const el=$('#authMessage'); if(!message){el.hidden=true;return;} el.hidden=false; el.className=`gate-message ${type}`.trim(); el.textContent=message;
+}
+function savedConfig(){
+  const stored=JSON.parse(localStorage.getItem('zenhogar_cloud_config')||'null');
+  if(stored?.supabaseUrl && stored?.supabaseKey) return stored;
+  const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
+}
+function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,at:new Date().toISOString()})); }
+function loadCache(){
+  const key=cacheKey(); if(!key)return false;
+  const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; renderAll(); return true;
+}
+function canAdmin(){ return ['owner','admin'].includes(state.role); }
+function requireOnline(){ if(!navigator.onLine){toast('Sin conexión: podés consultar datos guardados, pero los cambios requieren internet.','error');return false;} return true; }
+
+function setView(id){
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
+  $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  $$('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  const labels={dashboard:'Inicio',products:'Productos',sales:'Ventas',cash:'Caja diaria',reports:'Reportes',settings:'Configuración'};
+  $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
+}
+function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
+function saleProfit(s){ return s.items.reduce((a,i)=>a+(i.unitPrice-i.unitCost)*i.qty,0); }
+function saleQty(s){ return s.items.reduce((a,i)=>a+i.qty,0); }
+function saleProductLabel(s){ if(s.items.length===1)return s.items[0].productName; return `${s.items.length} productos`; }
+
+function renderDashboard(){
+  const ts=salesToday();
+  $('#salesToday').textContent=money(ts.reduce((a,s)=>a+s.total,0));
+  $('#profitToday').textContent=money(ts.reduce((a,s)=>a+saleProfit(s),0));
+  $('#productCount').textContent=state.products.length;
+  const low=state.products.filter(p=>p.stock<=p.minStock); $('#lowStockCount').textContent=low.length;
+  $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
+  $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${p.minStock}</small></div><span class="badge low">Stock ${p.stock}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
+}
+function renderProducts(){
+  const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
+  const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort(); const cur=$('#categoryFilter').value;
+  $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+  const rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.name} ${p.category}`.toLowerCase().includes(q)));
+  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}</td><td data-label="Producto"><strong>${esc(p.name)}</strong></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)}</td><td data-label="Precio">${money(p.price)}</td><td data-label="Stock"><span class="badge ${p.stock<=p.minStock?'low':''}">${p.stock}</span></td><td data-label="Mínimo">${p.minStock}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
+  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${p.stock} · ${money(p.price)}</option>`).join('');
+  $('#addProductBtn').hidden=!canAdmin();
+}
+function renderSales(){
+  $('#salesTable').innerHTML=state.sales.map(s=>`<tr><td data-label="Fecha">${fmtDate(s.soldAt)}</td><td data-label="Producto"><strong>${esc(saleProductLabel(s))}</strong></td><td data-label="Cantidad">${saleQty(s)}</td><td data-label="Total">${money(s.total)}</td><td data-label="Medio">${esc(s.payment)}</td><td data-label="Ganancia">${money(saleProfit(s))}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Anular venta" onclick="deleteSale('${s.id}')">⌫</button>`:'<small>—</small>'}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Todavía no hay ventas.</td></tr>';
+}
+function renderCash(){
+  const ts=salesToday(), sum=m=>ts.filter(s=>s.payment===m).reduce((a,s)=>a+s.total,0);
+  $('#cashToday').textContent=money(sum('Efectivo')); $('#transferToday').textContent=money(sum('Transferencia')); $('#dayTotal').textContent=money(ts.reduce((a,s)=>a+s.total,0));
+  $('#cashClosings').innerHTML=state.closings.slice(0,8).map(c=>`<div class="list-row"><div><strong>${new Intl.DateTimeFormat('es-AR').format(new Date(`${c.date}T12:00:00`))}</strong><br><small>${esc(c.notes||'Sin observaciones')}</small></div><div><strong>${money(c.counted)}</strong><br><small class="${c.diff>=0?'positive':'negative'}">Dif. ${money(c.diff)}</small></div></div>`).join('')||'<div class="empty">No hay cierres registrados.</div>';
+}
+function renderReports(){
+  const rev=state.sales.reduce((a,s)=>a+s.total,0), prof=state.sales.reduce((a,s)=>a+saleProfit(s),0), stock=state.products.reduce((a,p)=>a+p.cost*p.stock,0);
+  $('#totalRevenue').textContent=money(rev); $('#totalProfit').textContent=money(prof); $('#stockValue').textContent=money(stock);
+  const byPay={}; state.sales.forEach(s=>byPay[s.payment]=(byPay[s.payment]||0)+s.total);
+  $('#paymentReport').innerHTML=Object.entries(byPay).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="list-row"><span>${esc(k)}</span><strong>${money(v)}</strong></div>`).join('')||'<div class="empty">Sin datos.</div>';
+  const byProd={}; state.sales.forEach(s=>s.items.forEach(i=>byProd[i.productName]=(byProd[i.productName]||0)+i.qty));
+  $('#topProducts').innerHTML=Object.entries(byProd).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,q])=>`<div class="list-row"><span>${esc(name)}</span><strong>${q} u.</strong></div>`).join('')||'<div class="empty">Sin datos.</div>';
+}
+function renderSettings(){
+  $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
+  $('#teamCard').hidden=!canAdmin();
+}
+
+function renderAll(){ renderDashboard(); renderProducts(); renderSales(); renderCash(); renderReports(); renderSettings(); }
+
+async function loadAllData({silent=false}={}){
+  if(!state.org)return;
+  if(!navigator.onLine){ if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.'); updateConnection(); return; }
+  try{
+    const [pRes,sRes,cRes]=await Promise.all([
+      state.client.from('products').select('id,code,name,category,cost,price,stock,min_stock').eq('organization_id',state.org.id).eq('active',true).order('name'),
+      state.client.from('sales').select('id,payment,total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
+      state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365)
+    ]);
+    if(pRes.error)throw pRes.error; if(sRes.error)throw sRes.error; if(cRes.error)throw cRes.error;
+    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock)}));
+    state.sales=(sRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto'}))}));
+    state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
+    saveCache(); renderAll(); updateConnection();
+  }catch(err){ console.error(err); if(loadCache()){toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');} else toast(`Error al cargar datos: ${err.message||err}`,'error'); }
+}
+
+function subscribeRealtime(){
+  if(state.channel) state.client.removeChannel(state.channel);
+  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),350)};
+  state.channel=state.client.channel(`zenhogar-${org}`)
+    .on('postgres_changes',{event:'*',schema:'public',table:'products',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'sales',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'sale_items',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'cash_closings',filter:`organization_id=eq.${org}`},reload)
+    .subscribe();
+}
+
+async function resolveBusiness(){
+  const {data:m,error}=await state.client.from('memberships').select('organization_id,role').eq('user_id',state.user.id).order('created_at').limit(1).maybeSingle();
+  if(error)throw error; if(!m)return false;
+  const {data:o,error:oe}=await state.client.from('organizations').select('id,name').eq('id',m.organization_id).single(); if(oe)throw oe;
+  state.org=o; state.role=m.role; return true;
+}
+async function startApp(){
+  $('#cloudGate').hidden=true; $('#appShell').hidden=false; $('#mobileSaleBtn').hidden=false; $('#mobileNav').hidden=false;
+  $('#todayLabel').textContent=new Intl.DateTimeFormat('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); $('#cashDate').value=todayISO();
+  renderSettings(); await loadAllData(); subscribeRealtime();
+}
+async function handleSignedIn(user){
+  state.user=user; setGateStep('gateLoading');
+  try{ if(await resolveBusiness()) await startApp(); else setGateStep('businessStep'); }
+  catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo abrir el negocio: ${err.message}`,'error');}
+}
+
+window.editProduct=id=>{
+  if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
+  const p=state.products.find(x=>x.id===id); if(!p)return;
+  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pName').value=p.name; $('#pCategory').value=p.category; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pStock').value=p.stock; $('#pMinStock').value=p.minStock; $('#productDialog').showModal();
+};
+window.deleteProduct=async id=>{
+  if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
+  const {error}=await state.client.rpc('archive_product',{p_org_id:state.org.id,p_product_id:id}); if(error)return toast(error.message,'error'); toast('Producto archivado.','success'); await loadAllData({silent:true});
+};
+window.deleteSale=async id=>{
+  if(!canAdmin()||!requireOnline())return; if(!confirm('¿Anular esta venta? El stock se devolverá y el registro quedará auditado.'))return;
+  const {error}=await state.client.rpc('cancel_sale',{p_sale_id:id}); if(error)return toast(error.message,'error'); toast('Venta anulada y stock restaurado.','success'); await loadAllData({silent:true});
+};
+
+function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#productDialog').showModal(); }
+function openSale(){ if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;} $('#saleForm').reset(); $('#saleQty').value=1; $('#saleDate').value=nowLocal(); $('#saleDialog').showModal(); updateSalePreview(); }
+function updateSalePreview(){ const p=state.products.find(x=>x.id===$('#saleProduct').value),q=Number($('#saleQty').value||0); $('#salePreview').innerHTML=p?`Precio unitario: <strong>${money(p.price)}</strong> · Total: <strong>${money(p.price*q)}</strong> · Stock luego: <strong>${p.stock-q}</strong>`:'Seleccioná un producto.'; }
+
+$('#productForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return;
+  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:$('#pCategory').value.trim(),p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value),p_min_stock:Number($('#pMinStock').value)};
+  const btn=e.submitter; if(btn)btn.disabled=true; const {error}=await state.client.rpc('upsert_product',params); if(btn)btn.disabled=false;
+  if(error)return toast(error.message,'error'); $('#productDialog').close(); toast('Producto guardado en la nube.','success'); await loadAllData({silent:true});
+});
+$('#saleForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return;
+  const p=state.products.find(x=>x.id===$('#saleProduct').value),qty=Number($('#saleQty').value); if(!p)return; if(qty>p.stock)return toast('No hay stock suficiente.','error');
+  const btn=e.submitter;if(btn)btn.disabled=true;
+  const {error}=await state.client.rpc('create_sale',{p_org_id:state.org.id,p_payment:$('#salePayment').value,p_sold_at:new Date($('#saleDate').value).toISOString(),p_items:[{product_id:p.id,quantity:qty}]}); if(btn)btn.disabled=false;
+  if(error)return toast(error.message,'error'); $('#saleDialog').close(); toast('Venta sincronizada.','success'); await loadAllData({silent:true});
+});
+$('#cashCloseForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return;
+  const {error}=await state.client.rpc('close_cash',{p_org_id:state.org.id,p_business_date:$('#cashDate').value,p_counted:Number($('#cashCounted').value),p_notes:$('#cashNotes').value.trim()});
+  if(error)return toast(error.message,'error'); e.target.reset(); $('#cashDate').value=todayISO(); toast('Cierre guardado en la nube.','success'); await loadAllData({silent:true});
+});
+
+$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleProduct').onchange=updateSalePreview; $('#saleQty').oninput=updateSalePreview; $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts;
+
+$('#exportBtn').onclick=()=>{
+  const backup={version:2,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));a.download=`zen-hogar-cloud-${todayISO()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
+};
+$('#exportCsvBtn').onclick=()=>{
+  const q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Código','Producto','Categoría','Costo','Precio','Stock','Stock mínimo'],...state.products.map(p=>[p.code,p.name,p.category,p.cost,p.price,p.stock,p.minStock])];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv;charset=utf-8'}));a.download='productos-zen-hogar.csv';a.click();
+};
+$('#importFile').onchange=async e=>{
+  try{
+    if(!canAdmin())throw Error('Sólo un propietario o administrador puede migrar datos.'); if(!requireOnline())return;
+    if(state.products.length||state.sales.length)throw Error('La migración automática sólo está habilitada sobre un espacio vacío para evitar duplicados.');
+    const data=JSON.parse(await e.target.files[0].text()); if(!Array.isArray(data.products)||!Array.isArray(data.sales))throw Error('El archivo no es un backup compatible.');
+    if(!confirm(`Se migrarán ${data.products.length} productos y ${data.sales.length} ventas a la nube. ¿Continuar?`))return;
+    const map=new Map(), productByOld=new Map(data.products.map(p=>[p.id,p]));
+    for(const p of data.products){
+      const {data:newId,error}=await state.client.rpc('upsert_product',{p_org_id:state.org.id,p_product_id:null,p_code:p.code||`MIG-${Math.random().toString(36).slice(2,8)}`,p_name:p.name||'Producto',p_category:p.category||'',p_cost:Number(p.cost||0),p_price:Number(p.price||0),p_stock:Number(p.stock||0),p_min_stock:Number(p.minStock||p.min_stock||0)}); if(error)throw error; map.set(p.id,newId);
+    }
+    for(const s of data.sales.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)))){
+      const newProduct=map.get(s.productId); if(!newProduct)continue; const oldP=productByOld.get(s.productId)||{};
+      const {error}=await state.client.rpc('import_legacy_sale',{p_org_id:state.org.id,p_product_id:newProduct,p_quantity:Number(s.qty||1),p_unit_price:Number(s.unitPrice??oldP.price??0),p_unit_cost:Number(oldP.cost||0),p_payment:s.payment||'Otro',p_sold_at:s.date||new Date().toISOString()}); if(error)throw error;
+    }
+    for(const c of (data.closings||[])){
+      const {error}=await state.client.rpc('close_cash',{p_org_id:state.org.id,p_business_date:c.date,p_counted:Number(c.counted||0),p_notes:c.notes||''}); if(error)throw error;
+    }
+    toast('Migración completada.','success'); await loadAllData({silent:true});
+  }catch(err){toast(err.message||'No se pudo migrar el backup.','error');} finally{e.target.value='';}
+};
+$('#resetBtn').onclick=()=>{ const key=cacheKey(); if(key&&confirm('¿Borrar la copia offline de este dispositivo? Los datos de la nube no se eliminan.')){localStorage.removeItem(key);toast('Caché local borrada.','success');} };
+$('#signOutBtn').onclick=async()=>{ if(state.channel)await state.client.removeChannel(state.channel); await state.client.auth.signOut(); location.reload(); };
+
+function updateConnection(){
+  const online=navigator.onLine,el=$('#connectionStatus'); if(el){el.classList.toggle('offline',!online);el.innerHTML=`<span></span> ${online?'Nube conectada':'Sin conexión'}`;}
+  if($('#cloudStatusTitle'))$('#cloudStatusTitle').textContent=online?'Nube conectada':'Modo offline'; if($('#cloudStatusText'))$('#cloudStatusText').textContent=online?'Sincronización activa':'Mostrando caché local'; if($('#settingsSyncState'))$('#settingsSyncState').textContent=online?'Conectada':'Offline';
+}
+window.addEventListener('online',()=>{updateConnection(); if(state.org)loadAllData({silent:true});}); window.addEventListener('offline',updateConnection); updateConnection();
+
+// PWA
+// Service worker disabled in single-file GitHub Pages build.
+let deferredPrompt=null; const installBtn=$('#installAppBtn'),installStatus=$('#installStatus'); const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+if(standalone)installStatus.textContent='La app ya está instalada en este dispositivo.';
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.hidden=false;installStatus.textContent='Lista para instalar. Se abrirá como una app independiente.';});
+installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const {outcome}=await deferredPrompt.userChoice;if(outcome==='accepted'){installStatus.textContent='Instalación iniciada.';installBtn.hidden=true;}deferredPrompt=null;});
+window.addEventListener('appinstalled',()=>{installStatus.textContent='Zen Hogar quedó instalada correctamente.';installBtn.hidden=true;deferredPrompt=null;});
+
+// Cloud onboarding
+$('#cloudConfigForm').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem('zenhogar_cloud_config',JSON.stringify({supabaseUrl:$('#cloudUrl').value.trim().replace(/\/$/,''),supabaseKey:$('#cloudKey').value.trim()}));location.reload();});
+$('#changeCloudConfig').onclick=()=>{ if(confirm('¿Cambiar la conexión de nube de este dispositivo?')){localStorage.removeItem('zenhogar_cloud_config');location.reload();} };
+$('#toggleAuthMode').onclick=()=>{
+  state.authMode=state.authMode==='signin'?'signup':'signin'; const signup=state.authMode==='signup'; $('#authTitle').textContent=signup?'Crear cuenta':'Ingresar'; $('#authIntro').textContent=signup?'Creá el primer usuario de Zen Hogar. Si Supabase exige confirmación, revisá tu email antes de ingresar.':'Usá tu cuenta para acceder a los datos de Zen Hogar.'; $('#authSubmit').textContent=signup?'Crear cuenta':'Ingresar'; $('#toggleAuthMode').textContent=signup?'Ya tengo cuenta':'Crear una cuenta nueva'; setGateMessage('');
+};
+$('#authForm').addEventListener('submit',async e=>{
+  e.preventDefault(); setGateMessage(''); const email=$('#authEmail').value.trim(),password=$('#authPassword').value; $('#authSubmit').disabled=true;
+  try{
+    if(state.authMode==='signup'){
+      const {data,error}=await state.client.auth.signUp({email,password}); if(error)throw error;
+      if(data.session)await handleSignedIn(data.user); else setGateMessage('Cuenta creada. Revisá tu email para confirmar la cuenta y después ingresá.','success');
+    }else{
+      const {data,error}=await state.client.auth.signInWithPassword({email,password}); if(error)throw error; await handleSignedIn(data.user);
+    }
+  }catch(err){setGateMessage(err.message||'No se pudo autenticar.','error');}finally{$('#authSubmit').disabled=false;}
+});
+$('#businessForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return; const btn=e.submitter;if(btn)btn.disabled=true;
+  const {error}=await state.client.rpc('bootstrap_business',{p_business_name:$('#businessName').value.trim(),p_full_name:$('#ownerName').value.trim()||null}); if(btn)btn.disabled=false;
+  if(error)return toast(error.message,'error'); await handleSignedIn(state.user);
+});
+$('#joinBusinessForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return; const code=$('#inviteCodeInput').value.trim(); if(!code)return toast('Ingresá el código de invitación.','error'); const btn=e.submitter;if(btn)btn.disabled=true;
+  const {error}=await state.client.rpc('accept_invite_code',{p_code:code,p_full_name:$('#inviteNameInput').value.trim()||null}); if(btn)btn.disabled=false;
+  if(error)return toast(error.message,'error'); toast('Te uniste al equipo correctamente.','success'); await handleSignedIn(state.user);
+});
+
+$('#createInviteBtn').addEventListener('click',async()=>{
+  if(!canAdmin()||!requireOnline())return; const btn=$('#createInviteBtn');btn.disabled=true;
+  const {data,error}=await state.client.rpc('create_invite_code',{p_org_id:state.org.id,p_role:$('#inviteRole').value}); btn.disabled=false;
+  if(error)return toast(error.message,'error'); $('#inviteCodeValue').textContent=data; $('#inviteResult').hidden=false;
+});
+$('#copyInviteBtn').addEventListener('click',async()=>{
+  const code=$('#inviteCodeValue').textContent.trim(); if(!code)return; try{await navigator.clipboard.writeText(code);toast('Código copiado.','success');}catch{toast(`Código: ${code}`);}
+});
+
+async function init(){
+  const cfg=savedConfig();
+  if(!cfg){setGateStep('configStep');return;}
+  if(!window.supabase?.createClient){setGateStep('configStep');$('#cloudUrl').value=cfg.supabaseUrl||'';setGateMessage('No se pudo cargar el cliente de nube. Revisá la conexión a internet.','error');return;}
+  state.client=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  setGateStep('gateLoading');
+  try{
+    const {data,error}=await state.client.auth.getSession(); if(error)throw error;
+    if(data.session?.user)await handleSignedIn(data.session.user); else setGateStep('authStep');
+  }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${err.message}`,'error');}
+}
+init();
+
+  </script>
+</body>
+</html>
