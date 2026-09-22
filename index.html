@@ -673,6 +673,83 @@ async function handleSignedIn(user){
   catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo abrir el negocio: ${err.message}`,'error');}
 }
 
+
+function updateProductUnitLabels(){
+  const kind=$('#pUnitKind').value||'unit', label=unitLabel(kind), word=unitWord(kind);
+  $('#pCostUnitLabel').textContent=word; $('#pPriceUnitLabel').textContent=word;
+  $('#pStockUnitLabel').textContent=label; $('#pMinUnitLabel').textContent=label; $('#pTargetUnitLabel').textContent=label;
+  const step=kind==='unit'?'1':'0.001';
+  ['pStock','pMinStock','pTargetStock'].forEach(id=>$('#'+id).step=step);
+}
+function updateSaleUnit(){
+  const p=state.products.find(x=>x.id===$('#saleProduct').value);
+  $('#saleQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
+  $('#saleQty').step=p?.unitKind==='unit'?'1':'0.001';
+  if(p?.unitKind==='unit' && !Number.isInteger(Number($('#saleQty').value||1))) $('#saleQty').value=1;
+}
+function updatePurchaseUnit(){
+  const p=state.products.find(x=>x.id===$('#purchaseProduct').value);
+  $('#purchaseQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
+  $('#purchaseCostUnit').textContent=p?unitWord(p.unitKind):'unidad';
+  $('#purchaseQty').step=p?.unitKind==='unit'?'1':'0.001';
+  if(p){ $('#purchaseUnitCost').value=p.cost; if(p.unitKind==='unit'&&!Number.isInteger(Number($('#purchaseQty').value||1))) $('#purchaseQty').value=1; }
+}
+function updatePromotionUnit(){
+  const p=state.products.find(x=>x.id===$('#promoProduct').value), kind=p?.unitKind||'unit';
+  $('#promoQtyUnit').textContent=unitLabel(kind); $('#promoMinQty').step=kind==='unit'?'1':'0.001';
+  if($('#promoRuleType').value==='qty_total'){
+    $('#promoRuleHelp').textContent=`Ejemplo: cantidad ${kind==='unit'?'2':'1'} ${unitLabel(kind)} y un total promocional. La promoción se aplica por cada grupo completo.`;
+  }else{
+    $('#promoRuleHelp').textContent=`El precio promocional se interpreta por ${unitWord(kind)} y se aplica desde la cantidad mínima indicada.`;
+  }
+}
+function localInputFromISO(v){
+  if(!v)return '';
+  const d=new Date(v); if(Number.isNaN(d.getTime()))return '';
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,16);
+}
+function openPromotion(){
+  if(!canAdmin())return toast('Tu rol no permite crear promociones.','error');
+  $('#promotionForm').reset(); $('#promotionId').value=''; $('#promotionModalTitle').textContent='Nueva promoción';
+  $('#promoStartsAt').value=nowLocal(); $('#promoEndsAt').value=''; $('#promoRuleType').value='qty_total'; $('#promoPayment').value='Todos';
+  updatePromotionUnit(); $('#promotionDialog').showModal();
+}
+window.editPromotion=id=>{
+  if(!canAdmin())return;
+  const x=state.promotions.find(p=>p.id===id); if(!x)return;
+  const p=state.products.find(p=>p.id===x.productId); if(!p)return;
+  $('#promotionForm').reset(); $('#promotionId').value=x.id; $('#promotionModalTitle').textContent='Editar promoción';
+  $('#promoProduct').value=x.productId; $('#promoName').value=x.name; $('#promoRuleType').value=x.ruleType;
+  $('#promoMinQty').value=displayQty(p,x.minQty); $('#promoPrice').value=x.promoPrice; $('#promoPayment').value=x.payment;
+  $('#promoStartsAt').value=localInputFromISO(x.startsAt); $('#promoEndsAt').value=localInputFromISO(x.endsAt);
+  updatePromotionUnit(); $('#promotionDialog').showModal();
+};
+window.deletePromotion=async id=>{
+  if(!canAdmin()||!requireOnline())return;
+  if(!confirm('¿Desactivar esta promoción?'))return;
+  const {error}=await state.client.rpc('archive_promotion',{p_org_id:state.org.id,p_promotion_id:id});
+  if(error)return toast(error.message,'error'); toast('Promoción desactivada.','success'); await loadAllData({silent:true});
+};
+window.prepareReorder=id=>{
+  if(!canAdmin())return toast('Tu rol no permite preparar compras.','error');
+  const p=state.products.find(x=>x.id===id); if(!p)return;
+  const target=Math.max(p.targetStock||0,p.minStock||0), suggested=Math.max(target-p.stock,0);
+  if(suggested<=0)return toast('Este producto no tiene una cantidad de reposición pendiente.','error');
+  $('#purchaseForm').reset(); state.purchaseCart=[{productId:p.id,qty:suggested,unitCost:p.cost}];
+  $('#purchaseDate').value=nowLocal(); renderPurchaseCart();
+  if(p.preferredSupplierId) $('#purchaseSupplier').value=p.preferredSupplierId;
+  $('#purchaseDialog').showModal();
+};
+function prepareAllReorders(){
+  if(!canAdmin())return toast('Tu rol no permite preparar compras.','error');
+  const items=state.products.filter(p=>p.stock<=p.minStock).map(p=>({p,target:Math.max(p.targetStock||0,p.minStock||0)})).map(x=>({p:x.p,suggested:Math.max(x.target-x.p.stock,0)})).filter(x=>x.suggested>0);
+  if(!items.length)return toast('No hay cantidades sugeridas para reponer.','error');
+  $('#purchaseForm').reset(); state.purchaseCart=items.map(x=>({productId:x.p.id,qty:x.suggested,unitCost:x.p.cost})); $('#purchaseDate').value=nowLocal(); renderPurchaseCart();
+  const suppliers=[...new Set(items.map(x=>x.p.preferredSupplierId).filter(Boolean))]; if(suppliers.length===1) $('#purchaseSupplier').value=suppliers[0];
+  $('#purchaseDialog').showModal();
+  if(suppliers.length>1) toast('La lista incluye distintos proveedores. Revisá el proveedor antes de confirmar.');
+}
+
 window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
