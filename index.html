@@ -96,6 +96,8 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 @media(max-width:700px){.team-form{grid-template-columns:1fr}.invite-result{grid-template-columns:1fr}.invite-result button{grid-row:auto;grid-column:auto}.invite-result strong{grid-column:auto;font-size:21px}}
 
   .ops-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.ops-actions .secondary,.ops-actions .primary{min-height:42px}.purchase-cart,.receipt-lines{display:grid;gap:8px;margin:12px 0}.purchase-cart-item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:#fbfcfb}.purchase-cart-item small{display:block;color:var(--muted);margin-top:3px}.receipt-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.receipt-head{text-align:center;border-bottom:1px dashed #cfd8d3;padding-bottom:14px;margin-bottom:12px}.receipt-head h3{margin:0 0 4px;font-size:20px}.receipt-head p,.receipt-meta{margin:2px 0;color:var(--muted);font-size:12px}.receipt-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:8px 0;border-bottom:1px dashed #e2e7e4;font-size:12px}.receipt-line small{display:block;color:var(--muted);margin-top:2px}.receipt-total{display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:800;padding-top:14px}.receipt-footer{text-align:center;color:var(--muted);font-size:10px;margin-top:14px}.receipt-actions{display:flex;gap:9px;margin-top:13px}.receipt-actions>*{flex:1}.compact-table table{min-width:680px}@media(max-width:700px){.ops-actions{display:grid;grid-template-columns:1fr 1fr}.ops-actions>*{width:100%}.purchase-cart-item{grid-template-columns:minmax(0,1fr) auto}.purchase-cart-item .sale-cart-remove{grid-column:2}.receipt-actions{display:grid}.receipt-actions>*{width:100%}}
+.reorder-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #edf0ee}.reorder-card:last-child{border-bottom:0}.reorder-card small{display:block;color:var(--muted);margin-top:4px}.promo-pill{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f2ecf8;color:#765d8b;font-size:10px;font-weight:800;margin-top:5px}.discount-note{color:#6e8b7e;font-weight:750}.subtle-note{font-size:11px;color:var(--muted);line-height:1.45;margin:8px 0 0}.unit-hint{display:block;color:var(--muted);font-size:10px;margin-top:5px}.promo-card{padding:13px 0;border-bottom:1px solid #edf0ee}.promo-card:last-child{border-bottom:0}.promo-card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.promo-card small{color:var(--muted);display:block;margin-top:4px}.promo-actions{display:flex;gap:5px}.qty-highlight{font-weight:800;color:var(--accent-dark)}
+@media(max-width:700px){.reorder-card{grid-template-columns:1fr}.reorder-card .primary{width:100%}}
 </style>
 </head>
 <body>
@@ -171,6 +173,12 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
         <button class="nav-btn" data-view="products">
           <span class="nav-icon">◇</span><span>Productos</span>
         </button>
+        <button class="nav-btn" data-view="replenishment">
+          <span class="nav-icon">↻</span><span>Reposición</span>
+        </button>
+        <button class="nav-btn" data-view="promotions">
+          <span class="nav-icon">%</span><span>Promociones</span>
+        </button>
         <button class="nav-btn" data-view="sales">
           <span class="nav-icon">▤</span><span>Ventas</span>
         </button>
@@ -242,7 +250,11 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
       </section>
 
       <section class="view" id="products">
-        <div class="section-intro"><div><span class="section-kicker">Inventario</span><h2>Productos</h2><p>Consultá precios, costos y niveles de stock.</p></div></div>
+        <div class="section-intro"><div><span class="section-kicker">Inventario</span><h2>Productos</h2><p>Stock, precios, unidades de medida y niveles de reposición.</p></div></div>
+        <div class="ops-actions">
+          <button class="secondary" type="button" onclick="setView('replenishment')">↻ Reposición automática</button>
+          <button class="secondary" type="button" onclick="setView('promotions')">% Promociones</button>
+        </div>
         <div class="toolbar">
           <label class="search-field"><span>⌕</span><input id="productSearch" placeholder="Buscar producto, código o categoría..." /></label>
           <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
@@ -254,6 +266,28 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
             <tbody id="productsTable"></tbody>
           </table>
         </div>
+      </section>
+
+      <section class="view" id="replenishment">
+        <div class="section-intro"><div><span class="section-kicker">Inventario inteligente</span><h2>Reposición automática</h2><p>Productos que llegaron al mínimo y cantidad sugerida para alcanzar el stock objetivo.</p></div></div>
+        <div class="ops-actions"><button class="primary" id="prepareAllReordersBtn">Preparar compra sugerida</button><button class="secondary" type="button" onclick="setView('products')">Configurar productos</button></div>
+        <div class="cards three">
+          <article class="card stat peach"><div class="stat-top"><span>Necesitan reposición</span><span class="mini-icon">!</span></div><strong id="reorderCount">0</strong></article>
+          <article class="card stat blue"><div class="stat-top"><span>Con proveedor habitual</span><span class="mini-icon">◇</span></div><strong id="reorderSupplierCount">0</strong></article>
+          <article class="card stat mint"><div class="stat-top"><span>Unidades sugeridas</span><span class="mini-icon">↻</span></div><strong id="reorderUnits">0</strong><small>Puede mezclar u., L y kg</small></article>
+        </div>
+        <article class="card surface-card"><div id="replenishmentList"></div></article>
+      </section>
+
+      <section class="view" id="promotions">
+        <div class="section-intro"><div><span class="section-kicker">Precios especiales</span><h2>Promociones</h2><p>La caja aplica automáticamente la promoción más conveniente que corresponda.</p></div></div>
+        <div class="ops-actions"><button class="primary" id="addPromotionBtn">+ Nueva promoción</button><button class="secondary" type="button" onclick="setView('products')">Volver a productos</button></div>
+        <div class="cards three">
+          <article class="card stat lilac"><div class="stat-top"><span>Promociones activas</span><span class="mini-icon">%</span></div><strong id="activePromoCount">0</strong></article>
+          <article class="card stat mint"><div class="stat-top"><span>Por cantidad</span><span class="mini-icon">×</span></div><strong id="bundlePromoCount">0</strong></article>
+          <article class="card stat blue"><div class="stat-top"><span>Precio especial</span><span class="mini-icon">$</span></div><strong id="specialPromoCount">0</strong></article>
+        </div>
+        <article class="card surface-card"><div id="promotionsList"></div></article>
       </section>
 
       <section class="view" id="sales">
@@ -292,7 +326,7 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 
       <section class="view" id="purchases">
         <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras y proveedores</h2><p>Ingresá mercadería y actualizá el stock automáticamente.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button><button class="secondary" id="addSupplierBtn">+ Proveedor</button><button class="secondary" type="button" onclick="setView('products')">Ver inventario</button></div>
+        <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button><button class="secondary" id="addSupplierBtn">+ Proveedor</button><button class="secondary" type="button" onclick="setView('replenishment')">↻ Reposición sugerida</button><button class="secondary" type="button" onclick="setView('products')">Ver inventario</button></div>
         <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
         <div class="grid two"><article class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></article><article class="card surface-card"><span class="section-kicker">Agenda</span><h2>Proveedores activos</h2><div id="supplierList"></div></article></div>
       </section>
@@ -381,10 +415,13 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
         <label>Código<input id="pCode" required /></label>
         <label>Producto<input id="pName" required /></label>
         <label>Categoría<input id="pCategory" required /></label>
-        <label>Costo<input id="pCost" type="number" min="0" step="0.01" required /></label>
-        <label>Precio de venta<input id="pPrice" type="number" min="0" step="0.01" required /></label>
-        <label>Stock actual<input id="pStock" type="number" min="0" step="1" required /></label>
-        <label>Stock mínimo<input id="pMinStock" type="number" min="0" step="1" required /></label>
+        <label>Unidad de manejo<select id="pUnitKind"><option value="unit">Unidad</option><option value="volume">Litro</option><option value="weight">Kilogramo</option></select><small class="unit-hint">Los fraccionados se guardan internamente en ml o gramos.</small></label>
+        <label>Costo por <span id="pCostUnitLabel">unidad</span><input id="pCost" type="number" min="0" step="0.01" required /></label>
+        <label>Precio por <span id="pPriceUnitLabel">unidad</span><input id="pPrice" type="number" min="0" step="0.01" required /></label>
+        <label>Stock actual (<span id="pStockUnitLabel">u.</span>)<input id="pStock" type="number" min="0" step="0.001" required /></label>
+        <label>Stock mínimo (<span id="pMinUnitLabel">u.</span>)<input id="pMinStock" type="number" min="0" step="0.001" required /></label>
+        <label>Stock objetivo (<span id="pTargetUnitLabel">u.</span>)<input id="pTargetStock" type="number" min="0" step="0.001" value="0" /><small class="unit-hint">Al llegar al mínimo, la app sugiere comprar hasta este objetivo.</small></label>
+        <label>Proveedor habitual<select id="pPreferredSupplier"><option value="">Sin proveedor habitual</option></select></label>
       </div>
       <button class="primary full modal-primary" value="default" type="submit">Guardar producto</button>
     </form>
@@ -395,7 +432,7 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
       <div class="modal-head"><div><span class="section-kicker">Nueva operación</span><h2>Registrar venta</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
       <div class="sale-builder">
         <label>Producto<select id="saleProduct"></select></label>
-        <label>Cantidad<input id="saleQty" type="number" min="1" step="1" value="1" /></label>
+        <label>Cantidad (<span id="saleQtyUnit">u.</span>)<input id="saleQty" type="number" min="0.001" step="0.001" value="1" /></label>
         <button class="secondary sale-add-btn" id="saleAddItemBtn" type="button">+ Agregar a la venta</button>
       </div>
       <div class="sale-cart" id="saleCartList"></div>
@@ -410,7 +447,26 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 
   <dialog id="expenseDialog"><form method="dialog" id="expenseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Egreso</span><h2>Registrar gasto</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Categoría<select id="expenseCategory"><option>Servicios</option><option>Flete</option><option>Insumos</option><option>Mantenimiento</option><option>Impuestos</option><option>Otros</option></select></label><label>Medio de pago<select id="expensePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label><label class="full">Descripción<input id="expenseDescription" required placeholder="Ej. flete de mercadería" /></label><label>Importe<input id="expenseAmount" type="number" min="0.01" step="0.01" required /></label><label>Fecha y hora<input id="expenseDate" type="datetime-local" required /></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar gasto</button></form></dialog>
   <dialog id="supplierDialog"><form method="dialog" id="supplierForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Proveedor</span><h2>Datos del proveedor</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><input type="hidden" id="supplierId" /><div class="form-grid"><label class="full">Nombre<input id="supplierName" required /></label><label>Teléfono<input id="supplierPhone" /></label><label>Email<input id="supplierEmail" type="email" /></label><label class="full">Notas<textarea id="supplierNotes" rows="3"></textarea></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar proveedor</button></form></dialog>
-  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad<input id="purchaseQty" type="number" min="1" step="1" value="1" /></label><label>Costo unitario<input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label><label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+  <dialog id="promotionDialog">
+    <form method="dialog" id="promotionForm" class="modal-card">
+      <div class="modal-head"><div><span class="section-kicker">Precio especial</span><h2 id="promotionModalTitle">Nueva promoción</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <input type="hidden" id="promotionId" />
+      <div class="form-grid">
+        <label class="full">Producto<select id="promoProduct" required></select></label>
+        <label class="full">Nombre de la promoción<input id="promoName" required placeholder="Ej. 2 x $3.800" /></label>
+        <label>Tipo<select id="promoRuleType"><option value="qty_total">Cantidad por total fijo</option><option value="special_price">Precio especial por unidad/L/kg</option></select></label>
+        <label>Cantidad mínima (<span id="promoQtyUnit">u.</span>)<input id="promoMinQty" type="number" min="0.001" step="0.001" required /></label>
+        <label>Precio promocional<input id="promoPrice" type="number" min="0" step="0.01" required /></label>
+        <label>Medio válido<select id="promoPayment"><option>Todos</option><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label>
+        <label>Desde<input id="promoStartsAt" type="datetime-local" required /></label>
+        <label>Hasta<input id="promoEndsAt" type="datetime-local" /></label>
+      </div>
+      <p class="subtle-note" id="promoRuleHelp">Ejemplo: cantidad 2 y precio $3.800 aplica $3.800 por cada grupo de 2.</p>
+      <button class="primary full modal-primary" value="default" type="submit">Guardar promoción</button>
+    </form>
+  </dialog>
+
   <dialog id="receiptDialog"><div class="modal-card"><div class="modal-head"><div><span class="section-kicker">Comprobante</span><h2>Detalle de venta</h2></div><button class="icon-btn" id="closeReceiptBtn" aria-label="Cerrar">✕</button></div><div id="receiptContent"></div><div class="receipt-actions"><button class="secondary" id="shareReceiptBtn" type="button">Compartir</button><button class="primary" id="printReceiptBtn" type="button">Imprimir</button></div></div></dialog>
   <div class="toast" id="toast" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -432,9 +488,27 @@ const nowLocal = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTi
 const fmtDate = v => new Intl.DateTimeFormat('es-AR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v));
 const saleLocalDate = s => localDateISO(new Date(s.soldAt));
 const roleLabel = r => ({owner:'Propietario',admin:'Administrador',employee:'Empleado'})[r] || r || '—';
+const unitFactor = kind => kind==='unit'?1:1000;
+const unitLabel = kind => kind==='volume'?'L':kind==='weight'?'kg':'u.';
+const unitWord = kind => kind==='volume'?'litro':kind==='weight'?'kg':'unidad';
+const fmtQty = n => new Intl.NumberFormat('es-AR',{maximumFractionDigits:3}).format(Number(n||0));
+const displayQty = (p,base) => Number(base||0)/unitFactor(p?.unitKind||'unit');
+const qtyText = (p,base) => `${fmtQty(displayQty(p,base))} ${unitLabel(p?.unitKind||'unit')}`;
+const toBaseQty = (p,display) => Number(display||0)*unitFactor(p?.unitKind||'unit');
+function quoteProduct(p,baseQty,payment,soldAt){
+  const regular=p.price*(baseQty/p.priceUnitQty); let total=regular,promo=null;
+  const when=new Date(soldAt||Date.now()).getTime();
+  state.promotions.filter(x=>x.productId===p.id&&x.active&&x.minQty<=baseQty&&(x.payment==='Todos'||x.payment===payment)&&new Date(x.startsAt).getTime()<=when&&(!x.endsAt||new Date(x.endsAt).getTime()>=when)).forEach(x=>{
+    let candidate=regular;
+    if(x.ruleType==='special_price') candidate=x.promoPrice*(baseQty/p.priceUnitQty);
+    else { const bundles=Math.floor((baseQty+1e-9)/x.minQty),remainder=baseQty-bundles*x.minQty; candidate=bundles*x.promoPrice+p.price*(remainder/p.priceUnitQty); }
+    if(candidate<total){total=candidate;promo=x;}
+  });
+  return {regular,total,discount:Math.max(regular-total,0),promo};
+}
 
 const state = {
-  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],expenses:[],suppliers:[],purchases:[],cashMovements:[],channel:null,
+  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],expenses:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],channel:null,
   authMode:'signin', reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null
 };
 
@@ -455,11 +529,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,at:new Date().toISOString()})); }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,at:new Date().toISOString()})); }
 function loadCache(){
   const key=cacheKey(); if(!key)return false;
   const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; renderAll(); return true;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function requireOnline(){ if(!navigator.onLine){toast('Sin conexión: podés consultar datos guardados, pero los cambios requieren internet.','error');return false;} return true; }
@@ -468,12 +542,12 @@ function setView(id){
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   $$('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-  const labels={dashboard:'Inicio',products:'Productos',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',purchases:'Compras y proveedores',reports:'Reportes',settings:'Configuración'};
+  const labels={dashboard:'Inicio',products:'Productos',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',purchases:'Compras y proveedores',reports:'Reportes',settings:'Configuración'};
   $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
 }
 function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
-function saleProfit(s){ return s.items.reduce((a,i)=>a+(i.unitPrice-i.unitCost)*i.qty,0); }
-function saleQty(s){ return s.items.reduce((a,i)=>a+i.qty,0); }
+function saleProfit(s){ return s.items.reduce((a,i)=>a+i.lineTotal-(i.unitCost*(i.qty/i.priceUnitQty)),0); }
+function saleQty(s){ if(s.items.length===1){const i=s.items[0];return qtyText({unitKind:i.unitKind},i.qty);} return `${s.items.length} ítems`; }
 function saleProductLabel(s){ if(s.items.length===1)return s.items[0].productName; return `${s.items.length} productos`; }
 
 function renderDashboard(){
@@ -483,19 +557,33 @@ function renderDashboard(){
   $('#productCount').textContent=state.products.length;
   const low=state.products.filter(p=>p.stock<=p.minStock); $('#lowStockCount').textContent=low.length;
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
-  $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${p.minStock}</small></div><span class="badge low">Stock ${p.stock}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
+  $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge low">Stock ${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
 function renderProducts(){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
   const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort(); const cur=$('#categoryFilter').value;
   $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
   const rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.name} ${p.category}`.toLowerCase().includes(q)));
-  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}</td><td data-label="Producto"><strong>${esc(p.name)}</strong></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)}</td><td data-label="Precio">${money(p.price)}</td><td data-label="Stock"><span class="badge ${p.stock<=p.minStock?'low':''}">${p.stock}</span></td><td data-label="Mínimo">${p.minStock}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
-  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${p.stock} · ${money(p.price)}</option>`).join('');
+  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${p.stock<=p.minStock?'low':''}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
+  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
+  $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
 }
+function renderReplenishment(){
+  const items=state.products.filter(p=>p.stock<=p.minStock).map(p=>{const target=Math.max(p.targetStock||0,p.minStock||0),suggested=Math.max(target-p.stock,0);return {p,target,suggested};});
+  $('#reorderCount').textContent=items.length; $('#reorderSupplierCount').textContent=items.filter(x=>x.p.preferredSupplierId).length;
+  $('#reorderUnits').textContent=items.length?items.map(x=>x.suggested>0?qtyText(x.p,x.suggested):'—').slice(0,3).join(' · '):'0';
+  $('#prepareAllReordersBtn').disabled=!items.some(x=>x.suggested>0); $('#prepareAllReordersBtn').hidden=!canAdmin();
+  $('#replenishmentList').innerHTML=items.map(({p,target,suggested})=>`<div class="reorder-card"><div><strong>${esc(p.name)}</strong><small>${esc(p.code)} · stock ${qtyText(p,p.stock)} · mínimo ${qtyText(p,p.minStock)} · objetivo ${target>0?qtyText(p,target):'sin configurar'}</small><small>${p.preferredSupplierName?`Proveedor habitual: ${esc(p.preferredSupplierName)}`:'Sin proveedor habitual'}</small></div><div>${suggested>0?`<div class="qty-highlight">Reponer ${qtyText(p,suggested)}</div><button class="primary compact" onclick="prepareReorder('${p.id}')">Preparar compra</button>`:`<div class="badge low">Configurar objetivo</div><button class="secondary compact" onclick="editProduct('${p.id}')">Editar producto</button>`}</div></div>`).join('')||'<div class="empty">No hay productos que necesiten reposición.</div>';
+}
+function renderPromotions(){
+  const now=Date.now(),active=state.promotions.filter(x=>x.active&&new Date(x.startsAt).getTime()<=now&&(!x.endsAt||new Date(x.endsAt).getTime()>=now));
+  $('#activePromoCount').textContent=active.length; $('#bundlePromoCount').textContent=active.filter(x=>x.ruleType==='qty_total').length; $('#specialPromoCount').textContent=active.filter(x=>x.ruleType==='special_price').length; $('#addPromotionBtn').hidden=!canAdmin();
+  $('#promoProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  $('#promotionsList').innerHTML=state.promotions.map(x=>{const p=state.products.find(p=>p.id===x.productId);if(!p)return '';const rule=x.ruleType==='qty_total'?`${qtyText(p,x.minQty)} por ${money(x.promoPrice)}`:`${money(x.promoPrice)} / ${unitLabel(p.unitKind)} desde ${qtyText(p,x.minQty)}`;return `<div class="promo-card"><div class="promo-card-head"><div><strong>${esc(x.name)}</strong><small>${esc(p.name)} · ${rule}</small><span class="promo-pill">${x.payment==='Todos'?'Todos los medios':esc(x.payment)}</span></div>${canAdmin()?`<div class="promo-actions"><button class="action-btn" onclick="editPromotion('${x.id}')">✎</button><button class="action-btn" onclick="deletePromotion('${x.id}')">⌫</button></div>`:''}</div></div>`;}).join('')||'<div class="empty">Todavía no hay promociones.</div>';
+}
 function renderSales(){
-  $('#salesTable').innerHTML=state.sales.map(s=>'<tr><td data-label="Fecha">'+fmtDate(s.soldAt)+'</td><td data-label="Producto"><strong>'+esc(saleProductLabel(s))+'</strong><br><small>Comp. #'+String(s.receiptNumber||'—').padStart(6,'0')+'</small></td><td data-label="Cantidad">'+saleQty(s)+'</td><td data-label="Total">'+money(s.total)+'</td><td data-label="Medio">'+esc(s.payment)+'</td><td data-label="Ganancia">'+money(saleProfit(s))+'</td><td data-label="Acciones"><button class="action-btn" aria-label="Comprobante" onclick="openReceipt(\''+s.id+'\')">▤</button>'+(canAdmin()?'<button class="action-btn" aria-label="Anular venta" onclick="deleteSale(\''+s.id+'\')">⌫</button>':'')+'</td></tr>').join('')||'<tr><td colspan="7" class="empty">Todavía no hay ventas.</td></tr>';
+  $('#salesTable').innerHTML=state.sales.map(s=>`<tr><td data-label="Fecha">${fmtDate(s.soldAt)}</td><td data-label="Producto"><strong>${esc(saleProductLabel(s))}</strong><br><small>Comp. #${String(s.receiptNumber||'—').padStart(6,'0')}${s.discountTotal>0?` · ahorro ${money(s.discountTotal)}`:''}</small></td><td data-label="Cantidad">${saleQty(s)}</td><td data-label="Total">${money(s.total)}</td><td data-label="Medio">${esc(s.payment)}</td><td data-label="Ganancia">${money(saleProfit(s))}</td><td data-label="Acciones"><button class="action-btn" aria-label="Comprobante" onclick="openReceipt('${s.id}')">▤</button>${canAdmin()?`<button class="action-btn" aria-label="Anular venta" onclick="deleteSale('${s.id}')">⌫</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Todavía no hay ventas.</td></tr>';
 }
 function renderCash(){
   const day=todayISO(),ts=salesToday(),cashSales=ts.filter(s=>s.payment==='Efectivo').reduce((a,s)=>a+s.total,0),dayExpenses=state.expenses.filter(e=>e.date.slice(0,10)===day&&e.payment==='Efectivo').reduce((a,e)=>a+e.amount,0),dayPurchases=state.purchases.filter(p=>p.date.slice(0,10)===day&&p.payment==='Efectivo').reduce((a,p)=>a+p.total,0),mov=state.cashMovements.filter(m=>m.date===day),manual=mov.reduce((a,m)=>a+(m.kind==='withdrawal'?-m.amount:m.amount),0);
@@ -510,40 +598,44 @@ function renderExpenses(){
 }
 function renderPurchases(){
   const month=todayISO().slice(0,7);$('#purchasesMonth').textContent=money(state.purchases.filter(p=>p.date.slice(0,7)===month).reduce((a,p)=>a+p.total,0));$('#supplierCount').textContent=state.suppliers.length;$('#purchaseCount').textContent=state.purchases.length;
-  $('#purchasesTable').innerHTML=state.purchases.map(p=>'<tr><td data-label="Fecha">'+fmtDate(p.date)+'</td><td data-label="Proveedor">'+esc(p.supplierName||'Sin proveedor')+'</td><td data-label="Productos">'+p.items.reduce((a,i)=>a+i.qty,0)+' u.</td><td data-label="Medio">'+esc(p.payment)+'</td><td data-label="Total">'+money(p.total)+'</td><td data-label="Acciones">'+(canAdmin()?'<button class="action-btn" onclick="deletePurchase(\''+p.id+'\')">⌫</button>':'—')+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Todavía no hay compras.</td></tr>';
-  $('#supplierList').innerHTML=state.suppliers.map(s=>'<div class="list-row"><div><strong>'+esc(s.name)+'</strong><br><small>'+esc(s.phone||s.email||'Sin datos de contacto')+'</small></div>'+(canAdmin()?'<div><button class="action-btn" onclick="editSupplier(\''+s.id+'\')">✎</button><button class="action-btn" onclick="deleteSupplier(\''+s.id+'\')">⌫</button></div>':'')+'</div>').join('')||'<div class="empty">No hay proveedores cargados.</div>';
-  $('#purchaseSupplier').innerHTML='<option value="">Sin proveedor</option>'+state.suppliers.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');$('#purchaseProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.map(p=>'<option value="'+p.id+'">'+esc(p.name)+' · costo '+money(p.cost)+'</option>').join('');
+  $('#purchasesTable').innerHTML=state.purchases.map(p=>`<tr><td data-label="Fecha">${fmtDate(p.date)}</td><td data-label="Proveedor">${esc(p.supplierName||'Sin proveedor')}</td><td data-label="Productos">${p.items.length} ítems</td><td data-label="Medio">${esc(p.payment)}</td><td data-label="Total">${money(p.total)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" onclick="deletePurchase('${p.id}')">⌫</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Todavía no hay compras.</td></tr>';
+  $('#supplierList').innerHTML=state.suppliers.map(s=>`<div class="list-row"><div><strong>${esc(s.name)}</strong><br><small>${esc(s.phone||s.email||'Sin datos de contacto')}</small></div>${canAdmin()?`<div><button class="action-btn" onclick="editSupplier('${s.id}')">✎</button><button class="action-btn" onclick="deleteSupplier('${s.id}')">⌫</button></div>`:''}</div>`).join('')||'<div class="empty">No hay proveedores cargados.</div>';
+  $('#purchaseSupplier').innerHTML='<option value="">Sin proveedor</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  $('#purchaseProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.map(p=>`<option value="${p.id}">${esc(p.name)} · costo ${money(p.cost)}/${unitLabel(p.unitKind)}</option>`).join('');
 }
 function renderReports(){
   const rev=state.sales.reduce((a,s)=>a+s.total,0),prof=state.sales.reduce((a,s)=>a+saleProfit(s),0),exp=state.expenses.reduce((a,e)=>a+e.amount,0);$('#totalRevenue').textContent=money(rev);$('#totalProfit').textContent=money(prof);$('#totalExpenses').textContent=money(exp);$('#netResult').textContent=money(prof-exp);
   const byPay={};state.sales.forEach(s=>byPay[s.payment]=(byPay[s.payment]||0)+s.total);$('#paymentReport').innerHTML=Object.entries(byPay).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<div class="list-row"><span>'+esc(k)+'</span><strong>'+money(v)+'</strong></div>').join('')||'<div class="empty">Sin datos.</div>';
-  const byProd={};state.sales.forEach(s=>s.items.forEach(i=>byProd[i.productName]=(byProd[i.productName]||0)+i.qty));$('#topProducts').innerHTML=Object.entries(byProd).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,q])=>'<div class="list-row"><span>'+esc(name)+'</span><strong>'+q+' u.</strong></div>').join('')||'<div class="empty">Sin datos.</div>';
+  const byProd={};state.sales.forEach(s=>s.items.forEach(i=>{const k=i.productId||i.productName;if(!byProd[k])byProd[k]={name:i.productName,qty:0,unitKind:i.unitKind};byProd[k].qty+=i.qty;}));$('#topProducts').innerHTML=Object.values(byProd).sort((a,b)=>b.qty-a.qty).slice(0,8).map(x=>'<div class="list-row"><span>'+esc(x.name)+'</span><strong>'+qtyText({unitKind:x.unitKind},x.qty)+'</strong></div>').join('')||'<div class="empty">Sin datos.</div>';
 }
 function renderSettings(){
   $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
   $('#teamCard').hidden=!canAdmin();
 }
 
-function renderAll(){ renderDashboard(); renderProducts(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderReports(); renderSettings(); }
+function renderAll(){ renderDashboard(); renderProducts(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderReports(); renderSettings(); }
 
 async function loadAllData({silent=false}={}){
   if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
-    const [pRes,sRes,cRes,eRes,supRes,purRes,movRes]=await Promise.all([
-      state.client.from('products').select('id,code,name,category,cost,price,stock,min_stock').eq('organization_id',state.org.id).eq('active',true).order('name'),
-      state.client.from('sales').select('id,receipt_number,payment,total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
+    const [pRes,sRes,cRes,eRes,supRes,purRes,movRes,promoRes]=await Promise.all([
+      state.client.from('products').select('id,code,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name'),
+      state.client.from('sales').select('id,receipt_number,payment,total,subtotal,discount_total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,price_unit_qty,line_total,discount_amount,products(name,code,unit_kind),promotions(name))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
       state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365),
       state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false}).limit(1500),
       state.client.from('suppliers').select('id,name,phone,email,notes').eq('organization_id',state.org.id).eq('active',true).order('name'),
-      state.client.from('purchases').select('id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false}).limit(1000),
-      state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(1000)
-    ]);for(const r of [pRes,sRes,cRes,eRes,supRes,purRes,movRes])if(r.error)throw r.error;
-    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock)}));
-    state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto',productCode:i.products?.code||''}))}));
+      state.client.from('purchases').select('id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false}).limit(1000),
+      state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(1000),
+      state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false})
+    ]);for(const r of [pRes,sRes,cRes,eRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
+    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||''}));
+    state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
     state.expenses=(eRes.data||[]).map(r=>({id:r.id,category:r.category,description:r.description,amount:Number(r.amount),payment:r.payment,date:r.expense_at}));state.suppliers=(supRes.data||[]).map(r=>({id:r.id,name:r.name,phone:r.phone||'',email:r.email||'',notes:r.notes||''}));
-    state.purchases=(purRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto'}))}));
-    state.cashMovements=(movRes.data||[]).map(r=>({id:r.id,date:r.business_date,kind:r.kind,amount:Number(r.amount),notes:r.notes||'',createdAt:r.created_at}));saveCache();renderAll();updateConnection();
+    state.purchases=(purRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),unitKind:i.products?.unit_kind||'unit',productName:i.products?.name||'Producto'}))}));
+    state.cashMovements=(movRes.data||[]).map(r=>({id:r.id,date:r.business_date,kind:r.kind,amount:Number(r.amount),notes:r.notes||'',createdAt:r.created_at}));
+    state.promotions=(promoRes.data||[]).map(r=>({id:r.id,productId:r.product_id,name:r.name,ruleType:r.rule_type,minQty:Number(r.min_qty),promoPrice:Number(r.promo_price),payment:r.payment,startsAt:r.starts_at,endsAt:r.ends_at,active:r.active}));
+    saveCache();renderAll();updateConnection();
   }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
 }
 
@@ -560,6 +652,7 @@ function subscribeRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'purchases',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'purchase_items',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'cash_movements',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'promotions',filter:`organization_id=eq.${org}`},reload)
     .subscribe();
 }
 
@@ -583,7 +676,7 @@ async function handleSignedIn(user){
 window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
-  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pName').value=p.name; $('#pCategory').value=p.category; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pStock').value=p.stock; $('#pMinStock').value=p.minStock; $('#productDialog').showModal();
+  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pName').value=p.name; $('#pCategory').value=p.category; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#productDialog').showModal();
 };
 window.deleteProduct=async id=>{
   if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
@@ -602,49 +695,35 @@ window.deleteCashMovement=async id=>{if(!canAdmin()||!requireOnline())return;if(
 function openExpense(){$('#expenseForm').reset();$('#expenseDate').value=nowLocal();$('#expenseDialog').showModal();}
 function openSupplier(){if(!canAdmin())return toast('Sólo administradores pueden cargar proveedores.','error');$('#supplierForm').reset();$('#supplierId').value='';$('#supplierDialog').showModal();}
 function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();renderPurchaseCart();$('#purchaseDialog').showModal();}
-function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),qty=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isInteger(qty)||qty<=0)return toast('Cantidad inválida.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty:qty,unitCost:cost});$('#purchaseProduct').value='';$('#purchaseQty').value=1;$('#purchaseUnitCost').value='';renderPurchaseCart();}
+function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseProduct').value='';$('#purchaseQty').value=1;$('#purchaseQtyUnit').textContent='u.';$('#purchaseUnitCost').value='';renderPurchaseCart();}
 function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();}window.removePurchaseItem=removePurchaseItem;
-function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0,units=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.qty*i.unitCost;total+=sub;units+=i.qty;return '<div class="purchase-cart-item"><div><strong>'+esc(p.name)+'</strong><small>'+i.qty+' u. × '+money(i.unitCost)+'</small></div><strong>'+money(sub)+'</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem(\''+p.id+'\')">✕</button></div>';}).join('');preview.innerHTML='<div class="sale-total-row"><span>'+state.purchaseCart.length+' productos · '+units+' unidades</span><strong>'+money(total)+'</strong></div>';submit.disabled=false;}
-window.openReceipt=id=>{const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;const items=s.items.map(i=>'<div class="receipt-line"><div><strong>'+esc(i.productName)+'</strong><small>'+i.qty+' × '+money(i.unitPrice)+'</small></div><strong>'+money(i.qty*i.unitPrice)+'</strong></div>').join('');$('#receiptContent').innerHTML='<div class="receipt-card"><div class="receipt-head"><h3>Zen Hogar</h3><p>Comprobante no fiscal</p><p>Venta #'+String(s.receiptNumber||'—').padStart(6,'0')+'</p></div><div class="receipt-meta">'+fmtDate(s.soldAt)+' · '+esc(s.payment)+'</div><div class="receipt-lines">'+items+'</div><div class="receipt-total"><span>Total</span><span>'+money(s.total)+'</span></div><div class="receipt-footer">Gracias por tu compra · Zen Hogar</div></div>';$('#receiptDialog').showModal();};
-function receiptText(s){return 'ZEN HOGAR\\nComprobante no fiscal #'+String(s.receiptNumber||'—').padStart(6,'0')+'\\n'+fmtDate(s.soldAt)+'\\n\\n'+s.items.map(i=>i.qty+' x '+i.productName+' - '+money(i.qty*i.unitPrice)).join('\\n')+'\\n\\nTOTAL: '+money(s.total)+'\\nMedio de pago: '+s.payment+'\\n\\nGracias por tu compra.';}
-function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#productDialog').showModal(); }
+function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.unitCost*(i.qty/p.priceUnitQty);total+=sub;return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)}</small></div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${p.id}')">✕</button></div>`;}).join('');preview.innerHTML=`<div class="sale-total-row"><span>${state.purchaseCart.length} productos</span><strong>${money(total)}</strong></div>`;submit.disabled=false;}
+window.openReceipt=id=>{const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;const items=s.items.map(i=>`<div class="receipt-line"><div><strong>${esc(i.productName)}</strong><small>${qtyText({unitKind:i.unitKind},i.qty)} × ${money(i.unitPrice)}/${unitLabel(i.unitKind)}${i.promotionName?` · ${esc(i.promotionName)}`:''}</small></div><strong>${money(i.lineTotal)}</strong></div>`).join('');$('#receiptContent').innerHTML=`<div class="receipt-card"><div class="receipt-head"><h3>Zen Hogar</h3><p>Comprobante no fiscal</p><p>Venta #${String(s.receiptNumber||'—').padStart(6,'0')}</p></div><div class="receipt-meta">${fmtDate(s.soldAt)} · ${esc(s.payment)}</div><div class="receipt-lines">${items}</div>${s.discountTotal>0?`<div class="list-row"><span>Subtotal</span><strong>${money(s.subtotal)}</strong></div><div class="list-row discount-note"><span>Descuento promociones</span><strong>- ${money(s.discountTotal)}</strong></div>`:''}<div class="receipt-total"><span>Total</span><span>${money(s.total)}</span></div><div class="receipt-footer">Gracias por tu compra · Zen Hogar</div></div>`;$('#receiptDialog').showModal();};
+function receiptText(s){return 'ZEN HOGAR\nComprobante no fiscal #'+String(s.receiptNumber||'—').padStart(6,'0')+'\n'+fmtDate(s.soldAt)+'\n\n'+s.items.map(i=>qtyText({unitKind:i.unitKind},i.qty)+' x '+i.productName+' - '+money(i.lineTotal)+(i.promotionName?' ('+i.promotionName+')':'')).join('\n')+(s.discountTotal>0?'\n\nAHORRO: '+money(s.discountTotal):'')+'\nTOTAL: '+money(s.total)+'\nMedio de pago: '+s.payment+'\n\nGracias por tu compra.';}
+function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; updateProductUnitLabels(); $('#productDialog').showModal(); }
 function openSale(){
   if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;}
   $('#saleForm').reset(); state.saleCart=[]; $('#saleQty').value=1; $('#saleDate').value=nowLocal(); $('#saleDialog').showModal(); renderSaleCart();
 }
 function addSaleItem(){
-  const p=state.products.find(x=>x.id===$('#saleProduct').value),qty=Number($('#saleQty').value||0);
-  if(!p)return toast('Seleccioná un producto.','error');
-  if(!Number.isInteger(qty)||qty<=0)return toast('Ingresá una cantidad válida.','error');
-  const existing=state.saleCart.find(i=>i.productId===p.id),nextQty=(existing?.qty||0)+qty;
-  if(nextQty>p.stock)return toast(`Stock insuficiente. Disponible: ${p.stock}.`,'error');
-  if(existing) existing.qty=nextQty; else state.saleCart.push({productId:p.id,qty});
-  $('#saleProduct').value=''; $('#saleQty').value=1; renderSaleCart();
+  const p=state.products.find(x=>x.id===$('#saleProduct').value),display=Number($('#saleQty').value||0); if(!p)return toast('Seleccioná un producto.','error');
+  if(!Number.isFinite(display)||display<=0)return toast('Ingresá una cantidad válida.','error'); if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se vende por unidad entera.','error');
+  const qty=toBaseQty(p,display),existing=state.saleCart.find(i=>i.productId===p.id),nextQty=(existing?.qty||0)+qty;
+  if(nextQty>p.stock+1e-9)return toast(`Stock insuficiente. Disponible: ${qtyText(p,p.stock)}.`,'error');
+  if(existing)existing.qty=nextQty;else state.saleCart.push({productId:p.id,qty}); $('#saleProduct').value='';$('#saleQty').value=1;$('#saleQtyUnit').textContent='u.';renderSaleCart();
 }
-function removeSaleItem(productId){ state.saleCart=state.saleCart.filter(i=>i.productId!==productId); renderSaleCart(); }
-window.removeSaleItem=removeSaleItem;
+function removeSaleItem(productId){state.saleCart=state.saleCart.filter(i=>i.productId!==productId);renderSaleCart();} window.removeSaleItem=removeSaleItem;
 function renderSaleCart(){
-  const list=$('#saleCartList'),preview=$('#salePreview'),submit=$('#saleSubmitBtn');
-  if(!state.saleCart.length){
-    list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos a esta venta.</div>';
-    preview.innerHTML=`<div class="sale-total-row"><span>0 productos</span><strong>${money(0)}</strong></div>`;
-    submit.disabled=true; return;
-  }
-  let total=0,units=0;
-  list.innerHTML=state.saleCart.map(i=>{
-    const p=state.products.find(x=>x.id===i.productId); if(!p)return '';
-    const subtotal=p.price*i.qty; total+=subtotal; units+=i.qty;
-    return `<div class="sale-cart-item"><div><strong>${esc(p.name)}</strong><small>${i.qty} u. × ${money(p.price)} · stock luego ${p.stock-i.qty}</small></div><div class="sale-cart-subtotal">${money(subtotal)}</div><button class="sale-cart-remove" type="button" aria-label="Quitar producto" onclick="removeSaleItem('${p.id}')">✕</button></div>`;
-  }).join('');
-  preview.innerHTML=`<div class="sale-total-row"><span>${state.saleCart.length} producto${state.saleCart.length===1?'':'s'} · ${units} unidad${units===1?'':'es'}</span><strong>${money(total)}</strong></div>`;
-  submit.disabled=false;
+  const list=$('#saleCartList'),preview=$('#salePreview'),submit=$('#saleSubmitBtn'); if(!state.saleCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos a esta venta.</div>';preview.innerHTML=`<div class="sale-total-row"><span>0 productos</span><strong>${money(0)}</strong></div>`;submit.disabled=true;return;}
+  let total=0,regular=0; const payment=$('#salePayment').value,date=$('#saleDate').value?new Date($('#saleDate').value).toISOString():new Date().toISOString();
+  list.innerHTML=state.saleCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const q=quoteProduct(p,i.qty,payment,date);total+=q.total;regular+=q.regular;return `<div class="sale-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(p.price)}/${unitLabel(p.unitKind)} · stock luego ${qtyText(p,p.stock-i.qty)}</small>${q.promo?`<span class="promo-pill">${esc(q.promo.name)}</span>`:''}</div><div class="sale-cart-subtotal">${money(q.total)}${q.discount>0?`<small class="discount-note">Ahorrás ${money(q.discount)}</small>`:''}</div><button class="sale-cart-remove" type="button" onclick="removeSaleItem('${p.id}')">✕</button></div>`;}).join('');
+  preview.innerHTML=`<div class="sale-total-row"><span>${state.saleCart.length} producto${state.saleCart.length===1?'':'s'}${regular>total?` · ahorro ${money(regular-total)}`:''}</span><strong>${money(total)}</strong></div>`;submit.disabled=false;
 }
 
 $('#productForm').addEventListener('submit',async e=>{
-  e.preventDefault(); if(!requireOnline())return;
-  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:$('#pCategory').value.trim(),p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value),p_min_stock:Number($('#pMinStock').value)};
-  const btn=e.submitter; if(btn)btn.disabled=true; const {error}=await state.client.rpc('upsert_product',params); if(btn)btn.disabled=false;
-  if(error)return toast(error.message,'error'); $('#productDialog').close(); toast('Producto guardado en la nube.','success'); await loadAllData({silent:true});
+  e.preventDefault(); if(!requireOnline())return; const kind=$('#pUnitKind').value,factor=unitFactor(kind);
+  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:$('#pCategory').value.trim(),p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value)*factor,p_min_stock:Number($('#pMinStock').value)*factor,p_target_stock:Number($('#pTargetStock').value||0)*factor,p_unit_kind:kind,p_preferred_supplier_id:$('#pPreferredSupplier').value||null};
+  const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_product_v2',params);if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#productDialog').close();toast('Producto guardado en la nube.','success');await loadAllData({silent:true});
 });
 $('#saleForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return;
@@ -652,13 +731,14 @@ $('#saleForm').addEventListener('submit',async e=>{
   for(const item of state.saleCart){
     const p=state.products.find(x=>x.id===item.productId);
     if(!p)return toast('Uno de los productos ya no está disponible.','error');
-    if(item.qty>p.stock)return toast(`Stock insuficiente para ${p.name}. Disponible: ${p.stock}.`,'error');
+    if(item.qty>p.stock+1e-9)return toast(`Stock insuficiente para ${p.name}. Disponible: ${qtyText(p,p.stock)}.`,'error');
   }
   const btn=e.submitter;if(btn)btn.disabled=true;
   const items=state.saleCart.map(i=>({product_id:i.productId,quantity:i.qty}));
   const {error}=await state.client.rpc('create_sale',{p_org_id:state.org.id,p_payment:$('#salePayment').value,p_sold_at:new Date($('#saleDate').value).toISOString(),p_items:items}); if(btn)btn.disabled=false;
   if(error)return toast(error.message,'error'); state.saleCart=[]; $('#saleDialog').close(); toast('Venta sincronizada.','success'); await loadAllData({silent:true});
 });
+$('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const p=state.products.find(x=>x.id===$('#promoProduct').value);if(!p)return toast('Seleccioná un producto.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_promotion',{p_org_id:state.org.id,p_promotion_id:$('#promotionId').value||null,p_product_id:p.id,p_name:$('#promoName').value.trim(),p_rule_type:$('#promoRuleType').value,p_min_qty:toBaseQty(p,Number($('#promoMinQty').value)),p_promo_price:Number($('#promoPrice').value),p_payment:$('#promoPayment').value,p_starts_at:new Date($('#promoStartsAt').value).toISOString(),p_ends_at:$('#promoEndsAt').value?new Date($('#promoEndsAt').value).toISOString():null});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#promotionDialog').close();toast('Promoción guardada.','success');await loadAllData({silent:true});});
 $('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
 $('#supplierForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_supplier',{p_org_id:state.org.id,p_supplier_id:$('#supplierId').value||null,p_name:$('#supplierName').value.trim(),p_phone:$('#supplierPhone').value.trim(),p_email:$('#supplierEmail').value.trim(),p_notes:$('#supplierNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#supplierDialog').close();toast('Proveedor guardado.','success');await loadAllData({silent:true});});
 $('#purchaseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_purchase',{p_org_id:state.org.id,p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:new Date($('#purchaseDate').value).toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({product_id:i.productId,quantity:i.qty,unit_cost:i.unitCost}))});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');state.purchaseCart=[];$('#purchaseDialog').close();toast('Compra registrada y stock actualizado.','success');await loadAllData({silent:true});});
@@ -671,14 +751,14 @@ $('#cashCloseForm').addEventListener('submit',async e=>{
 
 $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts;
-$('#addExpenseBtn').onclick=openExpense;$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=()=>{const p=state.products.find(x=>x.id===$('#purchaseProduct').value);if(p)$('#purchaseUnitCost').value=p.cost;};$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante Zen Hogar</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};$('#shareReceiptBtn').onclick=async()=>{if(!state.activeReceipt)return;const t=receiptText(state.activeReceipt);try{if(navigator.share)await navigator.share({title:'Comprobante Zen Hogar',text:t});else{await navigator.clipboard.writeText(t);toast('Comprobante copiado.','success');}}catch(err){if(err.name!=='AbortError')toast('No se pudo compartir.','error');}};
+$('#addExpenseBtn').onclick=openExpense;$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProduct').onchange=updateSaleUnit;$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProduct').onchange=updatePromotionUnit;$('#promoRuleType').onchange=updatePromotionUnit;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante Zen Hogar</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};$('#shareReceiptBtn').onclick=async()=>{if(!state.activeReceipt)return;const t=receiptText(state.activeReceipt);try{if(navigator.share)await navigator.share({title:'Comprobante Zen Hogar',text:t});else{await navigator.clipboard.writeText(t);toast('Comprobante copiado.','success');}}catch(err){if(err.name!=='AbortError')toast('No se pudo compartir.','error');}};
 
 $('#exportBtn').onclick=()=>{
-  const backup={version:2,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
+  const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));a.download=`zen-hogar-cloud-${todayISO()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
 };
 $('#exportCsvBtn').onclick=()=>{
-  const q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Código','Producto','Categoría','Costo','Precio','Stock','Stock mínimo'],...state.products.map(p=>[p.code,p.name,p.category,p.cost,p.price,p.stock,p.minStock])];
+  const q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Código','Producto','Categoría','Unidad','Costo','Precio','Stock','Stock mínimo','Stock objetivo','Proveedor habitual'],...state.products.map(p=>[p.code,p.name,p.category,unitLabel(p.unitKind),p.cost,p.price,displayQty(p,p.stock),displayQty(p,p.minStock),displayQty(p,p.targetStock),p.preferredSupplierName])];
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv;charset=utf-8'}));a.download='productos-zen-hogar.csv';a.click();
 };
 $('#importFile').onchange=async e=>{
