@@ -98,6 +98,8 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
   .ops-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.ops-actions .secondary,.ops-actions .primary{min-height:42px}.purchase-cart,.receipt-lines{display:grid;gap:8px;margin:12px 0}.purchase-cart-item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:#fbfcfb}.purchase-cart-item small{display:block;color:var(--muted);margin-top:3px}.receipt-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.receipt-head{text-align:center;border-bottom:1px dashed #cfd8d3;padding-bottom:14px;margin-bottom:12px}.receipt-head h3{margin:0 0 4px;font-size:20px}.receipt-head p,.receipt-meta{margin:2px 0;color:var(--muted);font-size:12px}.receipt-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:8px 0;border-bottom:1px dashed #e2e7e4;font-size:12px}.receipt-line small{display:block;color:var(--muted);margin-top:2px}.receipt-total{display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:800;padding-top:14px}.receipt-footer{text-align:center;color:var(--muted);font-size:10px;margin-top:14px}.receipt-actions{display:flex;gap:9px;margin-top:13px}.receipt-actions>*{flex:1}.compact-table table{min-width:680px}@media(max-width:700px){.ops-actions{display:grid;grid-template-columns:1fr 1fr}.ops-actions>*{width:100%}.purchase-cart-item{grid-template-columns:minmax(0,1fr) auto}.purchase-cart-item .sale-cart-remove{grid-column:2}.receipt-actions{display:grid}.receipt-actions>*{width:100%}}
 .reorder-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #edf0ee}.reorder-card:last-child{border-bottom:0}.reorder-card small{display:block;color:var(--muted);margin-top:4px}.promo-pill{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f2ecf8;color:#765d8b;font-size:10px;font-weight:800;margin-top:5px}.discount-note{color:#6e8b7e;font-weight:750}.subtle-note{font-size:11px;color:var(--muted);line-height:1.45;margin:8px 0 0}.unit-hint{display:block;color:var(--muted);font-size:10px;margin-top:5px}.promo-card{padding:13px 0;border-bottom:1px solid #edf0ee}.promo-card:last-child{border-bottom:0}.promo-card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.promo-card small{color:var(--muted);display:block;margin-top:4px}.promo-actions{display:flex;gap:5px}.qty-highlight{font-weight:800;color:var(--accent-dark)}
 @media(max-width:700px){.reorder-card{grid-template-columns:1fr}.reorder-card .primary{width:100%}}
+.reorder-groups{display:grid;gap:14px}.reorder-group{border:1px solid var(--line);border-radius:20px;background:var(--panel-solid);overflow:hidden}.reorder-group-head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 16px;background:#fafcfb;border-bottom:1px solid var(--line)}.reorder-group-head strong{display:block;font-size:15px}.reorder-group-head small{display:block;color:var(--muted);margin-top:3px}.reorder-group-actions{display:flex;gap:9px;align-items:center}.reorder-group-total{font-size:12px;color:var(--muted);text-align:right}.reorder-group-total b{display:block;color:var(--ink);font-size:15px;margin-top:2px}.reorder-group-body{padding:0 16px}.reorder-config-warning{padding:12px 14px;border-radius:14px;background:var(--peach);color:#805f42;font-size:11px;line-height:1.45;margin:12px 0}.reorder-cost{font-size:10px;color:var(--muted);margin-top:3px}
+@media(max-width:700px){.reorder-group-head{align-items:flex-start;flex-direction:column}.reorder-group-actions{width:100%;display:grid;grid-template-columns:1fr}.reorder-group-actions .primary,.reorder-group-actions .secondary{width:100%}.reorder-group-total{text-align:left}}
 .receipt-card{position:relative;overflow:hidden}
 .receipt-preview-logo{display:block;width:92px;height:auto;margin:0 auto 8px;position:relative;z-index:2}
 .receipt-preview-watermark{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:68%;height:auto;pointer-events:none;z-index:0}
@@ -283,13 +285,14 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 
       <section class="view" id="replenishment">
         <div class="section-intro"><div><span class="section-kicker">Inventario inteligente</span><h2>Reposición automática</h2><p>Productos que llegaron al mínimo y cantidad sugerida para alcanzar el stock objetivo.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="prepareAllReordersBtn">Preparar compra sugerida</button><button class="secondary" type="button" onclick="setView('products')">Configurar productos</button></div>
-        <div class="cards three">
+        <div class="ops-actions"><button class="primary" id="prepareAllReordersBtn">Preparar compras por proveedor</button><button class="secondary" type="button" onclick="setView('products')">Configurar productos</button><button class="secondary" type="button" onclick="setView('suppliers')">Gestionar proveedores</button></div>
+        <div class="cards four">
           <article class="card stat peach"><div class="stat-top"><span>Necesitan reposición</span><span class="mini-icon">!</span></div><strong id="reorderCount">0</strong></article>
-          <article class="card stat blue"><div class="stat-top"><span>Con proveedor habitual</span><span class="mini-icon">◇</span></div><strong id="reorderSupplierCount">0</strong></article>
-          <article class="card stat mint"><div class="stat-top"><span>Unidades sugeridas</span><span class="mini-icon">↻</span></div><strong id="reorderUnits">0</strong><small>Puede mezclar u., L y kg</small></article>
+          <article class="card stat blue"><div class="stat-top"><span>Proveedores involucrados</span><span class="mini-icon">◇</span></div><strong id="reorderSupplierCount">0</strong></article>
+          <article class="card stat lilac"><div class="stat-top"><span>Sin proveedor asignado</span><span class="mini-icon">?</span></div><strong id="reorderMissingSupplierCount">0</strong></article>
+          <article class="card stat mint"><div class="stat-top"><span>Costo estimado</span><span class="mini-icon">$</span></div><strong id="reorderEstimatedCost">$0</strong><small>Usa el costo actual de cada producto</small></article>
         </div>
-        <article class="card surface-card"><div id="replenishmentList"></div></article>
+        <div id="replenishmentList" class="reorder-groups"></div>
       </section>
 
       <section class="view" id="promotions">
@@ -692,12 +695,86 @@ function renderProducts(){
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
 }
+function replenishmentItems(){
+  return state.products
+    .filter(p=>p.stock<=p.minStock)
+    .map(p=>{
+      const configuredTarget=Number(p.targetStock||0);
+      const target=configuredTarget>Number(p.minStock||0)?configuredTarget:0;
+      const suggested=target>0?Math.max(target-p.stock,0):0;
+      const estimatedCost=suggested>0?p.cost*(suggested/p.priceUnitQty):0;
+      return {p,target,suggested,estimatedCost};
+    });
+}
 function renderReplenishment(){
-  const items=state.products.filter(p=>p.stock<=p.minStock).map(p=>{const target=Math.max(p.targetStock||0,p.minStock||0),suggested=Math.max(target-p.stock,0);return {p,target,suggested};});
-  $('#reorderCount').textContent=items.length; $('#reorderSupplierCount').textContent=items.filter(x=>x.p.preferredSupplierId).length;
-  $('#reorderUnits').textContent=items.length?items.map(x=>x.suggested>0?qtyText(x.p,x.suggested):'—').slice(0,3).join(' · '):'0';
-  $('#prepareAllReordersBtn').disabled=!items.some(x=>x.suggested>0); $('#prepareAllReordersBtn').hidden=!canAdmin();
-  $('#replenishmentList').innerHTML=items.map(({p,target,suggested})=>`<div class="reorder-card"><div><strong>${esc(p.name)}</strong><small>${esc(p.code)} · stock ${qtyText(p,p.stock)} · mínimo ${qtyText(p,p.minStock)} · objetivo ${target>0?qtyText(p,target):'sin configurar'}</small><small>${p.preferredSupplierName?`Proveedor habitual: ${esc(p.preferredSupplierName)}`:'Sin proveedor habitual'}</small></div><div>${suggested>0?`<div class="qty-highlight">Reponer ${qtyText(p,suggested)}</div><button class="primary compact" onclick="prepareReorder('${p.id}')">Preparar compra</button>`:`<div class="badge low">Configurar objetivo</div><button class="secondary compact" onclick="editProduct('${p.id}')">Editar producto</button>`}</div></div>`).join('')||'<div class="empty">No hay productos que necesiten reposición.</div>';
+  const items=replenishmentItems();
+  const withSuggestion=items.filter(x=>x.suggested>0);
+  const supplierIds=[...new Set(withSuggestion.map(x=>x.p.preferredSupplierId).filter(Boolean))];
+  const missing=withSuggestion.filter(x=>!x.p.preferredSupplierId);
+  const estimated=withSuggestion.reduce((a,x)=>a+x.estimatedCost,0);
+  $('#reorderCount').textContent=items.length;
+  $('#reorderSupplierCount').textContent=supplierIds.length;
+  $('#reorderMissingSupplierCount').textContent=missing.length;
+  $('#reorderEstimatedCost').textContent=money(estimated);
+  $('#prepareAllReordersBtn').disabled=!withSuggestion.length;
+  $('#prepareAllReordersBtn').hidden=!canAdmin();
+
+  if(!items.length){
+    $('#replenishmentList').innerHTML='<div class="card surface-card empty">No hay productos que necesiten reposición.</div>';
+    return;
+  }
+
+  const groups=new Map();
+  items.forEach(x=>{
+    const key=x.p.preferredSupplierId||'__none__';
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(x);
+  });
+
+  const order=[...groups.entries()].sort((a,b)=>{
+    if(a[0]==='__none__')return 1;
+    if(b[0]==='__none__')return -1;
+    const an=a[1][0]?.p?.preferredSupplierName||'';
+    const bn=b[1][0]?.p?.preferredSupplierName||'';
+    return an.localeCompare(bn,'es');
+  });
+
+  $('#replenishmentList').innerHTML=order.map(([supplierId,group])=>{
+    const noSupplier=supplierId==='__none__';
+    const supplierName=noSupplier?'Sin proveedor habitual':(group[0].p.preferredSupplierName||'Proveedor');
+    const actionable=group.filter(x=>x.suggested>0);
+    const groupCost=actionable.reduce((a,x)=>a+x.estimatedCost,0);
+    const needsTarget=group.filter(x=>x.target<=0).length;
+    const rows=group.map(({p,target,suggested,estimatedCost})=>`
+      <div class="reorder-card">
+        <div>
+          <strong>${esc(p.name)}</strong>
+          <small>${esc(p.code)} · stock ${qtyText(p,p.stock)} · mínimo ${qtyText(p,p.minStock)} · objetivo ${target>0?qtyText(p,target):'sin configurar'}</small>
+          ${suggested>0?`<div class="reorder-cost">Costo estimado de reposición: ${money(estimatedCost)}</div>`:''}
+        </div>
+        <div>
+          ${suggested>0
+            ?`<div class="qty-highlight">Reponer ${qtyText(p,suggested)}</div><button class="secondary compact" onclick="prepareReorder('${p.id}')">Compra individual</button>`
+            :`<div class="badge low">Configurar objetivo</div><button class="secondary compact" onclick="editProduct('${p.id}')">Editar producto</button>`}
+        </div>
+      </div>`).join('');
+
+    return `<section class="reorder-group">
+      <div class="reorder-group-head">
+        <div><strong>${esc(supplierName)}</strong><small>${group.length} producto${group.length===1?'':'s'} en reposición</small></div>
+        <div class="reorder-group-actions">
+          <div class="reorder-group-total"><span>Costo estimado</span><b>${money(groupCost)}</b></div>
+          ${!noSupplier&&actionable.length&&canAdmin()?`<button class="primary compact" onclick="prepareSupplierReorder('${supplierId}')">Preparar compra</button>`:''}
+          ${noSupplier&&canAdmin()?`<button class="secondary compact" onclick="setView('products')">Asignar proveedor</button>`:''}
+        </div>
+      </div>
+      <div class="reorder-group-body">
+        ${noSupplier?'<div class="reorder-config-warning">Estos productos necesitan un proveedor habitual para poder agrupar su compra automáticamente.</div>':''}
+        ${needsTarget?'<div class="reorder-config-warning">Hay productos sin stock objetivo configurado. Definilo para que el sistema pueda calcular cuánto comprar.</div>':''}
+        ${rows}
+      </div>
+    </section>`;
+  }).join('');
 }
 function renderPromotions(){
   const now=Date.now(),active=state.promotions.filter(x=>x.active&&new Date(x.startsAt).getTime()<=now&&(!x.endsAt||new Date(x.endsAt).getTime()>=now));
@@ -873,22 +950,41 @@ window.deletePromotion=async id=>{
 };
 window.prepareReorder=id=>{
   if(!canAdmin())return toast('Tu rol no permite preparar compras.','error');
-  const p=state.products.find(x=>x.id===id); if(!p)return;
-  const target=Math.max(p.targetStock||0,p.minStock||0), suggested=Math.max(target-p.stock,0);
-  if(suggested<=0)return toast('Este producto no tiene una cantidad de reposición pendiente.','error');
-  $('#purchaseForm').reset(); state.purchaseCart=[{productId:p.id,qty:suggested,unitCost:p.cost}];
-  $('#purchaseDate').value=nowLocal(); renderPurchaseCart();
-  if(p.preferredSupplierId) $('#purchaseSupplier').value=p.preferredSupplierId;
+  const item=replenishmentItems().find(x=>x.p.id===id);
+  if(!item||item.suggested<=0)return toast('Configurá un stock objetivo mayor al mínimo para calcular la reposición.','error');
+  $('#purchaseForm').reset();
+  state.purchaseCart=[{productId:item.p.id,qty:item.suggested,unitCost:item.p.cost}];
+  $('#purchaseDate').value=nowLocal();
+  renderPurchaseCart();
+  if(item.p.preferredSupplierId)$('#purchaseSupplier').value=item.p.preferredSupplierId;
+  $('#purchaseDialog').showModal();
+};
+window.prepareSupplierReorder=supplierId=>{
+  if(!canAdmin())return toast('Tu rol no permite preparar compras.','error');
+  const items=replenishmentItems().filter(x=>x.p.preferredSupplierId===supplierId&&x.suggested>0);
+  if(!items.length)return toast('Este proveedor no tiene productos con reposición calculada.','error');
+  $('#purchaseForm').reset();
+  state.purchaseCart=items.map(x=>({productId:x.p.id,qty:x.suggested,unitCost:x.p.cost}));
+  $('#purchaseDate').value=nowLocal();
+  renderPurchaseCart();
+  $('#purchaseSupplier').value=supplierId;
   $('#purchaseDialog').showModal();
 };
 function prepareAllReorders(){
   if(!canAdmin())return toast('Tu rol no permite preparar compras.','error');
-  const items=state.products.filter(p=>p.stock<=p.minStock).map(p=>({p,target:Math.max(p.targetStock||0,p.minStock||0)})).map(x=>({p:x.p,suggested:Math.max(x.target-x.p.stock,0)})).filter(x=>x.suggested>0);
-  if(!items.length)return toast('No hay cantidades sugeridas para reponer.','error');
-  $('#purchaseForm').reset(); state.purchaseCart=items.map(x=>({productId:x.p.id,qty:x.suggested,unitCost:x.p.cost})); $('#purchaseDate').value=nowLocal(); renderPurchaseCart();
-  const suppliers=[...new Set(items.map(x=>x.p.preferredSupplierId).filter(Boolean))]; if(suppliers.length===1) $('#purchaseSupplier').value=suppliers[0];
-  $('#purchaseDialog').showModal();
-  if(suppliers.length>1) toast('La lista incluye distintos proveedores. Revisá el proveedor antes de confirmar.');
+  const items=replenishmentItems().filter(x=>x.suggested>0);
+  if(!items.length)return toast('No hay cantidades calculadas. Configurá el stock objetivo de los productos.','error');
+  const suppliers=[...new Set(items.map(x=>x.p.preferredSupplierId).filter(Boolean))];
+  const missing=items.filter(x=>!x.p.preferredSupplierId);
+  if(suppliers.length===1&&!missing.length){
+    return window.prepareSupplierReorder(suppliers[0]);
+  }
+  setView('replenishment');
+  if(missing.length){
+    toast('Hay productos sin proveedor habitual. Asignalos antes de preparar todas las compras.','error');
+  }else{
+    toast('La reposición está agrupada por proveedor. Prepará cada compra desde su bloque.');
+  }
 }
 
 window.editProduct=id=>{
