@@ -95,7 +95,8 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 .gate-divider{display:flex;align-items:center;gap:10px;margin:17px 0 13px;color:#a0aaa6;font-size:11px}.gate-divider:before,.gate-divider:after{content:"";height:1px;background:var(--line);flex:1}.gate-divider span{padding:0 3px}.compact-form{gap:9px}.team-form{grid-template-columns:minmax(0,1fr) auto;align-items:end}.team-form button{min-height:46px}.invite-result{margin-top:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--mint),var(--lilac));border:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center}.invite-result span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:800}.invite-result strong{grid-column:1/2;font-size:24px;letter-spacing:.08em}.invite-result button{grid-row:1/3;grid-column:2;align-self:stretch}.team-card{background:linear-gradient(145deg,#fff,#f5faf7)}
 @media(max-width:700px){.team-form{grid-template-columns:1fr}.invite-result{grid-template-columns:1fr}.invite-result button{grid-row:auto;grid-column:auto}.invite-result strong{grid-column:auto;font-size:21px}}
 
-  </style>
+  .ops-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.ops-actions .secondary,.ops-actions .primary{min-height:42px}.purchase-cart,.receipt-lines{display:grid;gap:8px;margin:12px 0}.purchase-cart-item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:#fbfcfb}.purchase-cart-item small{display:block;color:var(--muted);margin-top:3px}.receipt-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.receipt-head{text-align:center;border-bottom:1px dashed #cfd8d3;padding-bottom:14px;margin-bottom:12px}.receipt-head h3{margin:0 0 4px;font-size:20px}.receipt-head p,.receipt-meta{margin:2px 0;color:var(--muted);font-size:12px}.receipt-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:8px 0;border-bottom:1px dashed #e2e7e4;font-size:12px}.receipt-line small{display:block;color:var(--muted);margin-top:2px}.receipt-total{display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:800;padding-top:14px}.receipt-footer{text-align:center;color:var(--muted);font-size:10px;margin-top:14px}.receipt-actions{display:flex;gap:9px;margin-top:13px}.receipt-actions>*{flex:1}.compact-table table{min-width:680px}@media(max-width:700px){.ops-actions{display:grid;grid-template-columns:1fr 1fr}.ops-actions>*{width:100%}.purchase-cart-item{grid-template-columns:minmax(0,1fr) auto}.purchase-cart-item .sale-cart-remove{grid-column:2}.receipt-actions{display:grid}.receipt-actions>*{width:100%}}
+</style>
 </head>
 <body>
   <section class="cloud-gate" id="cloudGate">
@@ -175,6 +176,12 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
         </button>
         <button class="nav-btn" data-view="cash">
           <span class="nav-icon">$</span><span>Caja diaria</span>
+        </button>
+        <button class="nav-btn" data-view="expenses">
+          <span class="nav-icon">−</span><span>Gastos</span>
+        </button>
+        <button class="nav-btn" data-view="purchases">
+          <span class="nav-icon">＋</span><span>Compras</span>
         </button>
         <button class="nav-btn" data-view="reports">
           <span class="nav-icon">⌁</span><span>Reportes</span>
@@ -261,32 +268,42 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
       </section>
 
       <section class="view" id="cash">
-        <div class="section-intro"><div><span class="section-kicker">Control diario</span><h2>Caja</h2><p>Resumen por medio de pago y cierre del día.</p></div></div>
+        <div class="section-intro"><div><span class="section-kicker">Control diario</span><h2>Caja</h2><p>Ingresos, egresos y efectivo esperado del día.</p></div></div>
+        <div class="ops-actions"><button class="secondary" type="button" onclick="setView('expenses')">Ver gastos</button><button class="secondary" type="button" onclick="setView('purchases')">Compras y proveedores</button></div>
         <div class="cards three">
-          <article class="card stat mint"><div class="stat-top"><span>Efectivo hoy</span><span class="mini-icon">$</span></div><strong id="cashToday">$0</strong></article>
-          <article class="card stat blue"><div class="stat-top"><span>Transferencias</span><span class="mini-icon">↔</span></div><strong id="transferToday">$0</strong></article>
-          <article class="card stat lilac"><div class="stat-top"><span>Total del día</span><span class="mini-icon">∑</span></div><strong id="dayTotal">$0</strong></article>
+          <article class="card stat mint"><div class="stat-top"><span>Ventas en efectivo</span><span class="mini-icon">$</span></div><strong id="cashToday">$0</strong><small>Ingresos por ventas de hoy</small></article>
+          <article class="card stat peach"><div class="stat-top"><span>Egresos en efectivo</span><span class="mini-icon">−</span></div><strong id="cashOutToday">$0</strong><small>Gastos + compras en efectivo</small></article>
+          <article class="card stat blue"><div class="stat-top"><span>Efectivo esperado</span><span class="mini-icon">≈</span></div><strong id="cashExpectedToday">$0</strong><small>Incluye apertura, ingresos y retiros</small></article>
         </div>
         <div class="grid two">
-          <article class="card surface-card">
-            <span class="section-kicker">Arqueo</span><h2>Cierre de caja</h2>
-            <form id="cashCloseForm" class="form-grid">
-              <label>Fecha<input type="date" id="cashDate" required /></label>
-              <label>Efectivo contado<input type="number" id="cashCounted" min="0" step="0.01" required /></label>
-              <label class="full">Observaciones<textarea id="cashNotes" rows="3" placeholder="Opcional"></textarea></label>
-              <button class="primary full" type="submit">Guardar cierre</button>
-            </form>
-          </article>
+          <article class="card surface-card"><span class="section-kicker">Arqueo</span><h2>Cierre de caja</h2><form id="cashCloseForm" class="form-grid"><label>Fecha<input type="date" id="cashDate" required /></label><label>Efectivo contado<input type="number" id="cashCounted" min="0" step="0.01" required /></label><label class="full">Observaciones<textarea id="cashNotes" rows="3" placeholder="Opcional"></textarea></label><button class="primary full" type="submit">Guardar cierre</button></form></article>
+          <article class="card surface-card"><span class="section-kicker">Movimientos manuales</span><h2>Apertura, ingreso o retiro</h2><form id="cashMovementForm" class="form-grid"><label>Fecha<input type="date" id="cashMovementDate" required /></label><label>Tipo<select id="cashMovementKind"><option value="opening">Apertura de caja</option><option value="income">Ingreso manual</option><option value="withdrawal">Retiro</option></select></label><label>Importe<input type="number" id="cashMovementAmount" min="0.01" step="0.01" required /></label><label>Detalle<input id="cashMovementNotes" placeholder="Ej. cambio inicial" /></label><button class="primary full" type="submit">Registrar movimiento</button></form></article>
+          <article class="card surface-card"><span class="section-kicker">Detalle de hoy</span><h2>Movimientos de caja</h2><div id="cashMovementList"></div></article>
           <article class="card surface-card"><span class="section-kicker">Historial</span><h2>Últimos cierres</h2><div id="cashClosings"></div></article>
         </div>
       </section>
 
+      <section class="view" id="expenses">
+        <div class="section-intro"><div><span class="section-kicker">Egresos</span><h2>Gastos</h2><p>Registrá gastos del negocio sin mezclarlos con las compras de mercadería.</p></div></div>
+        <div class="ops-actions"><button class="primary" id="addExpenseBtn">+ Registrar gasto</button><button class="secondary" type="button" onclick="setView('cash')">Ir a caja</button></div>
+        <div class="cards three"><article class="card stat peach"><div class="stat-top"><span>Gastos de hoy</span><span class="mini-icon">−</span></div><strong id="expensesToday">$0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Gastos del mes</span><span class="mini-icon">▤</span></div><strong id="expensesMonth">$0</strong></article><article class="card stat mint"><div class="stat-top"><span>En efectivo hoy</span><span class="mini-icon">$</span></div><strong id="expensesCashToday">$0</strong></article></div>
+        <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Medio</th><th>Importe</th><th></th></tr></thead><tbody id="expensesTable"></tbody></table></div>
+      </section>
+
+      <section class="view" id="purchases">
+        <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras y proveedores</h2><p>Ingresá mercadería y actualizá el stock automáticamente.</p></div></div>
+        <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button><button class="secondary" id="addSupplierBtn">+ Proveedor</button><button class="secondary" type="button" onclick="setView('products')">Ver inventario</button></div>
+        <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
+        <div class="grid two"><article class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></article><article class="card surface-card"><span class="section-kicker">Agenda</span><h2>Proveedores activos</h2><div id="supplierList"></div></article></div>
+      </section>
+
       <section class="view" id="reports">
         <div class="section-intro"><div><span class="section-kicker">Análisis</span><h2>Reportes</h2><p>Una lectura rápida de la evolución del negocio.</p></div></div>
-        <div class="cards three">
+        <div class="cards four">
           <article class="card stat mint"><div class="stat-top"><span>Ventas acumuladas</span><span class="mini-icon">↗</span></div><strong id="totalRevenue">$0</strong></article>
-          <article class="card stat blue"><div class="stat-top"><span>Ganancia acumulada</span><span class="mini-icon">＋</span></div><strong id="totalProfit">$0</strong></article>
-          <article class="card stat peach"><div class="stat-top"><span>Valor de stock</span><span class="mini-icon">◇</span></div><strong id="stockValue">$0</strong></article>
+          <article class="card stat blue"><div class="stat-top"><span>Ganancia bruta</span><span class="mini-icon">＋</span></div><strong id="totalProfit">$0</strong></article>
+          <article class="card stat peach"><div class="stat-top"><span>Gastos acumulados</span><span class="mini-icon">−</span></div><strong id="totalExpenses">$0</strong></article>
+          <article class="card stat lilac"><div class="stat-top"><span>Resultado estimado</span><span class="mini-icon">≈</span></div><strong id="netResult">$0</strong></article>
         </div>
         <div class="grid two">
           <article class="card surface-card"><span class="section-kicker">Cobros</span><h2>Ventas por medio de pago</h2><div id="paymentReport"></div></article>
@@ -391,6 +408,10 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
     </form>
   </dialog>
 
+  <dialog id="expenseDialog"><form method="dialog" id="expenseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Egreso</span><h2>Registrar gasto</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Categoría<select id="expenseCategory"><option>Servicios</option><option>Flete</option><option>Insumos</option><option>Mantenimiento</option><option>Impuestos</option><option>Otros</option></select></label><label>Medio de pago<select id="expensePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label><label class="full">Descripción<input id="expenseDescription" required placeholder="Ej. flete de mercadería" /></label><label>Importe<input id="expenseAmount" type="number" min="0.01" step="0.01" required /></label><label>Fecha y hora<input id="expenseDate" type="datetime-local" required /></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar gasto</button></form></dialog>
+  <dialog id="supplierDialog"><form method="dialog" id="supplierForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Proveedor</span><h2>Datos del proveedor</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><input type="hidden" id="supplierId" /><div class="form-grid"><label class="full">Nombre<input id="supplierName" required /></label><label>Teléfono<input id="supplierPhone" /></label><label>Email<input id="supplierEmail" type="email" /></label><label class="full">Notas<textarea id="supplierNotes" rows="3"></textarea></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar proveedor</button></form></dialog>
+  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad<input id="purchaseQty" type="number" min="1" step="1" value="1" /></label><label>Costo unitario<input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+  <dialog id="receiptDialog"><div class="modal-card"><div class="modal-head"><div><span class="section-kicker">Comprobante</span><h2>Detalle de venta</h2></div><button class="icon-btn" id="closeReceiptBtn" aria-label="Cerrar">✕</button></div><div id="receiptContent"></div><div class="receipt-actions"><button class="secondary" id="shareReceiptBtn" type="button">Compartir</button><button class="primary" id="printReceiptBtn" type="button">Imprimir</button></div></div></dialog>
   <div class="toast" id="toast" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -413,8 +434,8 @@ const saleLocalDate = s => localDateISO(new Date(s.soldAt));
 const roleLabel = r => ({owner:'Propietario',admin:'Administrador',employee:'Empleado'})[r] || r || '—';
 
 const state = {
-  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],channel:null,
-  authMode:'signin', reloadTimer:null, saleCart:[]
+  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],expenses:[],suppliers:[],purchases:[],cashMovements:[],channel:null,
+  authMode:'signin', reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null
 };
 
 function toast(message,type=''){
@@ -434,11 +455,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,at:new Date().toISOString()})); }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,at:new Date().toISOString()})); }
 function loadCache(){
   const key=cacheKey(); if(!key)return false;
   const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; renderAll(); return true;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function requireOnline(){ if(!navigator.onLine){toast('Sin conexión: podés consultar datos guardados, pero los cambios requieren internet.','error');return false;} return true; }
@@ -447,7 +468,7 @@ function setView(id){
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   $$('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-  const labels={dashboard:'Inicio',products:'Productos',sales:'Ventas',cash:'Caja diaria',reports:'Reportes',settings:'Configuración'};
+  const labels={dashboard:'Inicio',products:'Productos',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',purchases:'Compras y proveedores',reports:'Reportes',settings:'Configuración'};
   $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
 }
 function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
@@ -474,43 +495,56 @@ function renderProducts(){
   $('#addProductBtn').hidden=!canAdmin();
 }
 function renderSales(){
-  $('#salesTable').innerHTML=state.sales.map(s=>`<tr><td data-label="Fecha">${fmtDate(s.soldAt)}</td><td data-label="Producto"><strong>${esc(saleProductLabel(s))}</strong></td><td data-label="Cantidad">${saleQty(s)}</td><td data-label="Total">${money(s.total)}</td><td data-label="Medio">${esc(s.payment)}</td><td data-label="Ganancia">${money(saleProfit(s))}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Anular venta" onclick="deleteSale('${s.id}')">⌫</button>`:'<small>—</small>'}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Todavía no hay ventas.</td></tr>';
+  $('#salesTable').innerHTML=state.sales.map(s=>'<tr><td data-label="Fecha">'+fmtDate(s.soldAt)+'</td><td data-label="Producto"><strong>'+esc(saleProductLabel(s))+'</strong><br><small>Comp. #'+String(s.receiptNumber||'—').padStart(6,'0')+'</small></td><td data-label="Cantidad">'+saleQty(s)+'</td><td data-label="Total">'+money(s.total)+'</td><td data-label="Medio">'+esc(s.payment)+'</td><td data-label="Ganancia">'+money(saleProfit(s))+'</td><td data-label="Acciones"><button class="action-btn" aria-label="Comprobante" onclick="openReceipt(\''+s.id+'\')">▤</button>'+(canAdmin()?'<button class="action-btn" aria-label="Anular venta" onclick="deleteSale(\''+s.id+'\')">⌫</button>':'')+'</td></tr>').join('')||'<tr><td colspan="7" class="empty">Todavía no hay ventas.</td></tr>';
 }
 function renderCash(){
-  const ts=salesToday(), sum=m=>ts.filter(s=>s.payment===m).reduce((a,s)=>a+s.total,0);
-  $('#cashToday').textContent=money(sum('Efectivo')); $('#transferToday').textContent=money(sum('Transferencia')); $('#dayTotal').textContent=money(ts.reduce((a,s)=>a+s.total,0));
-  $('#cashClosings').innerHTML=state.closings.slice(0,8).map(c=>`<div class="list-row"><div><strong>${new Intl.DateTimeFormat('es-AR').format(new Date(`${c.date}T12:00:00`))}</strong><br><small>${esc(c.notes||'Sin observaciones')}</small></div><div><strong>${money(c.counted)}</strong><br><small class="${c.diff>=0?'positive':'negative'}">Dif. ${money(c.diff)}</small></div></div>`).join('')||'<div class="empty">No hay cierres registrados.</div>';
+  const day=todayISO(),ts=salesToday(),cashSales=ts.filter(s=>s.payment==='Efectivo').reduce((a,s)=>a+s.total,0),dayExpenses=state.expenses.filter(e=>e.date.slice(0,10)===day&&e.payment==='Efectivo').reduce((a,e)=>a+e.amount,0),dayPurchases=state.purchases.filter(p=>p.date.slice(0,10)===day&&p.payment==='Efectivo').reduce((a,p)=>a+p.total,0),mov=state.cashMovements.filter(m=>m.date===day),manual=mov.reduce((a,m)=>a+(m.kind==='withdrawal'?-m.amount:m.amount),0);
+  $('#cashToday').textContent=money(cashSales);$('#cashOutToday').textContent=money(dayExpenses+dayPurchases);$('#cashExpectedToday').textContent=money(cashSales-dayExpenses-dayPurchases+manual);
+  $('#cashMovementList').innerHTML=mov.map(m=>'<div class="list-row"><div><strong>'+esc(({opening:'Apertura',income:'Ingreso',withdrawal:'Retiro'})[m.kind]||m.kind)+'</strong><br><small>'+esc(m.notes||'Sin detalle')+'</small></div><div><strong class="'+(m.kind==='withdrawal'?'negative':'positive')+'">'+(m.kind==='withdrawal'?'- ':'+ ')+money(m.amount)+'</strong>'+(canAdmin()?'<br><button class="action-btn" onclick="deleteCashMovement(\''+m.id+'\')">⌫</button>':'')+'</div></div>').join('')||'<div class="empty">Sin movimientos manuales hoy.</div>';
+  $('#cashClosings').innerHTML=state.closings.slice(0,8).map(x=>'<div class="list-row"><div><strong>'+new Intl.DateTimeFormat('es-AR').format(new Date(x.date+'T12:00:00'))+'</strong><br><small>'+esc(x.notes||'Sin observaciones')+'</small></div><div><strong>'+money(x.counted)+'</strong><br><small>Esperado '+money(x.expected)+'</small><br><small class="'+(x.diff>=0?'positive':'negative')+'">Dif. '+money(x.diff)+'</small></div></div>').join('')||'<div class="empty">No hay cierres registrados.</div>';
+}
+function renderExpenses(){
+  const day=todayISO(),month=day.slice(0,7),today=state.expenses.filter(e=>e.date.slice(0,10)===day),monthly=state.expenses.filter(e=>e.date.slice(0,7)===month);
+  $('#expensesToday').textContent=money(today.reduce((a,e)=>a+e.amount,0));$('#expensesMonth').textContent=money(monthly.reduce((a,e)=>a+e.amount,0));$('#expensesCashToday').textContent=money(today.filter(e=>e.payment==='Efectivo').reduce((a,e)=>a+e.amount,0));
+  $('#expensesTable').innerHTML=state.expenses.map(e=>'<tr><td data-label="Fecha">'+fmtDate(e.date)+'</td><td data-label="Categoría">'+esc(e.category)+'</td><td data-label="Descripción"><strong>'+esc(e.description)+'</strong></td><td data-label="Medio">'+esc(e.payment)+'</td><td data-label="Importe">'+money(e.amount)+'</td><td data-label="Acciones">'+(canAdmin()?'<button class="action-btn" onclick="deleteExpense(\''+e.id+'\')">⌫</button>':'—')+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Todavía no hay gastos.</td></tr>';
+}
+function renderPurchases(){
+  const month=todayISO().slice(0,7);$('#purchasesMonth').textContent=money(state.purchases.filter(p=>p.date.slice(0,7)===month).reduce((a,p)=>a+p.total,0));$('#supplierCount').textContent=state.suppliers.length;$('#purchaseCount').textContent=state.purchases.length;
+  $('#purchasesTable').innerHTML=state.purchases.map(p=>'<tr><td data-label="Fecha">'+fmtDate(p.date)+'</td><td data-label="Proveedor">'+esc(p.supplierName||'Sin proveedor')+'</td><td data-label="Productos">'+p.items.reduce((a,i)=>a+i.qty,0)+' u.</td><td data-label="Medio">'+esc(p.payment)+'</td><td data-label="Total">'+money(p.total)+'</td><td data-label="Acciones">'+(canAdmin()?'<button class="action-btn" onclick="deletePurchase(\''+p.id+'\')">⌫</button>':'—')+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Todavía no hay compras.</td></tr>';
+  $('#supplierList').innerHTML=state.suppliers.map(s=>'<div class="list-row"><div><strong>'+esc(s.name)+'</strong><br><small>'+esc(s.phone||s.email||'Sin datos de contacto')+'</small></div>'+(canAdmin()?'<div><button class="action-btn" onclick="editSupplier(\''+s.id+'\')">✎</button><button class="action-btn" onclick="deleteSupplier(\''+s.id+'\')">⌫</button></div>':'')+'</div>').join('')||'<div class="empty">No hay proveedores cargados.</div>';
+  $('#purchaseSupplier').innerHTML='<option value="">Sin proveedor</option>'+state.suppliers.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');$('#purchaseProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.map(p=>'<option value="'+p.id+'">'+esc(p.name)+' · costo '+money(p.cost)+'</option>').join('');
 }
 function renderReports(){
-  const rev=state.sales.reduce((a,s)=>a+s.total,0), prof=state.sales.reduce((a,s)=>a+saleProfit(s),0), stock=state.products.reduce((a,p)=>a+p.cost*p.stock,0);
-  $('#totalRevenue').textContent=money(rev); $('#totalProfit').textContent=money(prof); $('#stockValue').textContent=money(stock);
-  const byPay={}; state.sales.forEach(s=>byPay[s.payment]=(byPay[s.payment]||0)+s.total);
-  $('#paymentReport').innerHTML=Object.entries(byPay).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="list-row"><span>${esc(k)}</span><strong>${money(v)}</strong></div>`).join('')||'<div class="empty">Sin datos.</div>';
-  const byProd={}; state.sales.forEach(s=>s.items.forEach(i=>byProd[i.productName]=(byProd[i.productName]||0)+i.qty));
-  $('#topProducts').innerHTML=Object.entries(byProd).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,q])=>`<div class="list-row"><span>${esc(name)}</span><strong>${q} u.</strong></div>`).join('')||'<div class="empty">Sin datos.</div>';
+  const rev=state.sales.reduce((a,s)=>a+s.total,0),prof=state.sales.reduce((a,s)=>a+saleProfit(s),0),exp=state.expenses.reduce((a,e)=>a+e.amount,0);$('#totalRevenue').textContent=money(rev);$('#totalProfit').textContent=money(prof);$('#totalExpenses').textContent=money(exp);$('#netResult').textContent=money(prof-exp);
+  const byPay={};state.sales.forEach(s=>byPay[s.payment]=(byPay[s.payment]||0)+s.total);$('#paymentReport').innerHTML=Object.entries(byPay).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<div class="list-row"><span>'+esc(k)+'</span><strong>'+money(v)+'</strong></div>').join('')||'<div class="empty">Sin datos.</div>';
+  const byProd={};state.sales.forEach(s=>s.items.forEach(i=>byProd[i.productName]=(byProd[i.productName]||0)+i.qty));$('#topProducts').innerHTML=Object.entries(byProd).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,q])=>'<div class="list-row"><span>'+esc(name)+'</span><strong>'+q+' u.</strong></div>').join('')||'<div class="empty">Sin datos.</div>';
 }
 function renderSettings(){
   $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
   $('#teamCard').hidden=!canAdmin();
 }
 
-function renderAll(){ renderDashboard(); renderProducts(); renderSales(); renderCash(); renderReports(); renderSettings(); }
+function renderAll(){ renderDashboard(); renderProducts(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderReports(); renderSettings(); }
 
 async function loadAllData({silent=false}={}){
-  if(!state.org)return;
-  if(!navigator.onLine){ if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.'); updateConnection(); return; }
+  if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
-    const [pRes,sRes,cRes]=await Promise.all([
+    const [pRes,sRes,cRes,eRes,supRes,purRes,movRes]=await Promise.all([
       state.client.from('products').select('id,code,name,category,cost,price,stock,min_stock').eq('organization_id',state.org.id).eq('active',true).order('name'),
-      state.client.from('sales').select('id,payment,total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
-      state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365)
-    ]);
-    if(pRes.error)throw pRes.error; if(sRes.error)throw sRes.error; if(cRes.error)throw cRes.error;
+      state.client.from('sales').select('id,receipt_number,payment,total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
+      state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365),
+      state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false}).limit(1500),
+      state.client.from('suppliers').select('id,name,phone,email,notes').eq('organization_id',state.org.id).eq('active',true).order('name'),
+      state.client.from('purchases').select('id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,products(name,code))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false}).limit(1000),
+      state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(1000)
+    ]);for(const r of [pRes,sRes,cRes,eRes,supRes,purRes,movRes])if(r.error)throw r.error;
     state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock)}));
-    state.sales=(sRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto'}))}));
+    state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto',productCode:i.products?.code||''}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
-    saveCache(); renderAll(); updateConnection();
-  }catch(err){ console.error(err); if(loadCache()){toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');} else toast(`Error al cargar datos: ${err.message||err}`,'error'); }
+    state.expenses=(eRes.data||[]).map(r=>({id:r.id,category:r.category,description:r.description,amount:Number(r.amount),payment:r.payment,date:r.expense_at}));state.suppliers=(supRes.data||[]).map(r=>({id:r.id,name:r.name,phone:r.phone||'',email:r.email||'',notes:r.notes||''}));
+    state.purchases=(purRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),productName:i.products?.name||'Producto'}))}));
+    state.cashMovements=(movRes.data||[]).map(r=>({id:r.id,date:r.business_date,kind:r.kind,amount:Number(r.amount),notes:r.notes||'',createdAt:r.created_at}));saveCache();renderAll();updateConnection();
+  }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
 }
 
 function subscribeRealtime(){
@@ -521,6 +555,11 @@ function subscribeRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'sales',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'sale_items',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'cash_closings',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'expenses',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'suppliers',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'purchases',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'purchase_items',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'cash_movements',filter:`organization_id=eq.${org}`},reload)
     .subscribe();
 }
 
@@ -532,7 +571,7 @@ async function resolveBusiness(){
 }
 async function startApp(){
   $('#cloudGate').hidden=true; $('#appShell').hidden=false; $('#mobileSaleBtn').hidden=false; $('#mobileNav').hidden=false;
-  $('#todayLabel').textContent=new Intl.DateTimeFormat('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); $('#cashDate').value=todayISO();
+  $('#todayLabel').textContent=new Intl.DateTimeFormat('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()); $('#cashDate').value=todayISO(); $('#cashMovementDate').value=todayISO();
   renderSettings(); await loadAllData(); subscribeRealtime();
 }
 async function handleSignedIn(user){
@@ -555,6 +594,19 @@ window.deleteSale=async id=>{
   const {error}=await state.client.rpc('cancel_sale',{p_sale_id:id}); if(error)return toast(error.message,'error'); toast('Venta anulada y stock restaurado.','success'); await loadAllData({silent:true});
 };
 
+window.deleteExpense=async id=>{if(!canAdmin()||!requireOnline())return;if(!confirm('¿Anular este gasto?'))return;const {error}=await state.client.rpc('cancel_expense',{p_expense_id:id});if(error)return toast(error.message,'error');toast('Gasto anulado.','success');await loadAllData({silent:true});};
+window.editSupplier=id=>{if(!canAdmin())return;const s=state.suppliers.find(x=>x.id===id);if(!s)return;$('#supplierForm').reset();$('#supplierId').value=s.id;$('#supplierName').value=s.name;$('#supplierPhone').value=s.phone;$('#supplierEmail').value=s.email;$('#supplierNotes').value=s.notes;$('#supplierDialog').showModal();};
+window.deleteSupplier=async id=>{if(!canAdmin()||!requireOnline())return;if(!confirm('¿Archivar este proveedor?'))return;const {error}=await state.client.rpc('archive_supplier',{p_org_id:state.org.id,p_supplier_id:id});if(error)return toast(error.message,'error');toast('Proveedor archivado.','success');await loadAllData({silent:true});};
+window.deletePurchase=async id=>{if(!canAdmin()||!requireOnline())return;if(!confirm('¿Anular esta compra? El stock ingresado se descontará si todavía está disponible.'))return;const {error}=await state.client.rpc('cancel_purchase',{p_purchase_id:id});if(error)return toast(error.message,'error');toast('Compra anulada y stock revertido.','success');await loadAllData({silent:true});};
+window.deleteCashMovement=async id=>{if(!canAdmin()||!requireOnline())return;if(!confirm('¿Eliminar este movimiento de caja?'))return;const {error}=await state.client.rpc('delete_cash_movement',{p_movement_id:id});if(error)return toast(error.message,'error');toast('Movimiento eliminado.','success');await loadAllData({silent:true});};
+function openExpense(){$('#expenseForm').reset();$('#expenseDate').value=nowLocal();$('#expenseDialog').showModal();}
+function openSupplier(){if(!canAdmin())return toast('Sólo administradores pueden cargar proveedores.','error');$('#supplierForm').reset();$('#supplierId').value='';$('#supplierDialog').showModal();}
+function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();renderPurchaseCart();$('#purchaseDialog').showModal();}
+function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),qty=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isInteger(qty)||qty<=0)return toast('Cantidad inválida.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty:qty,unitCost:cost});$('#purchaseProduct').value='';$('#purchaseQty').value=1;$('#purchaseUnitCost').value='';renderPurchaseCart();}
+function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();}window.removePurchaseItem=removePurchaseItem;
+function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0,units=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.qty*i.unitCost;total+=sub;units+=i.qty;return '<div class="purchase-cart-item"><div><strong>'+esc(p.name)+'</strong><small>'+i.qty+' u. × '+money(i.unitCost)+'</small></div><strong>'+money(sub)+'</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem(\''+p.id+'\')">✕</button></div>';}).join('');preview.innerHTML='<div class="sale-total-row"><span>'+state.purchaseCart.length+' productos · '+units+' unidades</span><strong>'+money(total)+'</strong></div>';submit.disabled=false;}
+window.openReceipt=id=>{const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;const items=s.items.map(i=>'<div class="receipt-line"><div><strong>'+esc(i.productName)+'</strong><small>'+i.qty+' × '+money(i.unitPrice)+'</small></div><strong>'+money(i.qty*i.unitPrice)+'</strong></div>').join('');$('#receiptContent').innerHTML='<div class="receipt-card"><div class="receipt-head"><h3>Zen Hogar</h3><p>Comprobante no fiscal</p><p>Venta #'+String(s.receiptNumber||'—').padStart(6,'0')+'</p></div><div class="receipt-meta">'+fmtDate(s.soldAt)+' · '+esc(s.payment)+'</div><div class="receipt-lines">'+items+'</div><div class="receipt-total"><span>Total</span><span>'+money(s.total)+'</span></div><div class="receipt-footer">Gracias por tu compra · Zen Hogar</div></div>';$('#receiptDialog').showModal();};
+function receiptText(s){return 'ZEN HOGAR\\nComprobante no fiscal #'+String(s.receiptNumber||'—').padStart(6,'0')+'\\n'+fmtDate(s.soldAt)+'\\n\\n'+s.items.map(i=>i.qty+' x '+i.productName+' - '+money(i.qty*i.unitPrice)).join('\\n')+'\\n\\nTOTAL: '+money(s.total)+'\\nMedio de pago: '+s.payment+'\\n\\nGracias por tu compra.';}
 function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#productDialog').showModal(); }
 function openSale(){
   if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;}
@@ -607,6 +659,10 @@ $('#saleForm').addEventListener('submit',async e=>{
   const {error}=await state.client.rpc('create_sale',{p_org_id:state.org.id,p_payment:$('#salePayment').value,p_sold_at:new Date($('#saleDate').value).toISOString(),p_items:items}); if(btn)btn.disabled=false;
   if(error)return toast(error.message,'error'); state.saleCart=[]; $('#saleDialog').close(); toast('Venta sincronizada.','success'); await loadAllData({silent:true});
 });
+$('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
+$('#supplierForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_supplier',{p_org_id:state.org.id,p_supplier_id:$('#supplierId').value||null,p_name:$('#supplierName').value.trim(),p_phone:$('#supplierPhone').value.trim(),p_email:$('#supplierEmail').value.trim(),p_notes:$('#supplierNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#supplierDialog').close();toast('Proveedor guardado.','success');await loadAllData({silent:true});});
+$('#purchaseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_purchase',{p_org_id:state.org.id,p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:new Date($('#purchaseDate').value).toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({product_id:i.productId,quantity:i.qty,unit_cost:i.unitCost}))});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');state.purchaseCart=[];$('#purchaseDialog').close();toast('Compra registrada y stock actualizado.','success');await loadAllData({silent:true});});
+$('#cashMovementForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('add_cash_movement',{p_org_id:state.org.id,p_business_date:$('#cashMovementDate').value,p_kind:$('#cashMovementKind').value,p_amount:Number($('#cashMovementAmount').value),p_notes:$('#cashMovementNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');e.target.reset();$('#cashMovementDate').value=todayISO();toast('Movimiento de caja registrado.','success');await loadAllData({silent:true});});
 $('#cashCloseForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return;
   const {error}=await state.client.rpc('close_cash',{p_org_id:state.org.id,p_business_date:$('#cashDate').value,p_counted:Number($('#cashCounted').value),p_notes:$('#cashNotes').value.trim()});
@@ -615,6 +671,7 @@ $('#cashCloseForm').addEventListener('submit',async e=>{
 
 $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts;
+$('#addExpenseBtn').onclick=openExpense;$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=()=>{const p=state.products.find(x=>x.id===$('#purchaseProduct').value);if(p)$('#purchaseUnitCost').value=p.cost;};$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante Zen Hogar</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};$('#shareReceiptBtn').onclick=async()=>{if(!state.activeReceipt)return;const t=receiptText(state.activeReceipt);try{if(navigator.share)await navigator.share({title:'Comprobante Zen Hogar',text:t});else{await navigator.clipboard.writeText(t);toast('Comprobante copiado.','success');}}catch(err){if(err.name!=='AbortError')toast('No se pudo compartir.','error');}};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:2,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
