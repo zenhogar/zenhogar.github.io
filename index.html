@@ -409,7 +409,7 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 
   <dialog id="productDialog">
     <form method="dialog" id="productForm" class="modal-card">
-      <div class="modal-head"><div><span class="section-kicker">Inventario</span><h2 id="productModalTitle">Agregar producto</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <div class="modal-head"><div><span class="section-kicker">Inventario</span><h2 id="productModalTitle">Agregar producto</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
       <input type="hidden" id="productId" />
       <div class="form-grid">
         <label>Código<input id="pCode" required /></label>
@@ -429,7 +429,7 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 
   <dialog id="saleDialog">
     <form method="dialog" id="saleForm" class="modal-card">
-      <div class="modal-head"><div><span class="section-kicker">Nueva operación</span><h2>Registrar venta</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <div class="modal-head"><div><span class="section-kicker">Nueva operación</span><h2>Registrar venta</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
       <div class="sale-builder">
         <label>Producto<select id="saleProduct"></select></label>
         <label>Cantidad (<span id="saleQtyUnit">u.</span>)<input id="saleQty" type="number" min="0.001" step="0.001" value="1" /></label>
@@ -445,12 +445,12 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
     </form>
   </dialog>
 
-  <dialog id="expenseDialog"><form method="dialog" id="expenseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Egreso</span><h2>Registrar gasto</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Categoría<select id="expenseCategory"><option>Servicios</option><option>Flete</option><option>Insumos</option><option>Mantenimiento</option><option>Impuestos</option><option>Otros</option></select></label><label>Medio de pago<select id="expensePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label><label class="full">Descripción<input id="expenseDescription" required placeholder="Ej. flete de mercadería" /></label><label>Importe<input id="expenseAmount" type="number" min="0.01" step="0.01" required /></label><label>Fecha y hora<input id="expenseDate" type="datetime-local" required /></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar gasto</button></form></dialog>
-  <dialog id="supplierDialog"><form method="dialog" id="supplierForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Proveedor</span><h2>Datos del proveedor</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><input type="hidden" id="supplierId" /><div class="form-grid"><label class="full">Nombre<input id="supplierName" required /></label><label>Teléfono<input id="supplierPhone" /></label><label>Email<input id="supplierEmail" type="email" /></label><label class="full">Notas<textarea id="supplierNotes" rows="3"></textarea></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar proveedor</button></form></dialog>
-  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label><label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+  <dialog id="expenseDialog"><form method="dialog" id="expenseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Egreso</span><h2>Registrar gasto</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><div class="form-grid"><label>Categoría<select id="expenseCategory"><option>Servicios</option><option>Flete</option><option>Insumos</option><option>Mantenimiento</option><option>Impuestos</option><option>Otros</option></select></label><label>Medio de pago<select id="expensePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label><label class="full">Descripción<input id="expenseDescription" required placeholder="Ej. flete de mercadería" /></label><label>Importe<input id="expenseAmount" type="number" min="0.01" step="0.01" required /></label><label>Fecha y hora<input id="expenseDate" type="datetime-local" required /></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar gasto</button></form></dialog>
+  <dialog id="supplierDialog"><form method="dialog" id="supplierForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Proveedor</span><h2>Datos del proveedor</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><input type="hidden" id="supplierId" /><div class="form-grid"><label class="full">Nombre<input id="supplierName" required /></label><label>Teléfono<input id="supplierPhone" /></label><label>Email<input id="supplierEmail" type="email" /></label><label class="full">Notas<textarea id="supplierNotes" rows="3"></textarea></label></div><button class="primary full modal-primary" value="default" type="submit">Guardar proveedor</button></form></dialog>
+  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label><label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
   <dialog id="promotionDialog">
     <form method="dialog" id="promotionForm" class="modal-card">
-      <div class="modal-head"><div><span class="section-kicker">Precio especial</span><h2 id="promotionModalTitle">Nueva promoción</h2></div><button value="cancel" class="icon-btn" aria-label="Cerrar">✕</button></div>
+      <div class="modal-head"><div><span class="section-kicker">Precio especial</span><h2 id="promotionModalTitle">Nueva promoción</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
       <input type="hidden" id="promotionId" />
       <div class="form-grid">
         <label class="full">Producto<select id="promoProduct" required></select></label>
@@ -682,21 +682,24 @@ function updateProductUnitLabels(){
   ['pStock','pMinStock','pTargetStock'].forEach(id=>$('#'+id).step=step);
 }
 function updateSaleUnit(){
-  const p=state.products.find(x=>x.id===$('#saleProduct').value);
+  const p=state.products.find(x=>x.id===$('#saleProduct').value), input=$('#saleQty');
   $('#saleQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
-  $('#saleQty').step=p?.unitKind==='unit'?'1':'0.001';
-  if(p?.unitKind==='unit' && !Number.isInteger(Number($('#saleQty').value||1))) $('#saleQty').value=1;
+  const whole=p?.unitKind==='unit';
+  input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
+  if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1;
 }
 function updatePurchaseUnit(){
-  const p=state.products.find(x=>x.id===$('#purchaseProduct').value);
+  const p=state.products.find(x=>x.id===$('#purchaseProduct').value), input=$('#purchaseQty');
   $('#purchaseQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
   $('#purchaseCostUnit').textContent=p?unitWord(p.unitKind):'unidad';
-  $('#purchaseQty').step=p?.unitKind==='unit'?'1':'0.001';
-  if(p){ $('#purchaseUnitCost').value=p.cost; if(p.unitKind==='unit'&&!Number.isInteger(Number($('#purchaseQty').value||1))) $('#purchaseQty').value=1; }
+  const whole=p?.unitKind==='unit';
+  input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
+  if(p){ $('#purchaseUnitCost').value=p.cost; if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1; }
 }
 function updatePromotionUnit(){
-  const p=state.products.find(x=>x.id===$('#promoProduct').value), kind=p?.unitKind||'unit';
-  $('#promoQtyUnit').textContent=unitLabel(kind); $('#promoMinQty').step=kind==='unit'?'1':'0.001';
+  const p=state.products.find(x=>x.id===$('#promoProduct').value), kind=p?.unitKind||'unit', input=$('#promoMinQty');
+  $('#promoQtyUnit').textContent=unitLabel(kind); const whole=kind==='unit'; input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
+  if(whole && input.value && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1;
   if($('#promoRuleType').value==='qty_total'){
     $('#promoRuleHelp').textContent=`Ejemplo: cantidad ${kind==='unit'?'2':'1'} ${unitLabel(kind)} y un total promocional. La promoción se aplica por cada grupo completo.`;
   }else{
