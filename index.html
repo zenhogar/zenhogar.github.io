@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Zen Hogar V11.2 · PDF móvil robusto -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -639,7 +640,7 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
               <button class="primary" id="sendInviteBtn" type="submit">Enviar invitación</button>
             </form>
             <div class="access-section"><div class="access-section-title"><strong>Personas con acceso</strong><span id="accessMemberCount">0</span></div><div class="access-list" id="accessMembersList"></div></div>
-            <div class="access-section"><div class="access-section-title"><strong>Invitaciones</strong><span id="accessInviteCount">0</span></div><div class="access-list" id="accessInvitesList"></div></div>
+            <div class="access-section"><div class="access-section-title"><strong>Invitaciones pendientes</strong><span id="accessInviteCount">0</span></div><div class="access-list" id="accessInvitesList"></div></div>
           </article>
 
           <article class="card surface-card account-card">
@@ -785,7 +786,7 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
 
   <dialog id="receiptDialog"><div class="modal-card"><div class="modal-head"><div><span class="section-kicker">Comprobante</span><h2>Detalle de venta</h2></div><button type="button" class="icon-btn" id="closeReceiptBtn" aria-label="Cerrar">✕</button></div><div id="receiptContent"></div><div class="receipt-actions"><button class="secondary" id="downloadPdfBtn" type="button">Descargar PDF</button><button class="primary" id="sharePdfBtn" type="button">Compartir PDF</button><button class="secondary" id="printReceiptBtn" type="button">Imprimir</button></div></div></dialog>
   <div class="toast" id="toast" hidden></div>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js'"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
 window.ZH_CONFIG = {
@@ -893,22 +894,112 @@ function buildReceiptPdf(s){
   doc.text('Este comprobante no reemplaza factura fiscal.',center,y,{align:'center'});
   return doc;
 }
+function receiptPdfSafeText(value){
+  return String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7E]/g,'?').replace(/([\\()])/g,'\\$1');
+}
+function buildReceiptFallbackBlob(s){
+  const rows=[];
+  rows.push({t:'ZEN HOGAR',size:13,b:true});
+  rows.push({t:'COMPROBANTE NO FISCAL',size:9,b:true});
+  rows.push({t:`Venta #${receiptNumberText(s)}`,size:8});
+  rows.push({t:fmtDate(s.soldAt),size:7});
+  rows.push({t:'--------------------------------',size:7});
+  for(const i of s.items){
+    rows.push({t:String(i.productName||'Producto'),size:8,b:true});
+    rows.push({t:`${qtyText({unitKind:i.unitKind},i.qty)} x ${receiptPdfMoney(i.unitPrice)}/${unitLabel(i.unitKind)}   ${receiptPdfMoney(i.lineTotal)}`,size:7});
+    if(i.promotionName) rows.push({t:`Promo: ${i.promotionName}`,size:7,b:true});
+    if(Number(i.ownContainerCount||0)>0) rows.push({t:`Envase propio: ${i.ownContainerCount}  - ${receiptPdfMoney(i.containerDiscountAmount||0)}`,size:7,b:true});
+    rows.push({t:'--------------------------------',size:7});
+  }
+  if(Number(s.discountTotal||0)>0){
+    rows.push({t:`Subtotal: ${receiptPdfMoney(s.subtotal)}`,size:8});
+    if(Number(s.promotionDiscountTotal||0)>0) rows.push({t:`Descuento promociones: - ${receiptPdfMoney(s.promotionDiscountTotal)}`,size:7,b:true});
+    if(Number(s.containerDiscountTotal||0)>0) rows.push({t:`Descuento envase propio: - ${receiptPdfMoney(s.containerDiscountTotal)}`,size:7,b:true});
+  }
+  rows.push({t:`TOTAL: ${receiptPdfMoney(s.total)}`,size:12,b:true});
+  rows.push({t:`Medio de pago: ${s.payment}`,size:7});
+  rows.push({t:'--------------------------------',size:7});
+  rows.push({t:'Gracias por tu compra',size:9,b:true});
+  rows.push({t:'Zen Hogar',size:8});
+  rows.push({t:'Este comprobante no reemplaza factura fiscal.',size:6.5});
+
+  const width=226.77;
+  const height=Math.max(420,70+rows.length*14);
+  let y=height-30;
+  const commands=[];
+  for(const r of rows){
+    const font=r.b?'/F2':'/F1';
+    commands.push(`BT ${font} ${r.size||8} Tf 18 ${y.toFixed(2)} Td (${receiptPdfSafeText(r.t)}) Tj ET`);
+    y-=Math.max(11,(r.size||8)+5);
+  }
+  const stream=commands.join('\n');
+  const enc=new TextEncoder();
+  const objects=[
+    null,
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>`,
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>',
+    `<< /Length ${enc.encode(stream).length} >>\nstream\n${stream}\nendstream`
+  ];
+  let pdf='%PDF-1.4\n';
+  const offsets=[0];
+  for(let i=1;i<objects.length;i++){
+    offsets[i]=enc.encode(pdf).length;
+    pdf+=`${i} 0 obj\n${objects[i]}\nendobj\n`;
+  }
+  const xref=enc.encode(pdf).length;
+  pdf+=`xref\n0 ${objects.length}\n0000000000 65535 f \n`;
+  for(let i=1;i<objects.length;i++) pdf+=`${String(offsets[i]).padStart(10,'0')} 00000 n \n`;
+  pdf+=`trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  return new Blob([enc.encode(pdf)],{type:'application/pdf'});
+}
+function receiptPdfBlob(s){
+  const JsPDF=window.jspdf?.jsPDF;
+  if(JsPDF){
+    try{return buildReceiptPdf(s).output('blob');}
+    catch(err){console.warn('jsPDF falló; usando generador compatible.',err);}
+  }
+  return buildReceiptFallbackBlob(s);
+}
+function triggerPdfDownload(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename; a.rel='noopener'; a.target='_blank';
+  a.style.display='none'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+}
 function downloadReceiptPdf(s){
   if(!s)return;
-  try{ buildReceiptPdf(s).save(receiptPdfFilename(s)); toast('PDF generado.','success'); }
-  catch(err){ console.error(err); toast(err.message||'No se pudo generar el PDF.','error'); }
+  try{
+    const blob=receiptPdfBlob(s);
+    if(!blob||!blob.size)throw new Error('El archivo PDF quedó vacío.');
+    triggerPdfDownload(blob,receiptPdfFilename(s));
+    toast('PDF listo para descargar.','success');
+  }catch(err){console.error(err);toast(err.message||'No se pudo generar el PDF.','error');}
 }
 async function shareReceiptPdf(s){
   if(!s)return;
+  let blob=null,filename='';
   try{
-    const doc=buildReceiptPdf(s), blob=doc.output('blob'), filename=receiptPdfFilename(s);
-    const file=new File([blob],filename,{type:'application/pdf'});
-    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-      await navigator.share({title:`Comprobante Zen Hogar #${receiptNumberText(s)}`,text:'Comprobante de compra - Zen Hogar',files:[file]});
+    blob=receiptPdfBlob(s); filename=receiptPdfFilename(s);
+    if(!blob||!blob.size)throw new Error('El archivo PDF quedó vacío.');
+    const file=new File([blob],filename,{type:'application/pdf',lastModified:Date.now()});
+    const canShareFile=typeof navigator.share==='function' && (!navigator.canShare || navigator.canShare({files:[file]}));
+    if(canShareFile){
+      await navigator.share({title:`Comprobante Zen Hogar #${receiptNumberText(s)}`,files:[file]});
+      toast('Comprobante compartido.','success');
       return;
     }
-    doc.save(filename); toast('Tu navegador no permite compartir PDFs directamente. Lo descargué para que puedas enviarlo.','success');
-  }catch(err){ if(err?.name!=='AbortError'){console.error(err);toast(err.message||'No se pudo compartir el PDF.','error');} }
+    triggerPdfDownload(blob,filename);
+    toast('El navegador no permite compartir archivos directamente. Descargué el PDF para que puedas enviarlo.','success');
+  }catch(err){
+    if(err?.name==='AbortError')return;
+    console.error(err);
+    try{ if(blob) triggerPdfDownload(blob,filename||receiptPdfFilename(s)); }catch(_e){}
+    toast(err.message||'No se pudo compartir el PDF. Se intentó descargar como alternativa.','error');
+  }
 }
 
 const state = {
@@ -1250,8 +1341,9 @@ function renderAccessControl(){
   if(!canOwner())return;
   $('#accessMemberCount').textContent=state.accessMembers.length;
   $('#accessMembersList').innerHTML=state.accessMembers.map(m=>`<div class="access-row"><div class="access-row-main"><strong>${esc(m.fullName||m.email)}</strong><small>${esc(m.email)} · ${roleLabel(m.role)}</small></div><span class="access-status ${m.role==='owner'?'owner':''}">${roleLabel(m.role)}</span>${m.role!=='owner'?`<button class="access-revoke" type="button" onclick="revokeTeamMember('${m.userId}')">Revocar</button>`:''}</div>`).join('')||'<div class="access-empty">No hay usuarios para mostrar.</div>';
-  $('#accessInviteCount').textContent=state.accessInvites.length;
-  $('#accessInvitesList').innerHTML=state.accessInvites.map(i=>{const st=invitationStatus(i);const pending=!i.acceptedAt&&!i.revokedAt&&new Date(i.expiresAt).getTime()>Date.now();return `<div class="access-row"><div class="access-row-main"><strong>${esc(i.email)}</strong><small>${roleLabel(i.role)} · vence ${fmtDate(i.expiresAt)}${i.lastError?` · ${esc(i.lastError)}`:''}</small></div><span class="access-status ${st.cls}">${st.label}</span>${pending?`<button class="access-revoke" type="button" onclick="revokeAccessInvite('${i.id}')">Cancelar</button>`:''}</div>`;}).join('')||'<div class="access-empty">Todavía no hay invitaciones.</div>';
+  const pendingInvites=state.accessInvites.filter(i=>!i.acceptedAt&&!i.revokedAt&&new Date(i.expiresAt).getTime()>Date.now());
+  $('#accessInviteCount').textContent=pendingInvites.length;
+  $('#accessInvitesList').innerHTML=pendingInvites.map(i=>{const st=invitationStatus(i);return `<div class="access-row"><div class="access-row-main"><strong>${esc(i.email)}</strong><small>${roleLabel(i.role)} · vence ${fmtDate(i.expiresAt)}${i.lastError?` · ${esc(i.lastError)}`:''}</small></div><span class="access-status ${st.cls}">${st.label}</span><button class="access-revoke" type="button" onclick="revokeAccessInvite('${i.id}')">Cancelar</button></div>`;}).join('')||'<div class="access-empty">No hay invitaciones pendientes.</div>';
 }
 function renderSettings(){
   $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
@@ -1309,6 +1401,8 @@ function subscribeRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'purchase_items',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'cash_movements',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'promotions',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'access_invitations',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'memberships',filter:`organization_id=eq.${org}`},reload)
     .subscribe();
 }
 
