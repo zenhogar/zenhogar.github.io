@@ -248,6 +248,12 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
 }
+
+/* V11 · Seguridad por invitación */
+.gate-security-note{display:flex;align-items:center;gap:11px;padding:12px 13px;margin:14px 0;border:1px solid #dceae4;background:linear-gradient(135deg,#eef7f3,#f6f4f8);border-radius:15px;color:var(--ink-soft)}
+.gate-security-note>span{width:34px;height:34px;border-radius:11px;background:#fff;display:grid;place-items:center;box-shadow:0 5px 14px rgba(70,100,90,.07);font-weight:900;color:var(--accent-dark);flex:0 0 auto}.gate-security-note strong,.gate-security-note small{display:block}.gate-security-note strong{font-size:12px}.gate-security-note small{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}.access-denied-email{padding:12px 13px;margin:14px 0;background:#f6f7f6;border:1px solid var(--line);border-radius:13px;font-size:12px;font-weight:800;word-break:break-word}
+.access-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.access-card-head h2{margin-bottom:8px}.access-lock-badge{flex:0 0 auto;display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#eef7f3;color:#527568;font-size:10px;font-weight:850;border:1px solid #dceae4}.access-invite-form{display:grid;grid-template-columns:minmax(0,1fr) 160px auto;gap:10px;align-items:end;margin:17px 0 19px}.access-invite-form label{font-size:11px;font-weight:800;color:#75837d}.access-invite-form input,.access-invite-form select{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff;min-height:46px;color:var(--ink)}.access-invite-form input:focus,.access-invite-form select:focus{outline:2px solid rgba(111,158,142,.18);border-color:#b9d0c7}.access-section{border-top:1px solid #edf1ef;padding-top:14px;margin-top:12px}.access-section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.access-section-title strong{font-size:12px}.access-section-title span{font-size:10px;font-weight:850;background:#f1f6f3;padding:4px 8px;border-radius:999px;color:var(--muted)}.access-list{display:grid;gap:7px}.access-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:9px;padding:10px 11px;border:1px solid #e8eeeb;border-radius:13px;background:#fbfcfb}.access-row-main{min-width:0}.access-row-main strong,.access-row-main small{display:block;overflow:hidden;text-overflow:ellipsis}.access-row-main strong{font-size:11px;white-space:nowrap}.access-row-main small{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.35}.access-status{font-size:9px;font-weight:850;padding:5px 7px;border-radius:999px;background:#edf7f2;color:#557e70;white-space:nowrap}.access-status.owner{background:#f2eff8;color:#77668d}.access-status.pending{background:#edf4f9;color:#58778a}.access-status.warning{background:#fff3e8;color:#936b45}.access-status.danger{background:#f9eaea;color:#9a5b5b}.access-status.muted{background:#f1f2f1;color:#87908c}.access-revoke{border:0;background:#f8eeee;color:#965858;border-radius:9px;padding:7px 9px;font-size:9px;font-weight:850;cursor:pointer}.access-empty{padding:12px;text-align:center;border:1px dashed #dfe7e3;border-radius:12px;color:var(--muted);font-size:10px;background:#fbfcfb}
+@media(max-width:700px){.access-card-head{display:block}.access-lock-badge{margin-top:5px}.access-invite-form{grid-template-columns:1fr}.access-invite-form button{width:100%}.access-row{grid-template-columns:minmax(0,1fr) auto}.access-revoke{grid-column:1/-1;width:100%}.access-row-main small{white-space:normal}}
 </style>
 </head>
 <body>
@@ -271,32 +277,38 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
       <div id="authStep" class="gate-step" hidden>
         <div class="gate-badge">Acceso seguro</div>
         <h2 id="authTitle">Ingresar</h2>
-        <p id="authIntro">Usá tu cuenta para acceder a los datos de Zen Hogar.</p>
+        <p id="authIntro">Usá tu cuenta autorizada para acceder a los datos de Zen Hogar.</p>
+        <div class="gate-security-note"><span>⌾</span><div><strong>Acceso cerrado</strong><small>Las cuentas nuevas sólo pueden ser autorizadas por el propietario.</small></div></div>
         <form id="authForm" class="gate-form">
           <label>Email<input id="authEmail" type="email" autocomplete="email" required></label>
           <label>Contraseña<input id="authPassword" type="password" minlength="6" autocomplete="current-password" required></label>
           <button class="primary full" id="authSubmit" type="submit">Ingresar</button>
         </form>
-        <button id="toggleAuthMode" class="text-btn" type="button">Crear una cuenta nueva</button>
+        <small class="gate-help">Si recibiste una invitación, abrí el enlace enviado a tu correo para activar tu acceso.</small>
         <button id="changeCloudConfig" class="text-btn subtle" type="button">Cambiar conexión de nube</button>
         <div class="gate-message" id="authMessage" hidden></div>
       </div>
 
       <div id="businessStep" class="gate-step" hidden>
-        <div class="gate-badge">2 · Crear espacio</div>
-        <h2>Preparar Zen Hogar</h2>
-        <p>Este paso crea el espacio privado del negocio y te asigna como propietario.</p>
-        <form id="businessForm" class="gate-form">
-          <label>Nombre del negocio<input id="businessName" value="Zen Hogar" required></label>
-          <label>Tu nombre<input id="ownerName" placeholder="Opcional"></label>
-          <button class="primary full" type="submit">Crear espacio de trabajo</button>
+        <div class="gate-badge">Acceso restringido</div>
+        <h2>Esta cuenta no está autorizada</h2>
+        <p>El propietario de Zen Hogar debe autorizar tu correo antes de que puedas entrar al sistema.</p>
+        <div class="access-denied-email" id="accessDeniedEmail">—</div>
+        <button class="secondary full" id="accessDeniedSignOut" type="button">Cerrar sesión</button>
+      </div>
+
+      <div id="inviteSetupStep" class="gate-step" hidden>
+        <div class="gate-badge">Invitación aceptada</div>
+        <h2>Terminá de configurar tu acceso</h2>
+        <p>Elegí tu contraseña. Este paso se realiza una sola vez.</p>
+        <div class="gate-security-note"><span>✓</span><div><strong id="inviteSetupEmail">—</strong><small>Correo autorizado por el propietario</small></div></div>
+        <form id="inviteSetupForm" class="gate-form">
+          <label>Tu nombre<input id="inviteSetupName" autocomplete="name" placeholder="Opcional"></label>
+          <label>Nueva contraseña<input id="inviteSetupPassword" type="password" minlength="8" autocomplete="new-password" required></label>
+          <label>Repetir contraseña<input id="inviteSetupPassword2" type="password" minlength="8" autocomplete="new-password" required></label>
+          <button class="primary full" id="inviteSetupSubmit" type="submit">Activar mi acceso</button>
         </form>
-        <div class="gate-divider"><span>o</span></div>
-        <form id="joinBusinessForm" class="gate-form compact-form">
-          <label>Código de invitación<input id="inviteCodeInput" placeholder="Ej. 8F3A91C2D4" autocomplete="off"></label>
-          <label>Tu nombre<input id="inviteNameInput" placeholder="Opcional"></label>
-          <button class="secondary full" type="submit">Unirme con código</button>
-        </form>
+        <div class="gate-message" id="inviteSetupMessage" hidden></div>
       </div>
 
       <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p>Conectando de forma segura…</p></div>
@@ -607,7 +619,7 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
       </section>
 
       <section class="view" id="settings">
-        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Instalación, copias de seguridad y mantenimiento.</p></div></div>
+        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Seguridad, usuarios, instalación y copias de respaldo.</p></div></div>
         <div class="settings-grid">
           <article class="card install-card">
             <div class="install-icon"><span>ZH</span></div>
@@ -620,13 +632,14 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
           </article>
 
           <article class="card surface-card team-card" id="teamCard">
-            <span class="section-kicker">Equipo</span><h2>Invitar a otra persona</h2>
-            <p class="card-copy">Generá un código temporal para que un empleado o administrador se una al mismo negocio desde su propia cuenta.</p>
-            <div class="form-grid team-form">
+            <div class="access-card-head"><div><span class="section-kicker">Seguridad</span><h2>Usuarios y accesos</h2><p class="card-copy">Sólo el propietario puede autorizar nuevas cuentas. La invitación vence a los 7 días.</p></div><span class="access-lock-badge">🔒 Sólo invitación</span></div>
+            <form class="access-invite-form" id="accessInviteForm">
+              <label>Email<input id="inviteEmail" type="email" autocomplete="off" placeholder="persona@correo.com" required></label>
               <label>Rol<select id="inviteRole"><option value="employee">Empleado</option><option value="admin">Administrador</option></select></label>
-              <button class="primary" id="createInviteBtn" type="button">Generar código</button>
-            </div>
-            <div class="invite-result" id="inviteResult" hidden><span>Código válido por 7 días</span><strong id="inviteCodeValue"></strong><button class="secondary" id="copyInviteBtn" type="button">Copiar código</button></div>
+              <button class="primary" id="sendInviteBtn" type="submit">Enviar invitación</button>
+            </form>
+            <div class="access-section"><div class="access-section-title"><strong>Personas con acceso</strong><span id="accessMemberCount">0</span></div><div class="access-list" id="accessMembersList"></div></div>
+            <div class="access-section"><div class="access-section-title"><strong>Invitaciones</strong><span id="accessInviteCount">0</span></div><div class="access-list" id="accessInvitesList"></div></div>
           </article>
 
           <article class="card surface-card account-card">
@@ -899,8 +912,8 @@ async function shareReceiptPdf(s){
 }
 
 const state = {
-  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],expenses:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],channel:null,
-  authMode:'signin', reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,
+  client:null,user:null,org:null,role:null,products:[],sales:[],closings:[],expenses:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],accessInvites:[],accessMembers:[],channel:null,
+  reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,
   reportPeriod:localStorage.getItem('zenhogar_report_period')||'30d',
   reportMarginTarget:Number(localStorage.getItem('zenhogar_report_margin_target')||45)
 };
@@ -910,7 +923,7 @@ function toast(message,type=''){
   clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,3200);
 }
 function setGateStep(id){
-  ['configStep','authStep','businessStep','gateLoading'].forEach(x=>$('#'+x).hidden=x!==id);
+  ['configStep','authStep','businessStep','inviteSetupStep','gateLoading'].forEach(x=>$('#'+x).hidden=x!==id);
   $('#cloudGate').hidden=false;
 }
 function setGateMessage(message,type=''){
@@ -929,6 +942,7 @@ function loadCache(){
   state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
+function canOwner(){ return state.role==='owner'; }
 function requireOnline(){ if(!navigator.onLine){toast('Sin conexión: podés consultar datos guardados, pero los cambios requieren internet.','error');return false;} return true; }
 
 function setView(id){
@@ -1225,9 +1239,24 @@ function exportProfitabilityCsv(){
   const blob=new Blob(['\ufeff'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`rentabilidad-zen-hogar-${state.reportPeriod||'30d'}-${todayISO()}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500);
 }
 
+function invitationStatus(i){
+  if(i.acceptedAt)return {label:'Aceptada',cls:'success'};
+  if(i.revokedAt)return {label:'Revocada',cls:'muted'};
+  if(new Date(i.expiresAt).getTime()<=Date.now())return {label:'Vencida',cls:'warning'};
+  if(i.lastError)return {label:'Error de envío',cls:'danger'};
+  return {label:i.emailSentAt?'Pendiente':'Preparada',cls:'pending'};
+}
+function renderAccessControl(){
+  if(!canOwner())return;
+  $('#accessMemberCount').textContent=state.accessMembers.length;
+  $('#accessMembersList').innerHTML=state.accessMembers.map(m=>`<div class="access-row"><div class="access-row-main"><strong>${esc(m.fullName||m.email)}</strong><small>${esc(m.email)} · ${roleLabel(m.role)}</small></div><span class="access-status ${m.role==='owner'?'owner':''}">${roleLabel(m.role)}</span>${m.role!=='owner'?`<button class="access-revoke" type="button" onclick="revokeTeamMember('${m.userId}')">Revocar</button>`:''}</div>`).join('')||'<div class="access-empty">No hay usuarios para mostrar.</div>';
+  $('#accessInviteCount').textContent=state.accessInvites.length;
+  $('#accessInvitesList').innerHTML=state.accessInvites.map(i=>{const st=invitationStatus(i);const pending=!i.acceptedAt&&!i.revokedAt&&new Date(i.expiresAt).getTime()>Date.now();return `<div class="access-row"><div class="access-row-main"><strong>${esc(i.email)}</strong><small>${roleLabel(i.role)} · vence ${fmtDate(i.expiresAt)}${i.lastError?` · ${esc(i.lastError)}`:''}</small></div><span class="access-status ${st.cls}">${st.label}</span>${pending?`<button class="access-revoke" type="button" onclick="revokeAccessInvite('${i.id}')">Cancelar</button>`:''}</div>`;}).join('')||'<div class="access-empty">Todavía no hay invitaciones.</div>';
+}
 function renderSettings(){
   $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
-  $('#teamCard').hidden=!canAdmin();
+  $('#teamCard').hidden=!canOwner();
+  renderAccessControl();
 }
 
 function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
@@ -1252,6 +1281,16 @@ async function loadAllData({silent=false}={}){
     state.purchases=(purRes.data||[]).map(r=>({id:r.id,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),unitKind:i.products?.unit_kind||'unit',productName:i.products?.name||'Producto'}))}));
     state.cashMovements=(movRes.data||[]).map(r=>({id:r.id,date:r.business_date,kind:r.kind,amount:Number(r.amount),notes:r.notes||'',createdAt:r.created_at}));
     state.promotions=(promoRes.data||[]).map(r=>({id:r.id,productId:r.product_id,name:r.name,ruleType:r.rule_type,minQty:Number(r.min_qty),promoPrice:Number(r.promo_price),payment:r.payment,startsAt:r.starts_at,endsAt:r.ends_at,active:r.active}));
+    state.accessInvites=[]; state.accessMembers=[];
+    if(canOwner()){
+      const [inviteRes,memberRes]=await Promise.all([
+        state.client.from('access_invitations').select('id,email,role,expires_at,email_sent_at,last_error,accepted_at,revoked_at,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(30),
+        state.client.rpc('list_org_members',{p_org_id:state.org.id})
+      ]);
+      if(inviteRes.error)throw inviteRes.error; if(memberRes.error)throw memberRes.error;
+      state.accessInvites=(inviteRes.data||[]).map(i=>({id:i.id,email:i.email,role:i.role,expiresAt:i.expires_at,emailSentAt:i.email_sent_at,lastError:i.last_error||'',acceptedAt:i.accepted_at,revokedAt:i.revoked_at,createdAt:i.created_at}));
+      state.accessMembers=(memberRes.data||[]).map(m=>({userId:m.user_id,email:m.email||'',fullName:m.full_name||'',role:m.role,joinedAt:m.joined_at}));
+    }
     saveCache();renderAll();updateConnection();
   }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
 }
@@ -1286,7 +1325,19 @@ async function startApp(){
 }
 async function handleSignedIn(user){
   state.user=user; setGateStep('gateLoading');
-  try{ if(await resolveBusiness()) await startApp(); else setGateStep('businessStep'); }
+  try{
+    if(await resolveBusiness()){await startApp();return;}
+    const meta=user?.user_metadata||{};
+    if(meta.zen_hogar_invite){
+      $('#inviteSetupEmail').textContent=user.email||'—';
+      setGateStep('inviteSetupStep');
+      return;
+    }
+    const {data:accepted,error:acceptError}=await state.client.rpc('accept_access_invitation',{p_full_name:null});
+    if(!acceptError&&accepted&&await resolveBusiness()){await startApp();return;}
+    $('#accessDeniedEmail').textContent=user.email||'Cuenta sin email';
+    setGateStep('businessStep');
+  }
   catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo abrir el negocio: ${err.message}`,'error');}
 }
 
@@ -1350,7 +1401,7 @@ function updateSaleUnit(){
   $('#saleQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
-  if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1;
+  // No reponer el valor 1 mientras el usuario está editando: permite borrar y escribir otra cantidad sin que el 1 quede "fijo".
   const eligible=!!p&&(Number(p.ownContainerDiscount||0)>0||Number(p.containerCost||0)>0);
   wrap.hidden=!eligible;
   if(!eligible){containerInput.value=0;containerInput.removeAttribute('max');hint.textContent='Sin descuento configurado';return;}
@@ -1581,7 +1632,7 @@ const savedTarget=Number(localStorage.getItem('zenhogar_target_margin'));if(save
 
 $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts;
-$('#addExpenseBtn').onclick=openExpense;$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProduct').onchange=updatePromotionUnit;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante Zen Hogar</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
+$('#addExpenseBtn').onclick=openExpense;$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProduct').onchange=updatePromotionUnit;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante Zen Hogar</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
@@ -1631,39 +1682,53 @@ window.addEventListener('appinstalled',()=>{installStatus.textContent='Zen Hogar
 // Cloud onboarding
 $('#cloudConfigForm').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem('zenhogar_cloud_config',JSON.stringify({supabaseUrl:$('#cloudUrl').value.trim().replace(/\/$/,''),supabaseKey:$('#cloudKey').value.trim()}));location.reload();});
 $('#changeCloudConfig').onclick=()=>{ if(confirm('¿Cambiar la conexión de nube de este dispositivo?')){localStorage.removeItem('zenhogar_cloud_config');location.reload();} };
-$('#toggleAuthMode').onclick=()=>{
-  state.authMode=state.authMode==='signin'?'signup':'signin'; const signup=state.authMode==='signup'; $('#authTitle').textContent=signup?'Crear cuenta':'Ingresar'; $('#authIntro').textContent=signup?'Creá el primer usuario de Zen Hogar. Si Supabase exige confirmación, revisá tu email antes de ingresar.':'Usá tu cuenta para acceder a los datos de Zen Hogar.'; $('#authSubmit').textContent=signup?'Crear cuenta':'Ingresar'; $('#toggleAuthMode').textContent=signup?'Ya tengo cuenta':'Crear una cuenta nueva'; setGateMessage('');
-};
 $('#authForm').addEventListener('submit',async e=>{
   e.preventDefault(); setGateMessage(''); const email=$('#authEmail').value.trim(),password=$('#authPassword').value; $('#authSubmit').disabled=true;
   try{
-    if(state.authMode==='signup'){
-      const {data,error}=await state.client.auth.signUp({email,password}); if(error)throw error;
-      if(data.session)await handleSignedIn(data.user); else setGateMessage('Cuenta creada. Revisá tu email para confirmar la cuenta y después ingresá.','success');
-    }else{
-      const {data,error}=await state.client.auth.signInWithPassword({email,password}); if(error)throw error; await handleSignedIn(data.user);
-    }
+    const {data,error}=await state.client.auth.signInWithPassword({email,password}); if(error)throw error; await handleSignedIn(data.user);
   }catch(err){setGateMessage(err.message||'No se pudo autenticar.','error');}finally{$('#authSubmit').disabled=false;}
 });
-$('#businessForm').addEventListener('submit',async e=>{
-  e.preventDefault(); if(!requireOnline())return; const btn=e.submitter;if(btn)btn.disabled=true;
-  const {error}=await state.client.rpc('bootstrap_business',{p_business_name:$('#businessName').value.trim(),p_full_name:$('#ownerName').value.trim()||null}); if(btn)btn.disabled=false;
-  if(error)return toast(error.message,'error'); await handleSignedIn(state.user);
-});
-$('#joinBusinessForm').addEventListener('submit',async e=>{
-  e.preventDefault(); if(!requireOnline())return; const code=$('#inviteCodeInput').value.trim(); if(!code)return toast('Ingresá el código de invitación.','error'); const btn=e.submitter;if(btn)btn.disabled=true;
-  const {error}=await state.client.rpc('accept_invite_code',{p_code:code,p_full_name:$('#inviteNameInput').value.trim()||null}); if(btn)btn.disabled=false;
-  if(error)return toast(error.message,'error'); toast('Te uniste al equipo correctamente.','success'); await handleSignedIn(state.user);
+
+$('#accessDeniedSignOut').addEventListener('click',async()=>{await state.client.auth.signOut();location.reload();});
+
+$('#inviteSetupForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!requireOnline())return;
+  const pass=$('#inviteSetupPassword').value, pass2=$('#inviteSetupPassword2').value, btn=$('#inviteSetupSubmit'), msg=$('#inviteSetupMessage');
+  msg.hidden=true;
+  if(pass.length<8){msg.textContent='La contraseña debe tener al menos 8 caracteres.';msg.className='gate-message error';msg.hidden=false;return;}
+  if(pass!==pass2){msg.textContent='Las contraseñas no coinciden.';msg.className='gate-message error';msg.hidden=false;return;}
+  btn.disabled=true;
+  try{
+    const {error:passwordError}=await state.client.auth.updateUser({password:pass}); if(passwordError)throw passwordError;
+    const {error:acceptError}=await state.client.rpc('accept_access_invitation',{p_full_name:$('#inviteSetupName').value.trim()||null}); if(acceptError)throw acceptError;
+    const {data:userData}=await state.client.auth.getUser(); state.user=userData.user||state.user;
+    if(!await resolveBusiness())throw new Error('No se pudo activar la membresía');
+    toast('Acceso activado correctamente.','success'); await startApp();
+  }catch(err){msg.textContent=err.message||'No se pudo activar el acceso.';msg.className='gate-message error';msg.hidden=false;}finally{btn.disabled=false;}
 });
 
-$('#createInviteBtn').addEventListener('click',async()=>{
-  if(!canAdmin()||!requireOnline())return; const btn=$('#createInviteBtn');btn.disabled=true;
-  const {data,error}=await state.client.rpc('create_invite_code',{p_org_id:state.org.id,p_role:$('#inviteRole').value}); btn.disabled=false;
-  if(error)return toast(error.message,'error'); $('#inviteCodeValue').textContent=data; $('#inviteResult').hidden=false;
+$('#accessInviteForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!canOwner()||!requireOnline())return;
+  const btn=$('#sendInviteBtn'),email=$('#inviteEmail').value.trim(),role=$('#inviteRole').value; btn.disabled=true;
+  try{
+    const {data:invitationId,error:createError}=await state.client.rpc('create_access_invitation',{p_org_id:state.org.id,p_email:email,p_role:role}); if(createError)throw createError;
+    const {data,error:sendError}=await state.client.functions.invoke('send-access-invite',{body:{invitation_id:invitationId}});
+    if(sendError)throw sendError;
+    $('#inviteEmail').value=''; toast(`Invitación enviada a ${email}.`,'success'); await loadAllData({silent:true});
+  }catch(err){toast(err.message||'No se pudo enviar la invitación.','error'); await loadAllData({silent:true});}finally{btn.disabled=false;}
 });
-$('#copyInviteBtn').addEventListener('click',async()=>{
-  const code=$('#inviteCodeValue').textContent.trim(); if(!code)return; try{await navigator.clipboard.writeText(code);toast('Código copiado.','success');}catch{toast(`Código: ${code}`);}
-});
+window.revokeAccessInvite=async id=>{
+  if(!canOwner()||!requireOnline())return;
+  if(!confirm('¿Cancelar esta invitación?'))return;
+  const {error}=await state.client.rpc('revoke_access_invitation',{p_org_id:state.org.id,p_invitation_id:id});
+  if(error)return toast(error.message,'error'); toast('Invitación cancelada.','success'); await loadAllData({silent:true});
+};
+window.revokeTeamMember=async userId=>{
+  if(!canOwner()||!requireOnline())return;
+  if(!confirm('¿Revocar el acceso de esta persona? Dejará de poder ver y modificar los datos del negocio.'))return;
+  const {error}=await state.client.rpc('revoke_org_member',{p_org_id:state.org.id,p_user_id:userId});
+  if(error)return toast(error.message,'error'); toast('Acceso revocado.','success'); await loadAllData({silent:true});
+};
 
 async function init(){
   const cfg=savedConfig();
