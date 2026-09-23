@@ -172,6 +172,82 @@ dialog{overflow-x:hidden}
 @media(max-width:760px){.report-control-fields{display:grid;grid-template-columns:1fr 1fr}.report-control-fields label,.report-control-fields select,.report-control-fields input,.report-control-fields .secondary{width:100%;min-width:0}.report-control-fields .secondary{grid-column:1/-1}.report-insights{grid-template-columns:1fr}.report-primary-kpis,.report-secondary-kpis{grid-template-columns:1fr 1fr!important}.report-table-head{align-items:flex-start;flex-direction:column}.report-target-badge{align-self:flex-start}}
 @media(max-width:430px){.report-control-fields{grid-template-columns:1fr}.report-control-fields .secondary{grid-column:auto}.report-primary-kpis,.report-secondary-kpis{grid-template-columns:1fr!important}}
 
+
+
+/* V10 · Microinteracciones y animaciones sutiles */
+:root{--motion-fast:140ms;--motion-base:220ms;--motion-slow:320ms;--motion-ease:cubic-bezier(.2,.8,.2,1)}
+
+/* Botones y controles */
+.primary,.secondary,.danger,.file-btn,.hero-action,.icon-btn,.action-btn,.sale-cart-remove,.sale-product-result,.nav-btn,.mobile-nav-btn,.mobile-fab,.settings-mobile{
+  -webkit-tap-highlight-color:transparent;
+  transition:transform var(--motion-fast) var(--motion-ease),box-shadow var(--motion-base) var(--motion-ease),background-color var(--motion-base) ease,border-color var(--motion-base) ease,opacity var(--motion-base) ease;
+}
+.primary:active,.secondary:active,.danger:active,.file-btn:active,.hero-action:active,.icon-btn:active,.action-btn:active,.sale-cart-remove:active,.sale-product-result:active,.mobile-fab:active,.settings-mobile:active{
+  transform:scale(.975);
+}
+button:disabled{cursor:not-allowed;transform:none!important;box-shadow:none!important;opacity:.58}
+
+/* Tarjetas: elevación mínima sólo donde aporta feedback */
+.card,.product-create-card,.supplier-card,.promo-card,.pricing-product-card,.report-insight-card{
+  transition:transform var(--motion-base) var(--motion-ease),box-shadow var(--motion-base) var(--motion-ease),border-color var(--motion-base) ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .surface-card:hover,.product-create-card:hover,.supplier-card:hover,.promo-card:hover,.pricing-product-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 34px rgba(49,72,64,.09);
+  }
+}
+
+/* Cambio de sección */
+.view.active{animation:zhViewIn var(--motion-base) var(--motion-ease)}
+@keyframes zhViewIn{from{opacity:0;transform:translateY(7px) scale(.997)}to{opacity:1;transform:none}}
+
+/* Modales */
+dialog[open]::backdrop{animation:zhBackdropIn var(--motion-base) ease both}
+dialog[open]>.modal-card,dialog[open]>.promo-modal-card{animation:zhModalIn var(--motion-slow) var(--motion-ease) both;transform-origin:50% 80%}
+@keyframes zhBackdropIn{from{background:rgba(35,49,44,0);backdrop-filter:blur(0)}to{background:rgba(35,49,44,.34);backdrop-filter:blur(7px)}}
+@keyframes zhModalIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+
+/* Buscador de productos en venta */
+.sale-product-results:not([hidden]){animation:zhSearchDrop var(--motion-base) var(--motion-ease);transform-origin:top center}
+.sale-product-result{transition:background-color var(--motion-fast) ease,transform var(--motion-fast) var(--motion-ease)}
+.sale-product-result:hover,.sale-product-result:focus-visible{transform:translateX(2px)}
+.sale-product-selected:not([hidden]){animation:zhSelectedIn var(--motion-base) var(--motion-ease)}
+@keyframes zhSearchDrop{from{opacity:0;transform:translateY(-5px) scaleY(.97)}to{opacity:1;transform:none}}
+@keyframes zhSelectedIn{0%{opacity:0;transform:translateY(-3px)}70%{transform:translateY(1px)}100%{opacity:1;transform:none}}
+
+/* Carrito y confirmaciones visuales */
+.sale-cart-item{animation:zhCartItemIn var(--motion-base) var(--motion-ease) both}
+.sale-promo-applied,.sale-container-applied{animation:zhBadgeIn var(--motion-base) var(--motion-ease) both}
+@keyframes zhCartItemIn{from{opacity:0;transform:translateY(7px) scale(.992)}to{opacity:1;transform:none}}
+@keyframes zhBadgeIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
+
+/* Toasts */
+.toast:not([hidden]){animation:zhToastIn var(--motion-slow) var(--motion-ease) both}
+@keyframes zhToastIn{from{opacity:0;transform:translate(-50%,10px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+
+/* Navegación */
+.nav-btn,.mobile-nav-btn{position:relative}
+.nav-btn.active,.mobile-nav-btn.active{animation:zhNavActive var(--motion-base) var(--motion-ease)}
+@keyframes zhNavActive{0%{transform:scale(.985)}65%{transform:scale(1.015)}100%{transform:none}}
+
+/* Campos: foco menos brusco */
+input,select,textarea{transition:border-color var(--motion-fast) ease,box-shadow var(--motion-fast) ease,background-color var(--motion-fast) ease}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.09)}
+
+/* Mobile: modales tipo bottom sheet, sin perder el arreglo responsive V9 */
+@media(max-width:700px){
+  dialog[open]>.modal-card,dialog[open]>.promo-modal-card{animation-name:zhSheetIn;transform-origin:bottom center}
+  @keyframes zhSheetIn{from{opacity:.45;transform:translateY(34px)}to{opacity:1;transform:none}}
+  .mobile-fab{transition:transform var(--motion-fast) var(--motion-ease),box-shadow var(--motion-base) ease}
+  .mobile-fab:active{transform:scale(.94)}
+  .sale-product-result:hover{transform:none}
+}
+
+/* Accesibilidad y ahorro de batería */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
