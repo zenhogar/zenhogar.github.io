@@ -290,10 +290,74 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(111,158,142,.0
 .promo-product-picker{display:grid;gap:9px}.promo-product-picker input[type="search"]{width:100%}.promo-product-selected{display:flex;gap:7px;flex-wrap:wrap;min-height:4px}.promo-product-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:var(--mint);color:var(--accent-dark);font-size:10px;font-weight:800}.promo-product-options{display:grid;gap:7px;max-height:240px;overflow:auto;padding:4px;border:1px solid var(--line);border-radius:14px;background:#fbfcfb}.promo-product-option{display:flex;gap:10px;align-items:center;padding:10px;border-radius:11px;cursor:pointer}.promo-product-option:hover{background:#f5f8f6}.promo-product-option input{width:auto;margin:0}.promo-product-option span{min-width:0}.promo-product-option strong,.promo-product-option small{display:block}.promo-product-option small{font-size:9px;color:var(--muted);margin-top:2px}.promo-product-empty{padding:12px;color:var(--muted);font-size:11px}.promo-combo-note{margin-top:9px;padding:9px 10px;border-radius:12px;background:var(--blue);color:#516d78;font-size:10px;line-height:1.45}.promo-preset.selected{border-color:#9fc2b5!important;background:var(--mint)!important}.promo-preset[aria-pressed="true"]{box-shadow:0 0 0 2px rgba(81,174,151,.12)}
 @media(hover:none){.promo-preset:not(.selected):hover{border-color:var(--line);background:#fbfcfb}}
 
+
+
+/* V11.9 · Tipografía y legibilidad mejorada en escritorio */
+html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+@media(min-width:1081px){
+  body{font-size:15px;line-height:1.5}
+  .main{max-width:1580px;padding:30px 38px 44px}
+  .sidebar{padding:30px 20px 24px}
+  .brand-copy strong{font-size:18px}
+  .brand-copy small{font-size:13px}
+  .desktop-nav{gap:8px}
+  .nav-btn{font-size:15px;min-height:52px;padding:13px 14px}
+  .nav-icon{width:30px;height:30px;font-size:18px}
+  .sidebar-status strong{font-size:13px}
+  .sidebar-status small{font-size:11px}
+
+  .eyebrow,.section-kicker,.hero-kicker{font-size:11px}
+  .topbar h1{font-size:32px}
+  .topbar p{font-size:15px}
+  .connection-pill{font-size:12px}
+
+  .hero-card h2{font-size:36px;line-height:1.08}
+  .hero-card p{font-size:16px;line-height:1.55;max-width:520px}
+  .hero-action,.primary,.secondary,.danger,.file-btn{font-size:15px}
+  .primary.compact,.secondary.compact,.danger.compact{font-size:14px}
+
+  .card{padding:22px}
+  .stat span{font-size:14px}
+  .stat strong{font-size:36px}
+  .section-intro h2{font-size:27px}
+  .section-intro p{font-size:14px}
+
+  .toolbar>select,.form-grid input,.form-grid select,.form-grid textarea,.search-field input,
+  .gate-form input,.gate-form select,.gate-form textarea,
+  .compact-form input,.compact-form select,.compact-form textarea,
+  .access-invite-form input,.access-invite-form select,
+  #saleProductSearch,#expenseSearch,#productSearch,#purchaseProductSearch,#promotionProductSearch{
+    font-size:15px!important;
+    min-height:48px;
+  }
+  .search-field{font-size:15px}
+  .form-grid label,.sale-builder label,.purchase-builder label,.gate-form label,.access-invite-form label,.team-form label{font-size:12px}
+  .unit-hint,.subtle-note{font-size:11px}
+
+  table{min-width:860px}
+  th,td{font-size:14px;padding:15px 16px}
+  th{font-size:11.5px}
+  .badge,.promo-pill{font-size:11px}
+  .empty,.list-row strong,.sale-preview,.receipt-line{font-size:14px}
+  .list-row small,.receipt-head p,.receipt-meta{font-size:12px}
+
+  dialog{max-width:760px}
+  .modal-card{padding:24px}
+  .modal-head h2{font-size:22px}
+  .icon-btn{min-width:44px;min-height:44px}
+  .sale-builder{grid-template-columns:minmax(0,1fr) 140px 160px auto}
+  .purchase-builder{grid-template-columns:minmax(0,1fr) 140px 160px auto}
+
+  .fixed-expense-title strong{font-size:16px}
+  .fixed-expense-amount{font-size:22px}
+  .fixed-expense-meta strong{font-size:12px}
+  .report-kpis .stat strong{font-size:32px}
+}
+
 </style>
 </head>
 <body>
-<!-- Zen Hogar V11.8 · Promociones combinadas + escáner -->
+<!-- Zen Hogar V11.9 · Tipografía desktop mejorada -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
