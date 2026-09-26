@@ -357,7 +357,7 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
 </style>
 </head>
 <body>
-<!-- Zen Hogar V11.9 · Tipografía desktop mejorada -->
+<!-- Zen Hogar V11.10 · Vista previa de venta corregida + código de barras opcional -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
@@ -798,7 +798,7 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
       <div class="modal-head"><div><span class="section-kicker">Inventario</span><h2 id="productModalTitle">Agregar producto</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
       <input type="hidden" id="productId" />
       <div class="form-grid">
-        <label>Código interno<input id="pCode" required /></label><label class="barcode-field">Código de barras<div class="barcode-input-row"><input id="pBarcode" autocomplete="off" placeholder="Ej. 7791234567890" /><button class="secondary" id="scanProductBarcodeBtn" type="button">▣ Escanear</button></div><small class="unit-hint">Opcional. Podés escribirlo o leerlo con la cámara.</small></label>
+        <label>Código interno<input id="pCode" required /></label><label class="barcode-field">Código de barras <span style="font-weight:600;color:var(--muted)">(opcional)</span><div class="barcode-input-row"><input id="pBarcode" autocomplete="off" placeholder="Dejar vacío si no tiene código" /><button class="secondary" id="scanProductBarcodeBtn" type="button">▣ Escanear</button></div><small class="unit-hint">No es obligatorio. Si el producto no tiene código de barras, podés guardarlo normalmente dejando este campo vacío.</small></label>
         <label>Producto<input id="pName" required /></label>
         <label>Categoría<input id="pCategory" required /></label>
         <label>Unidad de manejo<select id="pUnitKind"><option value="unit">Unidad</option><option value="volume">Litro</option><option value="weight">Kilogramo</option></select><small class="unit-hint">Los fraccionados se guardan internamente en ml o gramos.</small></label>
@@ -2133,7 +2133,9 @@ function renderSaleCart(){
   const list=$('#saleCartList'),preview=$('#salePreview'),submit=$('#saleSubmitBtn'); if(!state.saleCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos a esta venta.</div>';preview.innerHTML=`<div class="sale-total-row"><span>0 productos</span><strong>${money(0)}</strong></div>`;submit.disabled=true;return;}
   let total=0,regular=0,promoCount=0,containerCount=0,containerDiscountTotal=0; const payment=$('#salePayment').value,date=$('#saleDate').value?new Date($('#saleDate').value).toISOString():new Date().toISOString();const quotes=quoteSaleCart(state.saleCart,payment,date);
   list.innerHTML=state.saleCart.map(i=>{
-    const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const q=quotes.get(p.id)||quoteProduct(p,i.qty,payment,date);
+    const p=state.products.find(x=>x.id===i.productId);if(!p)return '';
+    const quoted=quotes.get(p.id);
+    const q=quoted?{regular:quoted.regular,total:quoted.promoTotal,discount:quoted.promoDiscount,promo:quoted.promo}:quoteProduct(p,i.qty,payment,date);
     const ownCount=Number(i.ownContainerCount||0),containerDiscount=Math.max(0,Number(p.ownContainerDiscount||0)*ownCount),lineTotal=Math.max(0,q.total-containerDiscount);
     total+=lineTotal;regular+=q.regular;if(q.promo)promoCount++;containerCount+=ownCount;containerDiscountTotal+=containerDiscount;
     return `<div class="sale-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(p.price)}/${unitLabel(p.unitKind)} · stock luego ${qtyText(p,p.stock-i.qty)}</small>${q.promo?`<span class="sale-promo-applied">✓ ${esc(q.promo.name)}</span>`:''}${ownCount>0?`<span class="sale-container-applied">♻ ${ownCount} envase${ownCount===1?'':'s'} propio${ownCount===1?'':'s'} · - ${money(containerDiscount)}</span>`:''}</div><div class="sale-cart-subtotal">${q.discount+containerDiscount>0?`<span class="sale-price-before">${money(q.regular)}</span>`:''}${money(lineTotal)}${q.discount+containerDiscount>0?`<small class="discount-note">Ahorrás ${money(q.discount+containerDiscount)}</small>`:''}</div><button class="sale-cart-remove" type="button" onclick="removeSaleItem('${p.id}')">✕</button></div>`;
