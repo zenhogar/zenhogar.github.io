@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- Zen Hogar V11.11 · Modo oscuro + móvil pulido + categorías + calculadora kg/g -->
+<!-- Zen Hogar V11.12 · Teclado móvil corregido + fondo negro puro + categorías + calculadora kg/g -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="theme-color" content="#eef7f4" />
   <meta name="color-scheme" content="light dark" />
   <meta name="description" content="Gestión simple de productos, ventas, stock, caja y reportes de Zen Hogar." />
@@ -13,7 +13,11 @@
   <!-- V11.3 PDF visual autocontenido -->
   <title>Zen Hogar · Gestión</title>
   <script>
-    try{document.documentElement.dataset.theme=localStorage.getItem('zenhogar_theme')==='dark'?'dark':'light';}catch(_e){}
+    try{
+      const initialTheme=localStorage.getItem('zenhogar_theme')==='dark'?'dark':'light';
+      document.documentElement.dataset.theme=initialTheme;
+      if(initialTheme==='dark')document.querySelector('meta[name="theme-color"]')?.setAttribute('content','#000000');
+    }catch(_e){}
   </script>
   <style>
 :root{
@@ -42,12 +46,12 @@
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--bg)}
-body{margin:0;font-family:"Avenir Next",Avenir,"Segoe UI",Inter,system-ui,-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#fafbf9 0%,#f4f7f5 100%);color:var(--ink);min-height:100vh;letter-spacing:-.01em}
+body{margin:0;font-family:"Avenir Next",Avenir,"Segoe UI",Inter,system-ui,-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#fafbf9 0%,#f4f7f5 100%);color:var(--ink);min-height:100vh;min-height:100dvh;letter-spacing:-.01em}
 button,input,select,textarea{font:inherit}
 button{-webkit-tap-highlight-color:transparent}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(111,158,142,.22);outline-offset:2px}
 .ambient{position:fixed;pointer-events:none;border-radius:999px;filter:blur(1px);opacity:.55;z-index:-1}.ambient-one{width:380px;height:380px;right:-170px;top:-120px;background:radial-gradient(circle,#e9f3ef 0%,rgba(233,243,239,0) 72%)}.ambient-two{width:360px;height:360px;left:-200px;bottom:8%;background:radial-gradient(circle,#eef0f7 0%,rgba(238,240,247,0) 72%)}
-.app-shell{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
+.app-shell{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:260px minmax(0,1fr)}
 .sidebar{background:rgba(245,249,247,.88);border-right:1px solid rgba(223,232,227,.9);padding:28px 18px 22px;display:flex;flex-direction:column;gap:32px;position:sticky;top:0;height:100vh;z-index:30;backdrop-filter:blur(18px)}
 .brand{display:flex;gap:13px;align-items:center;padding:0 8px}.brand-mark{width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#7fae9e,#5e8e7e);box-shadow:0 10px 24px rgba(79,126,111,.2);display:grid;place-items:center;color:#fff}.brand-mark span{font-size:14px;font-weight:800;letter-spacing:.04em}.brand-copy strong,.brand-copy small{display:block}.brand-copy strong{font-size:17px;letter-spacing:-.02em}.brand-copy small{color:var(--muted);margin-top:3px;font-size:12px}
 .desktop-nav{display:grid;gap:7px}.nav-btn{border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:14px;color:#61716b;cursor:pointer;min-height:48px;display:flex;align-items:center;gap:12px;font-weight:650;transition:.18s ease}.nav-btn:hover{background:rgba(255,255,255,.65);color:var(--ink)}.nav-btn.active{background:#fff;color:var(--accent-dark);box-shadow:var(--shadow-soft)}.nav-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:rgba(111,158,142,.08);font-size:17px}.nav-btn.active .nav-icon{background:var(--accent-soft)}
@@ -80,6 +84,9 @@ dialog{border:0;background:transparent;padding:0;max-width:650px;width:calc(100%
   dialog{width:100%;max-width:none;margin:auto 0 0;border-radius:24px 24px 0 0;max-height:92dvh}dialog[open]{display:flex;align-items:flex-end}.modal-card{width:100%;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto}.modal-head{position:sticky;top:-18px;background:rgba(255,255,255,.98);padding:14px 0 10px;z-index:2}.modal-head h2{font-size:19px}.sale-preview{font-size:12px;line-height:1.5}.sale-builder{grid-template-columns:1fr 90px;gap:8px}.sale-builder #saleOwnContainerWrap{grid-column:1/-1}.sale-builder .sale-add-btn{grid-column:1/-1;width:100%}.sale-cart-item{grid-template-columns:minmax(0,1fr) auto auto;padding:10px}.sale-cart-subtotal{font-size:11px}
   .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding:7px 5px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid rgba(225,232,228,.95);z-index:40;box-shadow:0 -8px 28px rgba(59,78,71,.08);backdrop-filter:blur(18px)}.mobile-nav button{border:0;background:transparent;color:#8a9792;font-size:9px;font-weight:750;display:grid;place-items:center;align-content:center;gap:3px;padding:4px 2px;min-width:0}.mobile-nav button .ico{font-size:19px;line-height:1;width:31px;height:27px;border-radius:10px;display:grid;place-items:center}.mobile-nav button.active{color:var(--accent-dark)}.mobile-nav button.active .ico{background:var(--accent-soft)}
   .mobile-fab{display:flex;position:fixed;right:15px;bottom:calc(var(--nav-h) + 13px + env(safe-area-inset-bottom));z-index:35;background:linear-gradient(135deg,#78a897,#5f8c7d);color:#fff;border:0;border-radius:999px;min-height:49px;padding:0 16px;align-items:center;gap:7px;font-weight:800;font-size:13px;box-shadow:0 13px 28px rgba(69,112,97,.27)}
+  html.keyboard-open body{padding-bottom:0!important}
+  html.keyboard-open .mobile-nav,html.keyboard-open .mobile-fab{display:none!important}
+  html.keyboard-open .toast{bottom:12px!important}
 }
 @media(max-width:385px){.cards.four,.cards.three{grid-template-columns:1fr 1fr}.topbar p{max-width:195px}.hero-card h2{font-size:19px}.mobile-nav button{font-size:8px}.mobile-nav button .ico{font-size:18px}.stat strong{font-size:20px}}
 @media(display-mode:standalone){body{overscroll-behavior-y:none}.topbar{padding-top:max(13px,env(safe-area-inset-top))}}
@@ -365,11 +372,12 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
 
 html[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#090d0c;--panel:rgba(17,23,21,.94);--panel-solid:#111816;--ink:#f1f5f3;--ink-soft:#d7e2de;--muted:#91a29b;--line:#26332f;--accent:#78bba5;--accent-dark:#9bd1bf;--accent-soft:#18342b;--mint:#11271f;--blue:#111f2b;--lilac:#211b2c;--peach:#2a2019;--danger:#dc8585;--danger-soft:#321c1d;--shadow:0 18px 55px rgba(0,0,0,.28);--shadow-soft:0 10px 32px rgba(0,0,0,.22)
+  --bg:#000000;--panel:rgba(17,23,21,.94);--panel-solid:#111816;--ink:#f1f5f3;--ink-soft:#d7e2de;--muted:#91a29b;--line:#26332f;--accent:#78bba5;--accent-dark:#9bd1bf;--accent-soft:#18342b;--mint:#11271f;--blue:#111f2b;--lilac:#211b2c;--peach:#2a2019;--danger:#dc8585;--danger-soft:#321c1d;--shadow:0 18px 55px rgba(0,0,0,.28);--shadow-soft:0 10px 32px rgba(0,0,0,.22)
 }
-html[data-theme="dark"],html[data-theme="dark"] body{background:#090d0c;color:var(--ink)}
-html[data-theme="dark"] body{background:linear-gradient(180deg,#0b100e 0%,#080c0b 100%)}
-html[data-theme="dark"] .ambient{opacity:.2}
+html[data-theme="dark"],html[data-theme="dark"] body{background:#000000;color:var(--ink)}
+html[data-theme="dark"] body{background:#000000}
+html[data-theme="dark"] .app-shell,html[data-theme="dark"] .main{background:#000000}
+html[data-theme="dark"] .ambient{opacity:0}
 html[data-theme="dark"] .sidebar{background:rgba(10,15,13,.94);border-color:var(--line)}
 html[data-theme="dark"] .nav-btn{color:#9fb0a9}html[data-theme="dark"] .nav-btn:hover{background:#121a17;color:var(--ink)}html[data-theme="dark"] .nav-btn.active{background:#15201c;color:var(--accent-dark)}
 html[data-theme="dark"] .sidebar-status,html[data-theme="dark"] .connection-pill{background:#111816;border-color:var(--line)}
@@ -424,7 +432,7 @@ html[data-theme="dark"] .report-table-wrap{background:#0d1411!important}
 </style>
 </head>
 <body>
-<!-- Zen Hogar V11.11 · Modo oscuro + móvil pulido + categorías + calculadora kg/g -->
+<!-- Zen Hogar V11.12 · Teclado móvil corregido + fondo negro puro + categorías + calculadora kg/g -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
@@ -1807,7 +1815,7 @@ function applyTheme(theme,{persist=true}={}){
   const next=theme==='dark'?'dark':'light';
   document.documentElement.dataset.theme=next;
   document.documentElement.style.colorScheme=next;
-  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',next==='dark'?'#0b0f0e':'#eef7f4');
+  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',next==='dark'?'#000000':'#eef7f4');
   if(persist)try{localStorage.setItem(ZH_THEME_KEY,next);}catch(_e){}
   renderThemeControls();
 }
@@ -2346,6 +2354,30 @@ $('#importFile').onchange=async e=>{
 };
 $('#resetBtn').onclick=()=>{ const key=cacheKey(); if(key&&confirm('¿Borrar la copia offline de este dispositivo? Los datos de la nube no se eliminan.')){localStorage.removeItem(key);toast('Caché local borrada.','success');} };
 $('#signOutBtn').onclick=async()=>{ if(state.channel)await state.client.removeChannel(state.channel); await state.client.auth.signOut(); location.reload(); };
+
+// Ajuste móvil: al abrir el teclado ocultamos la navegación inferior para evitar
+// el salto/espacio vacío que algunos navegadores Android generan con elementos fixed.
+function isEditableField(el){
+  if(!el||!el.matches)return false;
+  if(el.matches('textarea,[contenteditable="true"]'))return true;
+  if(!el.matches('input'))return false;
+  return !['button','checkbox','radio','range','color','file','submit','reset','hidden'].includes((el.type||'text').toLowerCase());
+}
+function syncMobileKeyboardState(){
+  const mobile=window.matchMedia('(max-width:700px)').matches;
+  const focused=isEditableField(document.activeElement);
+  const vv=window.visualViewport;
+  const viewportReduced=!!(vv&&window.innerHeight-vv.height>120);
+  document.documentElement.classList.toggle('keyboard-open',mobile&&(focused||viewportReduced));
+}
+document.addEventListener('focusin',syncMobileKeyboardState);
+document.addEventListener('focusout',()=>setTimeout(syncMobileKeyboardState,120));
+window.addEventListener('resize',syncMobileKeyboardState,{passive:true});
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',syncMobileKeyboardState,{passive:true});
+  window.visualViewport.addEventListener('scroll',syncMobileKeyboardState,{passive:true});
+}
+syncMobileKeyboardState();
 
 function updateConnection(){
   const online=navigator.onLine,el=$('#connectionStatus'); if(el){el.classList.toggle('offline',!online);el.innerHTML=`<span></span> ${online?'Nube conectada':'Sin conexión'}`;}
