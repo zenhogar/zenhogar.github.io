@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<!-- Zen Hogar V11.5 · Gastos fijos independientes + reportes móvil -->
+<!-- Zen Hogar V11.11 · Modo oscuro + móvil pulido + categorías + calculadora kg/g -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#eef7f4" />
-  <meta name="color-scheme" content="light" />
+  <meta name="color-scheme" content="light dark" />
   <meta name="description" content="Gestión simple de productos, ventas, stock, caja y reportes de Zen Hogar." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Zen Hogar" />
   <!-- V11.3 PDF visual autocontenido -->
   <title>Zen Hogar · Gestión</title>
+  <script>
+    try{document.documentElement.dataset.theme=localStorage.getItem('zenhogar_theme')==='dark'?'dark':'light';}catch(_e){}
+  </script>
   <style>
 :root{
   --bg:#f7f8f6;
@@ -354,10 +357,74 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
   .report-kpis .stat strong{font-size:32px}
 }
 
+
+
+/* V11.11 · Tema oscuro, sugerencias y robustez móvil */
+.theme-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-option{display:flex;align-items:center;gap:11px;text-align:left;border:1px solid var(--line);background:var(--panel-solid);color:var(--ink);border-radius:15px;padding:12px;cursor:pointer;min-height:62px}.theme-option .theme-icon{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);font-size:18px;flex:0 0 auto}.theme-option strong,.theme-option small{display:block}.theme-option strong{font-size:13px}.theme-option small{font-size:10px;color:var(--muted);margin-top:2px}.theme-option.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(111,158,142,.15)}
+.frac-size-actions{align-items:center}.frac-size-actions .pricing-chip{min-width:68px}
+
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#090d0c;--panel:rgba(17,23,21,.94);--panel-solid:#111816;--ink:#f1f5f3;--ink-soft:#d7e2de;--muted:#91a29b;--line:#26332f;--accent:#78bba5;--accent-dark:#9bd1bf;--accent-soft:#18342b;--mint:#11271f;--blue:#111f2b;--lilac:#211b2c;--peach:#2a2019;--danger:#dc8585;--danger-soft:#321c1d;--shadow:0 18px 55px rgba(0,0,0,.28);--shadow-soft:0 10px 32px rgba(0,0,0,.22)
+}
+html[data-theme="dark"],html[data-theme="dark"] body{background:#090d0c;color:var(--ink)}
+html[data-theme="dark"] body{background:linear-gradient(180deg,#0b100e 0%,#080c0b 100%)}
+html[data-theme="dark"] .ambient{opacity:.2}
+html[data-theme="dark"] .sidebar{background:rgba(10,15,13,.94);border-color:var(--line)}
+html[data-theme="dark"] .nav-btn{color:#9fb0a9}html[data-theme="dark"] .nav-btn:hover{background:#121a17;color:var(--ink)}html[data-theme="dark"] .nav-btn.active{background:#15201c;color:var(--accent-dark)}
+html[data-theme="dark"] .sidebar-status,html[data-theme="dark"] .connection-pill{background:#111816;border-color:var(--line)}
+html[data-theme="dark"] .topbar{color:var(--ink)}
+html[data-theme="dark"] .card,html[data-theme="dark"] .surface-card,html[data-theme="dark"] .receipt-card,html[data-theme="dark"] .purchase-cart-item,html[data-theme="dark"] .fixed-expense-card,html[data-theme="dark"] .promo-card,html[data-theme="dark"] .supplier-card,html[data-theme="dark"] .reorder-group{background:var(--panel)!important;border-color:var(--line)!important;color:var(--ink)}
+html[data-theme="dark"] .stat.mint{background:linear-gradient(145deg,#111a17,#11271f)!important}html[data-theme="dark"] .stat.blue{background:linear-gradient(145deg,#111817,#111f2b)!important}html[data-theme="dark"] .stat.lilac{background:linear-gradient(145deg,#151316,#211b2c)!important}html[data-theme="dark"] .stat.peach{background:linear-gradient(145deg,#171411,#2a2019)!important}
+html[data-theme="dark"] .hero-card{background:linear-gradient(135deg,#10251e 0%,#102026 55%,#1f1929 100%);border-color:#263b34}html[data-theme="dark"] .hero-card p{color:var(--muted)}html[data-theme="dark"] .hero-action{background:#16231f;color:var(--accent-dark)}
+html[data-theme="dark"] .search-field,html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea,html[data-theme="dark"] .sale-builder input,html[data-theme="dark"] .sale-builder select,html[data-theme="dark"] .promo-toolbar input,html[data-theme="dark"] .promo-toolbar select,html[data-theme="dark"] .supplier-search-wrap input{background:#0e1512!important;color:var(--ink)!important;border-color:var(--line)!important}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#70827b}
+html[data-theme="dark"] option{background:#101714;color:var(--ink)}
+html[data-theme="dark"] .secondary,html[data-theme="dark"] .file-btn,html[data-theme="dark"] .action-btn,html[data-theme="dark"] .icon-btn,html[data-theme="dark"] .pricing-chip{background:#14201c;color:var(--ink-soft);border-color:var(--line)}
+html[data-theme="dark"] .danger{background:var(--danger-soft);color:#f0aaaa}
+html[data-theme="dark"] th{background:#111916;color:#91a39b}html[data-theme="dark"] th,html[data-theme="dark"] td{border-color:#202c28}
+html[data-theme="dark"] .badge{background:#173228;color:#9ed0be}html[data-theme="dark"] .badge.low{background:#34251c;color:#e4ad87}
+html[data-theme="dark"] .list-row,html[data-theme="dark"] .receipt-line{border-color:#24312d}
+html[data-theme="dark"] .modal-card{background:#101714;color:var(--ink);box-shadow:0 25px 80px rgba(0,0,0,.55)}html[data-theme="dark"] dialog::backdrop{background:rgba(0,0,0,.58)}
+html[data-theme="dark"] .sale-cart-item,html[data-theme="dark"] .sale-cart-empty{background:#0d1411;border-color:var(--line)}html[data-theme="dark"] .sale-preview{background:linear-gradient(135deg,#11231d,#171a23);border-color:var(--line);color:var(--ink-soft)}html[data-theme="dark"] .sale-total-row strong{color:var(--ink)}
+html[data-theme="dark"] .sale-cart-remove{background:#321d1e;color:#e59696}
+html[data-theme="dark"] .mobile-nav{background:rgba(10,15,13,.97);border-color:var(--line)}
+html[data-theme="dark"] .cloud-gate{background:linear-gradient(145deg,#0a0f0d 0%,#0e1814 48%,#17121d 100%)}html[data-theme="dark"] .gate-card{background:rgba(16,23,20,.95);border-color:var(--line);box-shadow:0 30px 90px rgba(0,0,0,.48)}
+html[data-theme="dark"] .gate-security-note,html[data-theme="dark"] .invite-result,html[data-theme="dark"] .product-container-hint,html[data-theme="dark"] .pricing-note,html[data-theme="dark"] .promo-combo-note,html[data-theme="dark"] .reorder-config-warning{background:#14201c!important;border-color:var(--line)!important;color:var(--ink-soft)!important}
+html[data-theme="dark"] .pricing-metric,html[data-theme="dark"] .report-mini-stat,html[data-theme="dark"] .fixed-expense-meta div{background:#0e1512!important;border-color:var(--line)!important}
+html[data-theme="dark"] .promo-product-options,html[data-theme="dark"] .promo-product-option{background:#0e1512;border-color:var(--line)}html[data-theme="dark"] .promo-product-option:hover{background:#15201c}
+html[data-theme="dark"] .scanner-status{background:#173228;color:#b9d9cd}
+html[data-theme="dark"] .danger-zone{background:linear-gradient(145deg,#171313,#241617);border-color:#3a2425}
+html[data-theme="dark"] .install-card{background:linear-gradient(135deg,#10251e,#1d1826)!important}
+html[data-theme="dark"] .theme-option{background:#0e1512}html[data-theme="dark"] .theme-option.active{background:#14231d}
+html[data-theme="dark"] .report-table-wrap{background:#0d1411!important}
+
+@media(max-width:700px){
+  html,body{max-width:100%;overflow-x:hidden}
+  dialog{inset:auto 0 0 0!important;width:100vw!important;max-width:100vw!important;max-height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;border-radius:24px 24px 0 0!important}
+  dialog[open]{display:flex!important;align-items:flex-end!important;justify-content:flex-end!important}
+  .modal-card{width:100%!important;max-width:100%!important;min-width:0!important;max-height:calc(100dvh - max(6px,env(safe-area-inset-top)))!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;padding:18px 16px calc(22px + env(safe-area-inset-bottom))!important;border-radius:24px 24px 0 0!important}
+  .modal-card>*{min-width:0}.modal-card input,.modal-card select,.modal-card textarea,.modal-card button{max-width:100%;min-width:0}
+  .modal-head{top:-18px!important;margin-left:-2px;margin-right:-2px;padding-left:2px;padding-right:2px}
+  .sale-builder,.form-grid,.pricing-form,.access-invite-form,.scanner-manual,.barcode-input-row,.sale-search-scan-row{min-width:0;max-width:100%}
+  .sale-product-picker,.sale-search-scan-row label,.promo-product-picker{min-width:0;max-width:100%}
+  .promo-modal-card .promo-product-options{max-height:30dvh}.scanner-card .scanner-stage{max-height:42dvh}
+  .receipt-actions,.pricing-inline-actions{max-width:100%;flex-wrap:wrap}.pricing-inline-actions>*{max-width:100%}
+  .theme-options{grid-template-columns:1fr}
+  html[data-theme="dark"] .topbar{background:rgba(9,13,12,.94);border-color:var(--line)}
+  html[data-theme="dark"] .settings-mobile{background:#111816;color:var(--ink);border-color:var(--line)}
+  html[data-theme="dark"] tr{background:rgba(16,23,20,.96);border-color:var(--line);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  html[data-theme="dark"] td[data-label="Producto"],html[data-theme="dark"] td[data-label="Acciones"]{border-color:#24312d!important}
+  html[data-theme="dark"] .modal-head{background:rgba(16,23,20,.98)}
+}
+@media(max-width:900px) and (max-height:620px){
+  dialog{border-radius:18px 18px 0 0!important}.modal-card{max-height:100dvh!important;border-radius:18px 18px 0 0!important;padding-top:12px!important}.modal-head{padding-top:10px!important}
+}
+
 </style>
 </head>
 <body>
-<!-- Zen Hogar V11.10 · Vista previa de venta corregida + código de barras opcional -->
+<!-- Zen Hogar V11.11 · Modo oscuro + móvil pulido + categorías + calculadora kg/g -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
@@ -669,20 +736,21 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
           </article>
 
           <article class="card pricing-card">
-            <div class="pricing-card-head"><span class="section-kicker">Fraccionados</span><h3>Calculadora de costo real</h3><p>Ideal para detergente, perfumina, cloro, jabón líquido y otros productos que preparás o fraccionás.</p></div>
+            <div class="pricing-card-head"><span class="section-kicker">Fraccionados</span><h3>Calculadora de costo real</h3><p>Calculá presentaciones líquidas en litros/ml o productos por peso en kilogramos/gramos.</p></div>
             <div class="pricing-form">
               <label class="full">Producto relacionado (opcional)<select id="fracProduct"><option value="">Cálculo manual</option></select></label>
-              <label>Costo del concentrado por litro<input id="fracConcentrateCost" type="number" min="0" step="0.01" placeholder="Ej. 12381.35" /></label>
-              <label>1 L de concentrado rinde<input id="fracYieldLiters" type="number" min="0.001" step="0.001" placeholder="Litros finales" /></label>
-              <label>Presentación final (ml)<input id="fracPresentationMl" type="number" min="1" step="1" value="1000" /></label>
+              <label class="full">Tipo de cálculo<select id="fracMode"><option value="volume">Volumen · litros y ml</option><option value="weight">Peso · kilogramos y gramos</option></select></label>
+              <label>Costo de materia prima por <span id="fracBaseUnitWord">litro</span><input id="fracConcentrateCost" type="number" min="0" step="0.01" placeholder="Ej. 12381.35" /></label>
+              <label>1 <span id="fracBaseUnitShort">L</span> de materia prima rinde<input id="fracYieldLiters" type="number" min="0.001" step="0.001" placeholder="Rendimiento final" /><small class="unit-hint" id="fracYieldHint">Ingresá litros finales obtenidos.</small></label>
+              <label>Presentación final (<span id="fracMinorUnitLabel">ml</span>)<input id="fracPresentationMl" type="number" min="1" step="1" value="1000" /></label>
               <label>Costo del envase/tapa<input id="fracContainerCost" type="number" min="0" step="0.01" value="0" /></label>
-              <label>Otros costos por envase<input id="fracExtraCost" type="number" min="0" step="0.01" value="0" /></label>
+              <label>Otros costos por presentación<input id="fracExtraCost" type="number" min="0" step="0.01" value="0" /></label>
               <label>Precio de venta<input id="fracSalePrice" type="number" min="0" step="0.01" /></label>
               <label>Margen objetivo (%)<input id="fracTargetMargin" type="number" min="1" max="95" step="0.1" value="45" /></label>
             </div>
-            <div class="pricing-inline-actions"><button type="button" class="pricing-chip" data-frac-ml="500">500 ml</button><button type="button" class="pricing-chip" data-frac-ml="1000">1 L</button><button type="button" class="pricing-chip" data-frac-ml="5000">5 L</button><button type="button" class="pricing-chip" id="fracNoContainerBtn">Sin envase</button></div>
-            <div class="pricing-note">Costo real = parte proporcional del concentrado + envase/tapa + otros costos. El “margen” se calcula sobre el precio de venta; el “recargo” compara la ganancia contra el costo.</div>
-            <div id="fracResult" class="pricing-result empty-result">Completá costo del concentrado, rendimiento y presentación.</div>
+            <div class="pricing-inline-actions frac-size-actions"><button type="button" class="pricing-chip" data-frac-size="100">100 ml</button><button type="button" class="pricing-chip" data-frac-size="250">250 ml</button><button type="button" class="pricing-chip" data-frac-size="500">500 ml</button><button type="button" class="pricing-chip" data-frac-size="1000">1 L</button><button type="button" class="pricing-chip" data-frac-size="5000">5 L</button><button type="button" class="pricing-chip" id="fracNoContainerBtn">Sin envase</button></div>
+            <div class="pricing-note" id="fracFormulaNote">Costo real = parte proporcional de la materia prima + envase/tapa + otros costos. El “margen” se calcula sobre el precio de venta; el “recargo” compara la ganancia contra el costo.</div>
+            <div id="fracResult" class="pricing-result empty-result">Completá costo de materia prima, rendimiento y presentación.</div>
           </article>
         </div>
       </section>
@@ -731,7 +799,7 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
       </section>
 
       <section class="view" id="settings">
-        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Seguridad, usuarios, instalación y copias de respaldo.</p></div></div>
+        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Apariencia, seguridad, usuarios, instalación y copias de respaldo.</p></div></div>
         <div class="settings-grid">
           <article class="card install-card">
             <div class="install-icon"><span>ZH</span></div>
@@ -752,6 +820,15 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
             </form>
             <div class="access-section"><div class="access-section-title"><strong>Personas con acceso</strong><span id="accessMemberCount">0</span></div><div class="access-list" id="accessMembersList"></div></div>
             <div class="access-section"><div class="access-section-title"><strong>Invitaciones pendientes</strong><span id="accessInviteCount">0</span></div><div class="access-list" id="accessInvitesList"></div></div>
+          </article>
+
+          <article class="card surface-card appearance-card">
+            <span class="section-kicker">Apariencia</span><h2>Tema visual</h2>
+            <p class="card-copy">Elegí cómo querés ver Zen Hogar en este dispositivo. La preferencia queda guardada.</p>
+            <div class="theme-options" role="group" aria-label="Tema visual">
+              <button class="theme-option" type="button" data-theme-choice="light" aria-pressed="false"><span class="theme-icon">☀</span><span><strong>Claro</strong><small>Fondo luminoso</small></span></button>
+              <button class="theme-option" type="button" data-theme-choice="dark" aria-pressed="false"><span class="theme-icon">◐</span><span><strong>Oscuro</strong><small>Fondo negro y detalles zen</small></span></button>
+            </div>
           </article>
 
           <article class="card surface-card account-card">
@@ -800,7 +877,7 @@ html{font-size:16px;text-rendering:optimizeLegibility;-webkit-font-smoothing:ant
       <div class="form-grid">
         <label>Código interno<input id="pCode" required /></label><label class="barcode-field">Código de barras <span style="font-weight:600;color:var(--muted)">(opcional)</span><div class="barcode-input-row"><input id="pBarcode" autocomplete="off" placeholder="Dejar vacío si no tiene código" /><button class="secondary" id="scanProductBarcodeBtn" type="button">▣ Escanear</button></div><small class="unit-hint">No es obligatorio. Si el producto no tiene código de barras, podés guardarlo normalmente dejando este campo vacío.</small></label>
         <label>Producto<input id="pName" required /></label>
-        <label>Categoría<input id="pCategory" required /></label>
+        <label>Categoría<input id="pCategory" list="pCategorySuggestions" autocomplete="off" required placeholder="Escribí para ver categorías existentes" /><datalist id="pCategorySuggestions"></datalist><small class="unit-hint">Podés elegir una existente o escribir una categoría nueva.</small></label>
         <label>Unidad de manejo<select id="pUnitKind"><option value="unit">Unidad</option><option value="volume">Litro</option><option value="weight">Kilogramo</option></select><small class="unit-hint">Los fraccionados se guardan internamente en ml o gramos.</small></label>
         <label>Costo por <span id="pCostUnitLabel">unidad</span><input id="pCost" type="number" min="0" step="0.01" required /></label>
         <label>Precio por <span id="pPriceUnitLabel">unidad</span><input id="pPrice" type="number" min="0" step="0.01" required /></label>
@@ -1389,8 +1466,9 @@ function renderDashboard(){
 }
 function renderProducts(){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
-  const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort(); const cur=$('#categoryFilter').value;
+  const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})); const cur=$('#categoryFilter').value;
   $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+  const categorySuggestions=$('#pCategorySuggestions');if(categorySuggestions)categorySuggestions.innerHTML=cats.map(c=>`<option value="${esc(c)}"></option>`).join('');
   const rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
   $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${p.stock<=p.minStock?'low':''}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
   $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
@@ -1606,22 +1684,48 @@ function renderPricingPromo(){
   box.className='pricing-result';
   box.innerHTML=`<div class="pricing-result-grid"><div class="pricing-metric"><span>Precio normal</span><strong>${money(regular)}</strong><small>${qtyText({unitKind:p.unitKind},qty*unitFactor(p.unitKind))}</small></div><div class="pricing-metric"><span>Total promo</span><strong>${money(promo)}</strong><small>${money(effective)} por ${unitLabel(p.unitKind)}</small></div><div class="pricing-metric ${saving>=0?'good':'warn'}"><span>Ahorro cliente</span><strong>${money(saving)}</strong><small>${regular>0?pct((saving/regular)*100):'—'} del precio normal</small></div><div class="pricing-metric ${profit>=0?'good':'warn'}"><span>Ganancia promo</span><strong>${money(profit)}</strong><small>costo total ${money(cost)}</small></div><div class="pricing-metric ${gap>=0?'good':'warn'}"><span>Margen promo</span><strong>${pct(margin)}</strong><small>${gap>=0?`Cumple el objetivo de ${pct(target)}`:`Queda ${pct(Math.abs(gap))} debajo del objetivo`}</small></div><div class="pricing-metric"><span>Precio promo mínimo objetivo</span><strong>${money(targetPriceFromMargin(cost,target))}</strong><small>para mantener margen ${pct(target)}</small></div></div>${profit<0?'<div class="pricing-note pricing-negative">Esta promoción vendería por debajo del costo cargado.</div>':''}`;
 }
+function fractionalModeInfo(){
+  const mode=$('#fracMode')?.value==='weight'?'weight':'volume';
+  return mode==='weight'
+    ?{mode,baseWord:'kilogramo',baseShort:'kg',minor:'g',basePlural:'kg finales',presentationWord:'gramos'}
+    :{mode,baseWord:'litro',baseShort:'L',minor:'ml',basePlural:'L finales',presentationWord:'mililitros'};
+}
+function updateFractionalModeUI({keepValue=true}={}){
+  const info=fractionalModeInfo();
+  if($('#fracBaseUnitWord'))$('#fracBaseUnitWord').textContent=info.baseWord;
+  if($('#fracBaseUnitShort'))$('#fracBaseUnitShort').textContent=info.baseShort;
+  if($('#fracMinorUnitLabel'))$('#fracMinorUnitLabel').textContent=info.minor;
+  if($('#fracYieldHint'))$('#fracYieldHint').textContent=info.mode==='weight'?'Ingresá los kg finales obtenidos.':'Ingresá los litros finales obtenidos.';
+  if($('#fracConcentrateCost'))$('#fracConcentrateCost').placeholder=info.mode==='weight'?'Ej. costo por kg':'Ej. costo por litro';
+  if($('#fracYieldLiters'))$('#fracYieldLiters').placeholder=info.mode==='weight'?'Kilogramos finales':'Litros finales';
+  $$('[data-frac-size]').forEach(b=>{
+    const n=Number(b.dataset.fracSize||0);
+    if(info.mode==='weight')b.textContent=n>=1000?`${fmtQty(n/1000)} kg`:`${fmtQty(n)} g`;
+    else b.textContent=n>=1000?`${fmtQty(n/1000)} L`:`${fmtQty(n)} ml`;
+  });
+  if(!keepValue&&$('#fracPresentationMl'))$('#fracPresentationMl').value=1000;
+  if($('#fracFormulaNote'))$('#fracFormulaNote').textContent=`Costo real = parte proporcional de la materia prima por ${info.baseShort} + envase/tapa + otros costos. El margen se calcula sobre el precio de venta.`;
+}
 function loadFractionalFromProduct(){
-  const p=state.products.find(x=>x.id===$('#fracProduct').value);if(!p)return;
-  const ml=Number($('#fracPresentationMl').value||1000);
-  if(p.unitKind==='volume')$('#fracSalePrice').value=(p.price*(ml/1000)).toFixed(2);
+  const p=state.products.find(x=>x.id===$('#fracProduct').value);if(!p){updateFractionalModeUI();renderFractionalCalculator();return;}
+  if(p.unitKind==='weight'){$('#fracMode').value='weight';updateFractionalModeUI();}
+  else if(p.unitKind==='volume'){$('#fracMode').value='volume';updateFractionalModeUI();}
+  const minor=Number($('#fracPresentationMl').value||1000);
+  if(p.unitKind==='volume'||p.unitKind==='weight')$('#fracSalePrice').value=(p.price*(minor/1000)).toFixed(2);
   else $('#fracSalePrice').value=Number(p.price||0).toFixed(2);
   $('#fracContainerCost').value=Number(p.containerCost||0).toFixed(2);
   renderFractionalCalculator();
 }
 function renderFractionalCalculator(){
   const box=$('#fracResult');if(!box)return;
-  const concentrate=Number($('#fracConcentrateCost').value||0),yieldL=Number($('#fracYieldLiters').value||0),ml=Number($('#fracPresentationMl').value||0),container=Number($('#fracContainerCost').value||0),extra=Number($('#fracExtraCost').value||0),sale=Number($('#fracSalePrice').value||0),target=Number($('#fracTargetMargin').value||0);
-  if(!(concentrate>0)||!(yieldL>0)||!(ml>0)){box.className='pricing-result empty-result';box.textContent='Completá costo del concentrado, rendimiento y presentación.';return;}
-  const finalLiters=ml/1000,chemicalPerL=concentrate/yieldL,chemicalCost=chemicalPerL*finalLiters,totalCost=chemicalCost+Math.max(container,0)+Math.max(extra,0),effectivePerL=finalLiters>0?totalCost/finalLiters:NaN,suggested=targetPriceFromMargin(totalCost,target);
+  const info=fractionalModeInfo();
+  const baseCost=Number($('#fracConcentrateCost').value||0),yieldBase=Number($('#fracYieldLiters').value||0),minor=Number($('#fracPresentationMl').value||0),container=Number($('#fracContainerCost').value||0),extra=Number($('#fracExtraCost').value||0),sale=Number($('#fracSalePrice').value||0),target=Number($('#fracTargetMargin').value||0);
+  if(!(baseCost>0)||!(yieldBase>0)||!(minor>0)){box.className='pricing-result empty-result';box.textContent='Completá costo de materia prima, rendimiento y presentación.';return;}
+  const finalBase=minor/1000,costPerFinalBase=baseCost/yieldBase,materialCost=costPerFinalBase*finalBase,totalCost=materialCost+Math.max(container,0)+Math.max(extra,0),effectivePerBase=finalBase>0?totalCost/finalBase:NaN,suggested=targetPriceFromMargin(totalCost,target);
   const m=sale>0?marginCalc(totalCost,sale):{profit:NaN,margin:NaN,markup:NaN};const gap=sale>0?m.margin-target:NaN;
+  const presentationLabel=minor>=1000?`${fmtQty(minor/1000)} ${info.baseShort}`:`${fmtQty(minor)} ${info.minor}`;
   box.className='pricing-result';
-  box.innerHTML=`<div class="pricing-result-grid"><div class="pricing-metric"><span>Costo químico por L final</span><strong>${money(chemicalPerL)}</strong><small>${money(concentrate)} ÷ ${yieldL.toLocaleString('es-AR')} L finales</small></div><div class="pricing-metric"><span>Costo químico presentación</span><strong>${money(chemicalCost)}</strong><small>${ml.toLocaleString('es-AR')} ml</small></div><div class="pricing-metric"><span>Costo real presentación</span><strong>${money(totalCost)}</strong><small>incluye envase y extras</small></div><div class="pricing-metric"><span>Costo efectivo por L</span><strong>${money(effectivePerL)}</strong><small>con envase prorrateado</small></div><div class="pricing-metric ${sale>0?(m.profit>=0?'good':'warn'):''}"><span>Ganancia por venta</span><strong>${sale>0?money(m.profit):'—'}</strong><small>${sale>0?`Precio ${money(sale)}`:'cargá precio de venta'}</small></div><div class="pricing-metric ${sale>0?(gap>=0?'good':'warn'):''}"><span>Margen real</span><strong>${sale>0?pct(m.margin):'—'}</strong><small>${sale>0?(gap>=0?`Cumple objetivo ${pct(target)}`:`Faltan ${pct(Math.abs(gap))}`):'—'}</small></div><div class="pricing-metric"><span>Recargo sobre costo</span><strong>${sale>0?pct(m.markup):'—'}</strong><small>ganancia ÷ costo</small></div><div class="pricing-metric good"><span>Precio sugerido</span><strong>${Number.isFinite(suggested)?money(suggested):'—'}</strong><small>para margen ${pct(target)}</small></div></div>${sale>0&&m.profit<0?'<div class="pricing-note pricing-negative">El precio ingresado está por debajo del costo real calculado.</div>':''}`;
+  box.innerHTML=`<div class="pricing-result-grid"><div class="pricing-metric"><span>Costo materia prima por ${info.baseShort} final</span><strong>${money(costPerFinalBase)}</strong><small>${money(baseCost)} ÷ ${fmtQty(yieldBase)} ${info.basePlural}</small></div><div class="pricing-metric"><span>Costo materia prima presentación</span><strong>${money(materialCost)}</strong><small>${presentationLabel}</small></div><div class="pricing-metric"><span>Costo real presentación</span><strong>${money(totalCost)}</strong><small>incluye envase y extras</small></div><div class="pricing-metric"><span>Costo efectivo por ${info.baseShort}</span><strong>${money(effectivePerBase)}</strong><small>con envase prorrateado</small></div><div class="pricing-metric ${sale>0?(m.profit>=0?'good':'warn'):''}"><span>Ganancia por venta</span><strong>${sale>0?money(m.profit):'—'}</strong><small>${sale>0?`Precio ${money(sale)}`:'cargá precio de venta'}</small></div><div class="pricing-metric ${sale>0?(gap>=0?'good':'warn'):''}"><span>Margen real</span><strong>${sale>0?pct(m.margin):'—'}</strong><small>${sale>0?(gap>=0?`Cumple objetivo ${pct(target)}`:`Faltan ${pct(Math.abs(gap))}`):'—'}</small></div><div class="pricing-metric"><span>Recargo sobre costo</span><strong>${sale>0?pct(m.markup):'—'}</strong><small>ganancia ÷ costo</small></div><div class="pricing-metric good"><span>Precio sugerido</span><strong>${Number.isFinite(suggested)?money(suggested):'—'}</strong><small>para margen ${pct(target)}</small></div></div>${sale>0&&m.profit<0?'<div class="pricing-note pricing-negative">El precio ingresado está por debajo del costo real calculado.</div>':''}`;
 }
 
 function reportRange(period=state.reportPeriod||'30d'){
@@ -1693,7 +1797,23 @@ function renderAccessControl(){
   $('#accessInviteCount').textContent=pendingInvites.length;
   $('#accessInvitesList').innerHTML=pendingInvites.map(i=>{const st=invitationStatus(i);return `<div class="access-row"><div class="access-row-main"><strong>${esc(i.email)}</strong><small>${roleLabel(i.role)} · vence ${fmtDate(i.expiresAt)}${i.lastError?` · ${esc(i.lastError)}`:''}</small></div><span class="access-status ${st.cls}">${st.label}</span><button class="access-revoke" type="button" onclick="revokeAccessInvite('${i.id}')">Cancelar</button></div>`;}).join('')||'<div class="access-empty">No hay invitaciones pendientes.</div>';
 }
+const ZH_THEME_KEY='zenhogar_theme';
+function currentTheme(){return document.documentElement.dataset.theme==='dark'?'dark':'light';}
+function renderThemeControls(){
+  const active=currentTheme();
+  $$('[data-theme-choice]').forEach(b=>{const on=b.dataset.themeChoice===active;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});
+}
+function applyTheme(theme,{persist=true}={}){
+  const next=theme==='dark'?'dark':'light';
+  document.documentElement.dataset.theme=next;
+  document.documentElement.style.colorScheme=next;
+  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',next==='dark'?'#0b0f0e':'#eef7f4');
+  if(persist)try{localStorage.setItem(ZH_THEME_KEY,next);}catch(_e){}
+  renderThemeControls();
+}
+
 function renderSettings(){
+  renderThemeControls();
   $('#settingsBusinessName').textContent=state.org?.name||'Zen Hogar'; $('#settingsUserEmail').textContent=state.user?.email||'—'; $('#settingsUserRole').textContent=roleLabel(state.role);
   $('#teamCard').hidden=!canOwner();
   renderAccessControl();
@@ -2178,11 +2298,12 @@ $('#pricingProduct').onchange=()=>{const p=pricingSelectedProduct();$('#pricingT
 $('#pricingTargetMargin').oninput=()=>{localStorage.setItem('zenhogar_target_margin',$('#pricingTargetMargin').value);renderPricingProduct();renderFractionalCalculator();};
 $('#pricingTestPrice').oninput=renderPricingProduct;$('#pricingPromoQty').oninput=renderPricingPromo;$('#pricingPromoTotal').oninput=renderPricingPromo;
 $('#pricingGoPromosBtn').onclick=()=>setView('promotions');$('#pricingEditProductBtn').onclick=()=>{const p=pricingSelectedProduct();if(!p)return toast('Seleccioná un producto.','error');editProduct(p.id);};
-$('#fracProduct').onchange=loadFractionalFromProduct;['fracConcentrateCost','fracYieldLiters','fracPresentationMl','fracContainerCost','fracExtraCost','fracSalePrice','fracTargetMargin'].forEach(id=>$('#'+id).oninput=renderFractionalCalculator);
+$('#fracProduct').onchange=loadFractionalFromProduct;$('#fracMode').onchange=()=>{updateFractionalModeUI({keepValue:false});loadFractionalFromProduct();renderFractionalCalculator();};['fracConcentrateCost','fracYieldLiters','fracPresentationMl','fracContainerCost','fracExtraCost','fracSalePrice','fracTargetMargin'].forEach(id=>$('#'+id).oninput=renderFractionalCalculator);
 $('#reportPeriod').onchange=e=>{state.reportPeriod=e.target.value;localStorage.setItem('zenhogar_report_period',state.reportPeriod);renderReports();};
 $('#reportMarginTarget').oninput=e=>{const v=Math.min(95,Math.max(1,Number(e.target.value||45)));state.reportMarginTarget=v;localStorage.setItem('zenhogar_report_margin_target',String(v));renderReports();};
 $('#exportProfitReportBtn').onclick=exportProfitabilityCsv;
-$$('[data-frac-ml]').forEach(b=>b.onclick=()=>{$('#fracPresentationMl').value=b.dataset.fracMl;loadFractionalFromProduct();renderFractionalCalculator();});$('#fracNoContainerBtn').onclick=()=>{$('#fracContainerCost').value=0;renderFractionalCalculator();};
+$$('[data-frac-size]').forEach(b=>b.onclick=()=>{$('#fracPresentationMl').value=b.dataset.fracSize;loadFractionalFromProduct();renderFractionalCalculator();});$('#fracNoContainerBtn').onclick=()=>{$('#fracContainerCost').value=0;renderFractionalCalculator();};updateFractionalModeUI();
+$$('[data-theme-choice]').forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(currentTheme(),{persist:false});
 const savedTarget=Number(localStorage.getItem('zenhogar_target_margin'));if(savedTarget>0&&savedTarget<100){$('#pricingTargetMargin').value=savedTarget;$('#fracTargetMargin').value=savedTarget;}
 
 $('#scanProductBarcodeBtn').onclick=()=>openBarcodeScanner('product');
