@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2.1 · SaaS multiempresa · consulta de stock corregida -->
+<!-- Gestión Cloud V12.2.2 · SaaS multiempresa · consulta de stock estricto -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="theme-color" content="#f3fbf7" />
   <meta name="color-scheme" content="light dark" />
@@ -666,7 +669,7 @@ html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,2
         </article>
         <article class="card stock-query-card">
           <div class="stock-query-head">
-            <div><span class="section-kicker">Consulta de stock</span><h3>¿Cuánto tengo de un producto o grupo?</h3><p>Buscá por nombre, marca o categoría. Podés escribir, por ejemplo, “aerosoles Saphirus”, “sahumerios” o el nombre de un producto específico.</p></div>
+            <div><span class="section-kicker">Consulta de stock · V12.2.2</span><h3>¿Cuánto tengo de un producto o grupo?</h3><p>Buscá por nombre, marca o categoría. Podés escribir, por ejemplo, “aerosoles Saphirus”, “sahumerios” o el nombre de un producto específico.</p></div>
             <div class="stock-query-icon" aria-hidden="true">⌕</div>
           </div>
           <div class="stock-query-row">
@@ -1661,18 +1664,23 @@ function stockQueryToken(v){
   const t=stockQueryNorm(v);
   const aliases={AEROSOLES:'AEROSOL',DIFUSORES:'DIFUSOR',SAHUMERIOS:'SAHUMERIO',PERFUMES:'PERFUME',TEXTILES:'TEXTIL',LIMPIADORES:'LIMPIADOR',PRODUCTOS:'PRODUCTO',UNIDADES:'UNIDAD'};
   if(aliases[t])return aliases[t];
-  if(t==='SAPHIRUS')return t;
+  if(t==='SAPHIRUS')return 'SAPHIRUS';
   return t.endsWith('S')&&t.length>4?t.slice(0,-1):t;
 }
+function stockQueryWords(v){
+  return stockQueryNorm(v).split(/\s+/).filter(Boolean).map(stockQueryToken).filter(Boolean);
+}
 function stockQueryMatches(p,query){
-  const wanted=stockQueryNorm(query).split(/\s+/).filter(Boolean).map(stockQueryToken);
+  const wanted=stockQueryWords(query);
   if(!wanted.length)return false;
-  const corpus=stockQueryNorm(`${p.code||''} ${p.name||''} ${p.category||''}`).split(/\s+/).filter(Boolean).map(stockQueryToken);
-  return wanted.every(w=>corpus.some(c=>{
-    if(c===w)return true;
-    if(c.length<4||w.length<4)return false;
-    return c.startsWith(w)||w.startsWith(c);
-  }));
+  const corpus=stockQueryWords(`${p.code||''} ${p.name||''} ${p.category||''}`);
+  const exact=new Set(corpus);
+  return wanted.every(w=>{
+    if(w==='SAPHIRUS')return exact.has('SAPHIRUS');
+    if(exact.has(w))return true;
+    if(w.length>=4)return corpus.some(c=>c.length>=w.length&&c.startsWith(w));
+    return false;
+  });
 }
 function stockQueryTotalText(rows){
   const sums={unit:0,volume:0,weight:0};
