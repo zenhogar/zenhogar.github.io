@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2 · SaaS multiempresa · consulta inteligente de stock -->
+<!-- Gestión Cloud V12.2.1 · SaaS multiempresa · consulta de stock corregida -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -1668,7 +1668,11 @@ function stockQueryMatches(p,query){
   const wanted=stockQueryNorm(query).split(/\s+/).filter(Boolean).map(stockQueryToken);
   if(!wanted.length)return false;
   const corpus=stockQueryNorm(`${p.code||''} ${p.name||''} ${p.category||''}`).split(/\s+/).filter(Boolean).map(stockQueryToken);
-  return wanted.every(w=>corpus.some(c=>c===w||c.includes(w)||w.includes(c)));
+  return wanted.every(w=>corpus.some(c=>{
+    if(c===w)return true;
+    if(c.length<4||w.length<4)return false;
+    return c.startsWith(w)||w.startsWith(c);
+  }));
 }
 function stockQueryTotalText(rows){
   const sums={unit:0,volume:0,weight:0};
