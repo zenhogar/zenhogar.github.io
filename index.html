@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2.3 · SaaS multiempresa · stock agotado diferenciado -->
+<!-- Gestión Cloud V12.2.4 · SaaS multiempresa · stock cero diferenciado -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -1655,7 +1655,7 @@ function renderDashboard(){
   $('#productCount').textContent=state.products.length;
   const low=state.products.filter(p=>p.stock<=p.minStock); $('#lowStockCount').textContent=low.length;
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
-  $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'AGOTADO · ': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
+  $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
 function stockQueryNorm(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim();
@@ -1715,7 +1715,7 @@ function renderProducts(){
   $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
   const categorySuggestions=$('#pCategorySuggestions');if(categorySuggestions)categorySuggestions.innerHTML=cats.map(c=>`<option value="${esc(c)}"></option>`).join('');
   const rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
-  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${Number(p.stock||0)<=0?'AGOTADO · ':''}${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
+  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
   $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
