@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2.5 · SaaS multiempresa · recuperación de contraseña -->
+<!-- Gestión Cloud V12.2.9 · SaaS multiempresa · último producto y orden por categoría -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -127,7 +127,11 @@ button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-
 @media(max-width:700px){.supplier-toolbar{display:grid}.supplier-search-wrap{max-width:none}.supplier-grid{grid-template-columns:1fr}.supplier-actions{grid-template-columns:1fr 1fr}.supplier-actions .supplier-buy{grid-column:1/-1}.supplier-modal-actions{grid-template-columns:1fr}.purchase-supplier-cta{align-items:flex-start;flex-direction:column}.purchase-supplier-cta button{width:100%}}
 
 /* Promociones · experiencia simplificada */
-.promo-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;padding:12px}.promo-search-wrap{position:relative;flex:1}.promo-search-wrap input{width:100%;padding-left:40px}.promo-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}.promo-toolbar select{min-width:180px}.promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.promo-item-card{background:var(--panel-solid);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow-soft);display:grid;gap:13px}.promo-item-top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.promo-item-title{min-width:0}.promo-item-title strong{display:block;font-size:16px;line-height:1.25}.promo-item-title small{display:block;color:var(--muted);margin-top:4px}.promo-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}.promo-status.active{background:var(--mint);color:var(--accent-dark)}.promo-status.scheduled{background:var(--peach);color:#8b673f}.promo-status.expired{background:#f1f2f1;color:#7c8581}.promo-offer-box{padding:12px;border-radius:15px;background:linear-gradient(135deg,var(--lilac),var(--blue));display:grid;gap:5px}.promo-offer-box strong{font-size:18px}.promo-offer-box small{color:var(--muted)}.promo-saving{color:var(--accent-dark);font-weight:800;font-size:11px}.promo-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.promo-meta{padding:9px 10px;border:1px solid var(--line);border-radius:12px}.promo-meta span,.promo-meta strong{display:block}.promo-meta span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}.promo-meta strong{font-size:11px;margin-top:3px;overflow-wrap:anywhere}.promo-item-actions{display:flex;gap:8px}.promo-item-actions .secondary{flex:1}.promo-modal-card{max-width:680px}.promo-steps{display:grid;gap:14px}.promo-step{border:1px solid var(--line);border-radius:18px;padding:14px;background:#fff}.promo-step-title{display:flex;gap:10px;align-items:center;margin-bottom:12px}.promo-step-title>span{width:28px;height:28px;border-radius:10px;background:var(--accent-soft);color:var(--accent-dark);display:grid;place-items:center;font-weight:900;font-size:12px}.promo-step-title strong,.promo-step-title small{display:block}.promo-step-title small{color:var(--muted);font-size:10px;margin-top:2px}.promo-presets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.promo-preset{border:1px solid var(--line);background:#fbfcfb;border-radius:14px;padding:11px;text-align:left;color:var(--ink);cursor:pointer}.promo-preset:hover,.promo-preset.selected{border-color:#9fc2b5;background:var(--mint)}.promo-preset strong,.promo-preset small{display:block}.promo-preset small{font-size:9px;color:var(--muted);margin-top:3px}.promo-live-preview{margin-top:12px;border-radius:16px;border:1px dashed #cfdcd6;background:#f9fcfb;padding:13px}.promo-preview-placeholder{color:var(--muted);font-size:11px}.promo-preview-main{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.promo-preview-main span{display:block;font-size:10px;color:var(--muted)}.promo-preview-main strong{font-size:21px}.promo-preview-saving{text-align:right}.promo-preview-saving strong{display:block;color:var(--accent-dark);font-size:14px}.promo-preview-saving small{color:var(--muted);font-size:9px}.promo-preview-regular{margin-top:9px;font-size:10px;color:var(--muted)}.promo-preview-warning{padding:10px;border-radius:12px;background:var(--danger-soft);color:var(--danger);font-size:11px;font-weight:700}.promo-name-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.promo-date-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.text-btn{border:0;background:var(--mint);color:var(--accent-dark);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}.sale-promo-applied{display:flex;align-items:center;gap:6px;margin-top:6px;padding:6px 8px;border-radius:10px;background:var(--mint);color:var(--accent-dark);font-size:10px;font-weight:800;width:max-content;max-width:100%}.sale-price-before{display:block;color:var(--muted);font-size:10px;text-decoration:line-through;margin-bottom:2px}.sale-discount-summary{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:8px;padding:9px 11px;border-radius:12px;background:var(--mint);color:var(--accent-dark);font-size:11px;font-weight:800}.sale-container-applied{display:flex;align-items:center;gap:6px;margin-top:6px;padding:6px 8px;border-radius:10px;background:var(--blue);color:#48646e;font-size:10px;font-weight:800;width:max-content;max-width:100%}.sale-container-summary{background:var(--blue);color:#48646e}.sale-builder #saleOwnContainerWrap small{display:block;margin-top:4px;color:var(--muted);font-size:9px;font-weight:600;line-height:1.3}.product-container-hint{grid-column:1/-1;padding:11px 12px;border-radius:14px;background:var(--blue);border:1px solid #dce8ec;font-size:10px;line-height:1.5;color:#536b73}.promo-rule-grid{margin-top:2px}
+.promo-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;padding:12px}.promo-search-wrap{position:relative;flex:1}.promo-search-wrap input{width:100%;padding-left:40px}.promo-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}.promo-toolbar select{min-width:180px}.promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.promo-item-card{background:var(--panel-solid);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow-soft);display:grid;gap:13px}.promo-item-top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.promo-item-title{min-width:0}.promo-item-title strong{display:block;font-size:16px;line-height:1.25}.promo-item-title small{display:block;color:var(--muted);margin-top:4px}.promo-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}.promo-status.active{background:var(--mint);color:var(--accent-dark)}.promo-status.scheduled{background:var(--peach);color:#8b673f}.promo-status.expired{background:#f1f2f1;color:#7c8581}.promo-offer-box{padding:12px;border-radius:15px;background:linear-gradient(135deg,var(--lilac),var(--blue));display:grid;gap:5px}.promo-offer-box strong{font-size:18px}.promo-offer-box small{color:var(--muted)}.promo-saving{color:var(--accent-dark);font-weight:800;font-size:11px}.promo-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.promo-meta{padding:9px 10px;border:1px solid var(--line);border-radius:12px}.promo-meta span,.promo-meta strong{display:block}.promo-meta span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}.promo-meta strong{font-size:11px;margin-top:3px;overflow-wrap:anywhere}.promo-item-actions{display:flex;gap:8px}.promo-item-actions .secondary{flex:1}.promo-modal-card{max-width:680px}.promo-steps{display:grid;gap:14px}.promo-step{border:1px solid var(--line);border-radius:18px;padding:14px;background:#fff}.promo-step-title{display:flex;gap:10px;align-items:center;margin-bottom:12px}.promo-step-title>span{width:28px;height:28px;border-radius:10px;background:var(--accent-soft);color:var(--accent-dark);display:grid;place-items:center;font-weight:900;font-size:12px}.promo-step-title strong,.promo-step-title small{display:block}.promo-step-title small{color:var(--muted);font-size:10px;margin-top:2px}.promo-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.promo-preset{border:1px solid var(--line);background:#fbfcfb;border-radius:14px;padding:11px;text-align:left;color:var(--ink);cursor:pointer}.promo-preset:hover,.promo-preset.selected{border-color:#9fc2b5;background:var(--mint)}.promo-preset strong,.promo-preset small{display:block}.promo-preset small{font-size:9px;color:var(--muted);margin-top:3px}.promo-live-preview{margin-top:12px;border-radius:16px;border:1px dashed #cfdcd6;background:#f9fcfb;padding:13px}.promo-preview-placeholder{color:var(--muted);font-size:11px}.promo-preview-main{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.promo-preview-main span{display:block;font-size:10px;color:var(--muted)}.promo-preview-main strong{font-size:21px}.promo-preview-saving{text-align:right}.promo-preview-saving strong{display:block;color:var(--accent-dark);font-size:14px}.promo-preview-saving small{color:var(--muted);font-size:9px}.promo-preview-regular{margin-top:9px;font-size:10px;color:var(--muted)}.promo-preview-warning{padding:10px;border-radius:12px;background:var(--danger-soft);color:var(--danger);font-size:11px;font-weight:700}.promo-name-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.promo-date-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.text-btn{border:0;background:var(--mint);color:var(--accent-dark);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}.sale-promo-applied{display:flex;align-items:center;gap:6px;margin-top:6px;padding:6px 8px;border-radius:10px;background:var(--mint);color:var(--accent-dark);font-size:10px;font-weight:800;width:max-content;max-width:100%}.sale-price-before{display:block;color:var(--muted);font-size:10px;text-decoration:line-through;margin-bottom:2px}.sale-discount-summary{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:8px;padding:9px 11px;border-radius:12px;background:var(--mint);color:var(--accent-dark);font-size:11px;font-weight:800}.sale-container-applied{display:flex;align-items:center;gap:6px;margin-top:6px;padding:6px 8px;border-radius:10px;background:var(--blue);color:#48646e;font-size:10px;font-weight:800;width:max-content;max-width:100%}.sale-container-summary{background:var(--blue);color:#48646e}.sale-builder #saleOwnContainerWrap small{display:block;margin-top:4px;color:var(--muted);font-size:9px;font-weight:600;line-height:1.3}.product-container-hint{grid-column:1/-1;padding:11px 12px;border-radius:14px;background:var(--blue);border:1px solid #dce8ec;font-size:10px;line-height:1.5;color:#536b73}.promo-rule-grid{margin-top:2px}
+dialog[open]{pointer-events:auto!important}
+dialog[open]>.modal-card,dialog[open]>.promo-modal-card{pointer-events:auto!important}
+.promo-combo-exact-note{margin-top:8px;padding:10px 11px;border-radius:12px;background:var(--blue);border:1px solid #dce8ec;color:#536b73;font-size:10px;line-height:1.45}
+.promo-combo-exact-note strong{color:var(--ink)}
 @media(max-width:700px){.promo-toolbar{display:grid}.promo-toolbar select{min-width:0;width:100%}.promo-grid{grid-template-columns:1fr}.promo-presets{grid-template-columns:1fr}.promo-meta-grid{grid-template-columns:1fr}.promo-name-row{grid-template-columns:1fr}.promo-name-row button{width:100%}.promo-preview-main{align-items:flex-start;flex-direction:column}.promo-preview-saving{text-align:left}}
 
 /* V9 · Promociones móviles + buscador rápido en ventas */
@@ -469,6 +473,21 @@ html:not([data-theme="dark"]) .install-card{background:linear-gradient(135deg,#e
 html:not([data-theme="dark"]) .theme-option.active{background:linear-gradient(135deg,#f2fbf7,#eef6ff);border-color:#91cdb7;box-shadow:0 0 0 2px rgba(86,170,141,.13)}
 html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,255,.82)}
 
+
+.category-last-card{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 18px;margin:0 0 16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,var(--panel-solid),var(--mint));box-shadow:var(--shadow-soft)}
+.category-last-copy{min-width:0}.category-last-copy span,.category-reference span{display:block;color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.05em}
+.category-last-copy strong{display:block;margin-top:4px;font-size:15px}.category-last-copy small{display:block;margin-top:5px;color:var(--muted);line-height:1.35}
+.category-next-code{flex:0 0 auto;text-align:right;padding:10px 13px;border-radius:14px;background:var(--accent-soft);color:var(--accent-dark)}
+.category-next-code span{display:block;font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:.05em}.category-next-code strong{display:block;margin-top:3px;font-size:18px}
+.category-reference{grid-column:1/-1;padding:12px 14px;border:1px dashed var(--line);border-radius:14px;background:var(--mint)}
+.category-reference strong{display:block;margin-top:3px}.category-reference small{display:block;margin-top:5px;color:var(--muted);line-height:1.35}
+.category-reference-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px}.category-reference-code{font-weight:800;color:var(--accent-dark)}
+.category-reference .secondary{padding:8px 11px;min-height:36px}
+html[data-theme="dark"] .category-last-card{background:linear-gradient(135deg,#121b18,#12231d);border-color:#263a32}
+html[data-theme="dark"] .category-next-code{background:#173228;color:#9ed0be}
+html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4239}
+@media(max-width:720px){.category-last-card{align-items:flex-start;flex-direction:column}.category-next-code{text-align:left;width:100%}.category-reference-actions{align-items:flex-start;flex-direction:column}.category-reference .secondary{width:100%}}
+
 </style>
 </head>
 <body>
@@ -712,7 +731,25 @@ html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,2
         <div class="toolbar">
           <label class="search-field"><span>⌕</span><input id="productSearch" placeholder="Buscar producto, código o categoría..." /></label>
           <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+          <select id="productSort" aria-label="Ordenar productos">
+            <option value="recent">Más recientes primero</option>
+            <option value="oldest">Más antiguos primero</option>
+            <option value="name">Nombre A-Z</option>
+            <option value="stockAsc">Menor stock primero</option>
+            <option value="stockDesc">Mayor stock primero</option>
+          </select>
           <button class="primary" id="addProductBtn">+ Agregar producto</button>
+        </div>
+        <div class="category-last-card" id="categoryLastProductCard" hidden>
+          <div class="category-last-copy">
+            <span id="categoryLastLabel">Último producto cargado</span>
+            <strong id="categoryLastProduct">—</strong>
+            <small id="categoryLastMeta">—</small>
+          </div>
+          <div class="category-next-code">
+            <span>Próximo código sugerido</span>
+            <strong id="categoryNextCode">—</strong>
+          </div>
         </div>
         <div class="card table-wrap">
           <table>
@@ -1018,7 +1055,16 @@ html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,2
       <div class="form-grid">
         <label>Código interno<input id="pCode" required /></label><label class="barcode-field">Código de barras <span style="font-weight:600;color:var(--muted)">(opcional)</span><div class="barcode-input-row"><input id="pBarcode" autocomplete="off" placeholder="Dejar vacío si no tiene código" /><button class="secondary" id="scanProductBarcodeBtn" type="button">▣ Escanear</button></div><small class="unit-hint">No es obligatorio. Si el producto no tiene código de barras, podés guardarlo normalmente dejando este campo vacío.</small></label>
         <label>Producto<input id="pName" required /></label>
-        <label>Categoría<input id="pCategory" list="pCategorySuggestions" autocomplete="off" required placeholder="Escribí para ver categorías existentes" /><datalist id="pCategorySuggestions"></datalist><small class="unit-hint">Podés elegir una existente o escribir una categoría nueva.</small></label>
+        <label>Categoría<select id="pCategory" required><option value="">Seleccionar categoría</option></select><input id="pCategoryNew" type="text" autocomplete="off" placeholder="Nombre de la nueva categoría" hidden /><small class="unit-hint" id="pCategoryHint">Elegí una categoría existente. Si necesitás otra, seleccioná “+ Nueva categoría”.</small></label>
+        <div class="category-reference" id="pCategoryReference" hidden>
+          <span>Referencia de la categoría</span>
+          <strong id="pCategoryLastProduct">—</strong>
+          <small id="pCategoryLastMeta">—</small>
+          <div class="category-reference-actions">
+            <div>Próximo código sugerido: <span class="category-reference-code" id="pCategoryNextCode">—</span></div>
+            <button class="secondary" id="useSuggestedProductCode" type="button">Usar código sugerido</button>
+          </div>
+        </div>
         <label>Unidad de manejo<select id="pUnitKind"><option value="unit">Unidad</option><option value="volume">Litro</option><option value="weight">Kilogramo</option></select><small class="unit-hint">Los fraccionados se guardan internamente en ml o gramos.</small></label>
         <label>Costo por <span id="pCostUnitLabel">unidad</span><input id="pCost" type="number" min="0" step="0.01" required /></label>
         <label>Precio por <span id="pPriceUnitLabel">unidad</span><input id="pPrice" type="number" min="0" step="0.01" required /></label>
@@ -1098,17 +1144,19 @@ html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,2
             <div class="promo-product-selected" id="promoSelectedProducts"></div>
             <div class="promo-product-options" id="promoProductOptions"></div>
           </div>
-          <div class="promo-combo-note">En una promo por cantidad, los productos seleccionados se pueden combinar. Ej.: si elegís Papel de cocina + Papel higiénico y configurás 2 x precio, sirve 2 + 0, 1 + 1 o 0 + 2.</div>
+          <div class="promo-combo-note">En una promo por cantidad, los productos seleccionados se pueden mezclar. Si querés exigir productos distintos —por ejemplo 1 Skip + 1 suavizante— elegí <strong>Combo de productos diferentes</strong>.</div>
+          <div class="promo-combo-exact-note" id="promoComboExactNote" hidden><strong>Combo exacto:</strong> la caja aplica el precio sólo cuando hay una unidad comercial de cada producto seleccionado. Si llevás 2 de cada uno, aplica dos combos.</div>
         </section>
         <section class="promo-step">
           <div class="promo-step-title"><span>2</span><div><strong>Elegí cómo querés ofrecerlo</strong><small>Usá un acceso rápido o configurá los valores manualmente.</small></div></div>
           <div class="promo-presets">
             <button class="promo-preset" id="promoPreset2x" type="button"><strong>2 x precio</strong><small>Ej. 2 por $3.800</small></button>
             <button class="promo-preset" id="promoPreset3x" type="button"><strong>3 x precio</strong><small>Ej. 3 por $5.000</small></button>
+            <button class="promo-preset" id="promoPresetCombo" type="button"><strong>Combo diferente</strong><small>1 de cada producto por un total</small></button>
             <button class="promo-preset" id="promoPresetSpecial" type="button"><strong>Precio especial</strong><small>Por unidad, litro o kg</small></button>
           </div>
           <div class="form-grid promo-rule-grid">
-            <label>Tipo<select id="promoRuleType"><option value="qty_total">Cantidad por total fijo</option><option value="special_price">Precio especial por unidad/L/kg</option></select></label>
+            <label>Tipo<select id="promoRuleType"><option value="qty_total">Cantidad por total fijo</option><option value="combo_exact">Combo de productos diferentes</option><option value="special_price">Precio especial por unidad/L/kg</option></select></label>
             <label>Cantidad mínima (<span id="promoQtyUnit">u.</span>)<input id="promoMinQty" type="number" min="0.001" step="0.001" required /></label>
             <label>Precio promocional<input id="promoPrice" type="number" min="0" step="0.01" required /></label>
             <label>Medio válido<select id="promoPayment"><option>Todos</option><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></label>
@@ -1176,6 +1224,7 @@ function quoteSaleCart(cart,payment,soldAt){
     lines.set(p.id,{p,qty:i.qty,regular,promoTotal:regular,promoDiscount:0,promo:null,bundleLocked:false});
   });
   const promos=activePromotionsFor(payment,soldAt);
+
   // Precio especial: mejor opción por línea.
   lines.forEach(line=>{
     promos.filter(x=>x.ruleType==='special_price'&&promotionMatchesProduct(x,line.p.id)&&x.minQty<=line.qty).forEach(x=>{
@@ -1183,29 +1232,78 @@ function quoteSaleCart(cart,payment,soldAt){
       if(candidate<line.promoTotal){line.promoTotal=candidate;line.promoDiscount=Math.max(0,line.regular-candidate);line.promo=x;}
     });
   });
-  // Promos por cantidad: se evalúan sobre la suma de productos elegibles.
+
   const candidates=[];
+
+  // Cantidad por total fijo: cualquier mezcla de los productos elegibles.
   promos.filter(x=>x.ruleType==='qty_total').forEach(x=>{
     const eligible=[...lines.values()].filter(l=>promotionMatchesProduct(x,l.p.id));
     const totalQty=eligible.reduce((a,l)=>a+l.qty,0);
     const bundles=Math.floor((totalQty+1e-9)/x.minQty);if(bundles<=0)return;
     let needed=bundles*x.minQty,selectedRegular=0,existing=0;
     const alloc=[];
-    eligible.sort((a,b)=>(b.p.price/b.p.priceUnitQty)-(a.p.price/a.p.priceUnitQty)).forEach(l=>{
+    eligible.slice().sort((a,b)=>(b.p.price/b.p.priceUnitQty)-(a.p.price/a.p.priceUnitQty)).forEach(l=>{
       if(needed<=1e-9)return;const take=Math.min(l.qty,needed);if(take<=0)return;
       const reg=l.p.price*(take/l.p.priceUnitQty);selectedRegular+=reg;existing+=l.promoDiscount*(take/l.qty);alloc.push({line:l,take,reg});needed-=take;
     });
     const groupDiscount=selectedRegular-bundles*x.promoPrice,incremental=groupDiscount-existing;
-    if(groupDiscount>0&&incremental>0)candidates.push({promo:x,incremental});
+    if(groupDiscount>0&&incremental>0)candidates.push({promo:x,incremental,mode:'qty'});
   });
+
+  // Combo exacto: requiere una unidad comercial de CADA producto seleccionado.
+  promos.filter(x=>x.ruleType==='combo_exact').forEach(x=>{
+    const ids=promotionProductIds(x);
+    if(ids.length<2)return;
+    const eligible=ids.map(id=>lines.get(id));
+    if(eligible.some(l=>!l))return;
+    const bundles=Math.min(...eligible.map(l=>Math.floor((l.qty+1e-9)/Number(l.p.priceUnitQty||unitFactor(l.p.unitKind)||1))));
+    if(!Number.isFinite(bundles)||bundles<=0)return;
+    let selectedRegular=0,existing=0;
+    eligible.forEach(l=>{
+      const take=bundles*Number(l.p.priceUnitQty||unitFactor(l.p.unitKind)||1);
+      const reg=l.p.price*bundles;
+      selectedRegular+=reg;
+      existing+=l.qty>0?l.promoDiscount*(take/l.qty):0;
+    });
+    const groupDiscount=selectedRegular-bundles*x.promoPrice,incremental=groupDiscount-existing;
+    if(groupDiscount>0&&incremental>0)candidates.push({promo:x,incremental,mode:'combo'});
+  });
+
   candidates.sort((a,b)=>b.incremental-a.incremental);
-  candidates.forEach(({promo})=>{
+  candidates.forEach(({promo,mode})=>{
+    if(mode==='combo'){
+      const ids=promotionProductIds(promo);
+      const eligible=ids.map(id=>lines.get(id)).filter(Boolean);
+      if(eligible.length!==ids.length||eligible.some(l=>l.bundleLocked))return;
+      const bundles=Math.min(...eligible.map(l=>Math.floor((l.qty+1e-9)/Number(l.p.priceUnitQty||unitFactor(l.p.unitKind)||1))));
+      if(!Number.isFinite(bundles)||bundles<=0)return;
+      let selectedRegular=0,existing=0;
+      const alloc=eligible.map(l=>{
+        const take=bundles*Number(l.p.priceUnitQty||unitFactor(l.p.unitKind)||1);
+        const reg=l.p.price*bundles;
+        selectedRegular+=reg;
+        existing+=l.qty>0?l.promoDiscount*(take/l.qty):0;
+        return {line:l,take,reg};
+      });
+      const groupDiscount=selectedRegular-bundles*promo.promoPrice,incremental=groupDiscount-existing;
+      if(groupDiscount<=0||incremental<=0)return;
+      let allocated=0;
+      alloc.forEach((a,idx)=>{
+        const groupPart=idx===alloc.length-1?groupDiscount-allocated:Math.round(groupDiscount*(a.reg/selectedRegular)*100)/100;allocated+=groupPart;
+        const priorSelected=a.line.qty>0?a.line.promoDiscount*(a.take/a.line.qty):0;
+        a.line.promoDiscount=Math.max(0,a.line.promoDiscount-priorSelected+groupPart);
+        a.line.promoTotal=Math.max(0,a.line.regular-a.line.promoDiscount);
+        a.line.promo=promo;a.line.bundleLocked=true;
+      });
+      return;
+    }
+
     const eligible=[...lines.values()].filter(l=>!l.bundleLocked&&promotionMatchesProduct(promo,l.p.id));
     const totalQty=eligible.reduce((a,l)=>a+l.qty,0);
     const bundles=Math.floor((totalQty+1e-9)/promo.minQty);if(bundles<=0)return;
     let needed=bundles*promo.minQty,selectedRegular=0,existing=0;
     const alloc=[];
-    eligible.sort((a,b)=>(b.p.price/b.p.priceUnitQty)-(a.p.price/a.p.priceUnitQty)).forEach(l=>{
+    eligible.slice().sort((a,b)=>(b.p.price/b.p.priceUnitQty)-(a.p.price/a.p.priceUnitQty)).forEach(l=>{
       if(needed<=1e-9)return;const take=Math.min(l.qty,needed);if(take<=0)return;
       const reg=l.p.price*(take/l.p.priceUnitQty);selectedRegular+=reg;existing+=l.promoDiscount*(take/l.qty);alloc.push({line:l,take,reg});needed-=take;
     });
@@ -1723,17 +1821,116 @@ function renderStockQuery(){
   detail.innerHTML=shown.map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.category||'Sin categoría')} · ${esc(p.code||'Sin código')}</small></div><strong>${qtyText(p,p.stock)}</strong></div>`).join('')+(ordered.length>shown.length?`<div class="stock-query-more">+ ${ordered.length-shown.length} productos más coinciden con la búsqueda.</div>`:'');
 }
 
+
+function productCategoryInfo(category){
+  const cat=String(category||'').trim();
+  if(!cat)return {last:null,nextCode:'—',count:0};
+  const key=cat.toLocaleUpperCase('es');
+  const rows=state.products.filter(p=>String(p.category||'').trim().toLocaleUpperCase('es')===key);
+  if(!rows.length)return {last:null,nextCode:'—',count:0};
+  const sorted=rows.slice().sort((a,b)=>{
+    const ad=a.createdAt?new Date(a.createdAt).getTime():0;
+    const bd=b.createdAt?new Date(b.createdAt).getTime():0;
+    if(bd!==ad)return bd-ad;
+    return String(b.code||'').localeCompare(String(a.code||''),'es',{numeric:true,sensitivity:'base'});
+  });
+  const last=sorted[0];
+  const code=String(last?.code||'').trim();
+  const match=code.match(/^(.*?)(\d+)$/);
+  let nextCode='—';
+  if(match){
+    const prefix=match[1],width=match[2].length;
+    let maxNumber=Number(match[2]);
+    rows.forEach(p=>{
+      const m=String(p.code||'').trim().match(/^(.*?)(\d+)$/);
+      if(m&&m[1]===prefix)maxNumber=Math.max(maxNumber,Number(m[2]));
+    });
+    const allCodes=new Set(state.products.map(p=>String(p.code||'').trim().toUpperCase()));
+    let candidate=maxNumber+1;
+    do{nextCode=`${prefix}${String(candidate).padStart(width,'0')}`;candidate++;}
+    while(allCodes.has(nextCode.toUpperCase()));
+  }
+  return {last,nextCode,count:rows.length};
+}
+function renderCategoryLastProduct(){
+  const box=$('#categoryLastProductCard');if(!box)return;
+  const cat=$('#categoryFilter')?.value||'';
+  if(!cat){box.hidden=true;return;}
+  const info=productCategoryInfo(cat);
+  box.hidden=false;
+  $('#categoryLastLabel').textContent=`Último producto cargado en ${cat}`;
+  if(!info.last){
+    $('#categoryLastProduct').textContent='Todavía no hay productos en esta categoría';
+    $('#categoryLastMeta').textContent='';
+    $('#categoryNextCode').textContent='—';
+    return;
+  }
+  $('#categoryLastProduct').textContent=info.last.name||'Producto';
+  const date=info.last.createdAt?new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(info.last.createdAt)):'Fecha no disponible';
+  $('#categoryLastMeta').textContent=`${info.last.code||'Sin código'} · cargado ${date} · ${info.count} producto${info.count===1?'':'s'} en la categoría`;
+  $('#categoryNextCode').textContent=info.nextCode;
+}
+function productCategoryValue(){
+  const select=$('#pCategory');
+  if(!select)return '';
+  if(select.value==='__new__')return ($('#pCategoryNew')?.value||'').trim().toUpperCase();
+  return String(select.value||'').trim();
+}
+function populateProductCategoryOptions(preferred=''){
+  const select=$('#pCategory');if(!select)return;
+  const current=preferred||productCategoryValue();
+  const cats=[...new Set(state.products.map(p=>String(p.category||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
+  if(current&&current!=='__new__'&&!cats.some(c=>c===current))cats.push(current);
+  select.innerHTML='<option value="">Seleccionar categoría</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')+'<option value="__new__">+ Nueva categoría…</option>';
+  if(current&&cats.includes(current))select.value=current;
+  else if(current&&current!=='__new__'){select.value='__new__';$('#pCategoryNew').value=current;}
+  const isNew=select.value==='__new__';
+  $('#pCategoryNew').hidden=!isNew;
+  $('#pCategoryNew').required=isNew;
+}
+function handleProductCategoryChange(){
+  const isNew=$('#pCategory')?.value==='__new__';
+  $('#pCategoryNew').hidden=!isNew;
+  $('#pCategoryNew').required=isNew;
+  if(isNew){$('#pCategoryNew').value='';$('#pCategoryNew').focus();}
+  renderProductCategoryReference();
+}
+function renderProductCategoryReference(){
+  const box=$('#pCategoryReference');if(!box)return;
+  const cat=productCategoryValue();
+  const info=productCategoryInfo(cat);
+  if(!cat||!info.last){box.hidden=true;return;}
+  box.hidden=false;
+  $('#pCategoryLastProduct').textContent=info.last.name||'Producto';
+  const date=info.last.createdAt?new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(info.last.createdAt)):'Fecha no disponible';
+  $('#pCategoryLastMeta').textContent=`Último: ${info.last.code||'Sin código'} · ${date}`;
+  $('#pCategoryNextCode').textContent=info.nextCode;
+  const btn=$('#useSuggestedProductCode');
+  btn.hidden=!!$('#productId').value||info.nextCode==='—';
+  btn.disabled=info.nextCode==='—';
+}
+
 function renderProducts(){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
   const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})); const cur=$('#categoryFilter').value;
   $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
-  const categorySuggestions=$('#pCategorySuggestions');if(categorySuggestions)categorySuggestions.innerHTML=cats.map(c=>`<option value="${esc(c)}"></option>`).join('');
-  const rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
+  populateProductCategoryOptions();
+  let rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
+  const sort=$('#productSort')?.value||'recent';
+  rows=rows.slice().sort((a,b)=>{
+    const at=a.createdAt?new Date(a.createdAt).getTime():0,bt=b.createdAt?new Date(b.createdAt).getTime():0;
+    if(sort==='recent')return bt-at||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
+    if(sort==='oldest')return at-bt||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
+    if(sort==='stockAsc')return Number(a.stock||0)-Number(b.stock||0)||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
+    if(sort==='stockDesc')return Number(b.stock||0)-Number(a.stock||0)||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
+    return String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
+  });
   $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
   $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
   renderStockQuery();
+  renderCategoryLastProduct();
 }
 function replenishmentItems(){
   return state.products
@@ -1823,6 +2020,10 @@ function promotionStatus(x,now=Date.now()){
 function promoProductsFor(x){return promotionProductIds(x).map(id=>state.products.find(p=>p.id===id)).filter(Boolean);}
 function promotionSavingInfo(x,products){
   if(!products?.length)return {regularMin:0,regularMax:0,promo:0,savingMin:0,savingMax:0};
+  if(x.ruleType==='combo_exact'){
+    const regular=products.reduce((a,p)=>a+Number(p.price||0),0);
+    return {regularMin:regular,regularMax:regular,promo:x.promoPrice,savingMin:Math.max(regular-x.promoPrice,0),savingMax:Math.max(regular-x.promoPrice,0)};
+  }
   const qtyDisplay=displayQty(products[0],x.minQty);
   const prices=products.map(p=>p.price);
   const regularMin=Math.min(...prices)*qtyDisplay,regularMax=Math.max(...prices)*qtyDisplay;
@@ -1832,18 +2033,18 @@ function promotionSavingInfo(x,products){
 function renderPromotions(){
   const now=Date.now(),statuses=state.promotions.map(x=>({x,status:promotionStatus(x,now)}));
   const active=statuses.filter(v=>v.status==='active').map(v=>v.x),scheduled=statuses.filter(v=>v.status==='scheduled').map(v=>v.x);
-  $('#activePromoCount').textContent=active.length; $('#scheduledPromoCount').textContent=scheduled.length; $('#bundlePromoCount').textContent=active.filter(x=>x.ruleType==='qty_total').length; $('#specialPromoCount').textContent=active.filter(x=>x.ruleType==='special_price').length; $('#addPromotionBtn').hidden=!canAdmin();
+  $('#activePromoCount').textContent=active.length; $('#scheduledPromoCount').textContent=scheduled.length; $('#bundlePromoCount').textContent=active.filter(x=>x.ruleType==='qty_total'||x.ruleType==='combo_exact').length; $('#specialPromoCount').textContent=active.filter(x=>x.ruleType==='special_price').length; $('#addPromotionBtn').hidden=!canAdmin();
   renderPromoProductPicker();
   const q=($('#promoSearch')?.value||'').toLowerCase().trim(),filter=$('#promoStatusFilter')?.value||'all';
   const order={active:0,scheduled:1,expired:2};
   const rows=statuses.filter(({x,status})=>{const ps=promoProductsFor(x),hay=ps.map(p=>`${p.name} ${p.code||''}`).join(' ');return ps.length&&(filter==='all'||status===filter)&&(!q||`${x.name} ${hay}`.toLowerCase().includes(q));}).sort((a,b)=>order[a.status]-order[b.status]||new Date(b.x.startsAt)-new Date(a.x.startsAt));
   $('#promotionsList').innerHTML=rows.map(({x,status})=>{
-    const ps=promoProductsFor(x),p=ps[0],sv=promotionSavingInfo(x,ps),rule=x.ruleType==='qty_total'?`${qtyText(p,x.minQty)} por ${money(x.promoPrice)}`:`${money(x.promoPrice)} / ${unitLabel(p.unitKind)} desde ${qtyText(p,x.minQty)}`;
+    const ps=promoProductsFor(x),p=ps[0],sv=promotionSavingInfo(x,ps),rule=x.ruleType==='combo_exact'?`1 de cada producto por ${money(x.promoPrice)}`:x.ruleType==='qty_total'?`${qtyText(p,x.minQty)} por ${money(x.promoPrice)}`:`${money(x.promoPrice)} / ${unitLabel(p.unitKind)} desde ${qtyText(p,x.minQty)}`;
     const productLabel=ps.length<=2?ps.map(v=>v.name).join(' + '):`${ps[0].name} + ${ps[1].name} + ${ps.length-2} más`;
     const savingText=sv.savingMin>0?(Math.abs(sv.savingMax-sv.savingMin)<.01?`Ahorro en el mínimo: ${money(sv.savingMin)}`:`Ahorro según combinación: ${money(sv.savingMin)} a ${money(sv.savingMax)}`):'';
     const statusLabel=status==='active'?'Activa ahora':status==='scheduled'?'Programada':'Finalizada';
     const validUntil=x.endsAt?fmtDate(x.endsAt):'Sin vencimiento';
-    return `<article class="promo-item-card"><div class="promo-item-top"><div class="promo-item-title"><strong>${esc(x.name)}</strong><small>${esc(productLabel)}${ps.length>1?` · ${ps.length} productos combinables`:''}</small></div><span class="promo-status ${status}">${statusLabel}</span></div><div class="promo-offer-box"><small>Oferta</small><strong>${rule}</strong>${savingText?`<span class="promo-saving">${savingText}</span>`:''}</div><div class="promo-meta-grid"><div class="promo-meta"><span>Medio de pago</span><strong>${x.payment==='Todos'?'Todos':esc(x.payment)}</strong></div><div class="promo-meta"><span>Vigencia</span><strong>${status==='scheduled'?'Desde '+fmtDate(x.startsAt):validUntil}</strong></div></div>${canAdmin()?`<div class="promo-item-actions"><button class="secondary" type="button" onclick="editPromotion('${x.id}')">Editar</button><button class="action-btn" type="button" title="Desactivar" onclick="deletePromotion('${x.id}')">⌫</button></div>`:''}</article>`;
+    return `<article class="promo-item-card"><div class="promo-item-top"><div class="promo-item-title"><strong>${esc(x.name)}</strong><small>${esc(productLabel)}${ps.length>1?` · ${ps.length} productos${x.ruleType==='combo_exact'?' obligatorios':' combinables'}`:''}</small></div><span class="promo-status ${status}">${statusLabel}</span></div><div class="promo-offer-box"><small>Oferta</small><strong>${rule}</strong>${savingText?`<span class="promo-saving">${savingText}</span>`:''}</div><div class="promo-meta-grid"><div class="promo-meta"><span>Medio de pago</span><strong>${x.payment==='Todos'?'Todos':esc(x.payment)}</strong></div><div class="promo-meta"><span>Vigencia</span><strong>${status==='scheduled'?'Desde '+fmtDate(x.startsAt):validUntil}</strong></div></div>${canAdmin()?`<div class="promo-item-actions"><button class="secondary" type="button" onclick="editPromotion('${x.id}')">Editar</button><button class="action-btn" type="button" title="Desactivar" onclick="deletePromotion('${x.id}')">⌫</button></div>`:''}</article>`;
   }).join('')||'<div class="card empty">No hay promociones que coincidan con el filtro.</div>';
 }
 function renderSales(){
@@ -2088,7 +2289,7 @@ async function loadAllData({silent=false}={}){
   if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
-      state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name'),
+      state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name'),
       state.client.from('sales').select('id,receipt_number,payment,total,subtotal,discount_total,promotion_discount_total,container_discount_total,container_cost_saving_total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,price_unit_qty,line_total,discount_amount,promotion_discount_amount,container_discount_amount,container_cost_saving,own_container_count,products(name,code,unit_kind),promotions(name))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
       state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365),
       state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false}).limit(1500),
@@ -2099,7 +2300,7 @@ async function loadAllData({silent=false}={}){
       state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(1000),
       state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false})
     ]);for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
-    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0)}));
+    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),createdAt:r.created_at||null}));
     state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),promotionDiscountTotal:Number(r.promotion_discount_total||0),containerDiscountTotal:Number(r.container_discount_total||0),containerCostSavingTotal:Number(r.container_cost_saving_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionDiscountAmount:Number(i.promotion_discount_amount||0),containerDiscountAmount:Number(i.container_discount_amount||0),containerCostSaving:Number(i.container_cost_saving||0),ownContainerCount:Number(i.own_container_count||0),promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
     state.expenses=(eRes.data||[]).map(r=>({id:r.id,category:r.category,description:r.description,amount:Number(r.amount),payment:r.payment,date:r.expense_at}));
@@ -2329,16 +2530,22 @@ function renderPromoProductPicker(){
 window.togglePromoProduct=(id,checked)=>{
   const p=state.products.find(x=>x.id===id);if(!p)return;
   if(checked){
-    const selected=promoSelectedProducts();
-    if(selected.length&&selected[0].unitKind!==p.unitKind){toast('Los productos de una misma promoción deben usar la misma unidad de manejo.','error');renderPromoProductPicker();return;}
-    if(selected.length&&p.unitKind!=='unit'){toast('Las promociones combinadas de varios productos están disponibles para productos por unidad.','error');renderPromoProductPicker();return;}
+    const selected=promoSelectedProducts(),rule=$('#promoRuleType').value;
+    if(rule!=='combo_exact'&&selected.length&&selected[0].unitKind!==p.unitKind){toast('Para 2x/3x los productos deben usar la misma unidad. Usá “Combo de productos diferentes” para mezclar productos distintos.','error');renderPromoProductPicker();return;}
+    if(rule!=='combo_exact'&&selected.length&&p.unitKind!=='unit'){toast('Para combinar productos con distintas unidades usá “Combo de productos diferentes”.','error');renderPromoProductPicker();return;}
     if(!state.promoSelectedProductIds.includes(id))state.promoSelectedProductIds.push(id);
   }else state.promoSelectedProductIds=state.promoSelectedProductIds.filter(x=>x!==id);
   renderPromoProductPicker();updatePromotionUnit();
 };
 function promotionDraft(){
   const products=promoSelectedProducts(),display=Number($('#promoMinQty').value),price=Number($('#promoPrice').value),rule=$('#promoRuleType').value;
-  if(!products.length||!Number.isFinite(display)||display<=0||!Number.isFinite(price)||price<=0)return null;
+  if(!products.length||!Number.isFinite(price)||price<=0)return null;
+  if(rule==='combo_exact'){
+    if(products.length<2)return null;
+    const regular=products.reduce((a,p)=>a+Number(p.price||0),0);
+    return {p:products[0],products,display:1,baseQty:1,regularMin:regular,regularMax:regular,promo:price,savingMin:regular-price,savingMax:regular-price,rule};
+  }
+  if(!Number.isFinite(display)||display<=0)return null;
   const p=products[0],baseQty=toBaseQty(p,display),prices=products.map(x=>x.price);
   const regularMin=Math.min(...prices)*display,regularMax=Math.max(...prices)*display;
   const promo=rule==='qty_total'?price:price*display,savingMin=regularMin-promo,savingMax=regularMax-promo;
@@ -2346,30 +2553,59 @@ function promotionDraft(){
 }
 function renderPromotionPreview(){
   const box=$('#promoLivePreview'); if(!box)return; const d=promotionDraft();
-  if(!d){box.innerHTML='<div class="promo-preview-placeholder">Elegí uno o más productos y cargá el precio promocional para ver cómo quedará.</div>';return;}
-  if(d.savingMin<=0){box.innerHTML=`<div class="promo-preview-warning">Con la combinación más económica, esta promo no reduce el precio normal (${money(d.regularMin)}). Bajá el precio para que siempre sea una promoción real.</div>`;return;}
+  if(!d){
+    const combo=$('#promoRuleType').value==='combo_exact';
+    box.innerHTML=`<div class="promo-preview-placeholder">${combo?'Elegí al menos dos productos diferentes y cargá el precio total del combo.':'Elegí uno o más productos y cargá el precio promocional para ver cómo quedará.'}</div>`;return;
+  }
+  if(d.savingMin<=0){box.innerHTML=`<div class="promo-preview-warning">El precio promocional no reduce el precio normal (${money(d.regularMin)}). Bajá el precio para que sea una promoción real.</div>`;return;}
+  if(d.rule==='combo_exact'){
+    const pct=d.regularMin>0?d.savingMin/d.regularMin*100:0;
+    const names=d.products.map(p=>p.name).join(' + ');
+    box.innerHTML=`<div class="promo-preview-main"><div><span>Combo completo</span><strong>${money(d.promo)}</strong></div><div class="promo-preview-saving"><strong>Ahorrá ${money(d.savingMin)}</strong><small>${pct.toFixed(1)}% menos que comprándolos por separado</small></div></div><div class="promo-preview-regular">Incluye 1 de cada uno: ${esc(names)} · normal <s>${money(d.regularMin)}</s></div>`;return;
+  }
   if(d.products.length===1){const pct=d.regularMin>0?d.savingMin/d.regularMin*100:0;box.innerHTML=`<div class="promo-preview-main"><div><span>Cliente paga</span><strong>${money(d.promo)}</strong></div><div class="promo-preview-saving"><strong>Ahorrá ${money(d.savingMin)}</strong><small>${pct.toFixed(1)}% menos que el precio normal</small></div></div><div class="promo-preview-regular">Precio normal para ${fmtQty(d.display)} ${unitLabel(d.p.unitKind)}: <s>${money(d.regularMin)}</s></div>`;return;}
   box.innerHTML=`<div class="promo-preview-main"><div><span>Cualquier combinación de ${fmtQty(d.display)}</span><strong>${money(d.promo)}</strong></div><div class="promo-preview-saving"><strong>Ahorrá desde ${money(d.savingMin)}</strong><small>hasta ${money(d.savingMax)}, según los productos elegidos</small></div></div><div class="promo-preview-regular">Participan ${d.products.length} productos y se pueden combinar entre sí.</div>`;
 }
 function suggestedPromotionName(){
   const d=promotionDraft(); if(!d)return '';
+  if(d.rule==='combo_exact')return `COMBO ${d.products.length} PRODUCTOS · ${money(d.promo)}`;
   return d.rule==='qty_total'?`${fmtQty(d.display)} x ${money(d.promo)}`:`${money(Number($('#promoPrice').value))} / ${unitLabel(d.p.unitKind)}`;
 }
 function updatePromotionUnit(){
-  const products=promoSelectedProducts(),p=products[0],kind=p?.unitKind||'unit',input=$('#promoMinQty');
-  $('#promoQtyUnit').textContent=unitLabel(kind); const whole=kind==='unit'; input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
-  if(whole && input.value && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1;
-  if($('#promoRuleType').value==='qty_total')$('#promoRuleHelp').textContent=products.length>1?'El total se calcula sumando todos los productos seleccionados. Se pueden mezclar dentro del mismo 2x, 3x, etc.':`El importe cargado es el total que paga el cliente por el grupo completo. Ej.: 2 unidades por $3.800.`;
-  else $('#promoRuleHelp').textContent=`El importe cargado es el nuevo precio por ${unitWord(kind)}. Se aplica cuando el cliente alcanza la cantidad mínima.`;
+  const products=promoSelectedProducts(),p=products[0],kind=p?.unitKind||'unit',input=$('#promoMinQty'),rule=$('#promoRuleType').value;
+  const combo=rule==='combo_exact';
+  $('#promoQtyUnit').textContent=combo?'cada uno':unitLabel(kind);
+  input.disabled=combo;
+  if(combo){
+    input.value=1;input.min='1';input.step='1';
+    $('#promoRuleHelp').textContent='El precio ingresado es el total del combo. La caja exige una unidad comercial de cada producto seleccionado; no sirve llevar dos iguales.';
+  }else{
+    const whole=kind==='unit'; input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
+    if(whole && input.value && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1;
+    if(rule==='qty_total')$('#promoRuleHelp').textContent=products.length>1?'El total se calcula sumando todos los productos seleccionados. Se pueden mezclar dentro del mismo 2x, 3x, etc.':`El importe cargado es el total que paga el cliente por el grupo completo. Ej.: 2 unidades por $3.800.`;
+    else $('#promoRuleHelp').textContent=`El importe cargado es el nuevo precio por ${unitWord(kind)}. Se aplica cuando el cliente alcanza la cantidad mínima.`;
+  }
+  const note=$('#promoComboExactNote');if(note)note.hidden=!combo;
   $$('.promo-preset').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});
-  let active=null;if($('#promoRuleType').value==='qty_total'&&Number(input.value)===2)active=$('#promoPreset2x');else if($('#promoRuleType').value==='qty_total'&&Number(input.value)===3)active=$('#promoPreset3x');else if($('#promoRuleType').value==='special_price')active=$('#promoPresetSpecial');
+  let active=null;
+  if(combo)active=$('#promoPresetCombo');
+  else if(rule==='qty_total'&&Number(input.value)===2)active=$('#promoPreset2x');
+  else if(rule==='qty_total'&&Number(input.value)===3)active=$('#promoPreset3x');
+  else if(rule==='special_price')active=$('#promoPresetSpecial');
   if(active){active.classList.add('selected');active.setAttribute('aria-pressed','true');}
+  renderPromoProductPicker();
   renderPromotionPreview();
 }
 function applyPromoPreset(type){
   if(!promoSelectedProducts().length)return toast('Primero elegí al menos un producto.','error');
-  if(type==='2x'||type==='3x'){const qty=type==='2x'?2:3;$('#promoRuleType').value='qty_total';$('#promoMinQty').value=qty;$('#promoPrice').value='';}
-  else{$('#promoRuleType').value='special_price';$('#promoMinQty').value=1;$('#promoPrice').value='';}
+  if(type==='combo'){
+    if(promoSelectedProducts().length<2)return toast('Elegí al menos dos productos para crear el combo.','error');
+    $('#promoRuleType').value='combo_exact';$('#promoMinQty').value=1;$('#promoPrice').value='';
+  }else if(type==='2x'||type==='3x'){
+    const products=promoSelectedProducts();
+    if(products.length>1&&(products.some(p=>p.unitKind!=='unit')||new Set(products.map(p=>p.unitKind)).size>1))return toast('Para estos productos usá “Combo diferente”.','error');
+    const qty=type==='2x'?2:3;$('#promoRuleType').value='qty_total';$('#promoMinQty').value=qty;$('#promoPrice').value='';
+  }else{$('#promoRuleType').value='special_price';$('#promoMinQty').value=1;$('#promoPrice').value='';}
   updatePromotionUnit(); $('#promoPrice').focus();
 }
 function setPromoEndDays(days){
@@ -2446,7 +2682,7 @@ function prepareAllReorders(){
 window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
-  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; $('#pCategory').value=p.category; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); $('#productDialog').showModal();
+  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); renderProductCategoryReference(); $('#productDialog').showModal();
 };
 window.deleteProduct=async id=>{
   if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
@@ -2485,7 +2721,7 @@ function receiptText(s){
   const discounts=(Number(s.promotionDiscountTotal||0)>0?'\nDescuento promociones: - '+money(s.promotionDiscountTotal):'')+(Number(s.containerDiscountTotal||0)>0?'\nDescuento envase propio: - '+money(s.containerDiscountTotal):'');
   return businessName().toUpperCase()+'\nComprobante no fiscal #'+receiptNumberText(s)+'\n'+fmtDate(s.soldAt)+'\n\n'+lines+(s.discountTotal>0?'\n\nSubtotal: '+money(s.subtotal)+discounts:'')+'\nTOTAL: '+money(s.total)+'\nMedio de pago: '+s.payment+'\n\nGracias por tu compra.';
 }
-function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; updateProductUnitLabels(); $('#productDialog').showModal(); }
+function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; const filteredCategory=$('#categoryFilter')?.value||''; populateProductCategoryOptions(filteredCategory); if(filteredCategory)$('#pCategory').value=filteredCategory; updateProductUnitLabels(); renderProductCategoryReference(); $('#productDialog').showModal(); }
 function openSale(){
   if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;}
   $('#saleForm').reset(); state.saleCart=[]; $('#saleQty').value=1; resetSaleProductPicker(); $('#saleDate').value=nowLocal(); $('#saleDialog').showModal(); renderSaleCart(); setTimeout(()=>$('#saleProductSearch')?.focus(),120);
@@ -2518,8 +2754,9 @@ function renderSaleCart(){
 }
 
 $('#productForm').addEventListener('submit',async e=>{
-  e.preventDefault(); if(!requireOnline())return; const kind=$('#pUnitKind').value,factor=unitFactor(kind);
-  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:$('#pCategory').value.trim(),p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value)*factor,p_min_stock:Number($('#pMinStock').value)*factor,p_target_stock:Number($('#pTargetStock').value||0)*factor,p_unit_kind:kind,p_preferred_supplier_id:$('#pPreferredSupplier').value||null,p_container_cost:Number($('#pContainerCost').value||0),p_own_container_discount:Number($('#pOwnContainerDiscount').value||0),p_barcode:normalizeBarcode($('#pBarcode').value)||null};
+  e.preventDefault(); if(!requireOnline())return; const kind=$('#pUnitKind').value,factor=unitFactor(kind),category=productCategoryValue();
+  if(!category)return toast('Seleccioná una categoría o escribí una nueva.','error');
+  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:category,p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value)*factor,p_min_stock:Number($('#pMinStock').value)*factor,p_target_stock:Number($('#pTargetStock').value||0)*factor,p_unit_kind:kind,p_preferred_supplier_id:$('#pPreferredSupplier').value||null,p_container_cost:Number($('#pContainerCost').value||0),p_own_container_discount:Number($('#pOwnContainerDiscount').value||0),p_barcode:normalizeBarcode($('#pBarcode').value)||null};
   const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_product_v4',params);if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#productDialog').close();toast('Producto guardado en la nube.','success');await loadAllData({silent:true});
 });
 $('#saleForm').addEventListener('submit',async e=>{
@@ -2535,7 +2772,7 @@ $('#saleForm').addEventListener('submit',async e=>{
   const {data:newSaleId,error}=await state.client.rpc('create_sale_v2',{p_org_id:state.org.id,p_payment:$('#salePayment').value,p_sold_at:new Date($('#saleDate').value).toISOString(),p_items:items}); if(btn)btn.disabled=false;
   if(error)return toast(error.message,'error'); state.saleCart=[]; $('#saleDialog').close(); toast('Venta sincronizada.','success'); await loadAllData({silent:true}); if(newSaleId) setTimeout(()=>window.openReceipt(newSaleId),80);
 });
-$('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const products=promoSelectedProducts();if(!products.length)return toast('Seleccioná al menos un producto.','error');const p=products[0],display=Number($('#promoMinQty').value),price=Number($('#promoPrice').value);if(!Number.isFinite(display)||display<=0)return toast('Ingresá una cantidad mínima válida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('La cantidad de estos productos debe ser un número entero.','error');if(products.length>1&&p.unitKind!=='unit')return toast('Las promociones combinadas de varios productos están disponibles para productos por unidad.','error');if(!Number.isFinite(price)||price<=0)return toast('Ingresá un precio promocional válido.','error');const draft=promotionDraft();if(!draft||draft.savingMin<=0)return toast('El precio promocional debe ser menor al precio normal incluso para la combinación más económica.','error');const start=new Date($('#promoStartsAt').value),end=$('#promoEndsAt').value?new Date($('#promoEndsAt').value):null;if(Number.isNaN(start.getTime()))return toast('Ingresá una fecha de inicio válida.','error');if(end&&(Number.isNaN(end.getTime())||end<=start))return toast('La fecha de finalización debe ser posterior al inicio.','error');if(!$('#promoName').value.trim())$('#promoName').value=suggestedPromotionName();const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_promotion_v2',{p_org_id:state.org.id,p_promotion_id:$('#promotionId').value||null,p_product_ids:products.map(v=>v.id),p_name:$('#promoName').value.trim(),p_rule_type:$('#promoRuleType').value,p_min_qty:toBaseQty(p,display),p_promo_price:price,p_payment:$('#promoPayment').value,p_starts_at:start.toISOString(),p_ends_at:end?end.toISOString():null});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#promotionDialog').close();toast('Promoción guardada y lista para combinar productos en caja.','success');await loadAllData({silent:true});});
+$('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const products=promoSelectedProducts();if(!products.length)return toast('Seleccioná al menos un producto.','error');const p=products[0],rule=$('#promoRuleType').value,display=Number($('#promoMinQty').value),price=Number($('#promoPrice').value);if(rule==='combo_exact'){if(products.length<2)return toast('El combo necesita al menos dos productos diferentes.','error');}else{if(!Number.isFinite(display)||display<=0)return toast('Ingresá una cantidad mínima válida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('La cantidad de estos productos debe ser un número entero.','error');if(products.length>1&&(p.unitKind!=='unit'||new Set(products.map(v=>v.unitKind)).size>1))return toast('Para productos diferentes usá la opción “Combo de productos diferentes”.','error');}if(!Number.isFinite(price)||price<=0)return toast('Ingresá un precio promocional válido.','error');const draft=promotionDraft();if(!draft||draft.savingMin<=0)return toast('El precio promocional debe ser menor al precio normal de la promoción.','error');const start=new Date($('#promoStartsAt').value),end=$('#promoEndsAt').value?new Date($('#promoEndsAt').value):null;if(Number.isNaN(start.getTime()))return toast('Ingresá una fecha de inicio válida.','error');if(end&&(Number.isNaN(end.getTime())||end<=start))return toast('La fecha de finalización debe ser posterior al inicio.','error');if(!$('#promoName').value.trim())$('#promoName').value=suggestedPromotionName();const btn=e.submitter;if(btn)btn.disabled=true;const minQty=rule==='combo_exact'?1:toBaseQty(p,display);const {error}=await state.client.rpc('upsert_promotion_v2',{p_org_id:state.org.id,p_promotion_id:$('#promotionId').value||null,p_product_ids:products.map(v=>v.id),p_name:$('#promoName').value.trim(),p_rule_type:rule,p_min_qty:minQty,p_promo_price:price,p_payment:$('#promoPayment').value,p_starts_at:start.toISOString(),p_ends_at:end?end.toISOString():null});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#promotionDialog').close();toast(rule==='combo_exact'?'Combo guardado. Se aplicará sólo cuando estén todos los productos.':'Promoción guardada y lista para aplicar en caja.','success');await loadAllData({silent:true});});
 $('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
 $('#fixedExpenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const amount=Number($('#fixedExpenseAmount').value),due=Number($('#fixedExpenseDueDay').value);if(!Number.isFinite(amount)||amount<=0)return toast('Ingresá un importe válido.','error');if(!Number.isInteger(due)||due<1||due>31)return toast('El vencimiento debe ser un día entre 1 y 31.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_fixed_expense',{p_org_id:state.org.id,p_fixed_expense_id:$('#fixedExpenseId').value||null,p_name:$('#fixedExpenseName').value.trim(),p_category:$('#fixedExpenseCategory').value,p_amount:amount,p_payment:$('#fixedExpensePayment').value,p_due_day:due,p_notes:$('#fixedExpenseNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#fixedExpenseDialog').close();toast('Gasto fijo guardado.','success');await loadAllData({silent:true});setView('fixedExpenses');});
 $('#supplierForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_supplier',{p_org_id:state.org.id,p_supplier_id:$('#supplierId').value||null,p_name:$('#supplierName').value.trim(),p_phone:$('#supplierPhone').value.trim(),p_email:$('#supplierEmail').value.trim(),p_notes:$('#supplierNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#supplierDialog').close();toast('Proveedor guardado.','success');await loadAllData({silent:true});});
@@ -2566,8 +2803,8 @@ $('#barcodeScannerDialog').addEventListener('close',stopBarcodeScanner);
 $('#barcodeManualApplyBtn').onclick=()=>{const v=normalizeBarcode($('#barcodeManualInput').value);if(!v)return toast('Ingresá un código.','error');handleBarcodeScanned(v);};
 $('#barcodeManualInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#barcodeManualApplyBtn').click();}});
 $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
-$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#heroSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
+$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
@@ -2623,6 +2860,41 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('scroll',syncMobileKeyboardState,{passive:true});
 }
 syncMobileKeyboardState();
+
+// Android / WebView: al volver desde otra app algunos navegadores dejan un <dialog>
+// visible pero fuera de la capa interactiva. Reabrimos el modal conservando sus datos
+// y posición de scroll para recuperar los toques sin perder lo que se estaba editando.
+let appWentToBackground=false,dialogResumeTimer=null;
+function restoreDialogsAfterAppResume(){
+  if(document.hidden)return;
+  document.documentElement.classList.remove('keyboard-open');
+  const active=document.activeElement;
+  if(isEditableField(active))try{active.blur();}catch(_e){}
+  clearTimeout(dialogResumeTimer);
+  dialogResumeTimer=setTimeout(()=>{
+    const dialogs=[...document.querySelectorAll('dialog[open]')].filter(d=>d.id!=='barcodeScannerDialog');
+    dialogs.forEach(d=>{
+      const card=d.querySelector('.modal-card'),scrollTop=card?.scrollTop||0;
+      try{
+        d.close();
+        requestAnimationFrame(()=>{
+          try{
+            if(!d.isConnected||d.open)return;
+            d.showModal();
+            requestAnimationFrame(()=>{if(card)card.scrollTop=scrollTop;});
+          }catch(_e){}
+        });
+      }catch(_e){}
+    });
+    syncMobileKeyboardState();
+  },120);
+}
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){appWentToBackground=true;return;}
+  if(appWentToBackground){appWentToBackground=false;restoreDialogsAfterAppResume();}
+});
+window.addEventListener('pagehide',()=>{appWentToBackground=true;},{passive:true});
+window.addEventListener('pageshow',e=>{if(e.persisted||appWentToBackground){appWentToBackground=false;restoreDialogsAfterAppResume();}},{passive:true});
 
 function updateConnection(){
   const online=navigator.onLine,el=$('#connectionStatus'); if(el){el.classList.toggle('offline',!online);el.innerHTML=`<span></span> ${online?'Nube conectada':'Sin conexión'}`;}
