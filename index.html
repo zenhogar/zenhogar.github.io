@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2.4 · SaaS multiempresa · stock cero diferenciado -->
+<!-- Gestión Cloud V12.2.5 · SaaS multiempresa · recuperación de contraseña -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -508,9 +508,23 @@ html:not([data-theme="dark"]) .topbar .connection-pill{background:rgba(255,255,2
           </div>
           <button class="primary full" id="authSubmit" type="submit">Ingresar</button>
         </form>
+        <button id="forgotPasswordBtn" class="text-btn" type="button">Olvidé mi contraseña</button>
         <small class="gate-help" id="authHelp">Si recibiste una invitación, usá el correo al que fue enviada.</small>
         <button id="changeCloudConfig" class="text-btn subtle" type="button">Cambiar conexión de nube</button>
         <div class="gate-message" id="authMessage" hidden></div>
+      </div>
+
+      <div id="resetPasswordStep" class="gate-step" hidden>
+        <div class="gate-badge">Recuperar acceso</div>
+        <h2>Creá una nueva contraseña</h2>
+        <p>Ingresá una contraseña nueva para tu cuenta. Debe tener al menos 8 caracteres.</p>
+        <form id="resetPasswordForm" class="gate-form">
+          <label>Nueva contraseña<input id="resetPassword" type="password" minlength="8" autocomplete="new-password" required></label>
+          <label>Repetir contraseña<input id="resetPassword2" type="password" minlength="8" autocomplete="new-password" required></label>
+          <button class="primary full" id="resetPasswordSubmit" type="submit">Guardar nueva contraseña</button>
+        </form>
+        <button id="resetPasswordCancel" class="text-btn subtle" type="button">Volver al inicio de sesión</button>
+        <div class="gate-message" id="resetPasswordMessage" hidden></div>
       </div>
 
       <div id="businessStep" class="gate-step" hidden>
@@ -1542,7 +1556,7 @@ function toast(message,type=''){
   clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,3200);
 }
 function setGateStep(id){
-  ['configStep','authStep','businessStep','inviteSetupStep','gateLoading'].forEach(x=>$('#'+x).hidden=x!==id);
+  ['configStep','authStep','resetPasswordStep','businessStep','inviteSetupStep','gateLoading'].forEach(x=>$('#'+x).hidden=x!==id);
   $('#cloudGate').hidden=false;
 }
 function setGateMessage(message,type=''){
@@ -2627,6 +2641,31 @@ window.addEventListener('appinstalled',()=>{installStatus.textContent='Gestión 
 // Cloud onboarding
 $('#cloudConfigForm').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem('zenhogar_cloud_config',JSON.stringify({supabaseUrl:$('#cloudUrl').value.trim().replace(/\/$/,''),supabaseKey:$('#cloudKey').value.trim()}));location.reload();});
 $('#changeCloudConfig').onclick=()=>{ if(confirm('¿Cambiar la conexión de nube de este dispositivo?')){localStorage.removeItem('zenhogar_cloud_config');location.reload();} };
+function passwordRecoveryIntent(){
+  try{
+    const query=new URLSearchParams(location.search);
+    const hash=new URLSearchParams(String(location.hash||'').replace(/^#/,''));
+    return query.get('reset')==='1'||hash.get('type')==='recovery';
+  }catch(_e){return false;}
+}
+function showPasswordReset(session=null){
+  state.user=session?.user||state.user||null;
+  $('#appShell').hidden=true;
+  if($('#mobileSaleBtn'))$('#mobileSaleBtn').hidden=true;
+  if($('#mobileNav'))$('#mobileNav').hidden=true;
+  $('#resetPassword').value='';$('#resetPassword2').value='';
+  const msg=$('#resetPasswordMessage');msg.hidden=true;
+  setGateStep('resetPasswordStep');
+}
+async function leavePasswordReset(){
+  try{await state.client?.auth?.signOut();}catch(_e){}
+  try{history.replaceState({},document.title,location.pathname);}catch(_e){}
+  state.user=null;
+  setAuthMode('signin');
+  setGateStep('authStep');
+  $('#authPassword').value='';
+}
+
 function setAuthMode(mode){
   state.authMode=mode==='signup'?'signup':'signin';const signup=state.authMode==='signup';
   $$('.auth-mode-btn').forEach(b=>{const active=b.dataset.authMode===state.authMode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
@@ -2634,6 +2673,39 @@ function setAuthMode(mode){
 }
 $$('.auth-mode-btn').forEach(b=>b.addEventListener('click',()=>setAuthMode(b.dataset.authMode)));
 setAuthMode('signin');
+$('#forgotPasswordBtn').addEventListener('click',async()=>{
+  setGateMessage('');
+  const email=$('#authEmail').value.trim();
+  if(!email){setGateMessage('Ingresá primero el correo de tu cuenta para enviarte el enlace de recuperación.','error');$('#authEmail').focus();return;}
+  const btn=$('#forgotPasswordBtn');btn.disabled=true;
+  try{
+    const redirectTo=`${location.origin}${location.pathname}`;
+    const {error}=await state.client.auth.resetPasswordForEmail(email,{redirectTo});
+    if(error)throw error;
+    setGateMessage(`Te enviamos un enlace de recuperación a ${email}. Revisá también Spam o Correo no deseado.`, 'success');
+  }catch(err){setGateMessage(err.message||'No se pudo enviar el correo de recuperación.','error');}
+  finally{btn.disabled=false;}
+});
+$('#resetPasswordForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const pass=$('#resetPassword').value,pass2=$('#resetPassword2').value,btn=$('#resetPasswordSubmit'),msg=$('#resetPasswordMessage');
+  msg.hidden=true;
+  if(pass.length<8){msg.textContent='La contraseña debe tener al menos 8 caracteres.';msg.className='gate-message error';msg.hidden=false;return;}
+  if(pass!==pass2){msg.textContent='Las contraseñas no coinciden.';msg.className='gate-message error';msg.hidden=false;return;}
+  btn.disabled=true;
+  try{
+    const email=state.user?.email||'';
+    const {error}=await state.client.auth.updateUser({password:pass});if(error)throw error;
+    try{await state.client.auth.signOut();}catch(_e){}
+    try{history.replaceState({},document.title,location.pathname);}catch(_e){}
+    state.user=null;
+    setAuthMode('signin');setGateStep('authStep');
+    $('#authEmail').value=email;$('#authPassword').value='';
+    setGateMessage('Contraseña actualizada correctamente. Ya podés ingresar con tu nueva contraseña.','success');
+  }catch(err){msg.textContent=err.message||'No se pudo actualizar la contraseña.';msg.className='gate-message error';msg.hidden=false;}
+  finally{btn.disabled=false;}
+});
+$('#resetPasswordCancel').addEventListener('click',leavePasswordReset);
 $('#authForm').addEventListener('submit',async e=>{
   e.preventDefault();setGateMessage('');const email=$('#authEmail').value.trim(),password=$('#authPassword').value;$('#authSubmit').disabled=true;
   try{
@@ -2698,9 +2770,14 @@ async function init(){
   if(!cfg){setGateStep('configStep');return;}
   if(!window.supabase?.createClient){setGateStep('configStep');$('#cloudUrl').value=cfg.supabaseUrl||'';setGateMessage('No se pudo cargar el cliente de nube. Revisá la conexión a internet.','error');return;}
   state.client=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const recoveryIntent=passwordRecoveryIntent();
+  state.client.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY')showPasswordReset(session);
+  });
   setGateStep('gateLoading');
   try{
     const {data,error}=await state.client.auth.getSession(); if(error)throw error;
+    if(recoveryIntent&&data.session?.user){showPasswordReset(data.session);return;}
     if(data.session?.user)await handleSignedIn(data.session.user); else setGateStep('authStep');
   }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${err.message}`,'error');}
 }
