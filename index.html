@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.3.1 · SaaS multiempresa · sugerencia solo al agregar -->
+<!-- Gestión Cloud V12.3.2 · SaaS multiempresa · buscador de rentabilidad -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -188,7 +188,8 @@ dialog{overflow-x:hidden}
 /* Costos y precios · centro de rentabilidad */
 .pricing-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;padding:20px 22px;background:linear-gradient(135deg,var(--blue),var(--mint));border:1px solid rgba(111,158,142,.14)}
 .pricing-hero h3{margin:4px 0 5px;font-size:19px}.pricing-hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.5;max-width:760px}.pricing-hero-badge{flex:0 0 auto;width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.72);display:grid;place-items:center;color:var(--accent-dark);font-size:23px;font-weight:850;box-shadow:var(--shadow-soft)}
-.pricing-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px;align-items:start}.pricing-card{display:grid;gap:15px}.pricing-card-head h3{margin:4px 0 4px;font-size:18px}.pricing-card-head p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.pricing-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.pricing-form .full{grid-column:1/-1}.pricing-form label{display:grid;gap:6px;font-size:10px;font-weight:800;color:#75837d}.pricing-form input,.pricing-form select{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff;color:var(--ink);min-height:46px}.pricing-form input:focus,.pricing-form select:focus{outline:2px solid rgba(111,158,142,.18);border-color:#b9d0c7}.pricing-help{font-size:10px;color:var(--muted);line-height:1.45;margin-top:-2px}.pricing-result{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#fff,#f8fbf9);padding:14px;display:grid;gap:10px}.pricing-result.empty-result{color:var(--muted);font-size:11px;text-align:center;padding:24px}.pricing-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pricing-metric{padding:11px;border-radius:14px;background:#fff;border:1px solid #edf1ef}.pricing-metric span,.pricing-metric strong,.pricing-metric small{display:block}.pricing-metric span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}.pricing-metric strong{font-size:18px;margin-top:4px;letter-spacing:-.025em}.pricing-metric small{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.35}.pricing-metric.good{background:var(--mint);border-color:#dcebe5}.pricing-metric.warn{background:var(--peach);border-color:#f0e3d7}.pricing-callout{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 13px;border-radius:15px;background:var(--lilac)}.pricing-callout span,.pricing-callout strong{display:block}.pricing-callout span{font-size:10px;color:var(--muted)}.pricing-callout strong{font-size:16px;margin-top:2px}.pricing-callout .secondary{min-height:40px;padding:9px 12px}.pricing-inline-actions{display:flex;gap:8px;flex-wrap:wrap}.pricing-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;color:var(--ink-soft);cursor:pointer}.pricing-chip:hover{background:var(--mint);border-color:#c9ddd5}.pricing-divider{height:1px;background:var(--line);margin:1px 0}.pricing-note{padding:10px 12px;border-radius:13px;background:var(--mint);color:var(--ink-soft);font-size:10px;line-height:1.5}.pricing-negative{color:var(--danger)!important}.pricing-positive{color:var(--accent-dark)!important}.pricing-summary-name{font-size:16px;font-weight:800;line-height:1.25}.pricing-summary-meta{font-size:10px;color:var(--muted);margin-top:3px}.pricing-promo-box{display:grid;gap:8px}.pricing-promo-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.pricing-promo-head strong{font-size:13px}.pricing-promo-head span{font-size:10px;color:var(--muted)}
+.pricing-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px;align-items:start}.pricing-card{display:grid;gap:15px}.pricing-card-head h3{margin:4px 0 4px;font-size:18px}.pricing-card-head p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.pricing-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.pricing-form .full{grid-column:1/-1}.pricing-form label{display:grid;gap:6px;font-size:10px;font-weight:800;color:#75837d}.pricing-form input,.pricing-form select{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff;color:var(--ink);min-height:46px}.pricing-form input:focus,.pricing-form select:focus{outline:2px solid rgba(111,158,142,.18);border-color:#b9d0c7}.pricing-help{font-size:10px;color:var(--muted);line-height:1.45;margin-top:-2px}.pricing-result{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#fff,#f8fbf9);padding:14px;display:grid;gap:10px}.pricing-result.empty-result{color:var(--muted);font-size:11px;text-align:center;padding:24px}.pricing-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pricing-metric{padding:11px;border-radius:14px;background:#fff;border:1px solid #edf1ef}.pricing-metric span,.pricing-metric strong,.pricing-metric small{display:block}.pricing-metric span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}.pricing-metric strong{font-size:18px;margin-top:4px;letter-spacing:-.025em}.pricing-metric small{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.35}.pricing-metric.good{background:var(--mint);border-color:#dcebe5}.pricing-metric.warn{background:var(--peach);border-color:#f0e3d7}.pricing-callout{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 13px;border-radius:15px;background:var(--lilac)}.pricing-callout span,.pricing-callout strong{display:block}.pricing-callout span{font-size:10px;color:var(--muted)}.pricing-callout strong{font-size:16px;margin-top:2px}.pricing-callout .secondary{min-height:40px;padding:9px 12px}.pricing-inline-actions{display:flex;gap:8px;flex-wrap:wrap}.pricing-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;color:var(--ink-soft);cursor:pointer}.pricing-chip:hover{background:var(--mint);border-color:#c9ddd5}.pricing-divider{height:1px;background:var(--line);margin:1px 0}.pricing-note{padding:10px 12px;border-radius:13px;background:var(--mint);color:var(--ink-soft);font-size:10px;line-height:1.5}.pricing-negative{color:var(--danger)!important}.pricing-positive{color:var(--accent-dark)!important}.pricing-summary-name{font-size:16px;font-weight:800;line-height:1.25}.pricing-summary-meta{font-size:10px;color:var(--muted);margin-top:3px}.pricing-product-search-wrap{position:relative;display:grid;gap:6px}.pricing-product-search-wrap>label{display:grid;gap:6px;font-size:10px;font-weight:800;color:#75837d}.pricing-product-search-field{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:0 12px;min-height:46px}.pricing-product-search-field:focus-within{outline:2px solid rgba(111,158,142,.18);border-color:#b9d0c7}.pricing-product-search-field span{color:var(--muted);font-size:16px}.pricing-product-search-field input{border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;padding:11px 0!important;min-height:44px!important;width:100%;color:var(--ink)}.pricing-product-search-results{position:absolute;z-index:30;top:71px;left:0;right:0;max-height:310px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 16px 36px rgba(38,56,49,.16);padding:6px}.pricing-product-search-results[hidden]{display:none}.pricing-product-search-item{width:100%;border:0;background:#fff;text-align:left;border-radius:11px;padding:10px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;color:var(--ink)}.pricing-product-search-item:hover,.pricing-product-search-item:focus{background:var(--mint);outline:0}.pricing-product-search-item strong,.pricing-product-search-item small{display:block}.pricing-product-search-item strong{font-size:11px;line-height:1.3}.pricing-product-search-item small{margin-top:3px;font-size:9px;color:var(--muted)}.pricing-product-search-price{font-size:10px;font-weight:850;color:var(--accent-dark);white-space:nowrap}.pricing-product-search-empty{padding:13px 11px;color:var(--muted);font-size:10px;text-align:center}
+.pricing-promo-box{display:grid;gap:8px}.pricing-promo-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.pricing-promo-head strong{font-size:13px}.pricing-promo-head span{font-size:10px;color:var(--muted)}
 @media(max-width:980px){.pricing-layout{grid-template-columns:1fr}}@media(max-width:650px){.pricing-hero{align-items:flex-start}.pricing-hero-badge{display:none}.pricing-form{grid-template-columns:1fr}.pricing-form .full{grid-column:auto}.pricing-result-grid{grid-template-columns:1fr 1fr}.pricing-callout{align-items:flex-start;flex-direction:column}.pricing-callout .secondary{width:100%}}@media(max-width:390px){.pricing-result-grid{grid-template-columns:1fr}}
 
 
@@ -849,8 +850,17 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
         <div class="pricing-layout">
           <article class="card pricing-card">
             <div class="pricing-card-head"><span class="section-kicker">Centro de precios</span><h3>Rentabilidad por producto</h3><p>Elegí un producto y simulá un precio objetivo o una promoción.</p></div>
+            <div class="pricing-product-search-wrap">
+              <label>Buscar producto
+                <div class="pricing-product-search-field">
+                  <span>⌕</span>
+                  <input id="pricingProductSearch" type="search" placeholder="Nombre, código o categoría..." autocomplete="off" />
+                </div>
+              </label>
+              <div class="pricing-product-search-results" id="pricingProductSearchResults" hidden></div>
+            </div>
             <div class="pricing-form">
-              <label class="full">Producto<select id="pricingProduct"><option value="">Seleccionar producto</option></select></label>
+              <label class="full">Producto seleccionado<select id="pricingProduct"><option value="">Seleccionar producto</option></select></label>
               <label>Margen objetivo (%)<input id="pricingTargetMargin" type="number" min="1" max="95" step="0.1" value="45" /></label>
               <label>Precio a evaluar<input id="pricingTestPrice" type="number" min="0" step="0.01" placeholder="Precio actual" /></label>
             </div>
@@ -2086,6 +2096,30 @@ function targetPriceFromMargin(cost,target){
   return cost/(1-target/100);
 }
 function pricingSelectedProduct(){return state.products.find(p=>p.id===$('#pricingProduct')?.value)||null;}
+function pricingSearchNorm(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();
+}
+function renderPricingProductSearch(){
+  const input=$('#pricingProductSearch'),box=$('#pricingProductSearchResults');if(!input||!box)return;
+  const q=pricingSearchNorm(input.value);
+  if(!q){box.hidden=true;box.innerHTML='';return;}
+  const rows=state.products
+    .filter(p=>pricingSearchNorm(`${p.code||''} ${p.name||''} ${p.category||''}`).includes(q))
+    .slice()
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'es',{sensitivity:'base'}))
+    .slice(0,10);
+  box.hidden=false;
+  if(!rows.length){box.innerHTML='<div class="pricing-product-search-empty">No encontramos productos con esa búsqueda.</div>';return;}
+  box.innerHTML=rows.map(p=>`<button class="pricing-product-search-item" type="button" onclick="selectPricingProductFromSearch('${p.id}')"><span><strong>${esc(p.name)}</strong><small>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')}</small></span><span class="pricing-product-search-price">${money(p.price)}</span></button>`).join('');
+}
+window.selectPricingProductFromSearch=id=>{
+  const p=state.products.find(x=>x.id===id);if(!p)return;
+  $('#pricingProduct').value=p.id;
+  $('#pricingProductSearch').value=p.name;
+  $('#pricingProductSearchResults').hidden=true;
+  $('#pricingTestPrice').value=Number(p.price).toFixed(2);
+  renderPricingProduct();
+};
 function renderPricing(){
   const productSel=$('#pricingProduct'),fracSel=$('#fracProduct'); if(!productSel||!fracSel)return;
   const productCurrent=productSel.value, fracCurrent=fracSel.value;
@@ -2094,6 +2128,8 @@ function renderPricing(){
   fracSel.innerHTML='<option value="">Cálculo manual</option>'+options;
   if(state.products.some(p=>p.id===productCurrent))productSel.value=productCurrent;
   if(state.products.some(p=>p.id===fracCurrent))fracSel.value=fracCurrent;
+  const selected=pricingSelectedProduct();
+  if($('#pricingProductSearch')&&selected&&!$('#pricingProductSearch').value)$('#pricingProductSearch').value=selected.name;
   renderPricingProduct();renderFractionalCalculator();
 }
 function renderPricingProduct(){
@@ -2756,7 +2792,11 @@ $('#cashCloseForm').addEventListener('submit',async e=>{
   if(error)return toast(error.message,'error'); e.target.reset(); $('#cashDate').value=todayISO(); toast('Cierre guardado en la nube.','success'); await loadAllData({silent:true});
 });
 
-$('#pricingProduct').onchange=()=>{const p=pricingSelectedProduct();$('#pricingTestPrice').value=p?Number(p.price).toFixed(2):'';renderPricingProduct();};
+$('#pricingProduct').onchange=()=>{const p=pricingSelectedProduct();$('#pricingTestPrice').value=p?Number(p.price).toFixed(2):'';if($('#pricingProductSearch'))$('#pricingProductSearch').value=p?p.name:'';if($('#pricingProductSearchResults'))$('#pricingProductSearchResults').hidden=true;renderPricingProduct();};
+$('#pricingProductSearch').oninput=renderPricingProductSearch;
+$('#pricingProductSearch').onfocus=renderPricingProductSearch;
+$('#pricingProductSearch').onkeydown=e=>{if(e.key==='Escape')$('#pricingProductSearchResults').hidden=true;};
+document.addEventListener('click',e=>{const wrap=e.target.closest?.('.pricing-product-search-wrap');if(!wrap&&$('#pricingProductSearchResults'))$('#pricingProductSearchResults').hidden=true;});
 $('#pricingTargetMargin').oninput=()=>{localStorage.setItem('zenhogar_target_margin',$('#pricingTargetMargin').value);renderPricingProduct();renderFractionalCalculator();};
 $('#pricingTestPrice').oninput=renderPricingProduct;$('#pricingPromoQty').oninput=renderPricingPromo;$('#pricingPromoTotal').oninput=renderPricingPromo;
 $('#pricingGoPromosBtn').onclick=()=>setView('promotions');$('#pricingEditProductBtn').onclick=()=>{const p=pricingSelectedProduct();if(!p)return toast('Seleccioná un producto.','error');editProduct(p.id);};
