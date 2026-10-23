@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.3.2 · SaaS multiempresa · buscador de rentabilidad -->
+<!-- Gestión Cloud V12.3.3 · SaaS multiempresa · rentabilidad solo con buscador -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -849,7 +849,7 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
         </article>
         <div class="pricing-layout">
           <article class="card pricing-card">
-            <div class="pricing-card-head"><span class="section-kicker">Centro de precios</span><h3>Rentabilidad por producto</h3><p>Elegí un producto y simulá un precio objetivo o una promoción.</p></div>
+            <div class="pricing-card-head"><span class="section-kicker">Centro de precios</span><h3>Rentabilidad por producto</h3><p>Buscá un producto y simulá un precio objetivo o una promoción.</p></div>
             <div class="pricing-product-search-wrap">
               <label>Buscar producto
                 <div class="pricing-product-search-field">
@@ -859,8 +859,8 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
               </label>
               <div class="pricing-product-search-results" id="pricingProductSearchResults" hidden></div>
             </div>
+            <input id="pricingProduct" type="hidden" value="" />
             <div class="pricing-form">
-              <label class="full">Producto seleccionado<select id="pricingProduct"><option value="">Seleccionar producto</option></select></label>
               <label>Margen objetivo (%)<input id="pricingTargetMargin" type="number" min="1" max="95" step="0.1" value="45" /></label>
               <label>Precio a evaluar<input id="pricingTestPrice" type="number" min="0" step="0.01" placeholder="Precio actual" /></label>
             </div>
@@ -2124,9 +2124,8 @@ function renderPricing(){
   const productSel=$('#pricingProduct'),fracSel=$('#fracProduct'); if(!productSel||!fracSel)return;
   const productCurrent=productSel.value, fracCurrent=fracSel.value;
   const options=state.products.map(p=>`<option value="${p.id}">${esc(p.name)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
-  productSel.innerHTML='<option value="">Seleccionar producto</option>'+options;
   fracSel.innerHTML='<option value="">Cálculo manual</option>'+options;
-  if(state.products.some(p=>p.id===productCurrent))productSel.value=productCurrent;
+  if(state.products.some(p=>p.id===productCurrent))productSel.value=productCurrent; else productSel.value='';
   if(state.products.some(p=>p.id===fracCurrent))fracSel.value=fracCurrent;
   const selected=pricingSelectedProduct();
   if($('#pricingProductSearch')&&selected&&!$('#pricingProductSearch').value)$('#pricingProductSearch').value=selected.name;
@@ -2792,7 +2791,6 @@ $('#cashCloseForm').addEventListener('submit',async e=>{
   if(error)return toast(error.message,'error'); e.target.reset(); $('#cashDate').value=todayISO(); toast('Cierre guardado en la nube.','success'); await loadAllData({silent:true});
 });
 
-$('#pricingProduct').onchange=()=>{const p=pricingSelectedProduct();$('#pricingTestPrice').value=p?Number(p.price).toFixed(2):'';if($('#pricingProductSearch'))$('#pricingProductSearch').value=p?p.name:'';if($('#pricingProductSearchResults'))$('#pricingProductSearchResults').hidden=true;renderPricingProduct();};
 $('#pricingProductSearch').oninput=renderPricingProductSearch;
 $('#pricingProductSearch').onfocus=renderPricingProductSearch;
 $('#pricingProductSearch').onkeydown=e=>{if(e.key==='Escape')$('#pricingProductSearchResults').hidden=true;};
