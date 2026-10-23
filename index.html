@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.2.9 · SaaS multiempresa · último producto y orden por categoría -->
+<!-- Gestión Cloud V12.3.0 · SaaS multiempresa · sugerencia de código solo en altas -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -1897,6 +1897,8 @@ function handleProductCategoryChange(){
 }
 function renderProductCategoryReference(){
   const box=$('#pCategoryReference');if(!box)return;
+  // La referencia de código se usa solo al crear productos nuevos.
+  if($('#productId')?.value){box.hidden=true;return;}
   const cat=productCategoryValue();
   const info=productCategoryInfo(cat);
   if(!cat||!info.last){box.hidden=true;return;}
@@ -2682,7 +2684,7 @@ function prepareAllReorders(){
 window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
-  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); renderProductCategoryReference(); $('#productDialog').showModal();
+  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); $('#pCategoryReference').hidden=true; $('#productDialog').showModal();
 };
 window.deleteProduct=async id=>{
   if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
@@ -2721,7 +2723,7 @@ function receiptText(s){
   const discounts=(Number(s.promotionDiscountTotal||0)>0?'\nDescuento promociones: - '+money(s.promotionDiscountTotal):'')+(Number(s.containerDiscountTotal||0)>0?'\nDescuento envase propio: - '+money(s.containerDiscountTotal):'');
   return businessName().toUpperCase()+'\nComprobante no fiscal #'+receiptNumberText(s)+'\n'+fmtDate(s.soldAt)+'\n\n'+lines+(s.discountTotal>0?'\n\nSubtotal: '+money(s.subtotal)+discounts:'')+'\nTOTAL: '+money(s.total)+'\nMedio de pago: '+s.payment+'\n\nGracias por tu compra.';
 }
-function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; const filteredCategory=$('#categoryFilter')?.value||''; populateProductCategoryOptions(filteredCategory); if(filteredCategory)$('#pCategory').value=filteredCategory; updateProductUnitLabels(); renderProductCategoryReference(); $('#productDialog').showModal(); }
+function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; populateProductCategoryOptions(''); $('#pCategory').value=''; $('#pCategoryReference').hidden=true; updateProductUnitLabels(); $('#productDialog').showModal(); }
 function openSale(){
   if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;}
   $('#saleForm').reset(); state.saleCart=[]; $('#saleQty').value=1; resetSaleProductPicker(); $('#saleDate').value=nowLocal(); $('#saleDialog').showModal(); renderSaleCart(); setTimeout(()=>$('#saleProductSearch')?.focus(),120);
