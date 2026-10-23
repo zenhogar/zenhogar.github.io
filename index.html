@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.3.0 · SaaS multiempresa · sugerencia de código solo en altas -->
+<!-- Gestión Cloud V12.3.1 · SaaS multiempresa · sugerencia solo al agregar -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -739,17 +739,6 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
             <option value="stockDesc">Mayor stock primero</option>
           </select>
           <button class="primary" id="addProductBtn">+ Agregar producto</button>
-        </div>
-        <div class="category-last-card" id="categoryLastProductCard" hidden>
-          <div class="category-last-copy">
-            <span id="categoryLastLabel">Último producto cargado</span>
-            <strong id="categoryLastProduct">—</strong>
-            <small id="categoryLastMeta">—</small>
-          </div>
-          <div class="category-next-code">
-            <span>Próximo código sugerido</span>
-            <strong id="categoryNextCode">—</strong>
-          </div>
         </div>
         <div class="card table-wrap">
           <table>
@@ -1852,24 +1841,6 @@ function productCategoryInfo(category){
   }
   return {last,nextCode,count:rows.length};
 }
-function renderCategoryLastProduct(){
-  const box=$('#categoryLastProductCard');if(!box)return;
-  const cat=$('#categoryFilter')?.value||'';
-  if(!cat){box.hidden=true;return;}
-  const info=productCategoryInfo(cat);
-  box.hidden=false;
-  $('#categoryLastLabel').textContent=`Último producto cargado en ${cat}`;
-  if(!info.last){
-    $('#categoryLastProduct').textContent='Todavía no hay productos en esta categoría';
-    $('#categoryLastMeta').textContent='';
-    $('#categoryNextCode').textContent='—';
-    return;
-  }
-  $('#categoryLastProduct').textContent=info.last.name||'Producto';
-  const date=info.last.createdAt?new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(info.last.createdAt)):'Fecha no disponible';
-  $('#categoryLastMeta').textContent=`${info.last.code||'Sin código'} · cargado ${date} · ${info.count} producto${info.count===1?'':'s'} en la categoría`;
-  $('#categoryNextCode').textContent=info.nextCode;
-}
 function productCategoryValue(){
   const select=$('#pCategory');
   if(!select)return '';
@@ -1932,7 +1903,6 @@ function renderProducts(){
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
   renderStockQuery();
-  renderCategoryLastProduct();
 }
 function replenishmentItems(){
   return state.products
