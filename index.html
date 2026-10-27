@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.1.2 · productos dark corregido y accesos internos sin duplicados -->
+<!-- Gestión Cloud V13.2.0 · configuración compacta · compras y proveedores unificados · auditoría móvil -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -813,6 +813,87 @@ html[data-theme="dark"] .search-field span{color:var(--muted)!important}
 /* When action rows keep only one action, avoid oversized empty spacing */
 .ops-actions:has(> :only-child){justify-content:flex-start}
 
+
+/* ===== V13.2.0 · Configuración compacta + Compras/Proveedores + auditoría visual ===== */
+
+/* Configuración agrupada */
+#settings .settings-grid{display:block!important}
+.settings-accordion-group{
+  margin:0 0 12px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--panel);
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
+}
+.settings-accordion-group>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:17px 18px;color:var(--ink);user-select:none;
+}
+.settings-accordion-group>summary::-webkit-details-marker{display:none}
+.settings-accordion-group>summary span:first-child{min-width:0}
+.settings-accordion-group>summary strong,.settings-accordion-group>summary small{display:block}
+.settings-accordion-group>summary strong{font-size:15px;font-weight:680;letter-spacing:-.015em}
+.settings-accordion-group>summary small{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+.settings-chevron{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--accent-soft);color:var(--accent-dark);font-size:18px;transition:transform .2s ease}
+.settings-accordion-group[open] .settings-chevron{transform:rotate(180deg)}
+.settings-accordion-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 12px 12px}
+.settings-accordion-body>.card{margin:0;min-width:0}
+.settings-accordion-body>.personalization-card,.settings-accordion-body>.install-card{grid-column:1/-1}
+
+/* Proveedores dentro de Compras */
+.purchase-suppliers-integrated{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:90px}
+.purchase-suppliers-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:13px}
+.purchase-suppliers-head h3{margin:4px 0 4px;font-size:19px}
+.purchase-suppliers-head p{margin:0;color:var(--muted);font-size:11px;line-height:1.45}
+.purchase-supplier-stats{margin-bottom:13px}
+
+/* Auditoría general: superficies que todavía podían quedar blancas */
+.table-wrap,.compact-table,.report-table-wrap{background:var(--panel)!important;border-color:var(--line)!important}
+thead th{background:var(--surface-soft)!important;color:var(--muted)!important;border-color:var(--line)!important}
+tbody td{border-color:var(--line)!important}
+.empty{color:var(--muted)!important}
+.supplier-search-wrap input,.pricing-product-search-field,.pricing-result,.pricing-metric,.promo-product-options,.promo-step,.receipt-card,.purchase-cart-item{
+  background:var(--surface)!important;color:var(--ink)!important;border-color:var(--line)!important;
+}
+.pricing-result{background:linear-gradient(145deg,var(--surface),var(--surface-soft))!important}
+.mini-icon{background:color-mix(in srgb,var(--surface) 76%,transparent)!important;color:var(--muted)!important}
+.product-create-card,.stock-query-card,.pricing-hero{border-color:var(--line)!important}
+
+/* No superponer +Venta sobre ventanas/modales */
+body:has(dialog[open]) .mobile-fab{opacity:0!important;pointer-events:none!important;transform:translateY(14px)!important}
+
+/* Móvil */
+@media(max-width:700px){
+  .settings-accordion-group{border-radius:18px;margin-bottom:10px}
+  .settings-accordion-group>summary{padding:15px 14px}
+  .settings-accordion-body{grid-template-columns:1fr;padding:0 9px 9px;gap:9px}
+  .settings-accordion-body>.personalization-card,.settings-accordion-body>.install-card{grid-column:auto}
+  .purchase-suppliers-head{align-items:stretch;flex-direction:column}
+  .purchase-suppliers-head .primary{width:100%}
+  .purchase-supplier-stats{grid-template-columns:1fr 1fr!important}
+  .purchase-supplier-stats .stat:last-child{grid-column:1/-1}
+  .supplier-toolbar{margin-top:4px}
+  tbody tr{background:var(--surface)!important;border-color:var(--line)!important}
+  td[data-label="Producto"]{border-bottom-color:var(--line)!important}
+  td[data-label="Acciones"]{border-top-color:var(--line)!important}
+}
+
+/* Oscuro: evitar blancos residuales y respetar cada paleta */
+html[data-theme="dark"] .settings-accordion-group{background:var(--panel)!important;border-color:var(--line)!important}
+html[data-theme="dark"] .settings-accordion-group>summary{background:var(--surface-soft)!important}
+html[data-theme="dark"] .settings-accordion-body{background:var(--panel)!important}
+html[data-theme="dark"] .supplier-search-wrap input,
+html[data-theme="dark"] .pricing-result,
+html[data-theme="dark"] .pricing-metric,
+html[data-theme="dark"] .promo-product-options,
+html[data-theme="dark"] .promo-step,
+html[data-theme="dark"] .receipt-card,
+html[data-theme="dark"] .purchase-cart-item{
+  background:var(--surface-soft)!important;color:var(--ink)!important;border-color:var(--line)!important;
+}
+html[data-theme="dark"] .purchase-suppliers-integrated{border-top-color:var(--line)!important}
+
 </style>
 </head>
 <body>
@@ -1143,22 +1224,23 @@ html[data-theme="dark"] .search-field span{color:var(--muted)!important}
         <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras</h2><p>Registrá el ingreso de mercadería y actualizá el stock automáticamente.</p></div></div>
         <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button></div>
         <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
-        <div class="purchase-supplier-cta"><div><strong>¿Necesitás cargar o editar un proveedor?</strong><small>Ahora los proveedores tienen su propia agenda para que sea más cómodo administrarlos desde el celular.</small></div><button class="secondary" type="button" onclick="setView('suppliers')">Abrir proveedores</button></div>
         <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></div>
-      </section>
 
-      <section class="view" id="suppliers">
-        <div class="section-intro"><div><span class="section-kicker">Agenda de compras</span><h2>Proveedores</h2><p>Contactos, productos vinculados y acceso rápido para registrar una compra.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addSupplierBtn">+ Nuevo proveedor</button></div>
-        <div class="cards three">
-          <article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◫</span></div><strong id="suppliersTotal">0</strong><small>Contactos disponibles</small></article>
-          <article class="card stat mint"><div class="stat-top"><span>Con teléfono</span><span class="mini-icon">☎</span></div><strong id="suppliersPhoneCount">0</strong><small>Contacto rápido</small></article>
-          <article class="card stat lilac"><div class="stat-top"><span>Con productos vinculados</span><span class="mini-icon">◇</span></div><strong id="suppliersLinkedCount">0</strong><small>Proveedor habitual configurado</small></article>
-        </div>
-        <div class="supplier-toolbar">
-          <div class="supplier-search-wrap"><span class="supplier-search-icon">⌕</span><input id="supplierSearch" type="search" placeholder="Buscar por nombre, teléfono o email..." autocomplete="off" /></div>
-        </div>
-        <div class="supplier-grid" id="supplierCards"></div>
+        <section class="purchase-suppliers-integrated" id="purchaseSuppliersSection">
+          <div class="purchase-suppliers-head">
+            <div><span class="section-kicker">Proveedores</span><h3>Agenda de proveedores</h3><p>Administrá contactos y proveedores habituales sin salir de Compras.</p></div>
+            <button class="primary" id="addSupplierBtn" type="button">+ Nuevo proveedor</button>
+          </div>
+          <div class="cards three purchase-supplier-stats">
+            <article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◫</span></div><strong id="suppliersTotal">0</strong><small>Contactos disponibles</small></article>
+            <article class="card stat mint"><div class="stat-top"><span>Con teléfono</span><span class="mini-icon">☎</span></div><strong id="suppliersPhoneCount">0</strong><small>Contacto rápido</small></article>
+            <article class="card stat lilac"><div class="stat-top"><span>Con productos vinculados</span><span class="mini-icon">◇</span></div><strong id="suppliersLinkedCount">0</strong><small>Proveedor habitual configurado</small></article>
+          </div>
+          <div class="supplier-toolbar">
+            <div class="supplier-search-wrap"><span class="supplier-search-icon">⌕</span><input id="supplierSearch" type="search" placeholder="Buscar proveedor por nombre, teléfono o email..." autocomplete="off" /></div>
+          </div>
+          <div class="supplier-grid" id="supplierCards"></div>
+        </section>
       </section>
 
       <section class="view" id="pricing">
@@ -2160,11 +2242,18 @@ function closeMobileMoreSheet(){
   setTimeout(()=>{if(!overlay.classList.contains('open'))overlay.hidden=true;if(!sheet.classList.contains('open'))sheet.hidden=true;},220);
 }
 function setView(id){
+  const supplierAnchor=id==='suppliers';
+  if(supplierAnchor)id='purchases';
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   renderMobileNavigation();
-  const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',suppliers:'Proveedores',reports:'Reportes',settings:'Configuración'};
-  $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet(); window.scrollTo({top:0,behavior:'smooth'});
+  const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',reports:'Reportes',settings:'Configuración'};
+  $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet();
+  if(supplierAnchor){
+    requestAnimationFrame(()=>$('#purchaseSuppliersSection')?.scrollIntoView({behavior:'smooth',block:'start'}));
+  }else{
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 }
 function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
 function saleProfit(s){ return s.items.reduce((a,i)=>a+i.lineTotal-(i.unitCost*(i.qty/i.priceUnitQty))+Number(i.containerCostSaving||0),0); }
@@ -2721,6 +2810,51 @@ function applyTheme(theme,{persist=true}={}){
   updateBrowserThemeColor();
 }
 
+
+function setupSettingsAccordion(){
+  const grid=$('#settings .settings-grid');
+  if(!grid||grid.dataset.compactReady==='1')return;
+  grid.dataset.compactReady='1';
+
+  const personalization=grid.querySelector('.personalization-card');
+  const appearance=grid.querySelector('.appearance-card');
+  const install=grid.querySelector('.install-card');
+  const orgProfile=grid.querySelector('#orgProfileCard');
+  const account=grid.querySelector('.account-card');
+  const team=grid.querySelector('#teamCard');
+  const danger=grid.querySelector('.danger-zone');
+
+  // The remaining generic backup card is the one that contains exportBtn.
+  const exportBtn=grid.querySelector('#exportBtn');
+  const backup=exportBtn?.closest('article')||null;
+
+  const defs=[
+    {key:'personalization',title:'Personalización',desc:'Accesos móviles, paleta y tema visual.',nodes:[personalization,appearance],open:true},
+    {key:'business',title:'Empresa',desc:'Instalación, datos del negocio y cuenta activa.',nodes:[install,orgProfile,account],open:false},
+    {key:'security',title:'Usuarios y seguridad',desc:'Personas con acceso e invitaciones.',nodes:[team],open:false},
+    {key:'data',title:'Datos y respaldo',desc:'Exportaciones, migración y caché del dispositivo.',nodes:[backup,danger],open:false}
+  ];
+
+  const frag=document.createDocumentFragment();
+  defs.forEach(def=>{
+    const details=document.createElement('details');
+    details.className='settings-accordion-group';
+    details.dataset.settingsGroup=def.key;
+    details.open=def.open;
+
+    const summary=document.createElement('summary');
+    summary.innerHTML=`<span><strong>${def.title}</strong><small>${def.desc}</small></span><span class="settings-chevron">⌄</span>`;
+    details.appendChild(summary);
+
+    const body=document.createElement('div');
+    body.className='settings-accordion-body';
+    def.nodes.filter(Boolean).forEach(node=>body.appendChild(node));
+    details.appendChild(body);
+    frag.appendChild(details);
+  });
+  grid.appendChild(frag);
+}
+
 function renderSettings(){
   renderThemeControls();renderPaletteControls();renderMobileNavConfig();applyOrganizationUI();
   const o=state.org||{};
@@ -2798,7 +2932,7 @@ async function startApp(){
   $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
   const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
   $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
-  renderSettings();await loadAllData();subscribeRealtime();
+  setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
 }
 async function handleSignedIn(user){
   state.user=user;setGateStep('gateLoading');
