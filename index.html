@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V12.3.3 · SaaS multiempresa · rentabilidad solo con buscador -->
+<!-- Gestión Cloud V13.0.0 · interfaz renovada · UX móvil y feedback visual -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -489,6 +489,65 @@ html[data-theme="dark"] .category-next-code{background:#173228;color:#9ed0be}
 html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4239}
 @media(max-width:720px){.category-last-card{align-items:flex-start;flex-direction:column}.category-next-code{text-align:left;width:100%}.category-reference-actions{align-items:flex-start;flex-direction:column}.category-reference .secondary{width:100%}}
 
+
+
+/* =========================================================
+   V13.0 · Interfaz renovada / UX de app
+   ========================================================= */
+:root{
+  --v13-ease:cubic-bezier(.2,.82,.2,1);
+  --v13-shadow:0 18px 46px rgba(42,78,66,.10);
+  --v13-shadow-hover:0 22px 54px rgba(42,78,66,.14);
+}
+body{
+  background:
+    radial-gradient(circle at 12% -8%,rgba(199,239,224,.42),transparent 31%),
+    radial-gradient(circle at 92% 4%,rgba(216,231,255,.36),transparent 28%),
+    linear-gradient(180deg,#fbfefc 0%,#f2f8f5 100%);
+}
+.topbar{transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card{border-color:rgba(216,230,223,.92);box-shadow:var(--v13-shadow)}
+.primary,.secondary,.hero-action,.dashboard-quick-btn,.mobile-fab{will-change:transform}
+.primary:active,.secondary:active,.hero-action:active,.dashboard-quick-btn:active{transform:scale(.97)!important}
+
+/* Inicio V13 */
+.v13-hero{min-height:188px;padding:30px 31px;background:linear-gradient(125deg,#dff7eb 0%,#e7f5ff 48%,#f2ecff 100%);box-shadow:0 20px 52px rgba(70,105,92,.11)}
+.v13-hero:before{content:"";position:absolute;inset:-45% 35% auto -18%;height:210px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);transform:rotate(-12deg);animation:v13HeroGlow 7s ease-in-out infinite;pointer-events:none}
+@keyframes v13HeroGlow{0%,68%,100%{transform:translateX(-35%) rotate(-12deg);opacity:0}76%{opacity:.7}88%{transform:translateX(210%) rotate(-12deg);opacity:0}}
+.v13-hero-copy{position:relative;z-index:1;max-width:690px}.v13-hero h2{font-size:29px;line-height:1.08;margin-top:8px}.v13-hero p{font-size:13px;line-height:1.5;max-width:610px}
+.v13-hero-status-row{display:flex;gap:8px;align-items:center;margin-top:15px}.v13-status-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid rgba(93,153,132,.15);border-radius:999px;background:rgba(255,255,255,.60);font-size:10px;font-weight:800;color:var(--ink-soft);backdrop-filter:blur(12px)}
+.v13-status-dot{width:7px;height:7px;border-radius:50%;background:#59a981;box-shadow:0 0 0 4px rgba(89,169,129,.12)}.v13-status-pill.alert .v13-status-dot{background:#d88b62;box-shadow:0 0 0 4px rgba(216,139,98,.14)}.v13-status-pill.alert{color:#8b6047;background:rgba(255,245,236,.76)}
+.dashboard-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:-4px 0 16px}.dashboard-quick-btn{border:1px solid rgba(216,230,223,.92);background:rgba(255,255,255,.86);border-radius:18px;min-height:67px;padding:11px 13px;display:flex;align-items:center;gap:11px;text-align:left;color:var(--ink);box-shadow:0 8px 22px rgba(55,82,72,.055);cursor:pointer;transition:transform .16s var(--v13-ease),box-shadow .2s ease,border-color .2s ease,background .2s ease}.dashboard-quick-btn:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(55,82,72,.09);border-color:#cde3da}.dashboard-quick-btn.primary-quick{background:linear-gradient(135deg,#effaf5,#e8f7f0);border-color:#cee7dc}.dashboard-quick-icon{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:var(--accent-soft);color:var(--accent-dark);font-size:17px;font-weight:850}.dashboard-quick-btn>span:last-child{min-width:0}.dashboard-quick-btn strong,.dashboard-quick-btn small{display:block}.dashboard-quick-btn strong{font-size:11px}.dashboard-quick-btn small{font-size:9px;color:var(--muted);margin-top:3px}
+.stat{position:relative;overflow:hidden}.stat:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;opacity:.72}.stat.mint:before{background:linear-gradient(90deg,#77c9a9,#a9dfca)}.stat.blue:before{background:linear-gradient(90deg,#84bde9,#b8d9f4)}.stat.lilac:before{background:linear-gradient(90deg,#ad95d4,#d2c2eb)}.stat.peach:before{background:linear-gradient(90deg,#e8a878,#f2c8a8)}.stat strong{font-variant-numeric:tabular-nums}.mini-icon{transition:transform .22s var(--v13-ease),background .22s ease}.stat:hover .mini-icon{transform:rotate(-5deg) scale(1.08)}
+
+/* Toast más claro */
+.toast{display:flex;align-items:center;justify-content:center;gap:9px;min-height:46px;border-radius:16px;padding:12px 16px;background:rgba(39,56,50,.96);backdrop-filter:blur(16px)}.toast:before{content:"i";width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.13);font-size:11px;font-weight:900}.toast.success:before{content:"✓"}.toast.error:before{content:"!"}
+
+/* Confirmación visual de venta */
+.v13-sale-success{position:fixed;inset:0;z-index:1600;display:grid;place-items:center;padding:24px;pointer-events:none;background:rgba(20,32,28,.10);backdrop-filter:blur(2px)}.v13-sale-success:not([hidden]){animation:v13SuccessBackdrop .2s ease both}.v13-sale-success-card{min-width:min(88vw,320px);display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid rgba(213,235,225,.95);border-radius:22px;background:rgba(255,255,255,.96);box-shadow:0 24px 70px rgba(36,66,55,.22);animation:v13SuccessCard .55s var(--v13-ease) both}.v13-sale-success-check{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(145deg,#79c4a5,#4d9879);color:#fff;font-size:24px;font-weight:900;box-shadow:0 10px 24px rgba(77,152,121,.24)}.v13-sale-success strong,.v13-sale-success span{display:block}.v13-sale-success strong{font-size:16px}.v13-sale-success span{font-size:11px;color:var(--muted);margin-top:3px}@keyframes v13SuccessBackdrop{from{opacity:0}to{opacity:1}}@keyframes v13SuccessCard{0%{opacity:0;transform:translateY(14px) scale(.92)}65%{transform:translateY(-2px) scale(1.025)}100%{opacity:1;transform:none}}
+
+/* Navegación y modales en móvil */
+@media(max-width:700px){
+  body{padding-bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom))}
+  .topbar{background:rgba(247,250,248,.86);box-shadow:0 7px 24px rgba(55,80,71,.045)}
+  .v13-hero{min-height:178px;padding:22px 20px 21px;border-radius:25px}.v13-hero h2{font-size:23px;max-width:285px}.v13-hero p{font-size:11px;max-width:265px}.v13-hero-status-row{margin-top:12px}.v13-status-pill{font-size:9px;padding:7px 9px}.v13-hero .hero-action{bottom:17px;right:17px}
+  .dashboard-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 12px}.dashboard-quick-btn{display:grid;place-items:center;text-align:center;align-content:center;gap:6px;min-height:79px;padding:9px 6px;border-radius:17px}.dashboard-quick-icon{width:31px;height:31px;border-radius:10px;font-size:15px}.dashboard-quick-btn strong{font-size:9px}.dashboard-quick-btn small{display:none}
+  .mobile-nav{left:10px!important;right:10px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;height:68px!important;padding:6px!important;border:1px solid rgba(218,229,224,.94)!important;border-radius:22px!important;background:rgba(255,255,255,.94)!important;box-shadow:0 16px 42px rgba(44,68,60,.16)!important;overflow:hidden}
+  .mobile-nav button{position:relative;isolation:isolate;border-radius:16px!important;overflow:hidden;transition:color .2s ease,transform .16s var(--v13-ease)!important}.mobile-nav button:before{content:"";position:absolute;inset:2px 4px;border-radius:14px;background:linear-gradient(145deg,#e8f7f0,#dff2e9);opacity:0;transform:scale(.78);transition:opacity .2s ease,transform .22s var(--v13-ease);z-index:-1}.mobile-nav button.active:before{opacity:1;transform:scale(1)}.mobile-nav button.active .ico{background:transparent!important;transform:translateY(-1px)}.mobile-nav button:active{transform:scale(.94)}
+  .mobile-fab{bottom:calc(82px + env(safe-area-inset-bottom))!important;right:16px!important;min-height:52px!important;padding:0 18px!important;box-shadow:0 16px 34px rgba(63,126,104,.32)!important}.mobile-fab:after{content:"";position:absolute;inset:-5px;border-radius:999px;border:1px solid rgba(95,160,137,.20);animation:v13FabPulse 4.8s ease-in-out infinite;pointer-events:none}@keyframes v13FabPulse{0%,70%,100%{opacity:0;transform:scale(.93)}80%{opacity:.6}92%{opacity:0;transform:scale(1.08)}}
+  dialog[open]>.modal-card:before,dialog[open]>.promo-modal-card:before{content:"";display:block;width:42px;height:4px;border-radius:999px;background:#d5dfda;margin:-5px auto 12px}.modal-card{box-shadow:0 -18px 60px rgba(30,50,43,.20)!important}
+  .toast{left:12px;right:12px;max-width:none;transform:none;bottom:calc(88px + env(safe-area-inset-bottom));justify-content:flex-start;text-align:left}.toast:not([hidden]){animation:v13ToastMobile .28s var(--v13-ease) both}@keyframes v13ToastMobile{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+}
+
+/* Tema oscuro V13 */
+html[data-theme="dark"] body{background:radial-gradient(circle at 15% -10%,rgba(49,91,76,.18),transparent 30%),linear-gradient(180deg,#080d0b,#0b110f)}
+html[data-theme="dark"] .v13-hero{background:linear-gradient(135deg,#10221c,#112028 54%,#1a1726);border-color:#24352f}.v13-hero-status-row{}
+html[data-theme="dark"] .v13-status-pill{background:rgba(13,21,18,.56);border-color:#31423b}.dashboard-quick-btn{ }
+html[data-theme="dark"] .dashboard-quick-btn{background:rgba(15,22,19,.92);border-color:#26352f;box-shadow:0 9px 25px rgba(0,0,0,.18)}html[data-theme="dark"] .dashboard-quick-btn.primary-quick{background:linear-gradient(145deg,#12231d,#10201b)}html[data-theme="dark"] .dashboard-quick-icon{background:#1b332a}
+html[data-theme="dark"] .v13-sale-success{background:rgba(0,0,0,.22)}html[data-theme="dark"] .v13-sale-success-card{background:rgba(14,21,18,.97);border-color:#2a3b34}html[data-theme="dark"] .mobile-nav{background:rgba(10,15,13,.95)!important;border-color:#26332e!important}html[data-theme="dark"] .mobile-nav button:before{background:linear-gradient(145deg,#173027,#132820)}
+
+@media(prefers-reduced-motion:reduce){.v13-hero:before,.mobile-fab:after{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -663,14 +722,23 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
       </header>
 
       <section class="view active" id="dashboard">
-        <article class="hero-card">
-          <div>
+        <article class="hero-card v13-hero">
+          <div class="v13-hero-copy">
             <span class="hero-kicker">Resumen de hoy</span>
-            <h2>Tu empresa, clara y ordenada.</h2>
-            <p>Ventas, stock y caja de la empresa activa en un solo lugar.</p>
+            <h2 id="dashboardGreeting">Tu empresa, clara y ordenada.</h2>
+            <p id="dashboardHeroCopy">Ventas, stock y caja de la empresa activa en un solo lugar.</p>
+            <div class="v13-hero-status-row">
+              <span class="v13-status-pill" id="dashboardStatusPill"><span class="v13-status-dot"></span><span id="dashboardStatusText">Sincronizando resumen...</span></span>
+            </div>
           </div>
           <button class="hero-action" id="heroSaleBtn">Registrar venta <span>→</span></button>
         </article>
+
+        <div class="dashboard-quick-actions" aria-label="Acciones rápidas">
+          <button type="button" class="dashboard-quick-btn primary-quick" onclick="openSale()"><span class="dashboard-quick-icon">＋</span><span><strong>Nueva venta</strong><small>Registrar cobro</small></span></button>
+          <button type="button" class="dashboard-quick-btn" onclick="openNewProduct()"><span class="dashboard-quick-icon">◇</span><span><strong>Nuevo producto</strong><small>Agregar al stock</small></span></button>
+          <button type="button" class="dashboard-quick-btn" onclick="openExpense()"><span class="dashboard-quick-icon">−</span><span><strong>Registrar gasto</strong><small>Movimiento rápido</small></span></button>
+        </div>
 
         <div class="cards four stat-grid">
           <article class="card stat mint"><div class="stat-top"><span>Ventas de hoy</span><span class="mini-icon">↗</span></div><strong id="salesToday">$0</strong><small>Facturación del día</small></article>
@@ -1178,6 +1246,12 @@ html[data-theme="dark"] .category-reference{background:#101c18;border-color:#2c4
   </dialog>
 
   <dialog id="receiptDialog"><div class="modal-card"><div class="modal-head"><div><span class="section-kicker">Comprobante</span><h2>Detalle de venta</h2></div><button type="button" class="icon-btn" id="closeReceiptBtn" aria-label="Cerrar">✕</button></div><div id="receiptContent"></div><div class="receipt-actions"><button class="secondary" id="downloadPdfBtn" type="button">Descargar PDF</button><button class="primary" id="sharePdfBtn" type="button">Compartir PDF</button><button class="secondary" id="printReceiptBtn" type="button">Imprimir</button></div></div></dialog>
+  <div class="v13-sale-success" id="v13SaleSuccess" hidden aria-live="polite">
+    <div class="v13-sale-success-card">
+      <div class="v13-sale-success-check">✓</div>
+      <div><strong>Venta registrada</strong><span id="v13SaleSuccessTotal">Guardada correctamente</span></div>
+    </div>
+  </div>
   <div class="toast" id="toast" hidden></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js'"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1758,13 +1832,34 @@ function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO(
 function saleProfit(s){ return s.items.reduce((a,i)=>a+i.lineTotal-(i.unitCost*(i.qty/i.priceUnitQty))+Number(i.containerCostSaving||0),0); }
 function saleQty(s){ if(s.items.length===1){const i=s.items[0];return qtyText({unitKind:i.unitKind},i.qty);} return `${s.items.length} ítems`; }
 function saleProductLabel(s){ if(s.items.length===1)return s.items[0].productName; return `${s.items.length} productos`; }
+function v13AnimateMetric(selector,target,formatter){
+  const el=$(selector);if(!el)return;
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  const end=Number(target)||0,start=Number(el.dataset.v13Metric||0);
+  el.dataset.v13Metric=String(end);
+  if(reduced||!Number.isFinite(start)||Math.abs(end-start)<.001){el.textContent=formatter(end);return;}
+  const t0=performance.now(),duration=520;
+  const step=now=>{const p=Math.min(1,(now-t0)/duration),ease=1-Math.pow(1-p,3),v=start+(end-start)*ease;el.textContent=formatter(v);if(p<1)requestAnimationFrame(step);else el.textContent=formatter(end);};
+  requestAnimationFrame(step);
+}
+function v13UpdateDashboardHero(lowCount,saleCount){
+  const hour=new Date().getHours();
+  const greeting=hour<12?'Buen día':hour<20?'Buenas tardes':'Buenas noches';
+  if($('#dashboardGreeting'))$('#dashboardGreeting').textContent=`${greeting}, ${businessName()}.`;
+  if($('#dashboardHeroCopy'))$('#dashboardHeroCopy').textContent=saleCount?`Hoy registraste ${saleCount} venta${saleCount===1?'':'s'}. Tenés ventas, stock y caja resumidos acá.`:'Todavía no hay ventas registradas hoy. Podés empezar desde Nueva venta.';
+  const pill=$('#dashboardStatusPill'),text=$('#dashboardStatusText');
+  if(pill&&text){pill.classList.toggle('alert',lowCount>0);text.textContent=lowCount>0?`${lowCount} producto${lowCount===1?'':'s'} para revisar en reposición`:'Stock al día · sin alertas de reposición';}
+}
 
 function renderDashboard(){
   const ts=salesToday();
-  $('#salesToday').textContent=money(ts.reduce((a,s)=>a+s.total,0));
-  $('#profitToday').textContent=money(ts.reduce((a,s)=>a+saleProfit(s),0));
-  $('#productCount').textContent=state.products.length;
-  const low=state.products.filter(p=>p.stock<=p.minStock); $('#lowStockCount').textContent=low.length;
+  const salesTotal=ts.reduce((a,s)=>a+s.total,0),profitTotal=ts.reduce((a,s)=>a+saleProfit(s),0);
+  const low=state.products.filter(p=>p.stock<=p.minStock);
+  v13AnimateMetric('#salesToday',salesTotal,v=>money(v));
+  v13AnimateMetric('#profitToday',profitTotal,v=>money(v));
+  v13AnimateMetric('#productCount',state.products.length,v=>String(Math.round(v)));
+  v13AnimateMetric('#lowStockCount',low.length,v=>String(Math.round(v)));
+  v13UpdateDashboardHero(low.length,ts.length);
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
   $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
@@ -2760,6 +2855,27 @@ function renderSaleCart(){
   preview.innerHTML=`<div class="sale-total-row"><span>${state.saleCart.length} producto${state.saleCart.length===1?'':'s'}</span><strong>${money(total)}</strong></div>${saving>0?`<div class="sale-discount-summary"><span>✓ Ahorro total</span><strong>${money(saving)}</strong></div>`:''}${containerCount>0?`<div class="sale-discount-summary sale-container-summary"><span>♻ ${containerCount} envase${containerCount===1?'':'s'} propio${containerCount===1?'':'s'}</span><strong>- ${money(containerDiscountTotal)}</strong></div>`:''}`;submit.disabled=false;
 }
 
+
+function v13SaleCartTotal(){
+  try{
+    const payment=$('#salePayment')?.value||'Otro';
+    const date=$('#saleDate')?.value?new Date($('#saleDate').value).toISOString():new Date().toISOString();
+    const quotes=quoteSaleCart(state.saleCart,payment,date);
+    return state.saleCart.reduce((sum,i)=>{
+      const p=state.products.find(x=>x.id===i.productId);if(!p)return sum;
+      const quoted=quotes.get(p.id);
+      const q=quoted?{total:quoted.promoTotal}:quoteProduct(p,i.qty,payment,date);
+      const ownCount=Number(i.ownContainerCount||0),discount=Math.max(0,Number(p.ownContainerDiscount||0)*ownCount);
+      return sum+Math.max(0,Number(q.total||0)-discount);
+    },0);
+  }catch(_e){return NaN;}
+}
+function v13ShowSaleSuccess(total){
+  const el=$('#v13SaleSuccess');if(!el){toast('Venta sincronizada.','success');return;}
+  const label=$('#v13SaleSuccessTotal');if(label)label.textContent=Number.isFinite(total)?`${money(total)} · guardada correctamente`:'Guardada correctamente';
+  el.hidden=false;clearTimeout(v13ShowSaleSuccess._t);v13ShowSaleSuccess._t=setTimeout(()=>{el.hidden=true;},780);
+}
+
 $('#productForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return; const kind=$('#pUnitKind').value,factor=unitFactor(kind),category=productCategoryValue();
   if(!category)return toast('Seleccioná una categoría o escribí una nueva.','error');
@@ -2775,9 +2891,10 @@ $('#saleForm').addEventListener('submit',async e=>{
     if(item.qty>p.stock+1e-9)return toast(`Stock insuficiente para ${p.name}. Disponible: ${qtyText(p,p.stock)}.`,'error');
   }
   const btn=e.submitter;if(btn)btn.disabled=true;
+  const successTotal=v13SaleCartTotal();
   const items=state.saleCart.map(i=>({product_id:i.productId,quantity:i.qty,own_container_count:Number(i.ownContainerCount||0)}));
   const {data:newSaleId,error}=await state.client.rpc('create_sale_v2',{p_org_id:state.org.id,p_payment:$('#salePayment').value,p_sold_at:new Date($('#saleDate').value).toISOString(),p_items:items}); if(btn)btn.disabled=false;
-  if(error)return toast(error.message,'error'); state.saleCart=[]; $('#saleDialog').close(); toast('Venta sincronizada.','success'); await loadAllData({silent:true}); if(newSaleId) setTimeout(()=>window.openReceipt(newSaleId),80);
+  if(error)return toast(error.message,'error'); state.saleCart=[]; $('#saleDialog').close(); v13ShowSaleSuccess(successTotal); await loadAllData({silent:true}); if(newSaleId) setTimeout(()=>window.openReceipt(newSaleId),720);
 });
 $('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const products=promoSelectedProducts();if(!products.length)return toast('Seleccioná al menos un producto.','error');const p=products[0],rule=$('#promoRuleType').value,display=Number($('#promoMinQty').value),price=Number($('#promoPrice').value);if(rule==='combo_exact'){if(products.length<2)return toast('El combo necesita al menos dos productos diferentes.','error');}else{if(!Number.isFinite(display)||display<=0)return toast('Ingresá una cantidad mínima válida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('La cantidad de estos productos debe ser un número entero.','error');if(products.length>1&&(p.unitKind!=='unit'||new Set(products.map(v=>v.unitKind)).size>1))return toast('Para productos diferentes usá la opción “Combo de productos diferentes”.','error');}if(!Number.isFinite(price)||price<=0)return toast('Ingresá un precio promocional válido.','error');const draft=promotionDraft();if(!draft||draft.savingMin<=0)return toast('El precio promocional debe ser menor al precio normal de la promoción.','error');const start=new Date($('#promoStartsAt').value),end=$('#promoEndsAt').value?new Date($('#promoEndsAt').value):null;if(Number.isNaN(start.getTime()))return toast('Ingresá una fecha de inicio válida.','error');if(end&&(Number.isNaN(end.getTime())||end<=start))return toast('La fecha de finalización debe ser posterior al inicio.','error');if(!$('#promoName').value.trim())$('#promoName').value=suggestedPromotionName();const btn=e.submitter;if(btn)btn.disabled=true;const minQty=rule==='combo_exact'?1:toBaseQty(p,display);const {error}=await state.client.rpc('upsert_promotion_v2',{p_org_id:state.org.id,p_promotion_id:$('#promotionId').value||null,p_product_ids:products.map(v=>v.id),p_name:$('#promoName').value.trim(),p_rule_type:rule,p_min_qty:minQty,p_promo_price:price,p_payment:$('#promoPayment').value,p_starts_at:start.toISOString(),p_ends_at:end?end.toISOString():null});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#promotionDialog').close();toast(rule==='combo_exact'?'Combo guardado. Se aplicará sólo cuando estén todos los productos.':'Promoción guardada y lista para aplicar en caja.','success');await loadAllData({silent:true});});
 $('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
