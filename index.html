@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.0.2 · ajuste modal venta escritorio · tipografía refinada -->
+<!-- Gestión Cloud V13.1.0 · personalización de accesos y paletas -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -18,7 +18,9 @@
   <script>
     try{
       const initialTheme=localStorage.getItem('gestioncloud_theme')==='dark'?'dark':'light';
+      const initialPalette=localStorage.getItem('gestioncloud_palette')||'zen';
       document.documentElement.dataset.theme=initialTheme;
+      document.documentElement.dataset.palette=initialPalette;
       if(initialTheme==='dark')document.querySelector('meta[name="theme-color"]')?.setAttribute('content','#0a0f0d');
     }catch(_e){}
   </script>
@@ -93,6 +95,48 @@ dialog{border:0;background:transparent;padding:0;max-width:650px;width:calc(100%
 }
 @media(max-width:385px){.cards.four,.cards.three{grid-template-columns:1fr 1fr}.topbar p{max-width:195px}.hero-card h2{font-size:19px}.mobile-nav button{font-size:8px}.mobile-nav button .ico{font-size:18px}.stat strong{font-size:20px}}
 @media(display-mode:standalone){body{overscroll-behavior-y:none}.topbar{padding-top:max(13px,env(safe-area-inset-top))}}
+
+
+/* V13.1.0 · Personalización */
+.personalization-card{grid-column:1/-1}.personalization-section{padding-top:14px;margin-top:14px;border-top:1px solid var(--line)}.personalization-section:first-of-type{margin-top:6px}.personalization-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.personalization-head strong,.personalization-head small{display:block}.personalization-head strong{font-size:13px}.personalization-head small{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}.personalization-reset{width:auto;padding:7px 10px;background:var(--mint);border-radius:999px}.mobile-nav-config-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.mobile-nav-config-grid label{display:grid;gap:5px;font-size:10px;font-weight:650;color:var(--muted)}.mobile-nav-config-grid select{width:100%;min-width:0;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:10px 11px;min-height:43px}.mobile-nav-preview{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.mobile-nav-preview-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-dark);font-size:10px;font-weight:700}.palette-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.palette-option{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:16px;padding:11px;text-align:left;cursor:pointer;display:grid;gap:9px;transition:.18s ease}.palette-option:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft)}.palette-option.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 14%,transparent);background:linear-gradient(145deg,#fff,var(--accent-soft))}.palette-option strong,.palette-option small{display:block}.palette-option strong{font-size:12px}.palette-option small{font-size:9px;color:var(--muted);margin-top:2px}.palette-swatches{display:flex;gap:5px}.palette-swatches i{display:block;width:25px;height:25px;border-radius:9px;border:1px solid rgba(0,0,0,.05)}
+html[data-palette="zen"]{--accent:#56aa8d;--accent-dark:#357b65;--accent-soft:#d8f1e7;--mint:#e8f8f0;--blue:#eaf5ff;--lilac:#f2ebff;--peach:#fff0e4}
+html[data-palette="ocean"]{--accent:#4d9fbb;--accent-dark:#33758d;--accent-soft:#d8f0f7;--mint:#e5f7f7;--blue:#e4f1ff;--lilac:#edf0ff;--peach:#fff1e7}
+html[data-palette="lavender"]{--accent:#8f79b9;--accent-dark:#68558f;--accent-soft:#e9e1f7;--mint:#edf7f3;--blue:#e9f3ff;--lilac:#f0eaff;--peach:#fff0ea}
+html[data-palette="sand"]{--accent:#b18462;--accent-dark:#805f45;--accent-soft:#f2e4d7;--mint:#f4f2e9;--blue:#eef3f4;--lilac:#f4ece8;--peach:#fff1e5}
+@media(max-width:800px){.mobile-nav-config-grid,.palette-options{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.mobile-nav-config-grid,.palette-options{grid-template-columns:1fr}.personalization-head{align-items:stretch;flex-direction:column}.personalization-reset{width:100%}}
+html[data-theme="dark"] .mobile-nav-config-grid select,html[data-theme="dark"] .palette-option{background:#111815;border-color:var(--line);color:var(--ink)}html[data-theme="dark"] .palette-option.active{background:linear-gradient(145deg,#111815,#17231e)}
+
+/* V13.0.4 · navegación móvil ampliada */
+.mobile-more-overlay,.mobile-more-sheet{display:none}
+@media(max-width:700px){
+  .mobile-nav{grid-template-columns:repeat(5,1fr)!important}
+  .mobile-nav button{position:relative}
+  .mobile-nav button .ico{font-size:18px}
+  .mobile-nav button.active .ico{background:var(--accent-soft)}
+  .mobile-more-overlay{position:fixed;inset:0;background:rgba(28,40,35,.26);backdrop-filter:blur(4px);z-index:44;opacity:0;transition:opacity .18s ease;display:block}
+  .mobile-more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(255,255,255,.98);border-radius:24px 24px 0 0;box-shadow:0 -18px 42px rgba(44,68,60,.18);padding:8px 14px calc(16px + env(safe-area-inset-bottom));display:block;transform:translateY(104%);transition:transform .22s ease,opacity .18s ease;opacity:0;max-height:min(76dvh,560px);overflow:auto}
+  .mobile-more-overlay.open{opacity:1}
+  .mobile-more-sheet.open{transform:translateY(0);opacity:1}
+  .mobile-more-handle{width:42px;height:5px;border-radius:999px;background:#d8e3de;margin:4px auto 12px}
+  .mobile-more-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.mobile-more-head strong{display:block;font-size:18px;letter-spacing:-.02em;color:var(--ink)}
+  .mobile-more-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mobile-more-btn{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px 13px;min-height:84px;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:flex-start;color:var(--ink);box-shadow:0 8px 24px rgba(62,82,75,.05)}
+  .mobile-more-btn strong,.mobile-more-btn small{display:block}.mobile-more-btn strong{font-size:13px;line-height:1.2}.mobile-more-btn small{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.35}
+  .mobile-more-ico{width:34px;height:34px;border-radius:12px;background:var(--accent-soft);color:var(--accent-dark);display:grid;place-items:center;font-size:17px;font-weight:800}
+  .mobile-more-btn.active{border-color:#cfe2da;background:linear-gradient(135deg,#fcfffd,#f2faf6)}
+  .mobile-more-btn.active .mobile-more-ico{background:linear-gradient(145deg,#d7f1e6,#e4f1fb)}
+  html.mobile-more-open{overflow:hidden}
+  html.mobile-more-open .mobile-fab{opacity:0;pointer-events:none;transform:translateY(16px)}
+}
+@media(max-width:385px){
+  .mobile-more-grid{grid-template-columns:1fr}
+}
+html[data-theme="dark"] .mobile-more-overlay{background:rgba(0,0,0,.36)}
+html[data-theme="dark"] .mobile-more-sheet{background:rgba(10,15,13,.98);border-top:1px solid var(--line)}
+html[data-theme="dark"] .mobile-more-handle{background:#30403a}
+html[data-theme="dark"] .mobile-more-btn{background:rgba(18,26,23,.92);border-color:var(--line);box-shadow:none}
+html[data-theme="dark"] .mobile-more-btn.active{background:rgba(22,33,29,.98)}
 
 /* --- Cloud authentication / setup --- */
 [hidden]{display:none!important}
@@ -760,9 +804,6 @@ button{letter-spacing:-.005em}
         <button class="nav-btn" data-view="purchases">
           <span class="nav-icon">＋</span><span>Compras</span>
         </button>
-        <button class="nav-btn" data-view="suppliers">
-          <span class="nav-icon">◫</span><span>Proveedores</span>
-        </button>
         <button class="nav-btn" data-view="reports">
           <span class="nav-icon">⌁</span><span>Reportes</span>
         </button>
@@ -1075,7 +1116,7 @@ button{letter-spacing:-.005em}
       </section>
 
       <section class="view" id="settings">
-        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Apariencia, seguridad, usuarios, instalación y copias de respaldo.</p></div></div>
+        <div class="section-intro"><div><span class="section-kicker">Preferencias</span><h2>Configuración</h2><p>Personalización, apariencia, seguridad, usuarios, instalación y copias de respaldo.</p></div></div>
         <div class="settings-grid">
           <article class="card install-card">
             <div class="install-icon"><span>GC</span></div>
@@ -1096,6 +1137,32 @@ button{letter-spacing:-.005em}
             </form>
             <div class="access-section"><div class="access-section-title"><strong>Personas con acceso</strong><span id="accessMemberCount">0</span></div><div class="access-list" id="accessMembersList"></div></div>
             <div class="access-section"><div class="access-section-title"><strong>Invitaciones pendientes</strong><span id="accessInviteCount">0</span></div><div class="access-list" id="accessInvitesList"></div></div>
+          </article>
+
+          <article class="card surface-card personalization-card">
+            <span class="section-kicker">Personalización</span><h2>Tu interfaz</h2>
+            <p class="card-copy">Elegí qué accesos querés tener siempre a mano en la barra inferior del celular y cambiá la paleta general de la aplicación.</p>
+
+            <div class="personalization-section">
+              <div class="personalization-head"><div><strong>Accesos móviles</strong><small>Elegí 4. “Más” queda fijo y reúne automáticamente el resto.</small></div><button class="text-btn personalization-reset" id="resetMobileNavBtn" type="button">Restaurar</button></div>
+              <div class="mobile-nav-config-grid" id="mobileNavConfigGrid">
+                <label><span>Posición 1</span><select class="mobile-nav-slot" data-mobile-nav-slot="0"></select></label>
+                <label><span>Posición 2</span><select class="mobile-nav-slot" data-mobile-nav-slot="1"></select></label>
+                <label><span>Posición 3</span><select class="mobile-nav-slot" data-mobile-nav-slot="2"></select></label>
+                <label><span>Posición 4</span><select class="mobile-nav-slot" data-mobile-nav-slot="3"></select></label>
+              </div>
+              <div class="mobile-nav-preview" id="mobileNavPreview"></div>
+            </div>
+
+            <div class="personalization-section">
+              <div class="personalization-head"><div><strong>Paleta de colores</strong><small>Se aplica al instante y no modifica tus datos.</small></div></div>
+              <div class="palette-options" id="paletteOptions" role="group" aria-label="Paleta de colores">
+                <button type="button" class="palette-option" data-palette-choice="zen" aria-pressed="false"><span class="palette-swatches"><i style="background:#56aa8d"></i><i style="background:#eaf5ff"></i><i style="background:#f2ebff"></i></span><span><strong>Zen</strong><small>Verde agua y pasteles suaves</small></span></button>
+                <button type="button" class="palette-option" data-palette-choice="ocean" aria-pressed="false"><span class="palette-swatches"><i style="background:#4d9fbb"></i><i style="background:#dff4fa"></i><i style="background:#e8efff"></i></span><span><strong>Océano</strong><small>Azules y turquesas</small></span></button>
+                <button type="button" class="palette-option" data-palette-choice="lavender" aria-pressed="false"><span class="palette-swatches"><i style="background:#8f79b9"></i><i style="background:#f0eaff"></i><i style="background:#e9f3ff"></i></span><span><strong>Lavanda</strong><small>Violeta suave y azul frío</small></span></button>
+                <button type="button" class="palette-option" data-palette-choice="sand" aria-pressed="false"><span class="palette-swatches"><i style="background:#b18462"></i><i style="background:#fff1e5"></i><i style="background:#f4eadf"></i></span><span><strong>Arena</strong><small>Beige cálido y terracota</small></span></button>
+              </div>
+            </div>
           </article>
 
           <article class="card surface-card appearance-card">
@@ -1155,13 +1222,16 @@ button{letter-spacing:-.005em}
   </div>
 
   <button class="mobile-fab" id="mobileSaleBtn" hidden aria-label="Registrar nueva venta"><span>＋</span> Venta</button>
-  <nav class="mobile-nav" id="mobileNav" hidden aria-label="Navegación móvil">
-    <button class="mobile-nav-btn active" data-view="dashboard"><span class="ico">⌂</span><span>Inicio</span></button>
-    <button class="mobile-nav-btn" data-view="products"><span class="ico">◇</span><span>Productos</span></button>
-    <button class="mobile-nav-btn" data-view="sales"><span class="ico">▤</span><span>Ventas</span></button>
-    <button class="mobile-nav-btn" data-view="cash"><span class="ico">$</span><span>Caja</span></button>
-    <button class="mobile-nav-btn" data-view="reports"><span class="ico">⌁</span><span>Reportes</span></button>
-  </nav>
+  <nav class="mobile-nav" id="mobileNav" hidden aria-label="Navegación móvil"></nav>
+  <div class="mobile-more-overlay" id="mobileMoreOverlay" hidden></div>
+  <section class="mobile-more-sheet" id="mobileMoreSheet" hidden aria-label="Más accesos móviles">
+    <div class="mobile-more-handle" aria-hidden="true"></div>
+    <div class="mobile-more-head">
+      <div><span class="section-kicker">Navegación</span><strong>Más accesos</strong></div>
+      <button type="button" class="icon-btn" id="mobileMoreClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="mobile-more-grid" id="mobileMoreGrid"></div>
+  </section>
 
 
   <dialog id="organizationDialog">
@@ -1887,12 +1957,69 @@ async function acceptPendingOrganization(invitationId){
 window.acceptPendingOrganization=acceptPendingOrganization;
 
 
+const ZH_MOBILE_NAV_KEY='gestioncloud_mobile_nav';
+const ZH_PALETTE_KEY='gestioncloud_palette';
+const MOBILE_NAV_DEFAULT=['dashboard','products','sales','purchases'];
+const MOBILE_NAV_ITEMS={
+  dashboard:{label:'Inicio',icon:'⌂',desc:'Resumen general'},
+  products:{label:'Productos',icon:'◇',desc:'Inventario y stock'},
+  sales:{label:'Ventas',icon:'▤',desc:'Historial de ventas'},
+  purchases:{label:'Compras',icon:'＋',desc:'Compras y proveedores'},
+  cash:{label:'Caja',icon:'$',desc:'Movimientos y saldo'},
+  expenses:{label:'Gastos',icon:'−',desc:'Registrar egresos'},
+  fixedExpenses:{label:'Gastos fijos',icon:'▦',desc:'Pagos mensuales'},
+  pricing:{label:'Costos y precios',icon:'%',desc:'Márgenes y rentabilidad'},
+  replenishment:{label:'Reposición',icon:'↻',desc:'Stock a reponer'},
+  promotions:{label:'Promociones',icon:'%',desc:'Ofertas activas'},
+  reports:{label:'Reportes',icon:'⌁',desc:'Ventas y resultados'},
+  settings:{label:'Configuración',icon:'⚙',desc:'Cuenta y personalización'}
+};
+function loadMobileNavPreference(){
+  try{const saved=JSON.parse(localStorage.getItem(ZH_MOBILE_NAV_KEY)||'null');if(Array.isArray(saved)&&saved.length===4&&new Set(saved).size===4&&saved.every(v=>MOBILE_NAV_ITEMS[v]))return saved;}catch(_e){}
+  return [...MOBILE_NAV_DEFAULT];
+}
+function saveMobileNavPreference(items){try{localStorage.setItem(ZH_MOBILE_NAV_KEY,JSON.stringify(items));}catch(_e){}}
+function mobileNavItems(){return loadMobileNavPreference();}
+function renderMobileNavigation(){
+  const nav=$('#mobileNav'),grid=$('#mobileMoreGrid');if(!nav||!grid)return;
+  const visible=mobileNavItems(),active=$$('.view').find(v=>v.classList.contains('active'))?.id||'dashboard';
+  nav.innerHTML=visible.map(id=>{const x=MOBILE_NAV_ITEMS[id];return `<button class="mobile-nav-btn ${active===id?'active':''}" data-view="${id}" type="button"><span class="ico">${x.icon}</span><span>${x.label}</span></button>`;}).join('')+`<button class="mobile-nav-btn ${visible.includes(active)?'':'active'}" id="mobileMoreBtn" type="button"><span class="ico">⋯</span><span>Más</span></button>`;
+  const rest=Object.keys(MOBILE_NAV_ITEMS).filter(id=>!visible.includes(id));
+  grid.innerHTML=rest.map(id=>{const x=MOBILE_NAV_ITEMS[id];return `<button class="mobile-more-btn ${active===id?'active':''}" data-view="${id}" type="button"><span class="mobile-more-ico">${x.icon}</span><span><strong>${x.label}</strong><small>${x.desc}</small></span></button>`;}).join('');
+}
+function renderMobileNavConfig(){
+  const slots=$$('.mobile-nav-slot');if(!slots.length)return;
+  const selected=mobileNavItems();
+  slots.forEach((s,i)=>{s.innerHTML=Object.entries(MOBILE_NAV_ITEMS).map(([id,x])=>`<option value="${id}">${x.label}</option>`).join('');s.value=selected[i];});
+  const preview=$('#mobileNavPreview');if(preview)preview.innerHTML=selected.map(id=>`<span class="mobile-nav-preview-chip"><b>${MOBILE_NAV_ITEMS[id].icon}</b>${MOBILE_NAV_ITEMS[id].label}</span>`).join('')+'<span class="mobile-nav-preview-chip"><b>⋯</b>Más</span>';
+}
+function changeMobileNavSlot(slot,newId){
+  const current=mobileNavItems(),old=current[slot],duplicate=current.indexOf(newId);
+  if(duplicate>=0&&duplicate!==slot)current[duplicate]=old;
+  current[slot]=newId;saveMobileNavPreference(current);renderMobileNavigation();renderMobileNavConfig();
+}
+function resetMobileNavigation(){saveMobileNavPreference([...MOBILE_NAV_DEFAULT]);renderMobileNavigation();renderMobileNavConfig();toast('Accesos móviles restaurados.','success');}
+function currentPalette(){return document.documentElement.dataset.palette||'zen';}
+function renderPaletteControls(){const active=currentPalette();$$('[data-palette-choice]').forEach(b=>{const on=b.dataset.paletteChoice===active;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});}
+function applyPalette(palette,{persist=true}={}){const next=['zen','ocean','lavender','sand'].includes(palette)?palette:'zen';document.documentElement.dataset.palette=next;if(persist)try{localStorage.setItem(ZH_PALETTE_KEY,next);}catch(_e){}renderPaletteControls();}
+function openMobileMoreSheet(){
+  const overlay=$('#mobileMoreOverlay'),sheet=$('#mobileMoreSheet');
+  if(!overlay||!sheet)return;
+  overlay.hidden=false; sheet.hidden=false;
+  requestAnimationFrame(()=>{overlay.classList.add('open');sheet.classList.add('open');document.documentElement.classList.add('mobile-more-open');});
+}
+function closeMobileMoreSheet(){
+  const overlay=$('#mobileMoreOverlay'),sheet=$('#mobileMoreSheet');
+  if(!overlay||!sheet)return;
+  overlay.classList.remove('open'); sheet.classList.remove('open'); document.documentElement.classList.remove('mobile-more-open');
+  setTimeout(()=>{if(!overlay.classList.contains('open'))overlay.hidden=true;if(!sheet.classList.contains('open'))sheet.hidden=true;},220);
+}
 function setView(id){
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-  $$('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  renderMobileNavigation();
   const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',suppliers:'Proveedores',reports:'Reportes',settings:'Configuración'};
-  $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
+  $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet(); window.scrollTo({top:0,behavior:'smooth'});
 }
 function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
 function saleProfit(s){ return s.items.reduce((a,i)=>a+i.lineTotal-(i.unitCost*(i.qty/i.priceUnitQty))+Number(i.containerCostSaving||0),0); }
@@ -2442,7 +2569,7 @@ function applyTheme(theme,{persist=true}={}){
 }
 
 function renderSettings(){
-  renderThemeControls();applyOrganizationUI();
+  renderThemeControls();renderPaletteControls();renderMobileNavConfig();applyOrganizationUI();
   const o=state.org||{};
   $('#settingsBusinessName').textContent=o.name||'Mi empresa';$('#settingsUserEmail').textContent=state.user?.email||'—';$('#settingsUserRole').textContent=roleLabel(state.role);$('#settingsActiveOrg').textContent=o.name||'—';
   $('#settingsPlanCode').textContent=planLabel(o.plan_code);$('#settingsSubscriptionStatus').textContent=subscriptionLabel(o.subscription_status);$('#settingsTrialEnds').textContent=trialLabel(o);
@@ -2988,6 +3115,11 @@ $('#exportProfitReportBtn').onclick=exportProfitabilityCsv;
 $$('[data-frac-size]').forEach(b=>b.onclick=()=>{$('#fracPresentationMl').value=b.dataset.fracSize;loadFractionalFromProduct();renderFractionalCalculator();});$('#fracNoContainerBtn').onclick=()=>{$('#fracContainerCost').value=0;renderFractionalCalculator();};updateFractionalModeUI();
 $$('[data-theme-choice]').forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(currentTheme(),{persist:false});
 const savedTarget=Number(localStorage.getItem('zenhogar_target_margin'));if(savedTarget>0&&savedTarget<100){$('#pricingTargetMargin').value=savedTarget;$('#fracTargetMargin').value=savedTarget;}
+applyPalette(currentPalette(),{persist:false});
+renderMobileNavigation();
+renderMobileNavConfig();
+renderPaletteControls();
+
 
 $('#scanProductBarcodeBtn').onclick=()=>openBarcodeScanner('product');
 $('#scanSaleBarcodeBtn').onclick=()=>openBarcodeScanner('sale');
@@ -2995,7 +3127,13 @@ $('#barcodeScannerCloseBtn').onclick=closeBarcodeScanner;
 $('#barcodeScannerDialog').addEventListener('close',stopBarcodeScanner);
 $('#barcodeManualApplyBtn').onclick=()=>{const v=normalizeBarcode($('#barcodeManualInput').value);if(!v)return toast('Ingresá un código.','error');handleBarcodeScanned(v);};
 $('#barcodeManualInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#barcodeManualApplyBtn').click();}});
-$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view))); $$('.mobile-nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+$('#mobileNav').addEventListener('click',e=>{const b=e.target.closest('.mobile-nav-btn');if(!b)return;if(b.id==='mobileMoreBtn'){openMobileMoreSheet();return;}if(b.dataset.view)setView(b.dataset.view);});
+$('#mobileMoreGrid').addEventListener('click',e=>{const b=e.target.closest('.mobile-more-btn');if(b?.dataset.view)setView(b.dataset.view);});
+$('#mobileMoreClose').onclick=closeMobileMoreSheet; $('#mobileMoreOverlay').onclick=closeMobileMoreSheet;
+$$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNavSlot(Number(s.dataset.mobileNavSlot),s.value)));
+$('#resetMobileNavBtn').onclick=resetMobileNavigation;
+$$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
 $('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
