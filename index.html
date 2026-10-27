@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.1.0 · personalización de accesos y paletas -->
+<!-- Gestión Cloud V13.1.2 · productos dark corregido y accesos internos sin duplicados -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -663,6 +663,156 @@ button{letter-spacing:-.005em}
   }
 }
 
+
+/* ===== V13.1.1 · paletas globales completas ===== */
+
+/* Tokens de superficie por paleta - modo claro */
+html[data-palette="zen"]{
+  --app-bg-1:#fbfefc;--app-bg-2:#f1f8f4;--surface:#ffffff;--surface-soft:#f8fbf9;
+  --sidebar-bg:rgba(241,249,245,.94);--topbar-bg:rgba(247,250,248,.90);
+  --field-bg:#ffffff;--nav-active:#f1faf6;--secondary-bg:#edf8f3;
+  --hero-1:#dff7eb;--hero-2:#e7f5ff;--hero-3:#f2ecff;
+  --stat-mint-1:#fbfffd;--stat-mint-2:#e5f8ef;
+  --stat-blue-1:#fbfdff;--stat-blue-2:#e7f3ff;
+  --stat-lilac-1:#fefcff;--stat-lilac-2:#f0e8ff;
+  --stat-peach-1:#fffdfb;--stat-peach-2:#ffecdd;
+  --overlay-tint:rgba(35,49,44,.34);
+}
+html[data-palette="ocean"]{
+  --bg:#f2f9fc;--panel:rgba(255,255,255,.93);--panel-solid:#ffffff;--ink:#243840;--ink-soft:#405d67;--muted:#718890;--line:#d7e8ee;
+  --accent:#4d9fbb;--accent-dark:#33758d;--accent-soft:#d8f0f7;--mint:#e5f7f7;--blue:#e4f1ff;--lilac:#edf0ff;--peach:#fff1e7;
+  --app-bg-1:#f8fcfe;--app-bg-2:#edf6fa;--surface:#ffffff;--surface-soft:#f5fafc;
+  --sidebar-bg:rgba(239,248,251,.95);--topbar-bg:rgba(246,251,253,.92);
+  --field-bg:#ffffff;--nav-active:#edf8fb;--secondary-bg:#eaf6f9;
+  --hero-1:#dcf3f7;--hero-2:#e2f0ff;--hero-3:#eef0ff;
+  --stat-mint-1:#fbffff;--stat-mint-2:#e2f7f4;
+  --stat-blue-1:#fbfdff;--stat-blue-2:#dfedff;
+  --stat-lilac-1:#fcfcff;--stat-lilac-2:#e9edff;
+  --stat-peach-1:#fffdfb;--stat-peach-2:#fff0e5;
+  --overlay-tint:rgba(30,55,65,.34);
+}
+html[data-palette="lavender"]{
+  --bg:#f8f5fb;--panel:rgba(255,255,255,.93);--panel-solid:#ffffff;--ink:#373144;--ink-soft:#5a5268;--muted:#82798e;--line:#e6def0;
+  --accent:#8f79b9;--accent-dark:#68558f;--accent-soft:#e9e1f7;--mint:#edf7f3;--blue:#e9f3ff;--lilac:#f0eaff;--peach:#fff0ea;
+  --app-bg-1:#fdfbff;--app-bg-2:#f4f0fa;--surface:#ffffff;--surface-soft:#faf8fc;
+  --sidebar-bg:rgba(248,244,251,.95);--topbar-bg:rgba(251,248,253,.92);
+  --field-bg:#ffffff;--nav-active:#f3eef9;--secondary-bg:#f2ecf8;
+  --hero-1:#eee7f8;--hero-2:#e9f3ff;--hero-3:#f3eaff;
+  --stat-mint-1:#fcfffd;--stat-mint-2:#e8f5ef;
+  --stat-blue-1:#fcfdff;--stat-blue-2:#e6f0ff;
+  --stat-lilac-1:#fefcff;--stat-lilac-2:#ece4fa;
+  --stat-peach-1:#fffdfc;--stat-peach-2:#fbeae4;
+  --overlay-tint:rgba(53,43,67,.34);
+}
+html[data-palette="sand"]{
+  --bg:#faf6f1;--panel:rgba(255,255,255,.93);--panel-solid:#ffffff;--ink:#40372f;--ink-soft:#65574b;--muted:#8b7c70;--line:#eadfd4;
+  --accent:#b18462;--accent-dark:#805f45;--accent-soft:#f2e4d7;--mint:#f4f2e9;--blue:#eef3f4;--lilac:#f4ece8;--peach:#fff1e5;
+  --app-bg-1:#fffdf9;--app-bg-2:#f7efe7;--surface:#ffffff;--surface-soft:#fcf8f4;
+  --sidebar-bg:rgba(250,245,239,.96);--topbar-bg:rgba(253,249,245,.93);
+  --field-bg:#ffffff;--nav-active:#f8eee5;--secondary-bg:#f7ede4;
+  --hero-1:#f5e9dc;--hero-2:#f0f4f1;--hero-3:#f4ece8;
+  --stat-mint-1:#fdfdf9;--stat-mint-2:#f1efe3;
+  --stat-blue-1:#fcfefe;--stat-blue-2:#eaf1f2;
+  --stat-lilac-1:#fefcfb;--stat-lilac-2:#f2e9e5;
+  --stat-peach-1:#fffdf9;--stat-peach-2:#fbe8d8;
+  --overlay-tint:rgba(63,50,40,.34);
+}
+
+/* Tokens oscuros específicos para cada paleta */
+html[data-theme="dark"][data-palette="zen"]{
+  --bg:#0a0f0d;--panel:#101714;--panel-solid:#111916;--ink:#e7f0ec;--ink-soft:#b8c8c1;--muted:#869991;--line:#26342e;
+  --accent:#62b99a;--accent-dark:#8bd0b8;--accent-soft:#17362b;--mint:#14251f;--blue:#13242b;--lilac:#211a2a;--peach:#2a2019;
+  --app-bg-1:#080d0b;--app-bg-2:#0b110f;--surface:#101714;--surface-soft:#0e1512;
+  --sidebar-bg:rgba(10,15,13,.96);--topbar-bg:rgba(9,13,12,.95);--field-bg:#0e1512;--nav-active:#15201c;--secondary-bg:#14201c;
+  --hero-1:#10231c;--hero-2:#112028;--hero-3:#1b1725;
+  --stat-mint-1:#111a17;--stat-mint-2:#11271f;--stat-blue-1:#111817;--stat-blue-2:#111f2b;--stat-lilac-1:#151316;--stat-lilac-2:#211b2c;--stat-peach-1:#171411;--stat-peach-2:#2a2019;
+  --overlay-tint:rgba(0,0,0,.58);
+}
+html[data-theme="dark"][data-palette="ocean"]{
+  --bg:#081014;--panel:#0d171b;--panel-solid:#101b20;--ink:#e6f2f6;--ink-soft:#b4cbd3;--muted:#8199a3;--line:#233943;
+  --accent:#58abc5;--accent-dark:#89c9dc;--accent-soft:#123441;--mint:#10282c;--blue:#112938;--lilac:#181f35;--peach:#2a211d;
+  --app-bg-1:#071015;--app-bg-2:#0a151a;--surface:#0d171b;--surface-soft:#0b1317;
+  --sidebar-bg:rgba(8,16,20,.96);--topbar-bg:rgba(8,16,20,.95);--field-bg:#0b1418;--nav-active:#102731;--secondary-bg:#10242b;
+  --hero-1:#0d2931;--hero-2:#10283a;--hero-3:#171f35;
+  --stat-mint-1:#0e1919;--stat-mint-2:#0f2a29;--stat-blue-1:#0d171d;--stat-blue-2:#10283b;--stat-lilac-1:#12151e;--stat-lilac-2:#1a2134;--stat-peach-1:#171411;--stat-peach-2:#2a211c;
+  --overlay-tint:rgba(0,0,0,.60);
+}
+html[data-theme="dark"][data-palette="lavender"]{
+  --bg:#100d14;--panel:#17131d;--panel-solid:#19151f;--ink:#f1ebf7;--ink-soft:#cfc2dc;--muted:#a091ad;--line:#362d42;
+  --accent:#9b84c8;--accent-dark:#c0ace4;--accent-soft:#332746;--mint:#1b2925;--blue:#1a2431;--lilac:#2a2139;--peach:#2d211f;
+  --app-bg-1:#0e0b12;--app-bg-2:#141019;--surface:#17131d;--surface-soft:#130f18;
+  --sidebar-bg:rgba(16,13,20,.96);--topbar-bg:rgba(16,13,20,.95);--field-bg:#141019;--nav-active:#251d31;--secondary-bg:#241d2e;
+  --hero-1:#211a2d;--hero-2:#1a2230;--hero-3:#2d203c;
+  --stat-mint-1:#131916;--stat-mint-2:#172720;--stat-blue-1:#12171d;--stat-blue-2:#192434;--stat-lilac-1:#18131d;--stat-lilac-2:#2a203a;--stat-peach-1:#191414;--stat-peach-2:#2d211f;
+  --overlay-tint:rgba(0,0,0,.62);
+}
+html[data-theme="dark"][data-palette="sand"]{
+  --bg:#120f0c;--panel:#1a1511;--panel-solid:#1d1712;--ink:#f3ece5;--ink-soft:#d2c1b2;--muted:#a89584;--line:#3d3026;
+  --accent:#bd8e68;--accent-dark:#dfb28f;--accent-soft:#3a291e;--mint:#28261d;--blue:#20282a;--lilac:#2b2320;--peach:#37271b;
+  --app-bg-1:#100d0b;--app-bg-2:#17120e;--surface:#1a1511;--surface-soft:#15110e;
+  --sidebar-bg:rgba(18,15,12,.96);--topbar-bg:rgba(18,15,12,.95);--field-bg:#16110e;--nav-active:#2b211a;--secondary-bg:#2a211b;
+  --hero-1:#2c2119;--hero-2:#20282a;--hero-3:#2d2320;
+  --stat-mint-1:#181713;--stat-mint-2:#29271d;--stat-blue-1:#16191a;--stat-blue-2:#202a2d;--stat-lilac-1:#191514;--stat-lilac-2:#2a2320;--stat-peach-1:#1b1510;--stat-peach-2:#38271b;
+  --overlay-tint:rgba(0,0,0,.62);
+}
+
+/* Aplicación global de los tokens */
+html,body,.app-shell,.main{background:linear-gradient(180deg,var(--app-bg-1),var(--app-bg-2))!important;color:var(--ink)}
+.sidebar{background:var(--sidebar-bg)!important;border-color:var(--line)!important}
+.topbar{background:var(--topbar-bg)!important;border-color:var(--line)!important}
+.card,.surface-card,.receipt-card,.purchase-cart-item,.fixed-expense-card,.promo-item-card,.supplier-card,.reorder-group,.pricing-card,.report-products-card{background:var(--panel)!important;border-color:var(--line)!important;color:var(--ink)!important}
+.nav-btn.active{background:var(--nav-active)!important;border-color:var(--line)!important;color:var(--accent-dark)!important}
+.nav-btn:hover{background:var(--surface-soft)!important}
+.primary,.mobile-fab{background:linear-gradient(135deg,var(--accent),var(--accent-dark))!important}
+.secondary,.file-btn,.action-btn,.icon-btn,.pricing-chip{background:var(--secondary-bg)!important;color:var(--ink-soft)!important;border-color:var(--line)!important}
+.hero-card,.v13-hero{background:linear-gradient(125deg,var(--hero-1),var(--hero-2) 50%,var(--hero-3))!important;border-color:var(--line)!important}
+.stat.mint{background:linear-gradient(145deg,var(--stat-mint-1),var(--stat-mint-2))!important}
+.stat.blue{background:linear-gradient(145deg,var(--stat-blue-1),var(--stat-blue-2))!important}
+.stat.lilac{background:linear-gradient(145deg,var(--stat-lilac-1),var(--stat-lilac-2))!important}
+.stat.peach{background:linear-gradient(145deg,var(--stat-peach-1),var(--stat-peach-2))!important}
+input,select,textarea,.search-field,.sale-builder input,.sale-builder select,.promo-toolbar input,.promo-toolbar select,.supplier-search-wrap input,.mobile-nav-config-grid select{background:var(--field-bg)!important;color:var(--ink)!important;border-color:var(--line)!important}
+.mobile-nav,.mobile-more-sheet{background:color-mix(in srgb,var(--surface) 96%,transparent)!important;border-color:var(--line)!important}
+.mobile-nav button.active .ico,.mobile-more-ico,.dashboard-quick-icon,.nav-btn.active .nav-icon{background:var(--accent-soft)!important;color:var(--accent-dark)!important}
+.mobile-more-btn,.dashboard-quick-btn,.theme-option,.palette-option,.promo-step,.promo-product-options,.promo-product-option{background:var(--surface)!important;border-color:var(--line)!important;color:var(--ink)!important}
+.mobile-more-btn.active,.dashboard-quick-btn.primary-quick,.theme-option.active,.palette-option.active{background:linear-gradient(145deg,var(--surface),var(--accent-soft))!important;border-color:var(--accent)!important}
+.modal-card,.promo-modal-card,.gate-card{background:var(--surface)!important;color:var(--ink)!important;border-color:var(--line)!important}
+dialog::backdrop{background:var(--overlay-tint)!important}
+.sale-cart-item,.sale-cart-empty,.pricing-metric,.report-mini-stat,.fixed-expense-meta div{background:var(--surface-soft)!important;border-color:var(--line)!important}
+.sale-preview,.install-card,.invite-result,.pricing-note,.promo-combo-note,.product-container-hint,.reorder-config-warning{background:linear-gradient(135deg,var(--accent-soft),var(--surface-soft))!important;border-color:var(--line)!important;color:var(--ink-soft)!important}
+.badge{background:var(--accent-soft)!important;color:var(--accent-dark)!important}
+.connection-pill,.sidebar-status{background:var(--surface-soft)!important;border-color:var(--line)!important}
+.theme-option.active,.palette-option.active{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)!important}
+.mobile-more-overlay{background:color-mix(in srgb,var(--overlay-tint) 88%,transparent)!important}
+.menu-btn,.settings-mobile{background:var(--surface)!important;color:var(--ink)!important;border-color:var(--line)!important}
+.brand-mark,.install-icon{background:linear-gradient(145deg,var(--accent),var(--accent-dark))!important}
+.status-dot{background:var(--accent)!important;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 14%,transparent)!important}
+.v13-sale-success-card{background:var(--surface)!important;border-color:var(--line)!important}
+.v13-sale-success-check{background:linear-gradient(145deg,var(--accent),var(--accent-dark))!important}
+
+/* Ajustes de legibilidad en oscuro */
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:var(--muted)!important}
+html[data-theme="dark"] option{background:var(--surface)!important;color:var(--ink)!important}
+html[data-theme="dark"] .modal-head{background:color-mix(in srgb,var(--surface) 98%,transparent)!important}
+html[data-theme="dark"] th{background:var(--surface-soft)!important;color:var(--muted)!important}
+html[data-theme="dark"] tr{background:var(--surface)!important;border-color:var(--line)!important}
+
+
+/* ===== V13.1.2 · limpieza de accesos repetidos + productos dark ===== */
+.stock-query-card{background:linear-gradient(135deg,var(--surface),var(--mint))!important;border-color:var(--line)!important}
+.stock-query-chip{background:var(--surface)!important;color:var(--ink-soft)!important;border-color:var(--line)!important}
+.stock-query-chip:hover,.stock-query-chip.active{background:var(--accent-soft)!important;border-color:var(--accent)!important;color:var(--accent-dark)!important}
+.stock-query-metric{background:color-mix(in srgb,var(--surface) 92%, transparent)!important;border-color:var(--line)!important;color:var(--ink)!important}
+.stock-query-detail{border-top-color:var(--line)!important}
+.stock-query-icon{background:var(--accent-soft)!important;color:var(--accent-dark)!important}
+html[data-theme="dark"] .stock-query-card{background:linear-gradient(135deg,var(--surface),color-mix(in srgb,var(--mint) 72%, var(--surface)))!important}
+html[data-theme="dark"] .stock-query-chip{background:var(--surface-soft)!important;color:var(--ink-soft)!important}
+html[data-theme="dark"] .stock-query-metric{background:color-mix(in srgb,var(--surface-soft) 94%, transparent)!important}
+html[data-theme="dark"] .search-field{background:var(--field-bg)!important;border-color:var(--line)!important}
+html[data-theme="dark"] .search-field input{background:transparent!important;color:var(--ink)!important}
+html[data-theme="dark"] .search-field span{color:var(--muted)!important}
+/* When action rows keep only one action, avoid oversized empty spacing */
+.ops-actions:has(> :only-child){justify-content:flex-start}
+
 </style>
 </head>
 <body>
@@ -899,11 +1049,6 @@ button{letter-spacing:-.005em}
           </div>
           <div class="stock-query-detail" id="stockQueryDetail"><div class="empty">Escribí una consulta o elegí un acceso rápido.</div></div>
         </article>
-        <div class="ops-actions">
-          <button class="secondary" type="button" onclick="setView('replenishment')">↻ Reposición automática</button>
-          <button class="secondary" type="button" onclick="setView('promotions')">% Promociones</button>
-          <button class="secondary" type="button" onclick="setView('pricing')">$ Costos y márgenes</button>
-        </div>
         <div class="toolbar">
           <label class="search-field"><span>⌕</span><input id="productSearch" placeholder="Buscar producto, código o categoría..." /></label>
           <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
@@ -926,7 +1071,7 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="replenishment">
         <div class="section-intro"><div><span class="section-kicker">Inventario inteligente</span><h2>Reposición automática</h2><p>Productos que llegaron al mínimo y cantidad sugerida para alcanzar el stock objetivo.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="prepareAllReordersBtn">Preparar compras por proveedor</button><button class="secondary" type="button" onclick="setView('products')">Configurar productos</button><button class="secondary" type="button" onclick="setView('suppliers')">Gestionar proveedores</button></div>
+        <div class="ops-actions"><button class="primary" id="prepareAllReordersBtn">Preparar compras por proveedor</button></div>
         <div class="cards four">
           <article class="card stat peach"><div class="stat-top"><span>Necesitan reposición</span><span class="mini-icon">!</span></div><strong id="reorderCount">0</strong></article>
           <article class="card stat blue"><div class="stat-top"><span>Proveedores involucrados</span><span class="mini-icon">◇</span></div><strong id="reorderSupplierCount">0</strong></article>
@@ -938,7 +1083,7 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="promotions">
         <div class="section-intro"><div><span class="section-kicker">Precios especiales</span><h2>Promociones</h2><p>Creá ofertas simples. La caja detecta y aplica automáticamente la opción más conveniente para el cliente.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addPromotionBtn">+ Nueva promoción</button><button class="secondary" type="button" onclick="openSale()">Probar en una venta</button><button class="secondary" type="button" onclick="setView('products')">Ver productos</button></div>
+        <div class="ops-actions"><button class="primary" id="addPromotionBtn">+ Nueva promoción</button><button class="secondary" type="button" onclick="openSale()">Probar en una venta</button></div>
         <div class="cards four">
           <article class="card stat lilac"><div class="stat-top"><span>Activas ahora</span><span class="mini-icon">%</span></div><strong id="activePromoCount">0</strong></article>
           <article class="card stat peach"><div class="stat-top"><span>Programadas</span><span class="mini-icon">◷</span></div><strong id="scheduledPromoCount">0</strong></article>
@@ -965,7 +1110,7 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="cash">
         <div class="section-intro"><div><span class="section-kicker">Control diario</span><h2>Caja</h2><p>Ingresos, egresos y efectivo esperado del día.</p></div></div>
-        <div class="ops-actions"><button class="secondary" type="button" onclick="setView('expenses')">Ver gastos</button><button class="secondary" type="button" onclick="setView('fixedExpenses')">Gastos fijos</button><button class="secondary" type="button" onclick="setView('purchases')">Compras y proveedores</button></div>
+
         <div class="cards three">
           <article class="card stat mint"><div class="stat-top"><span>Ventas en efectivo</span><span class="mini-icon">$</span></div><strong id="cashToday">$0</strong><small>Ingresos por ventas de hoy</small></article>
           <article class="card stat peach"><div class="stat-top"><span>Egresos en efectivo</span><span class="mini-icon">−</span></div><strong id="cashOutToday">$0</strong><small>Gastos + compras en efectivo</small></article>
@@ -981,14 +1126,14 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="expenses">
         <div class="section-intro"><div><span class="section-kicker">Egresos</span><h2>Gastos</h2><p>Registrá y consultá los gastos operativos del local sin mezclarlos con las compras de mercadería.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addExpenseBtn">+ Registrar gasto</button><button class="secondary" type="button" onclick="setView('fixedExpenses')">▦ Gastos fijos</button><button class="secondary" type="button" onclick="setView('cash')">Ir a caja</button></div>
+        <div class="ops-actions"><button class="primary" id="addExpenseBtn">+ Registrar gasto</button></div>
         <div class="cards three"><article class="card stat peach"><div class="stat-top"><span>Gastos de hoy</span><span class="mini-icon">−</span></div><strong id="expensesToday">$0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Gastos del mes</span><span class="mini-icon">▤</span></div><strong id="expensesMonth">$0</strong></article><article class="card stat mint"><div class="stat-top"><span>En efectivo hoy</span><span class="mini-icon">$</span></div><strong id="expensesCashToday">$0</strong></article></div>
         <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Medio</th><th>Importe</th><th></th></tr></thead><tbody id="expensesTable"></tbody></table></div>
       </section>
 
       <section class="view" id="fixedExpenses">
         <div class="section-intro"><div><span class="section-kicker">Compromisos mensuales</span><h2>Gastos fijos</h2><p>Administrá alquiler, servicios, impuestos, sueldos y otros compromisos recurrentes del local.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addFixedExpenseBtn">+ Nuevo gasto fijo</button><button class="secondary" type="button" onclick="setView('expenses')">Gastos registrados</button><button class="secondary" type="button" onclick="setView('cash')">Ir a caja</button></div>
+        <div class="ops-actions"><button class="primary" id="addFixedExpenseBtn">+ Nuevo gasto fijo</button></div>
         <div class="fixed-expense-period-note"><span><strong>Mes actual:</strong> <span id="fixedExpenseMonthLabel">—</span></span><span>Al marcar un gasto fijo como pagado, se registra automáticamente como gasto real.</span></div>
         <div class="cards three fixed-expense-summary"><article class="card stat lilac"><div class="stat-top"><span>Fijos del mes</span><span class="mini-icon">▤</span></div><strong id="fixedExpensesTotal">$0</strong><small>Total comprometido</small></article><article class="card stat mint"><div class="stat-top"><span>Pagados</span><span class="mini-icon">✓</span></div><strong id="fixedExpensesPaid">$0</strong><small id="fixedExpensesPaidCount">0 pagos</small></article><article class="card stat peach"><div class="stat-top"><span>Pendientes</span><span class="mini-icon">!</span></div><strong id="fixedExpensesPending">$0</strong><small id="fixedExpensesPendingCount">0 pendientes</small></article></div>
         <div class="fixed-expense-grid" id="fixedExpensesList"></div>
@@ -996,7 +1141,7 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="purchases">
         <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras</h2><p>Registrá el ingreso de mercadería y actualizá el stock automáticamente.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button><button class="secondary" type="button" onclick="setView('suppliers')">◫ Gestionar proveedores</button><button class="secondary" type="button" onclick="setView('replenishment')">↻ Reposición sugerida</button><button class="secondary" type="button" onclick="setView('products')">Ver inventario</button></div>
+        <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button></div>
         <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
         <div class="purchase-supplier-cta"><div><strong>¿Necesitás cargar o editar un proveedor?</strong><small>Ahora los proveedores tienen su propia agenda para que sea más cómodo administrarlos desde el celular.</small></div><button class="secondary" type="button" onclick="setView('suppliers')">Abrir proveedores</button></div>
         <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></div>
@@ -1004,7 +1149,7 @@ button{letter-spacing:-.005em}
 
       <section class="view" id="suppliers">
         <div class="section-intro"><div><span class="section-kicker">Agenda de compras</span><h2>Proveedores</h2><p>Contactos, productos vinculados y acceso rápido para registrar una compra.</p></div></div>
-        <div class="ops-actions"><button class="primary" id="addSupplierBtn">+ Nuevo proveedor</button><button class="secondary" type="button" onclick="setView('purchases')">← Volver a compras</button></div>
+        <div class="ops-actions"><button class="primary" id="addSupplierBtn">+ Nuevo proveedor</button></div>
         <div class="cards three">
           <article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◫</span></div><strong id="suppliersTotal">0</strong><small>Contactos disponibles</small></article>
           <article class="card stat mint"><div class="stat-top"><span>Con teléfono</span><span class="mini-icon">☎</span></div><strong id="suppliersPhoneCount">0</strong><small>Contacto rápido</small></article>
@@ -2001,7 +2146,7 @@ function changeMobileNavSlot(slot,newId){
 function resetMobileNavigation(){saveMobileNavPreference([...MOBILE_NAV_DEFAULT]);renderMobileNavigation();renderMobileNavConfig();toast('Accesos móviles restaurados.','success');}
 function currentPalette(){return document.documentElement.dataset.palette||'zen';}
 function renderPaletteControls(){const active=currentPalette();$$('[data-palette-choice]').forEach(b=>{const on=b.dataset.paletteChoice===active;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});}
-function applyPalette(palette,{persist=true}={}){const next=['zen','ocean','lavender','sand'].includes(palette)?palette:'zen';document.documentElement.dataset.palette=next;if(persist)try{localStorage.setItem(ZH_PALETTE_KEY,next);}catch(_e){}renderPaletteControls();}
+function applyPalette(palette,{persist=true}={}){const next=['zen','ocean','lavender','sand'].includes(palette)?palette:'zen';document.documentElement.dataset.palette=next;if(persist)try{localStorage.setItem(ZH_PALETTE_KEY,next);}catch(_e){}renderPaletteControls();updateBrowserThemeColor();}
 function openMobileMoreSheet(){
   const overlay=$('#mobileMoreOverlay'),sheet=$('#mobileMoreSheet');
   if(!overlay||!sheet)return;
@@ -2559,13 +2704,21 @@ function renderThemeControls(){
   const active=currentTheme();
   $$('[data-theme-choice]').forEach(b=>{const on=b.dataset.themeChoice===active;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});
 }
+function updateBrowserThemeColor(){
+  requestAnimationFrame(()=>{
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(!meta)return;
+    const c=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    if(c)meta.setAttribute('content',c);
+  });
+}
 function applyTheme(theme,{persist=true}={}){
   const next=theme==='dark'?'dark':'light';
   document.documentElement.dataset.theme=next;
   document.documentElement.style.colorScheme=next;
-  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',next==='dark'?'#0a0f0d':'#f3fbf7');
   if(persist)try{localStorage.setItem(ZH_THEME_KEY,next);}catch(_e){}
   renderThemeControls();
+  updateBrowserThemeColor();
 }
 
 function renderSettings(){
