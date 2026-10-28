@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.2.0 · configuración compacta · compras y proveedores unificados · auditoría móvil -->
+<!-- Gestión Cloud V13.2.1 · resumen de inventario en Productos -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -894,6 +894,66 @@ html[data-theme="dark"] .purchase-cart-item{
 }
 html[data-theme="dark"] .purchase-suppliers-integrated{border-top-color:var(--line)!important}
 
+
+/* ===== V13.2.1 · Resumen de inventario ===== */
+.inventory-summary-card{
+  margin:0 0 16px;
+  padding:15px 17px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--panel);
+  box-shadow:var(--shadow-soft);
+}
+.inventory-summary-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:11px;
+}
+.inventory-summary-head h3{margin:3px 0 0;font-size:15px;letter-spacing:-.015em}
+.inventory-summary-head>small{font-size:9px;color:var(--muted);text-align:right}
+.inventory-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+}
+.inventory-summary-item{
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--surface-soft);
+}
+.inventory-summary-item span,.inventory-summary-item strong,.inventory-summary-item small{display:block}
+.inventory-summary-item span{
+  font-size:8px;
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.045em;
+}
+.inventory-summary-item strong{
+  margin:5px 0 1px;
+  font-size:19px;
+  line-height:1.05;
+  letter-spacing:-.03em;
+  color:var(--ink);
+}
+.inventory-summary-item small{font-size:8px;color:var(--muted);line-height:1.25}
+#inventorySummaryOut{color:var(--danger)}
+#inventorySummaryLow{color:var(--accent-dark)}
+html[data-theme="dark"] .inventory-summary-card{background:var(--panel)!important;border-color:var(--line)!important}
+html[data-theme="dark"] .inventory-summary-item{background:var(--surface-soft)!important;border-color:var(--line)!important}
+@media(max-width:760px){
+  .inventory-summary-card{padding:14px;margin-bottom:13px}
+  .inventory-summary-head{align-items:flex-start}
+  .inventory-summary-head>small{max-width:130px}
+  .inventory-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .inventory-summary-item:last-child{grid-column:1/-1}
+  .inventory-summary-item{padding:10px}
+}
+
 </style>
 </head>
 <body>
@@ -1130,6 +1190,41 @@ html[data-theme="dark"] .purchase-suppliers-integrated{border-top-color:var(--li
           </div>
           <div class="stock-query-detail" id="stockQueryDetail"><div class="empty">Escribí una consulta o elegí un acceso rápido.</div></div>
         </article>
+
+        <article class="inventory-summary-card" aria-label="Resumen de inventario">
+          <div class="inventory-summary-head">
+            <div><span class="section-kicker">Datos generales</span><h3>Resumen de inventario</h3></div>
+            <small>Se actualiza automáticamente con el stock.</small>
+          </div>
+          <div class="inventory-summary-grid">
+            <div class="inventory-summary-item">
+              <span>Productos distintos</span>
+              <strong id="inventorySummaryProducts">0</strong>
+              <small>Productos activos</small>
+            </div>
+            <div class="inventory-summary-item">
+              <span>Unidades físicas</span>
+              <strong id="inventorySummaryUnits">0</strong>
+              <small>Productos por unidad</small>
+            </div>
+            <div class="inventory-summary-item">
+              <span>Por volumen</span>
+              <strong id="inventorySummaryVolume">0 L</strong>
+              <small>Stock medido en litros</small>
+            </div>
+            <div class="inventory-summary-item">
+              <span>Sin stock</span>
+              <strong id="inventorySummaryOut">0</strong>
+              <small>Stock igual a cero</small>
+            </div>
+            <div class="inventory-summary-item">
+              <span>Stock bajo</span>
+              <strong id="inventorySummaryLow">0</strong>
+              <small>En mínimo o por debajo</small>
+            </div>
+          </div>
+        </article>
+
         <div class="toolbar">
           <label class="search-field"><span>⌕</span><input id="productSearch" placeholder="Buscar producto, código o categoría..." /></label>
           <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
@@ -2415,6 +2510,24 @@ function renderProductCategoryReference(){
   btn.disabled=info.nextCode==='—';
 }
 
+
+function renderInventorySummary(){
+  const products=state.products||[];
+  const unitItems=products.filter(p=>(p.unitKind||'unit')==='unit').reduce((a,p)=>a+Number(p.stock||0),0);
+  const volume=products.filter(p=>p.unitKind==='volume').reduce((a,p)=>a+Number(p.stock||0),0);
+  const out=products.filter(p=>Number(p.stock||0)<=0).length;
+  const low=products.filter(p=>Number(p.stock||0)<=Number(p.minStock||0)).length;
+  const volumeText=volume>=1000
+    ?`${new Intl.NumberFormat('es-AR',{maximumFractionDigits:2}).format(volume/1000)} L`
+    :`${new Intl.NumberFormat('es-AR',{maximumFractionDigits:0}).format(volume)} ml`;
+
+  if($('#inventorySummaryProducts'))$('#inventorySummaryProducts').textContent=new Intl.NumberFormat('es-AR').format(products.length);
+  if($('#inventorySummaryUnits'))$('#inventorySummaryUnits').textContent=new Intl.NumberFormat('es-AR',{maximumFractionDigits:0}).format(unitItems);
+  if($('#inventorySummaryVolume'))$('#inventorySummaryVolume').textContent=volumeText;
+  if($('#inventorySummaryOut'))$('#inventorySummaryOut').textContent=new Intl.NumberFormat('es-AR').format(out);
+  if($('#inventorySummaryLow'))$('#inventorySummaryLow').textContent=new Intl.NumberFormat('es-AR').format(low);
+}
+
 function renderProducts(){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
   const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})); const cur=$('#categoryFilter').value;
@@ -2435,6 +2548,7 @@ function renderProducts(){
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
   renderStockQuery();
+  renderInventorySummary();
 }
 function replenishmentItems(){
   return state.products
