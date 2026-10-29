@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.2.1 · resumen de inventario en Productos -->
+<!-- Gestión Cloud V13.2.2 · buscador de productos en Compras -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -954,6 +954,52 @@ html[data-theme="dark"] .inventory-summary-item{background:var(--surface-soft)!i
   .inventory-summary-item{padding:10px}
 }
 
+
+/* ===== V13.2.2 · Buscador de productos en Compras ===== */
+.purchase-builder{align-items:end}
+.purchase-product-picker{position:relative;min-width:0}
+.purchase-product-picker>label{display:block;margin-bottom:6px;font-size:10px;font-weight:800;color:var(--muted)}
+.purchase-product-search-field{
+  display:flex;align-items:center;gap:9px;min-height:46px;padding:0 12px;
+  border:1px solid var(--line);border-radius:13px;background:var(--field-bg);color:var(--muted)
+}
+.purchase-product-search-field:focus-within{outline:2px solid color-mix(in srgb,var(--accent) 18%,transparent);border-color:var(--accent)}
+.purchase-product-search-field input{
+  width:100%;min-width:0;border:0!important;outline:0!important;box-shadow:none!important;
+  background:transparent!important;color:var(--ink)!important;padding:11px 0!important
+}
+.purchase-product-results{
+  position:absolute;left:0;right:0;top:70px;z-index:80;max-height:300px;overflow:auto;
+  padding:6px;border:1px solid var(--line);border-radius:15px;background:var(--surface);
+  box-shadow:0 16px 38px rgba(35,50,44,.18)
+}
+.purchase-product-result{
+  width:100%;border:0;background:transparent;color:var(--ink);text-align:left;border-radius:11px;
+  padding:10px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer
+}
+.purchase-product-result:hover,.purchase-product-result:focus-visible{background:var(--accent-soft);outline:0}
+.purchase-product-result strong,.purchase-product-result small{display:block}
+.purchase-product-result strong{font-size:11px;line-height:1.3}
+.purchase-product-result small{font-size:9px;color:var(--muted);margin-top:3px}
+.purchase-product-result-cost{white-space:nowrap;font-size:10px;font-weight:800;color:var(--accent-dark)}
+.purchase-product-search-empty{padding:13px 11px;text-align:center;color:var(--muted);font-size:10px}
+.purchase-product-selected{
+  margin-top:7px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;
+  background:var(--accent-soft);font-size:10px;line-height:1.35
+}
+.purchase-product-selected strong,.purchase-product-selected span{display:block}
+.purchase-product-selected strong{font-size:11px;color:var(--ink)}
+.purchase-product-selected span{margin-top:2px;color:var(--muted)}
+html[data-theme="dark"] .purchase-product-results{background:var(--surface)!important;border-color:var(--line)!important}
+html[data-theme="dark"] .purchase-product-result:hover,
+html[data-theme="dark"] .purchase-product-result:focus-visible{background:var(--accent-soft)!important}
+@media(max-width:700px){
+  .purchase-builder{grid-template-columns:minmax(0,1fr) 90px}
+  .purchase-product-picker{grid-column:1/-1}
+  .purchase-product-results{position:static;max-height:230px;margin-top:6px}
+  .purchase-builder .sale-add-btn{grid-column:1/-1}
+}
+
 </style>
 </head>
 <body>
@@ -1656,7 +1702,21 @@ html[data-theme="dark"] .inventory-summary-item{background:var(--surface-soft)!i
       <div class="supplier-modal-actions"><button class="secondary" type="button" onclick="this.closest('dialog').close()">Cancelar</button><button class="primary" value="default" type="submit">Guardar proveedor</button></div>
     </form>
   </dialog>
-  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder" style="margin-top:14px"><label>Producto<select id="purchaseProduct"></select></label><label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label><label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label><button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button></div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder purchase-builder" style="margin-top:14px">
+  <div class="purchase-product-picker">
+    <label>Producto</label>
+    <div class="purchase-product-search-field">
+      <span>⌕</span>
+      <input id="purchaseProductSearch" type="search" placeholder="Buscar por nombre, código o categoría..." autocomplete="off" />
+    </div>
+    <select id="purchaseProduct" hidden></select>
+    <div class="purchase-product-selected" id="purchaseSelectedProduct" hidden></div>
+    <div class="purchase-product-results" id="purchaseProductResults" hidden></div>
+  </div>
+  <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label>
+  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label>
+  <button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button>
+</div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
   <dialog id="promotionDialog">
     <form method="dialog" id="promotionForm" class="modal-card promo-modal-card">
       <div class="modal-head"><div><span class="section-kicker">Oferta automática</span><h2 id="promotionModalTitle">Nueva promoción</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
@@ -3207,6 +3267,49 @@ function updateSaleUnit(){
   const disc=Number(p.ownContainerDiscount||0),cost=Number(p.containerCost||0);
   hint.textContent=disc>0?`${money(disc)} de descuento por envase${cost>0?` · ahorro de costo ${money(cost)}`:''}`:`Registrar envase propio · ahorro de costo ${money(cost)}`;
 }
+
+function purchaseProductMatches(value){
+  const q=normalizeSaleSearch(value);
+  if(!q)return [];
+  return state.products
+    .filter(p=>normalizeSaleSearch(`${p.code||''} ${p.name||''} ${p.category||''}`).includes(q))
+    .slice()
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'es',{sensitivity:'base'}))
+    .slice(0,12);
+}
+function renderPurchaseProductSearch(){
+  const input=$('#purchaseProductSearch'),box=$('#purchaseProductResults');
+  if(!input||!box)return;
+  const q=input.value.trim();
+  if(!q){box.hidden=true;box.innerHTML='';return;}
+  const rows=purchaseProductMatches(q);
+  box.hidden=false;
+  if(!rows.length){
+    box.innerHTML='<div class="purchase-product-search-empty">No encontramos productos con esa búsqueda.</div>';
+    return;
+  }
+  box.innerHTML=rows.map(p=>`<button class="purchase-product-result" type="button" onclick="selectPurchaseProduct('${p.id}')"><span><strong>${esc(p.name)}</strong><small>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')}</small></span><span class="purchase-product-result-cost">${money(p.cost)}/${unitLabel(p.unitKind)}</span></button>`).join('');
+}
+function resetPurchaseProductPicker(){
+  if($('#purchaseProduct'))$('#purchaseProduct').value='';
+  if($('#purchaseProductSearch'))$('#purchaseProductSearch').value='';
+  if($('#purchaseSelectedProduct')){$('#purchaseSelectedProduct').hidden=true;$('#purchaseSelectedProduct').innerHTML='';}
+  if($('#purchaseProductResults')){$('#purchaseProductResults').hidden=true;$('#purchaseProductResults').innerHTML='';}
+  $('#purchaseQtyUnit').textContent='u.';
+  $('#purchaseCostUnit').textContent='unidad';
+  $('#purchaseUnitCost').value='';
+}
+window.selectPurchaseProduct=id=>{
+  const p=state.products.find(x=>x.id===id);if(!p)return;
+  $('#purchaseProduct').value=p.id;
+  $('#purchaseProductSearch').value=p.name;
+  $('#purchaseProductResults').hidden=true;
+  $('#purchaseSelectedProduct').hidden=false;
+  $('#purchaseSelectedProduct').innerHTML=`<strong>${esc(p.name)}</strong><span>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')} · costo actual ${money(p.cost)}/${unitLabel(p.unitKind)}</span>`;
+  updatePurchaseUnit();
+  setTimeout(()=>$('#purchaseQty')?.focus(),40);
+};
+
 function updatePurchaseUnit(){
   const p=state.products.find(x=>x.id===$('#purchaseProduct').value), input=$('#purchaseQty');
   $('#purchaseQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
@@ -3401,9 +3504,9 @@ window.archiveFixedExpense=async id=>{if(!canAdmin()||!requireOnline())return;if
 window.payFixedExpense=async id=>{if(!requireOnline())return;const f=state.fixedExpenses.find(x=>x.id===id);if(!f)return;if(!confirm(`¿Registrar ${f.name} por ${money(f.amount)} como pagado este mes?`))return;const {error}=await state.client.rpc('pay_fixed_expense',{p_org_id:state.org.id,p_fixed_expense_id:id,p_period:fixedExpensePeriod()+'-01',p_paid_at:new Date().toISOString()});if(error)return toast(error.message,'error');toast('Pago registrado y agregado a los gastos del mes.','success');await loadAllData({silent:true});};
 window.undoFixedExpensePayment=async id=>{if(!canAdmin()||!requireOnline())return;const f=state.fixedExpenses.find(x=>x.id===id);if(!f)return;if(!confirm(`¿Deshacer el pago de ${f.name} de este mes? El gasto registrado se anulará.`))return;const {error}=await state.client.rpc('undo_fixed_expense_payment',{p_org_id:state.org.id,p_fixed_expense_id:id,p_period:fixedExpensePeriod()+'-01'});if(error)return toast(error.message,'error');toast('Pago deshecho.','success');await loadAllData({silent:true});};
 function openSupplier(){if(!canAdmin())return toast('Sólo administradores pueden cargar proveedores.','error');$('#supplierForm').reset();$('#supplierId').value='';$('#supplierModalTitle').textContent='Nuevo proveedor';$('#supplierDialog').showModal();}
-function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();renderPurchaseCart();$('#purchaseDialog').showModal();}
+function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();resetPurchaseProductPicker();renderPurchaseCart();$('#purchaseDialog').showModal();setTimeout(()=>$('#purchaseProductSearch')?.focus(),120);}
 window.openPurchaseForSupplier=id=>{if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');openPurchase();setTimeout(()=>{$('#purchaseSupplier').value=id;},0);};
-function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseProduct').value='';$('#purchaseQty').value=1;$('#purchaseQtyUnit').textContent='u.';$('#purchaseUnitCost').value='';renderPurchaseCart();}
+function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();setTimeout(()=>$('#purchaseProductSearch')?.focus(),50);}
 function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();}window.removePurchaseItem=removePurchaseItem;
 function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.unitCost*(i.qty/p.priceUnitQty);total+=sub;return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)}</small></div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${p.id}')">✕</button></div>`;}).join('');preview.innerHTML=`<div class="sale-total-row"><span>${state.purchaseCart.length} productos</span><strong>${money(total)}</strong></div>`;submit.disabled=false;}
 window.openReceipt=id=>{
@@ -3536,7 +3639,7 @@ $$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNa
 $('#resetMobileNavBtn').onclick=resetMobileNavigation;
 $$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
-$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
+$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);}}};$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
