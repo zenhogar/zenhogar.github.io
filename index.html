@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.2.2 · buscador de productos en Compras -->
+<!-- Gestión Cloud V13.2.3 · borradores automáticos de compras -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -1000,6 +1000,23 @@ html[data-theme="dark"] .purchase-product-result:focus-visible{background:var(--
   .purchase-builder .sale-add-btn{grid-column:1/-1}
 }
 
+
+/* ===== V13.2.3 · Borrador automático de compras ===== */
+.purchase-draft-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:0 0 13px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:14px;background:var(--accent-soft);color:var(--ink)
+}
+.purchase-draft-strip strong,.purchase-draft-strip small{display:block}
+.purchase-draft-strip strong{font-size:11px}
+.purchase-draft-strip small{margin-top:2px;font-size:9px;color:var(--muted);line-height:1.35}
+.purchase-draft-discard{width:auto!important;flex:0 0 auto;padding:7px 10px!important;border-radius:999px!important;background:var(--surface)!important;color:var(--danger)!important;font-size:10px!important}
+html[data-theme="dark"] .purchase-draft-strip{background:color-mix(in srgb,var(--accent-soft) 72%,var(--surface))!important;border-color:var(--line)!important}
+@media(max-width:700px){
+  .purchase-draft-strip{align-items:flex-start}
+  .purchase-draft-strip small{max-width:210px}
+}
+
 </style>
 </head>
 <body>
@@ -1702,7 +1719,12 @@ html[data-theme="dark"] .purchase-product-result:focus-visible{background:var(--
       <div class="supplier-modal-actions"><button class="secondary" type="button" onclick="this.closest('dialog').close()">Cancelar</button><button class="primary" value="default" type="submit">Guardar proveedor</button></div>
     </form>
   </dialog>
-  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div><div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder purchase-builder" style="margin-top:14px">
+  <dialog id="purchaseDialog"><form method="dialog" id="purchaseForm" class="modal-card"><div class="modal-head"><div><span class="section-kicker">Ingreso de mercadería</span><h2>Registrar compra</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
+<div class="purchase-draft-strip" id="purchaseDraftStrip" hidden>
+  <div><strong>Borrador recuperado</strong><small id="purchaseDraftStatus">Tus cambios se guardan automáticamente en este dispositivo.</small></div>
+  <button class="text-btn purchase-draft-discard" id="discardPurchaseDraftBtn" type="button">Descartar</button>
+</div>
+<div class="form-grid"><label>Proveedor<select id="purchaseSupplier"></select></label><label>Medio de pago<select id="purchasePayment"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cuenta corriente</option><option>Otro</option></select></label><label>Fecha y hora<input id="purchaseDate" type="datetime-local" required /></label><label>Actualizar costo del producto<select id="purchaseUpdateCost"><option value="true">Sí, usar costo comprado</option><option value="false">No cambiar costo actual</option></select></label><label class="full">Notas<input id="purchaseNotes" placeholder="Opcional" /></label></div><div class="sale-builder purchase-builder" style="margin-top:14px">
   <div class="purchase-product-picker">
     <label>Producto</label>
     <div class="purchase-product-search-field">
@@ -3307,6 +3329,7 @@ window.selectPurchaseProduct=id=>{
   $('#purchaseSelectedProduct').hidden=false;
   $('#purchaseSelectedProduct').innerHTML=`<strong>${esc(p.name)}</strong><span>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')} · costo actual ${money(p.cost)}/${unitLabel(p.unitKind)}</span>`;
   updatePurchaseUnit();
+  savePurchaseDraft();
   setTimeout(()=>$('#purchaseQty')?.focus(),40);
 };
 
@@ -3504,10 +3527,113 @@ window.archiveFixedExpense=async id=>{if(!canAdmin()||!requireOnline())return;if
 window.payFixedExpense=async id=>{if(!requireOnline())return;const f=state.fixedExpenses.find(x=>x.id===id);if(!f)return;if(!confirm(`¿Registrar ${f.name} por ${money(f.amount)} como pagado este mes?`))return;const {error}=await state.client.rpc('pay_fixed_expense',{p_org_id:state.org.id,p_fixed_expense_id:id,p_period:fixedExpensePeriod()+'-01',p_paid_at:new Date().toISOString()});if(error)return toast(error.message,'error');toast('Pago registrado y agregado a los gastos del mes.','success');await loadAllData({silent:true});};
 window.undoFixedExpensePayment=async id=>{if(!canAdmin()||!requireOnline())return;const f=state.fixedExpenses.find(x=>x.id===id);if(!f)return;if(!confirm(`¿Deshacer el pago de ${f.name} de este mes? El gasto registrado se anulará.`))return;const {error}=await state.client.rpc('undo_fixed_expense_payment',{p_org_id:state.org.id,p_fixed_expense_id:id,p_period:fixedExpensePeriod()+'-01'});if(error)return toast(error.message,'error');toast('Pago deshecho.','success');await loadAllData({silent:true});};
 function openSupplier(){if(!canAdmin())return toast('Sólo administradores pueden cargar proveedores.','error');$('#supplierForm').reset();$('#supplierId').value='';$('#supplierModalTitle').textContent='Nuevo proveedor';$('#supplierDialog').showModal();}
-function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();resetPurchaseProductPicker();renderPurchaseCart();$('#purchaseDialog').showModal();setTimeout(()=>$('#purchaseProductSearch')?.focus(),120);}
-window.openPurchaseForSupplier=id=>{if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');openPurchase();setTimeout(()=>{$('#purchaseSupplier').value=id;},0);};
-function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();setTimeout(()=>$('#purchaseProductSearch')?.focus(),50);}
-function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();}window.removePurchaseItem=removePurchaseItem;
+
+function purchaseDraftKey(){
+  return state.org?.id?`gestioncloud_purchase_draft_${state.org.id}`:'gestioncloud_purchase_draft';
+}
+function purchaseDraftSnapshot(){
+  return {
+    version:1,
+    savedAt:new Date().toISOString(),
+    supplierId:$('#purchaseSupplier')?.value||'',
+    payment:$('#purchasePayment')?.value||'Efectivo',
+    date:$('#purchaseDate')?.value||'',
+    updateCost:$('#purchaseUpdateCost')?.value||'true',
+    notes:$('#purchaseNotes')?.value||'',
+    cart:(state.purchaseCart||[]).map(i=>({productId:i.productId,qty:Number(i.qty),unitCost:Number(i.unitCost)})),
+    pending:{
+      productId:$('#purchaseProduct')?.value||'',
+      search:$('#purchaseProductSearch')?.value||'',
+      qty:$('#purchaseQty')?.value||'1',
+      unitCost:$('#purchaseUnitCost')?.value||''
+    }
+  };
+}
+function purchaseDraftMeaningful(d){
+  if(!d)return false;
+  const p=d.pending||{};
+  return Boolean(
+    (Array.isArray(d.cart)&&d.cart.length) ||
+    d.supplierId ||
+    String(d.notes||'').trim() ||
+    p.productId ||
+    String(p.search||'').trim() ||
+    (String(p.qty||'1')!=='1' && String(p.qty||'')!=='') ||
+    String(p.unitCost||'')!==''
+  );
+}
+function savePurchaseDraft(){
+  if(state.purchaseDraftRestoring)return;
+  const d=purchaseDraftSnapshot(),key=purchaseDraftKey();
+  try{
+    if(purchaseDraftMeaningful(d)){
+      localStorage.setItem(key,JSON.stringify(d));
+      if($('#purchaseDraftStrip')){
+        $('#purchaseDraftStrip').hidden=false;
+        $('#purchaseDraftStatus').textContent='Guardado automáticamente · '+new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date());
+      }
+    }else{
+      localStorage.removeItem(key);
+      if($('#purchaseDraftStrip'))$('#purchaseDraftStrip').hidden=true;
+    }
+  }catch(_e){}
+}
+function getPurchaseDraft(){
+  try{
+    const raw=localStorage.getItem(purchaseDraftKey());
+    if(!raw)return null;
+    const d=JSON.parse(raw);
+    return purchaseDraftMeaningful(d)?d:null;
+  }catch(_e){return null;}
+}
+function clearPurchaseDraft(){
+  try{localStorage.removeItem(purchaseDraftKey());}catch(_e){}
+  if($('#purchaseDraftStrip'))$('#purchaseDraftStrip').hidden=true;
+}
+function restorePurchaseDraft(d){
+  if(!d)return false;
+  state.purchaseDraftRestoring=true;
+  try{
+    if($('#purchaseSupplier')&&[...$('#purchaseSupplier').options].some(o=>o.value===String(d.supplierId||'')))$('#purchaseSupplier').value=d.supplierId||'';
+    if($('#purchasePayment')&&[...$('#purchasePayment').options].some(o=>o.value===String(d.payment||'')))$('#purchasePayment').value=d.payment||'Efectivo';
+    if($('#purchaseDate'))$('#purchaseDate').value=d.date||nowLocal();
+    if($('#purchaseUpdateCost')&&[...$('#purchaseUpdateCost').options].some(o=>o.value===String(d.updateCost||'')))$('#purchaseUpdateCost').value=d.updateCost||'true';
+    if($('#purchaseNotes'))$('#purchaseNotes').value=d.notes||'';
+
+    state.purchaseCart=(Array.isArray(d.cart)?d.cart:[])
+      .filter(i=>state.products.some(p=>p.id===i.productId))
+      .map(i=>({productId:i.productId,qty:Number(i.qty||0),unitCost:Number(i.unitCost||0)}))
+      .filter(i=>i.qty>0&&Number.isFinite(i.unitCost));
+
+    resetPurchaseProductPicker();
+    const pending=d.pending||{};
+    if(pending.productId&&state.products.some(p=>p.id===pending.productId)){
+      selectPurchaseProduct(pending.productId);
+      if($('#purchaseProductSearch')&&pending.search)$('#purchaseProductSearch').value=pending.search;
+    }else if($('#purchaseProductSearch')&&pending.search){
+      $('#purchaseProductSearch').value=pending.search;
+      renderPurchaseProductSearch();
+    }
+    if($('#purchaseQty'))$('#purchaseQty').value=pending.qty||'1';
+    if($('#purchaseUnitCost')&&pending.unitCost!=='')$('#purchaseUnitCost').value=pending.unitCost;
+    renderPurchaseCart();
+
+    if($('#purchaseDraftStrip')){
+      $('#purchaseDraftStrip').hidden=false;
+      let when='';
+      try{when=d.savedAt?' · '+new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(d.savedAt)):'';}catch(_e){}
+      $('#purchaseDraftStatus').textContent='Borrador recuperado'+when+' · se seguirá guardando automáticamente.';
+    }
+    return true;
+  }finally{
+    state.purchaseDraftRestoring=false;
+  }
+}
+
+function openPurchase(){if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');$('#purchaseForm').reset();state.purchaseCart=[];$('#purchaseQty').value=1;$('#purchaseDate').value=nowLocal();resetPurchaseProductPicker();const draft=getPurchaseDraft();if(draft)restorePurchaseDraft(draft);else{renderPurchaseCart();$('#purchaseDraftStrip').hidden=true;}$('#purchaseDialog').showModal();setTimeout(()=>$('#purchaseProductSearch')?.focus(),120);}
+window.openPurchaseForSupplier=id=>{if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');openPurchase();setTimeout(()=>{$('#purchaseSupplier').value=id;savePurchaseDraft();},0);};
+function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();savePurchaseDraft();setTimeout(()=>$('#purchaseProductSearch')?.focus(),50);}
+function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();savePurchaseDraft();}window.removePurchaseItem=removePurchaseItem;
 function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.unitCost*(i.qty/p.priceUnitQty);total+=sub;return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)}</small></div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${p.id}')">✕</button></div>`;}).join('');preview.innerHTML=`<div class="sale-total-row"><span>${state.purchaseCart.length} productos</span><strong>${money(total)}</strong></div>`;submit.disabled=false;}
 window.openReceipt=id=>{
   const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;
@@ -3597,7 +3723,7 @@ $('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!c
 $('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
 $('#fixedExpenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const amount=Number($('#fixedExpenseAmount').value),due=Number($('#fixedExpenseDueDay').value);if(!Number.isFinite(amount)||amount<=0)return toast('Ingresá un importe válido.','error');if(!Number.isInteger(due)||due<1||due>31)return toast('El vencimiento debe ser un día entre 1 y 31.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_fixed_expense',{p_org_id:state.org.id,p_fixed_expense_id:$('#fixedExpenseId').value||null,p_name:$('#fixedExpenseName').value.trim(),p_category:$('#fixedExpenseCategory').value,p_amount:amount,p_payment:$('#fixedExpensePayment').value,p_due_day:due,p_notes:$('#fixedExpenseNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#fixedExpenseDialog').close();toast('Gasto fijo guardado.','success');await loadAllData({silent:true});setView('fixedExpenses');});
 $('#supplierForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_supplier',{p_org_id:state.org.id,p_supplier_id:$('#supplierId').value||null,p_name:$('#supplierName').value.trim(),p_phone:$('#supplierPhone').value.trim(),p_email:$('#supplierEmail').value.trim(),p_notes:$('#supplierNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#supplierDialog').close();toast('Proveedor guardado.','success');await loadAllData({silent:true});});
-$('#purchaseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_purchase',{p_org_id:state.org.id,p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:new Date($('#purchaseDate').value).toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({product_id:i.productId,quantity:i.qty,unit_cost:i.unitCost}))});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');state.purchaseCart=[];$('#purchaseDialog').close();toast('Compra registrada y stock actualizado.','success');await loadAllData({silent:true});});
+$('#purchaseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_purchase',{p_org_id:state.org.id,p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:new Date($('#purchaseDate').value).toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({product_id:i.productId,quantity:i.qty,unit_cost:i.unitCost}))});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');state.purchaseCart=[];clearPurchaseDraft();$('#purchaseDialog').close();toast('Compra registrada y stock actualizado.','success');await loadAllData({silent:true});});
 $('#cashMovementForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('add_cash_movement',{p_org_id:state.org.id,p_business_date:$('#cashMovementDate').value,p_kind:$('#cashMovementKind').value,p_amount:Number($('#cashMovementAmount').value),p_notes:$('#cashMovementNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');e.target.reset();$('#cashMovementDate').value=todayISO();toast('Movimiento de caja registrado.','success');await loadAllData({silent:true});});
 $('#cashCloseForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return;
@@ -3639,7 +3765,7 @@ $$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNa
 $('#resetMobileNavBtn').onclick=resetMobileNavigation;
 $$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
-$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);}}};$('#purchaseProduct').onchange=updatePurchaseUnit;$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
+$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',savePurchaseDraft);$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
