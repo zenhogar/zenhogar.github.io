@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.2.4 · edición segura de compras -->
+<!-- Gestión Cloud V13.2.5 · corrección visual móvil de Compras -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -1020,6 +1020,95 @@ html[data-theme="dark"] .purchase-draft-strip{background:color-mix(in srgb,var(-
 
 /* ===== V13.2.4 · Edición de compras ===== */
 #purchasesTable td[data-label="Acciones"]{white-space:nowrap}
+
+
+/* ===== V13.2.5 · Historial de Compras legible en móvil ===== */
+.purchase-cell-value{display:inline-block;color:var(--ink);font-weight:650}
+.purchase-total-value{font-weight:850}
+.purchase-cell-actions{display:inline-flex;align-items:center;justify-content:flex-end;gap:6px}
+
+@media(max-width:700px){
+  #purchases .compact-table{overflow:visible!important}
+  #purchases .compact-table table{display:block!important;width:100%!important;min-width:0!important}
+  #purchases .compact-table thead{display:none!important}
+  #purchases .compact-table tbody{display:grid!important;width:100%!important;gap:10px!important}
+  #purchases .purchase-history-row{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:13px 14px!important;
+    background:var(--surface)!important;
+    border:1px solid var(--line)!important;
+    border-radius:18px!important;
+    box-shadow:var(--shadow-soft)!important;
+  }
+  #purchases .purchase-history-row td{
+    display:grid!important;
+    grid-template-columns:minmax(90px,.8fr) minmax(0,1.4fr)!important;
+    align-items:center!important;
+    gap:12px!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:8px 0!important;
+    margin:0!important;
+    border:0!important;
+    text-align:right!important;
+    color:var(--ink)!important;
+  }
+  #purchases .purchase-history-row td+td{border-top:1px solid var(--line)!important}
+  #purchases .purchase-history-row td::before{
+    display:block!important;
+    content:attr(data-label)!important;
+    color:var(--muted)!important;
+    font-size:10px!important;
+    font-weight:800!important;
+    letter-spacing:.04em!important;
+    text-transform:uppercase!important;
+    text-align:left!important;
+  }
+  #purchases .purchase-cell-value{
+    display:block!important;
+    min-width:0!important;
+    color:var(--ink)!important;
+    font-size:12px!important;
+    font-weight:700!important;
+    line-height:1.35!important;
+    text-align:right!important;
+    overflow-wrap:anywhere!important;
+  }
+  #purchases .purchase-total-value{
+    color:var(--accent-dark)!important;
+    font-size:15px!important;
+    font-weight:900!important;
+  }
+  #purchases .purchase-history-row td[data-label="Acciones"]{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    padding-top:10px!important;
+  }
+  #purchases .purchase-history-row td[data-label="Acciones"]::before{
+    margin-right:auto!important;
+  }
+  #purchases .purchase-cell-actions{
+    display:flex!important;
+    gap:8px!important;
+    margin-left:auto!important;
+  }
+  #purchases .purchase-cell-actions .action-btn{
+    display:grid!important;
+    place-items:center!important;
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    background:var(--surface-soft)!important;
+    color:var(--ink)!important;
+    border:1px solid var(--line)!important;
+  }
+}
 
 </style>
 </head>
@@ -2786,7 +2875,7 @@ function renderPurchases(){
   const month=todayISO().slice(0,7);
   $('#purchasesMonth').textContent=money(state.purchases.filter(p=>p.date.slice(0,7)===month).reduce((a,p)=>a+p.total,0));
   $('#supplierCount').textContent=state.suppliers.length; $('#purchaseCount').textContent=state.purchases.length;
-  $('#purchasesTable').innerHTML=state.purchases.map(p=>`<tr><td data-label="Fecha">${fmtDate(p.date)}</td><td data-label="Proveedor">${esc(p.supplierName||'Sin proveedor')}</td><td data-label="Productos">${p.items.length} ítems</td><td data-label="Medio">${esc(p.payment)}</td><td data-label="Total">${money(p.total)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" onclick="editPurchase('${p.id}')" aria-label="Editar compra" title="Editar compra">✎</button><button class="action-btn" onclick="deletePurchase('${p.id}')" aria-label="Anular compra" title="Anular compra">⌫</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Todavía no hay compras.</td></tr>';
+  $('#purchasesTable').innerHTML=state.purchases.map(p=>`<tr class="purchase-history-row"><td data-label="Fecha"><span class="purchase-cell-value">${fmtDate(p.date)}</span></td><td data-label="Proveedor"><span class="purchase-cell-value">${esc(p.supplierName||'Sin proveedor')}</span></td><td data-label="Productos"><span class="purchase-cell-value">${p.items.length} ítems</span></td><td data-label="Medio"><span class="purchase-cell-value">${esc(p.payment)}</span></td><td data-label="Total"><span class="purchase-cell-value purchase-total-value">${money(p.total)}</span></td><td data-label="Acciones"><span class="purchase-cell-actions">${canAdmin()?`<button class="action-btn" onclick="editPurchase('${p.id}')" aria-label="Editar compra" title="Editar compra">✎</button><button class="action-btn" onclick="deletePurchase('${p.id}')" aria-label="Anular compra" title="Anular compra">⌫</button>`:'—'}</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Todavía no hay compras.</td></tr>';
   $('#purchaseSupplier').innerHTML='<option value="">Sin proveedor</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#purchaseProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.map(p=>`<option value="${p.id}">${esc(p.name)} · costo ${money(p.cost)}/${unitLabel(p.unitKind)}</option>`).join('');
 }
