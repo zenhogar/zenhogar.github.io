@@ -60,6 +60,36 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sidebar{background:rgba(241,249,245,.92);border-right:1px solid rgba(214,231,222,.96);padding:28px 18px 22px;display:flex;flex-direction:column;gap:32px;position:sticky;top:0;height:100vh;z-index:30;backdrop-filter:blur(18px)}
 .brand{display:flex;gap:13px;align-items:center;padding:0 8px}.brand-mark{width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#68b99e,#3f8e75);box-shadow:0 10px 24px rgba(63,142,117,.24);display:grid;place-items:center;color:#fff}.brand-mark span{font-size:14px;font-weight:800;letter-spacing:.04em}.brand-copy strong,.brand-copy small{display:block}.brand-copy strong{font-size:17px;letter-spacing:-.02em}.brand-copy small{color:var(--muted);margin-top:3px;font-size:12px}
 .desktop-nav{display:grid;gap:7px}.nav-btn{border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:14px;color:#61716b;cursor:pointer;min-height:48px;display:flex;align-items:center;gap:12px;font-weight:650;transition:.18s ease}.nav-btn:hover{background:rgba(255,255,255,.65);color:var(--ink)}.nav-btn.active{background:linear-gradient(135deg,#ffffff,#f4fbf7);color:var(--accent-dark);box-shadow:var(--shadow-soft);border:1px solid #dceee6}.nav-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:rgba(111,158,142,.08);font-size:17px}.nav-btn.active .nav-icon{background:var(--accent-soft)}
+
+/* V13.2.7 · navegación escritorio agrupada */
+@media(min-width:761px){
+  .sidebar{padding:24px 16px 18px;gap:24px}
+  .desktop-nav-v1327{display:block}
+  .desktop-nav-v1327>.nav-btn,.desktop-nav-group{margin-bottom:4px}
+  .desktop-nav-v1327 .nav-btn{min-height:44px;padding:9px 11px;border-radius:13px;gap:10px;font-size:13px}
+  .desktop-nav-v1327 .nav-icon{width:27px;height:27px;border-radius:9px;font-size:15px;flex:0 0 27px}
+  .desktop-nav-section-label{padding:12px 11px 5px;font-size:9px;line-height:1;text-transform:uppercase;letter-spacing:.13em;font-weight:850;color:var(--muted);opacity:.78}
+  .desktop-nav-group{border-radius:14px}
+  .desktop-nav-group>summary{list-style:none}
+  .desktop-nav-group>summary::-webkit-details-marker{display:none}
+  .desktop-nav-group-toggle{min-height:44px;padding:9px 11px;border-radius:13px;display:flex;align-items:center;gap:10px;color:#61716b;font-size:13px;font-weight:650;cursor:pointer;user-select:none;transition:.18s ease}
+  .desktop-nav-group-toggle:hover{background:color-mix(in srgb,var(--surface,#fff) 72%,transparent);color:var(--ink)}
+  .desktop-nav-group-label{flex:1;min-width:0}
+  .desktop-nav-chevron{width:20px;text-align:center;font-size:14px;color:var(--muted);transition:transform .18s ease}
+  .desktop-nav-group[open]>.desktop-nav-group-toggle .desktop-nav-chevron{transform:rotate(180deg)}
+  .desktop-nav-group:has(.nav-btn.active)>.desktop-nav-group-toggle{color:var(--accent-dark);background:color-mix(in srgb,var(--accent-soft) 55%,transparent)}
+  .desktop-nav-group:has(.nav-btn.active)>.desktop-nav-group-toggle .nav-icon{background:var(--accent-soft);color:var(--accent-dark)}
+  .desktop-nav-submenu{display:grid;gap:2px;padding:3px 0 5px 37px}
+  .desktop-nav-subitem{min-height:36px!important;padding:7px 10px!important;border-radius:10px!important;font-size:12px!important;box-shadow:none!important;border:1px solid transparent!important}
+  .desktop-nav-subitem.active{background:var(--accent-soft)!important;color:var(--accent-dark)!important;border-color:color-mix(in srgb,var(--accent) 22%,transparent)!important}
+  .sub-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.42;flex:0 0 6px}
+  .desktop-nav-subitem.active .sub-dot{opacity:1}
+  .desktop-nav-divider{height:1px;background:var(--line);margin:12px 8px 8px}
+  .desktop-nav-settings{margin-bottom:0!important}
+  html[data-theme="dark"] .desktop-nav-group-toggle:hover{background:var(--surface-soft)}
+  html[data-theme="dark"] .desktop-nav-group:has(.nav-btn.active)>.desktop-nav-group-toggle{background:color-mix(in srgb,var(--accent-soft) 72%,var(--surface))}
+}
+
 .sidebar-status{margin-top:auto;display:flex;gap:10px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.72)}.status-dot{width:9px;height:9px;border-radius:50%;background:#79aa91;box-shadow:0 0 0 5px rgba(121,170,145,.12)}.sidebar-status strong,.sidebar-status small{display:block}.sidebar-status strong{font-size:12px}.sidebar-status small{font-size:10px;color:var(--muted);margin-top:2px}
 .main{min-width:0;padding:28px 34px 40px;max-width:1500px;width:100%;margin:0 auto}.topbar{display:flex;align-items:center;gap:16px;margin-bottom:24px;min-height:72px}.topbar-copy{min-width:0}.eyebrow,.section-kicker,.hero-kicker{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800;color:#8a9993}.topbar h1{margin:5px 0 0;font-size:28px;line-height:1.12;letter-spacing:-.035em;font-weight:720}.topbar p{margin:5px 0 0;color:var(--muted);font-size:13px}.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.connection-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.72);font-size:11px;color:var(--muted)}.connection-pill span{width:7px;height:7px;border-radius:50%;background:#79aa91}.connection-pill.offline span{background:#d48b76}.menu-btn,.settings-mobile{display:none;border:0;background:#fff;padding:10px 12px;border-radius:13px;box-shadow:var(--shadow-soft);min-width:44px;min-height:44px;color:var(--ink)}
 .primary,.secondary,.danger,.file-btn,.hero-action{border:0;border-radius:14px;padding:12px 16px;cursor:pointer;font-weight:750;min-height:46px;transition:transform .12s ease,box-shadow .18s ease,background .18s ease}.primary{background:linear-gradient(135deg,#5db296,#3f8e75);color:#fff;box-shadow:0 9px 22px rgba(63,142,117,.24)}.primary:hover,.hero-action:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(63,142,117,.29)}.primary:active,.hero-action:active{transform:translateY(0)}.primary.compact{min-height:42px;padding:10px 14px;font-size:13px}.secondary,.file-btn{background:#edf8f3;color:var(--ink-soft);border:1px solid #d7ebe1;text-align:center}.danger{background:var(--danger-soft);color:#8d4949}.full{width:100%}
@@ -1255,41 +1285,55 @@ html[data-theme="dark"] .weight-quick-qty button{
         <button class="tenant-switch-mini" id="openOrgSwitcherBtn" type="button" aria-label="Cambiar empresa" title="Cambiar empresa">⇄</button>
       </div>
 
-      <nav class="desktop-nav" aria-label="Navegación principal">
+      <nav class="desktop-nav desktop-nav-v1327" aria-label="Navegación principal">
         <button class="nav-btn active" data-view="dashboard">
           <span class="nav-icon">⌂</span><span>Inicio</span>
         </button>
-        <button class="nav-btn" data-view="products">
-          <span class="nav-icon">◇</span><span>Productos</span>
-        </button>
-        <button class="nav-btn" data-view="pricing">
-          <span class="nav-icon">%</span><span>Costos y precios</span>
-        </button>
-        <button class="nav-btn" data-view="replenishment">
-          <span class="nav-icon">↻</span><span>Reposición</span>
-        </button>
-        <button class="nav-btn" data-view="promotions">
-          <span class="nav-icon">%</span><span>Promociones</span>
-        </button>
+
+        <div class="desktop-nav-section-label">Operaciones</div>
         <button class="nav-btn" data-view="sales">
           <span class="nav-icon">▤</span><span>Ventas</span>
         </button>
-        <button class="nav-btn" data-view="cash">
-          <span class="nav-icon">$</span><span>Caja diaria</span>
-        </button>
-        <button class="nav-btn" data-view="expenses">
-          <span class="nav-icon">−</span><span>Gastos</span>
-        </button>
-        <button class="nav-btn" data-view="fixedExpenses">
-          <span class="nav-icon">▦</span><span>Gastos fijos</span>
-        </button>
+
+        <details class="desktop-nav-group" data-nav-group="products">
+          <summary class="desktop-nav-group-toggle">
+            <span class="nav-icon">◇</span>
+            <span class="desktop-nav-group-label">Productos</span>
+            <span class="desktop-nav-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="desktop-nav-submenu">
+            <button class="nav-btn desktop-nav-subitem" data-view="products"><span class="sub-dot"></span><span>Inventario</span></button>
+            <button class="nav-btn desktop-nav-subitem" data-view="pricing"><span class="sub-dot"></span><span>Costos y precios</span></button>
+            <button class="nav-btn desktop-nav-subitem" data-view="replenishment"><span class="sub-dot"></span><span>Reposición</span></button>
+            <button class="nav-btn desktop-nav-subitem" data-view="promotions"><span class="sub-dot"></span><span>Promociones</span></button>
+          </div>
+        </details>
+
         <button class="nav-btn" data-view="purchases">
           <span class="nav-icon">＋</span><span>Compras</span>
         </button>
+
+        <div class="desktop-nav-section-label">Finanzas</div>
+        <details class="desktop-nav-group" data-nav-group="finance">
+          <summary class="desktop-nav-group-toggle">
+            <span class="nav-icon">$</span>
+            <span class="desktop-nav-group-label">Finanzas</span>
+            <span class="desktop-nav-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="desktop-nav-submenu">
+            <button class="nav-btn desktop-nav-subitem" data-view="cash"><span class="sub-dot"></span><span>Caja</span></button>
+            <button class="nav-btn desktop-nav-subitem" data-view="expenses"><span class="sub-dot"></span><span>Gastos</span></button>
+            <button class="nav-btn desktop-nav-subitem" data-view="fixedExpenses"><span class="sub-dot"></span><span>Gastos fijos</span></button>
+          </div>
+        </details>
+
+        <div class="desktop-nav-section-label">Análisis</div>
         <button class="nav-btn" data-view="reports">
           <span class="nav-icon">⌁</span><span>Reportes</span>
         </button>
-        <button class="nav-btn" data-view="settings">
+
+        <div class="desktop-nav-divider"></div>
+        <button class="nav-btn desktop-nav-settings" data-view="settings">
           <span class="nav-icon">⚙</span><span>Configuración</span>
         </button>
       </nav>
@@ -2557,6 +2601,9 @@ function setView(id){
   if(supplierAnchor)id='purchases';
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  if(window.matchMedia?.('(min-width: 761px)')?.matches){
+    $$('.desktop-nav-group').forEach(group=>{if(group.querySelector('.nav-btn.active'))group.open=true;});
+  }
   renderMobileNavigation();
   const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',reports:'Reportes',settings:'Configuración'};
   $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet();
@@ -3916,6 +3963,21 @@ applyPalette(currentPalette(),{persist:false});
 renderMobileNavigation();
 renderMobileNavConfig();
 renderPaletteControls();
+
+const ZH_DESKTOP_NAV_GROUPS_KEY='gestioncloud_desktop_nav_groups_v1';
+function loadDesktopNavGroups(){
+  let saved={products:true,finance:false};
+  try{const parsed=JSON.parse(localStorage.getItem(ZH_DESKTOP_NAV_GROUPS_KEY)||'null');if(parsed&&typeof parsed==='object')saved={...saved,...parsed};}catch(_e){}
+  $$('.desktop-nav-group').forEach(group=>{
+    const key=group.dataset.navGroup;
+    if(key in saved)group.open=!!saved[key];
+    group.addEventListener('toggle',()=>{
+      try{const state={};$$('.desktop-nav-group').forEach(g=>state[g.dataset.navGroup]=g.open);localStorage.setItem(ZH_DESKTOP_NAV_GROUPS_KEY,JSON.stringify(state));}catch(_e){}
+    });
+  });
+  const active=$('.desktop-nav-group .nav-btn.active');if(active)active.closest('.desktop-nav-group').open=true;
+}
+loadDesktopNavGroups();
 
 
 $('#scanProductBarcodeBtn').onclick=()=>openBarcodeScanner('product');
