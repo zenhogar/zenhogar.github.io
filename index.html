@@ -1178,6 +1178,9 @@ html[data-theme="dark"] .weight-quick-qty button{
   .weight-quick-qty button{min-height:40px;font-size:11px}
 }
 
+
+/* V13.3.3 · Actualización masiva de precios */
+.bulk-price-card{margin-top:16px;display:grid;gap:14px}.bulk-price-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px}.bulk-price-preview{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}.bulk-price-preview-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}.bulk-price-preview-list{max-height:330px;overflow:auto}.bulk-price-row{display:grid;grid-template-columns:minmax(0,1.8fr) .7fr .7fr;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:10px}.bulk-price-row:last-child{border-bottom:0}.bulk-price-row strong{font-size:11px}.bulk-price-row small{display:block;color:var(--muted);margin-top:2px}.bulk-price-old{color:var(--muted);text-align:right}.bulk-price-new{font-weight:850;color:var(--accent-dark);text-align:right}.bulk-price-empty{padding:24px;text-align:center;color:var(--muted);font-size:11px}.bulk-price-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.bulk-price-warning{padding:10px 12px;border-radius:13px;background:var(--peach);color:var(--ink-soft);font-size:10px;line-height:1.45}.bulk-price-summary{font-size:10px;color:var(--muted)}@media(max-width:760px){.bulk-price-grid{grid-template-columns:1fr}.bulk-price-row{grid-template-columns:minmax(0,1fr) auto auto}.bulk-price-actions>*{flex:1}}
 </style>
 </head>
 <body>
@@ -1638,6 +1641,21 @@ html[data-theme="dark"] .weight-quick-qty button{
             <div id="fracResult" class="pricing-result empty-result">Completá costo de materia prima, rendimiento y presentación.</div>
           </article>
         </div>
+
+        <article class="card pricing-card bulk-price-card" id="bulkPriceCard">
+          <div class="pricing-card-head"><span class="section-kicker">Actualización masiva</span><h3>Cambiar precios por categoría</h3><p>Aplicá un aumento o descuento porcentual a una categoría completa. Antes de guardar, revisá todos los precios nuevos.</p></div>
+          <div class="bulk-price-grid pricing-form">
+            <label>Categoría<select id="bulkPriceCategory"><option value="">Seleccionar categoría</option></select></label>
+            <label>Operación<select id="bulkPriceOperation"><option value="increase">Aumentar</option><option value="decrease">Disminuir</option></select></label>
+            <label>Porcentaje (%)<input id="bulkPricePercent" type="number" min="0.01" max="99.99" step="0.01" placeholder="Ej. 10" /></label>
+          </div>
+          <div class="bulk-price-warning"><strong>Solo modifica el precio de venta.</strong> No cambia costo, stock, mínimos, objetivos ni promociones.</div>
+          <div class="bulk-price-preview">
+            <div class="bulk-price-preview-head"><div><strong>Vista previa</strong><div class="bulk-price-summary" id="bulkPriceSummary">Elegí una categoría y porcentaje.</div></div><button class="secondary compact" id="bulkPriceRefreshBtn" type="button">Actualizar vista previa</button></div>
+            <div class="bulk-price-preview-list" id="bulkPricePreview"><div class="bulk-price-empty">Todavía no hay cambios para mostrar.</div></div>
+          </div>
+          <div class="bulk-price-actions"><button class="primary" id="bulkPriceApplyBtn" type="button" disabled>Aplicar cambios</button></div>
+        </article>
       </section>
 
       <section class="view" id="reports">
@@ -3092,6 +3110,58 @@ window.selectPricingProductFromSearch=id=>{
   $('#pricingTestPrice').value=Number(p.price).toFixed(2);
   renderPricingProduct();
 };
+
+// V13.3.3 · Actualización masiva de precios por categoría
+function bulkPriceCategories(){
+  return [...new Set(state.products.map(p=>(p.category||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+}
+function renderBulkPriceCategoryOptions(){
+  const el=$('#bulkPriceCategory'); if(!el)return;
+  const current=el.value;
+  el.innerHTML='<option value="">Seleccionar categoría</option>'+bulkPriceCategories().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if(bulkPriceCategories().includes(current))el.value=current;
+}
+function bulkPriceDraft(){
+  const category=$('#bulkPriceCategory')?.value||'';
+  const op=$('#bulkPriceOperation')?.value==='decrease'?'decrease':'increase';
+  const pct=Number($('#bulkPricePercent')?.value||0);
+  if(!category||!Number.isFinite(pct)||pct<=0||pct>=100)return [];
+  const factor=op==='increase'?1+pct/100:1-pct/100;
+  return state.products.filter(p=>p.category===category).map(p=>({
+    id:p.id,name:p.name,code:p.code,oldPrice:Number(p.price||0),newPrice:Math.round(Number(p.price||0)*factor*100)/100
+  }));
+}
+function renderBulkPricePreview(){
+  const list=$('#bulkPricePreview'),summary=$('#bulkPriceSummary'),btn=$('#bulkPriceApplyBtn'); if(!list||!summary||!btn)return;
+  const category=$('#bulkPriceCategory')?.value||'', pct=Number($('#bulkPricePercent')?.value||0), op=$('#bulkPriceOperation')?.value==='decrease'?'decrease':'increase';
+  const rows=bulkPriceDraft();
+  if(!category){summary.textContent='Elegí una categoría.';list.innerHTML='<div class="bulk-price-empty">Seleccioná una categoría para ver sus productos.</div>';btn.disabled=true;return;}
+  if(!Number.isFinite(pct)||pct<=0||pct>=100){summary.textContent='Ingresá un porcentaje mayor a 0 y menor a 100.';list.innerHTML='<div class="bulk-price-empty">Ingresá un porcentaje válido para calcular los nuevos precios.</div>';btn.disabled=true;return;}
+  summary.textContent=`${rows.length} producto${rows.length===1?'':'s'} · ${op==='increase'?'aumento':'descuento'} de ${fmtQty(pct)}%`;
+  list.innerHTML=rows.length?rows.map(r=>`<div class="bulk-price-row"><div><strong>${esc(r.name)}</strong><small>${esc(r.code||'Sin código')}</small></div><div class="bulk-price-old">${money(r.oldPrice)}</div><div class="bulk-price-new">${money(r.newPrice)}</div></div>`).join(''):'<div class="bulk-price-empty">No hay productos activos en esta categoría.</div>';
+  btn.disabled=!rows.length||!canAdmin();
+}
+async function applyBulkPriceUpdate(){
+  if(!canAdmin())return toast('Tu rol no permite modificar precios.','error');
+  if(!requireOnline())return;
+  const rows=bulkPriceDraft(); if(!rows.length)return toast('No hay cambios válidos para aplicar.','error');
+  const category=$('#bulkPriceCategory').value,pct=Number($('#bulkPricePercent').value),op=$('#bulkPriceOperation').value==='decrease'?'descuento':'aumento';
+  if(!confirm(`Se aplicará un ${op} de ${fmtQty(pct)}% a ${rows.length} producto${rows.length===1?'':'s'} de ${category}. Solo se modificará el precio de venta. ¿Continuar?`))return;
+  const btn=$('#bulkPriceApplyBtn'); btn.disabled=true; btn.textContent='Aplicando…';
+  let ok=0;
+  try{
+    for(const r of rows){
+      const {error}=await state.client.from('products').update({price:r.newPrice}).eq('id',r.id).eq('organization_id',state.org.id);
+      if(error)throw new Error(`${r.name}: ${error.message}`);
+      ok++;
+    }
+    toast(`Precios actualizados: ${ok} producto${ok===1?'':'s'}.`,'success');
+    await loadAllData({silent:true});
+    renderBulkPriceCategoryOptions();renderBulkPricePreview();
+  }catch(err){toast(`Se actualizaron ${ok} antes del error. ${err.message||'No se pudo completar la actualización.'}`,'error');await loadAllData({silent:true});renderBulkPricePreview();}
+  finally{btn.textContent='Aplicar cambios';btn.disabled=!bulkPriceDraft().length||!canAdmin();}
+}
+
 function renderPricing(){
   const productSel=$('#pricingProduct'),fracSel=$('#fracProduct'); if(!productSel||!fracSel)return;
   const productCurrent=productSel.value, fracCurrent=fracSel.value;
@@ -3101,7 +3171,7 @@ function renderPricing(){
   if(state.products.some(p=>p.id===fracCurrent))fracSel.value=fracCurrent;
   const selected=pricingSelectedProduct();
   if($('#pricingProductSearch')&&selected&&!$('#pricingProductSearch').value)$('#pricingProductSearch').value=selected.name;
-  renderPricingProduct();renderFractionalCalculator();
+  renderPricingProduct();renderFractionalCalculator();renderBulkPriceCategoryOptions();renderBulkPricePreview();
 }
 function renderPricingProduct(){
   const box=$('#pricingProductResult'),promoBox=$('#pricingPromoResult'); if(!box||!promoBox)return;
@@ -4032,6 +4102,11 @@ $('#cashCloseForm').addEventListener('submit',async e=>{
   if(error)return toast(error.message,'error'); e.target.reset(); $('#cashDate').value=todayISO(); toast('Cierre guardado en la nube.','success'); await loadAllData({silent:true});
 });
 
+$('#bulkPriceCategory').onchange=renderBulkPricePreview;
+$('#bulkPriceOperation').onchange=renderBulkPricePreview;
+$('#bulkPricePercent').oninput=renderBulkPricePreview;
+$('#bulkPriceRefreshBtn').onclick=renderBulkPricePreview;
+$('#bulkPriceApplyBtn').onclick=applyBulkPriceUpdate;
 $('#pricingProductSearch').oninput=renderPricingProductSearch;
 $('#pricingProductSearch').onfocus=renderPricingProductSearch;
 $('#pricingProductSearch').onkeydown=e=>{if(e.key==='Escape')$('#pricingProductSearchResults').hidden=true;};
@@ -4330,7 +4405,7 @@ async function init(){
     if(data.session?.user)await handleSignedIn(data.session.user); else setGateStep('authStep');
   }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${err.message}`,'error');}
 }
-// V13.3.2 · Exportación CSV de Inventario y Ventas
+// V13.3.3 · Actualización masiva de precios
 init();
 
   </script>
