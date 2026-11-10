@@ -619,6 +619,12 @@ body{
 /* Tema oscuro V13 */
 html[data-theme="dark"] body{background:radial-gradient(circle at 15% -10%,rgba(49,91,76,.18),transparent 30%),linear-gradient(180deg,#080d0b,#0b110f)}
 html[data-theme="dark"] .v13-hero{background:linear-gradient(135deg,#10221c,#112028 54%,#1a1726);border-color:#24352f}.v13-hero-status-row{}
+
+/* V13.3.5 · Dashboard mejorado */
+.dashboard-primary-action{grid-column:1/-1;min-height:86px;padding:14px 16px;background:linear-gradient(135deg,var(--accent-soft),var(--surface))!important;border-color:var(--accent)!important}.dashboard-primary-action .dashboard-quick-icon{width:44px;height:44px;font-size:22px}.dashboard-primary-action strong{font-size:14px!important}.dashboard-primary-action small{font-size:10px!important}.dashboard-comparison{display:inline-flex;align-items:center;gap:5px;margin-top:5px;font-size:9px;font-weight:750}.dashboard-comparison.up{color:#2d7a5f}.dashboard-comparison.down{color:#a04f4f}.dashboard-comparison.flat{color:var(--muted)}
+.dashboard-insight-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:12px;margin:12px 0}.dashboard-chart-card,.dashboard-top-card{min-width:0}.sales-week-chart{display:flex;align-items:flex-end;gap:8px;min-height:185px;padding:16px 4px 2px}.sales-week-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px}.sales-week-value{font-size:9px;font-weight:800;color:var(--ink);white-space:nowrap}.sales-week-track{height:110px;width:min(34px,100%);display:flex;align-items:flex-end;border-radius:10px;background:var(--surface-2,#eef5f1);overflow:hidden}.sales-week-bar{width:100%;min-height:4px;border-radius:10px 10px 0 0;background:linear-gradient(180deg,var(--accent),var(--accent-dark));transition:height .35s ease}.sales-week-label{font-size:9px;color:var(--muted);text-transform:capitalize}.dashboard-top-list .list-row{align-items:center}.dashboard-top-list .rank-num{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);font-size:9px;font-weight:900;flex:0 0 auto}.dashboard-top-list .top-product-main{display:flex;align-items:center;gap:8px;min-width:0}.dashboard-top-list .top-product-main>div{min-width:0}.dashboard-top-list strong{overflow:hidden;text-overflow:ellipsis}.dashboard-stock-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.dashboard-stock-chip{padding:7px 9px;border-radius:10px;background:var(--surface-2,#eef5f1);font-size:9px;color:var(--muted)}.dashboard-stock-chip b{color:var(--ink)}
+@media(max-width:900px){.dashboard-insight-grid{grid-template-columns:1fr}.sales-week-chart{min-height:170px}.dashboard-primary-action{min-height:78px}}
+@media(max-width:760px){.dashboard-primary-action{grid-column:1/-1;display:flex!important;text-align:left!important;place-items:initial!important;align-items:center!important;justify-content:flex-start!important;min-height:68px!important}.dashboard-primary-action small{display:block!important}.sales-week-chart{gap:5px;padding-left:0;padding-right:0}.sales-week-value{font-size:8px}.sales-week-label{font-size:8px}.sales-week-track{width:min(28px,100%)}}
 html[data-theme="dark"] .v13-status-pill{background:rgba(13,21,18,.56);border-color:#31423b}.dashboard-quick-btn{ }
 html[data-theme="dark"] .dashboard-quick-btn{background:rgba(15,22,19,.92);border-color:#26352f;box-shadow:0 9px 25px rgba(0,0,0,.18)}html[data-theme="dark"] .dashboard-quick-btn.primary-quick{background:linear-gradient(145deg,#12231d,#10201b)}html[data-theme="dark"] .dashboard-quick-icon{background:#1b332a}
 html[data-theme="dark"] .v13-sale-success{background:rgba(0,0,0,.22)}html[data-theme="dark"] .v13-sale-success-card{background:rgba(14,21,18,.97);border-color:#2a3b34}html[data-theme="dark"] .mobile-nav{background:rgba(10,15,13,.95)!important;border-color:#26332e!important}html[data-theme="dark"] .mobile-nav button:before{background:linear-gradient(145deg,#173027,#132820)}
@@ -1375,15 +1381,27 @@ html[data-theme="dark"] .weight-quick-qty button{
         </article>
 
         <div class="dashboard-quick-actions" aria-label="Acciones rápidas">
+          <button type="button" class="dashboard-quick-btn dashboard-primary-action primary-quick" onclick="openSale()"><span class="dashboard-quick-icon">＋</span><span><strong>Nueva venta</strong><small>Abrir el mostrador y registrar una operación</small></span></button>
           <button type="button" class="dashboard-quick-btn" onclick="openNewProduct()"><span class="dashboard-quick-icon">◇</span><span><strong>Nuevo producto</strong><small>Agregar al stock</small></span></button>
           <button type="button" class="dashboard-quick-btn" onclick="openExpense()"><span class="dashboard-quick-icon">−</span><span><strong>Registrar gasto</strong><small>Movimiento rápido</small></span></button>
         </div>
 
         <div class="cards four stat-grid">
-          <article class="card stat mint"><div class="stat-top"><span>Ventas de hoy</span><span class="mini-icon">↗</span></div><strong id="salesToday">$0</strong><small>Facturación del día</small></article>
+          <article class="card stat mint"><div class="stat-top"><span>Ventas de hoy</span><span class="mini-icon">↗</span></div><strong id="salesToday">$0</strong><small>Facturación del día</small><span id="salesVsYesterday" class="dashboard-comparison flat">Sin comparación todavía</span></article>
           <article class="card stat blue"><div class="stat-top"><span>Ganancia estimada</span><span class="mini-icon">＋</span></div><strong id="profitToday">$0</strong><small>Según costos cargados</small></article>
           <article class="card stat lilac"><div class="stat-top"><span>Productos</span><span class="mini-icon">◇</span></div><strong id="productCount">0</strong><small>Productos registrados</small></article>
           <article class="card stat peach"><div class="stat-top"><span>Stock bajo</span><span class="mini-icon">!</span></div><strong id="lowStockCount">0</strong><small><b id="outOfStockCount">0</b> sin stock · requieren reposición</small></article>
+        </div>
+
+        <div class="dashboard-insight-grid">
+          <article class="card surface-card dashboard-chart-card">
+            <div class="card-head"><div><span class="section-kicker">Tendencia</span><h2>Ventas de los últimos 7 días</h2></div></div>
+            <div id="salesWeekChart" class="sales-week-chart" aria-label="Gráfico de ventas de los últimos 7 días"></div>
+          </article>
+          <article class="card surface-card dashboard-top-card">
+            <div class="card-head"><div><span class="section-kicker">Rotación</span><h2>Más vendidos · 7 días</h2></div></div>
+            <div id="dashboardTopProducts" class="dashboard-top-list"></div>
+          </article>
         </div>
 
         <div class="grid two dashboard-grid">
@@ -1394,6 +1412,7 @@ html[data-theme="dark"] .weight-quick-qty button{
           <article class="card surface-card">
             <div class="card-head"><div><span class="section-kicker">Inventario</span><h2>Alertas de stock</h2></div></div>
             <div id="stockAlerts"></div>
+            <div id="dashboardStockSummary" class="dashboard-stock-summary"></div>
           </article>
         </div>
       </section>
@@ -2663,6 +2682,54 @@ function v13UpdateDashboardHero(saleCount){
   if($('#dashboardHeroCopy'))$('#dashboardHeroCopy').textContent=saleCount?`Hoy registraste ${saleCount} venta${saleCount===1?'':'s'}. Tenés ventas, stock y caja resumidos acá.`:'Todavía no hay ventas registradas hoy. Podés registrar la primera desde el botón + Venta.';
 }
 
+function dashboardDateISO(date){
+  const d=new Date(date);d.setHours(12,0,0,0);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function dashboardLastNDays(n=7){
+  const out=[];const base=new Date();base.setHours(12,0,0,0);
+  for(let i=n-1;i>=0;i--){const d=new Date(base);d.setDate(base.getDate()-i);out.push({date:d,iso:dashboardDateISO(d)});}
+  return out;
+}
+function dashboardSalesForISO(iso){return state.sales.filter(s=>saleLocalDate(s)===iso);}
+function dashboardRenderWeekChart(){
+  const host=$('#salesWeekChart');if(!host)return;
+  const days=dashboardLastNDays(7).map(d=>({...d,total:dashboardSalesForISO(d.iso).reduce((a,s)=>a+Number(s.total||0),0)}));
+  const max=Math.max(1,...days.map(d=>d.total));
+  host.innerHTML=days.map(d=>{
+    const pct=Math.max(d.total>0?4:0,Math.round((d.total/max)*100));
+    const label=d.date.toLocaleDateString('es-AR',{weekday:'short'}).replace('.','');
+    return `<div class="sales-week-col" title="${esc(label)} · ${money(d.total)}"><span class="sales-week-value">${d.total?money(d.total):'$0'}</span><div class="sales-week-track"><div class="sales-week-bar" style="height:${pct}%"></div></div><span class="sales-week-label">${esc(label)}</span></div>`;
+  }).join('');
+}
+function dashboardRenderTopProducts(){
+  const host=$('#dashboardTopProducts');if(!host)return;
+  const allowed=new Set(dashboardLastNDays(7).map(d=>d.iso));
+  const map=new Map();
+  state.sales.filter(s=>allowed.has(saleLocalDate(s))).forEach(s=>(s.items||[]).forEach(i=>{
+    const key=i.productId||i.productName||'Producto';
+    const cur=map.get(key)||{name:i.productName||'Producto',qty:0,revenue:0,unitKind:i.unitKind||'unit'};
+    cur.qty+=Number(i.qty||0);cur.revenue+=Number(i.lineTotal||0);map.set(key,cur);
+  }));
+  const rows=[...map.values()].sort((a,b)=>b.revenue-a.revenue).slice(0,5);
+  host.innerHTML=rows.map((r,idx)=>`<div class="list-row"><div class="top-product-main"><span class="rank-num">${idx+1}</span><div><strong>${esc(r.name)}</strong><br><small>${qtyText({unitKind:r.unitKind},r.qty)} vendidos</small></div></div><strong>${money(r.revenue)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas en los últimos 7 días.</div>';
+}
+function dashboardRenderComparison(){
+  const el=$('#salesVsYesterday');if(!el)return;
+  const today=new Date();today.setHours(12,0,0,0);const yesterday=new Date(today);yesterday.setDate(today.getDate()-1);
+  const t=dashboardSalesForISO(dashboardDateISO(today)).reduce((a,s)=>a+Number(s.total||0),0);
+  const y=dashboardSalesForISO(dashboardDateISO(yesterday)).reduce((a,s)=>a+Number(s.total||0),0);
+  el.className='dashboard-comparison flat';
+  if(y<=0){el.textContent=t>0?'Ayer no hubo ventas':'Sin ventas para comparar';return;}
+  const pct=((t-y)/y)*100;
+  el.classList.remove('flat');el.classList.add(pct>0.05?'up':pct<-.05?'down':'flat');
+  el.textContent=`${pct>0?'▲':pct<0?'▼':'•'} ${Math.abs(pct).toFixed(0)}% vs. ayer`;
+}
+function dashboardRenderStockSummary(low,outOfStock){
+  const host=$('#dashboardStockSummary');if(!host)return;
+  const belowTarget=state.products.filter(p=>Number(p.targetStock||0)>0&&Number(p.stock||0)<Number(p.targetStock||0)).length;
+  host.innerHTML=`<span class="dashboard-stock-chip"><b>${outOfStock.length}</b> sin stock</span><span class="dashboard-stock-chip"><b>${low.length}</b> en mínimo</span><span class="dashboard-stock-chip"><b>${belowTarget}</b> debajo del objetivo</span>`;
+}
 function renderDashboard(){
   const ts=salesToday();
   const salesTotal=ts.reduce((a,s)=>a+s.total,0),profitTotal=ts.reduce((a,s)=>a+saleProfit(s),0);
@@ -2674,6 +2741,10 @@ function renderDashboard(){
   v13AnimateMetric('#lowStockCount',low.length,v=>String(Math.round(v)));
   v13AnimateMetric('#outOfStockCount',outOfStock.length,v=>String(Math.round(v)));
   v13UpdateDashboardHero(ts.length);
+  dashboardRenderComparison();
+  dashboardRenderWeekChart();
+  dashboardRenderTopProducts();
+  dashboardRenderStockSummary(low,outOfStock);
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
   $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
