@@ -1403,7 +1403,7 @@ html[data-theme="dark"] .weight-quick-qty button{
             <h3>Agregar un nuevo producto</h3>
             <p>Cargá código, categoría, costo, precio, stock y proveedor habitual. También podés definir si se vende por unidad, litro o kilogramo.</p>
           </div>
-          <button class="primary product-create-btn" id="addProductTopBtn" type="button">+ Nuevo producto</button>
+          <div class="product-create-actions"><button class="secondary" id="exportInventoryCsvBtn" type="button">⇩ Exportar inventario CSV</button><button class="primary product-create-btn" id="addProductTopBtn" type="button">+ Nuevo producto</button></div>
         </article>
         <article class="card stock-query-card">
           <div class="stock-query-head">
@@ -1513,7 +1513,7 @@ html[data-theme="dark"] .weight-quick-qty button{
 
       <section class="view" id="sales">
         <div class="section-intro"><div><span class="section-kicker">Movimientos</span><h2>Ventas</h2><p>Historial de operaciones registradas.</p></div></div>
-        <div class="toolbar toolbar-end"><button class="primary" id="addSaleBtn">+ Registrar venta</button></div>
+        <div class="toolbar toolbar-end"><button class="secondary" id="exportSalesCsvBtn" type="button">⇩ Exportar ventas CSV</button><button class="primary" id="addSaleBtn">+ Registrar venta</button></div>
         <div class="card sales-filter-panel">
           <label class="search-field sales-search-field"><span>⌕</span><input id="salesSearch" type="search" autocomplete="off" placeholder="Buscar producto o código..." /></label>
           <label class="sales-filter-field"><span>Desde</span><input id="salesDateFrom" type="date" /></label>
@@ -2939,6 +2939,45 @@ function renderPromotions(){
     return `<article class="promo-item-card"><div class="promo-item-top"><div class="promo-item-title"><strong>${esc(x.name)}</strong><small>${esc(productLabel)}${ps.length>1?` · ${ps.length} productos${x.ruleType==='combo_exact'?' obligatorios':' combinables'}`:''}</small></div><span class="promo-status ${status}">${statusLabel}</span></div><div class="promo-offer-box"><small>Oferta</small><strong>${rule}</strong>${savingText?`<span class="promo-saving">${savingText}</span>`:''}</div><div class="promo-meta-grid"><div class="promo-meta"><span>Medio de pago</span><strong>${x.payment==='Todos'?'Todos':esc(x.payment)}</strong></div><div class="promo-meta"><span>Vigencia</span><strong>${status==='scheduled'?'Desde '+fmtDate(x.startsAt):validUntil}</strong></div></div>${canAdmin()?`<div class="promo-item-actions"><button class="secondary" type="button" onclick="editPromotion('${x.id}')">Editar</button><button class="action-btn" type="button" title="Desactivar" onclick="deletePromotion('${x.id}')">⌫</button></div>`:''}</article>`;
   }).join('')||'<div class="card empty">No hay promociones que coincidan con el filtro.</div>';
 }
+function csvCell(value){
+  const text=String(value??'').replace(/\r?\n/g,' ').replace(/"/g,'""');
+  return `"${text}"`;
+}
+function csvNumber(value){
+  const n=Number(value||0);
+  return Number.isFinite(n)?n.toFixed(2).replace('.',','):'0,00';
+}
+function exportFileName(kind){
+  const org=String(state.org?.name||'Zen_Hogar').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'')||'Zen_Hogar';
+  return `${org}_${kind}_${todayISO()}.csv`;
+}
+function downloadCsv(filename,headers,rows){
+  const sep=';';
+  const lines=[headers.map(csvCell).join(sep),...rows.map(row=>row.map(csvCell).join(sep))];
+  const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportInventoryCsv(){
+  const rows=[...(state.products||[])].sort((a,b)=>`${a.category} ${a.name}`.localeCompare(`${b.category} ${b.name}`,'es',{sensitivity:'base'})).map(p=>[
+    p.code||'',p.barcode||'',p.name||'',p.category||'',unitLabel(p.unitKind),csvNumber(p.cost),csvNumber(p.price),csvNumber(p.stock),csvNumber(p.minStock),csvNumber(p.targetStock),p.preferredSupplierName||'',Number(p.stock||0)<=0?'SIN STOCK':Number(p.stock||0)<=Number(p.minStock||0)?'STOCK BAJO':'OK'
+  ]);
+  downloadCsv(exportFileName('Inventario'),['Código','Código de barras','Producto','Categoría','Unidad','Costo','Precio','Stock actual','Stock mínimo','Stock objetivo','Proveedor habitual','Estado'],rows);
+  toast(`Inventario exportado: ${rows.length} productos.`,'success');
+}
+function exportSalesCsv(){
+  const sales=filteredSales();
+  const rows=[];
+  sales.forEach(s=>{
+    const items=(s.items||[]).length?s.items:[{}];
+    items.forEach(i=>rows.push([
+      saleLocalDate(s),s.receiptNumber||'',s.payment||'',i.productCode||'',i.productName||'',csvNumber(i.qty||0),unitLabel(i.unitKind||'unit'),csvNumber(i.unitPrice||0),csvNumber(i.lineTotal||0),csvNumber(i.discountAmount||0),csvNumber(s.subtotal||0),csvNumber(s.discountTotal||0),csvNumber(s.total||0),csvNumber(saleProfit(s))
+    ]));
+  });
+  downloadCsv(exportFileName('Ventas'),['Fecha','Comprobante','Medio de pago','Código producto','Producto','Cantidad','Unidad','Precio unitario','Total línea','Descuento línea','Subtotal venta','Descuento venta','Total venta','Ganancia estimada'],rows);
+  toast(`Ventas exportadas: ${sales.length} operaciones (${rows.length} líneas).`,'success');
+}
 function filteredSales(){
   const q=String($('#salesSearch')?.value||'').trim().toLocaleLowerCase('es');
   const from=$('#salesDateFrom')?.value||'';
@@ -4041,7 +4080,7 @@ $('#mobileMoreClose').onclick=closeMobileMoreSheet; $('#mobileMoreOverlay').oncl
 $$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNavSlot(Number(s.dataset.mobileNavSlot),s.value)));
 $('#resetMobileNavBtn').onclick=resetMobileNavigation;
 $$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#addSaleBtn').onclick=openSale; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
 $('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',()=>{savePurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';});$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$$('[data-weight-qty]').forEach(b=>b.onclick=()=>{const p=state.products.find(x=>x.id===$('#saleProduct').value);if(!p||p.unitKind!=='weight')return;$('#saleQty').value=b.dataset.weightQty;updateSaleUnit();$('#saleQty').dispatchEvent(new Event('input',{bubbles:true}));});$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
@@ -4291,6 +4330,7 @@ async function init(){
     if(data.session?.user)await handleSignedIn(data.session.user); else setGateStep('authStep');
   }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${err.message}`,'error');}
 }
+// V13.3.2 · Exportación CSV de Inventario y Ventas
 init();
 
   </script>
