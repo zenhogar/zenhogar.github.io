@@ -61,7 +61,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .brand{display:flex;gap:13px;align-items:center;padding:0 8px}.brand-mark{width:48px;height:48px;border-radius:17px;background:linear-gradient(145deg,#68b99e,#3f8e75);box-shadow:0 10px 24px rgba(63,142,117,.24);display:grid;place-items:center;color:#fff}.brand-mark span{font-size:14px;font-weight:800;letter-spacing:.04em}.brand-copy strong,.brand-copy small{display:block}.brand-copy strong{font-size:17px;letter-spacing:-.02em}.brand-copy small{color:var(--muted);margin-top:3px;font-size:12px}
 .desktop-nav{display:grid;gap:7px}.nav-btn{border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:14px;color:#61716b;cursor:pointer;min-height:48px;display:flex;align-items:center;gap:12px;font-weight:650;transition:.18s ease}.nav-btn:hover{background:rgba(255,255,255,.65);color:var(--ink)}.nav-btn.active{background:linear-gradient(135deg,#ffffff,#f4fbf7);color:var(--accent-dark);box-shadow:var(--shadow-soft);border:1px solid #dceee6}.nav-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:rgba(111,158,142,.08);font-size:17px}.nav-btn.active .nav-icon{background:var(--accent-soft)}
 
-/* V13.2.7 · navegación escritorio agrupada */
+/* V13.3.0 · navegación escritorio agrupada */
 @media(min-width:761px){
   .sidebar{padding:24px 16px 18px;gap:24px}
   .desktop-nav-v1327{display:block}
@@ -3244,20 +3244,34 @@ function renderSettings(){
 
 function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
 
+// V13.3.0 · carga paginada para evitar cortes silenciosos de Supabase/PostgREST.
+async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
+  const rows=[];
+  for(let page=0;page<maxPages;page++){
+    const from=page*pageSize,to=from+pageSize-1;
+    const res=await makeQuery().range(from,to);
+    if(res.error)return {data:null,error:res.error};
+    const batch=res.data||[];
+    rows.push(...batch);
+    if(batch.length<pageSize)return {data:rows,error:null};
+  }
+  return {data:null,error:new Error('La carga superó el límite de seguridad de paginación. Revisá el volumen de datos.')};
+}
+
 async function loadAllData({silent=false}={}){
   if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
-      state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name'),
-      state.client.from('sales').select('id,receipt_number,payment,total,subtotal,discount_total,promotion_discount_total,container_discount_total,container_cost_saving_total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,price_unit_qty,line_total,discount_amount,promotion_discount_amount,container_discount_amount,container_cost_saving,own_container_count,products(name,code,unit_kind),promotions(name))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false}).limit(1500),
-      state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false}).limit(365),
-      state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false}).limit(1500),
-      state.client.from('fixed_expenses').select('id,name,category,amount,payment,due_day,notes,active,created_at,updated_at').eq('organization_id',state.org.id).eq('active',true).order('due_day').order('name'),
-      state.client.from('fixed_expense_payments').select('id,fixed_expense_id,period,amount,payment,paid_at,expense_id,created_at').eq('organization_id',state.org.id).order('period',{ascending:false}).limit(1000),
-      state.client.from('suppliers').select('id,name,phone,email,notes').eq('organization_id',state.org.id).eq('active',true).order('name'),
-      state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false}).limit(1000),
-      state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(1000),
-      state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false})
+      fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
+      fetchAllPages(()=>state.client.from('sales').select('id,receipt_number,payment,total,subtotal,discount_total,promotion_discount_total,container_discount_total,container_cost_saving_total,sold_at,status,sale_items(id,product_id,quantity,unit_price,unit_cost,price_unit_qty,line_total,discount_amount,promotion_discount_amount,container_discount_amount,container_cost_saving,own_container_count,products(name,code,unit_kind),promotions(name))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false})),
+      fetchAllPages(()=>state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('fixed_expenses').select('id,name,category,amount,payment,due_day,notes,active,created_at,updated_at').eq('organization_id',state.org.id).eq('active',true).order('due_day').order('name')),
+      fetchAllPages(()=>state.client.from('fixed_expense_payments').select('id,fixed_expense_id,period,amount,payment,paid_at,expense_id,created_at').eq('organization_id',state.org.id).order('period',{ascending:false})),
+      fetchAllPages(()=>state.client.from('suppliers').select('id,name,phone,email,notes').eq('organization_id',state.org.id).eq('active',true).order('name')),
+      fetchAllPages(()=>state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false}))
     ]);for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
     state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),createdAt:r.created_at||null}));
     state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),promotionDiscountTotal:Number(r.promotion_discount_total||0),containerDiscountTotal:Number(r.container_discount_total||0),containerCostSavingTotal:Number(r.container_cost_saving_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionDiscountAmount:Number(i.promotion_discount_amount||0),containerDiscountAmount:Number(i.container_discount_amount||0),containerCostSaving:Number(i.container_cost_saving||0),ownContainerCount:Number(i.own_container_count||0),promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
