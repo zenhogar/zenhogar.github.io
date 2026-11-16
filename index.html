@@ -1691,7 +1691,7 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
         <div class="section-intro"><div><span class="section-kicker">Análisis de mercado</span><h2>Inteligencia de Precios</h2><p>Compará referencias externas y registrá decisiones sin modificar el inventario.</p></div></div>
 
         <article class="card price-monitor-status">
-          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Revisión manual cada 14 días</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente. Cuando La Gallega muestra un precio tachado, se utiliza ese precio de lista como referencia, no el valor promocional en negrita.</p></div>
+          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Revisión manual cada 14 días</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente.</p></div>
           <div class="price-monitor-flags"><span class="monitor-flag warning">● Automatización desactivada</span><span class="monitor-flag">La Gallega · principal</span><span class="monitor-flag warning">Coto · pendiente</span></div>
         </article>
 
@@ -3519,13 +3519,12 @@ function renderPriceIntelligence(){
   list.innerHTML=visible.map(f=>{
     const url=safeExternalUrl(f.sourceUrl),canChoose=canAdmin()&&f.matchStatus==='matched',reviewed=f.reviewStatus!=='pending';
     const sourcePrice=f.sourcePrice==null?'No disponible':money(f.sourcePrice),market=f.suggestionMarket==null?'No calculada':money(f.suggestionMarket),profitable=f.suggestionProfitable==null?'No calculada':money(f.suggestionProfitable);
-    const sourceLabel=f.sourcePriceBasis==='crossed_list'?'Precio de lista (tachado)':'Precio publicado';
-    const promoNote=f.sourcePriceBasis==='crossed_list'&&f.sourcePromotionalPrice!=null?'<small>Oferta en negrita: '+money(f.sourcePromotionalPrice)+' · No se usa para calcular sugerencias.</small>':'';
+    const promoNote=f.sourcePriceBasis==='crossed_list'&&f.sourcePromotionalPrice!=null?'<small>En promoción a '+money(f.sourcePromotionalPrice)+'</small>':'';
     return `<article class="monitor-finding">
       <div class="monitor-finding-head"><div><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(monitorMatchLabel(f.matchStatus))}</span></div>
       <div class="monitor-prices">
         <div class="monitor-price"><span>Zen Hogar · actual</span><strong>${money(f.originalPrice)}</strong><small>Costo registrado: ${money(f.originalCost)}</small></div>
-        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))} · ${esc(sourceLabel)}</span><strong>${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small></div>
+        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))}</span><strong>${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small></div>
         <div class="monitor-price"><span>Alternativa competitiva</span><strong>${market}</strong><small>Referencia frente al mercado</small></div>
         <div class="monitor-price"><span>Alternativa rentable</span><strong>${profitable}</strong><small>${f.suggestedMarginPct==null?'Según costo y margen mínimo':`Margen estimado: ${Number(f.suggestedMarginPct).toFixed(1)}%`}</small></div>
       </div>
