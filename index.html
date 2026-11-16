@@ -1187,6 +1187,11 @@ html[data-theme="dark"] .weight-quick-qty button{
 
 /* V13.3.3 · Actualización masiva de precios */
 .bulk-price-card{margin-top:16px;display:grid;gap:14px}.bulk-price-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px}.bulk-price-preview{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}.bulk-price-preview-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}.bulk-price-preview-list{max-height:330px;overflow:auto}.bulk-price-row{display:grid;grid-template-columns:minmax(0,1.8fr) .7fr .7fr;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:10px}.bulk-price-row:last-child{border-bottom:0}.bulk-price-row strong{font-size:11px}.bulk-price-row small{display:block;color:var(--muted);margin-top:2px}.bulk-price-old{color:var(--muted);text-align:right}.bulk-price-new{font-weight:850;color:var(--accent-dark);text-align:right}.bulk-price-empty{padding:24px;text-align:center;color:var(--muted);font-size:11px}.bulk-price-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.bulk-price-warning{padding:10px 12px;border-radius:13px;background:var(--peach);color:var(--ink-soft);font-size:10px;line-height:1.45}.bulk-price-summary{font-size:10px;color:var(--muted)}@media(max-width:760px){.bulk-price-grid{grid-template-columns:1fr}.bulk-price-row{grid-template-columns:minmax(0,1fr) auto auto}.bulk-price-actions>*{flex:1}}
+/* Inteligencia de Precios · V1 (consulta y aprobación, sin cambios de inventario) */
+.price-monitor-status{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;margin-bottom:16px;background:linear-gradient(135deg,var(--mint),var(--blue));border-color:color-mix(in srgb,var(--accent) 24%,var(--line))}.price-monitor-status h3{margin:5px 0 4px;font-size:19px}.price-monitor-status p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.price-monitor-flags{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}.monitor-flag{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--surface) 86%,transparent);font-size:10px;font-weight:800;color:var(--ink-soft)}.monitor-flag.warning{color:#936319;background:color-mix(in srgb,var(--peach) 82%,var(--surface))}.price-monitor-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.price-monitor-toolbar .search-field{flex:1;min-width:220px}.price-monitor-toolbar select{min-height:44px;border:1px solid var(--line);border-radius:12px;padding:0 11px}.price-monitor-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.monitor-metric{padding:13px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.monitor-metric span,.monitor-metric strong{display:block}.monitor-metric span{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800}.monitor-metric strong{font-size:17px;margin-top:5px}.price-monitor-list{display:grid;gap:12px}.monitor-finding{border:1px solid var(--line);border-radius:19px;background:var(--surface);padding:16px}.monitor-finding-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.monitor-finding-head h3{margin:3px 0 0;font-size:15px}.monitor-state{padding:6px 9px;border-radius:999px;font-size:9px;font-weight:850;white-space:nowrap;background:var(--surface-soft);color:var(--muted)}.monitor-state.matched{background:var(--accent-soft);color:var(--accent-dark)}.monitor-state.ambiguous,.monitor-state.source_error{background:var(--peach);color:#936319}.monitor-prices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.monitor-price{padding:11px;border-radius:13px;background:var(--surface-soft);min-width:0}.monitor-price span,.monitor-price strong,.monitor-price small{display:block}.monitor-price span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800}.monitor-price strong{font-size:14px;margin-top:5px}.monitor-price small{font-size:9px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis}.monitor-source-link{color:var(--accent-dark);font-weight:800;text-decoration:none}.monitor-source-link:hover{text-decoration:underline}.monitor-review{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.monitor-review-meta{font-size:10px;color:var(--muted)}.monitor-actions{display:flex;gap:7px;flex-wrap:wrap}.monitor-actions button{min-height:37px;padding:8px 10px;font-size:10px}.monitor-empty{padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:18px;color:var(--muted);background:var(--surface-soft)}.monitor-service-message{margin:0 0 14px;padding:11px 13px;border:1px solid #e8c99a;border-radius:13px;background:var(--peach);color:var(--ink-soft);font-size:11px;line-height:1.45}.monitor-service-message strong{display:block;margin-bottom:2px}
+html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,var(--mint),var(--blue))}html[data-theme="dark"] .monitor-state.ambiguous,html[data-theme="dark"] .monitor-state.source_error{background:#33281b;color:#e0b36f}
+@media(max-width:800px){.price-monitor-status{grid-template-columns:1fr}.price-monitor-flags{justify-content:flex-start}.price-monitor-summary,.monitor-prices{grid-template-columns:1fr 1fr}.monitor-finding{padding:13px}.monitor-review{align-items:stretch;flex-direction:column}.monitor-actions{display:grid;grid-template-columns:1fr}.monitor-actions button{width:100%}}
+@media(max-width:420px){.price-monitor-summary,.monitor-prices{grid-template-columns:1fr}.price-monitor-toolbar{align-items:stretch;flex-direction:column}.price-monitor-toolbar .search-field,.price-monitor-toolbar select{width:100%}}
 </style>
 </head>
 <body>
@@ -1340,6 +1345,9 @@ html[data-theme="dark"] .weight-quick-qty button{
         </details>
 
         <div class="desktop-nav-section-label">Análisis</div>
+        <button class="nav-btn" data-view="priceIntelligence">
+          <span class="nav-icon">◎</span><span>Inteligencia de Precios</span>
+        </button>
         <button class="nav-btn" data-view="reports">
           <span class="nav-icon">⌁</span><span>Reportes</span>
         </button>
@@ -1675,6 +1683,24 @@ html[data-theme="dark"] .weight-quick-qty button{
           </div>
           <div class="bulk-price-actions"><button class="primary" id="bulkPriceApplyBtn" type="button" disabled>Aplicar cambios</button></div>
         </article>
+      </section>
+
+      <section class="view" id="priceIntelligence">
+        <div class="section-intro"><div><span class="section-kicker">Análisis de mercado</span><h2>Inteligencia de Precios</h2><p>Compará referencias externas y registrá decisiones sin modificar el inventario.</p></div></div>
+
+        <article class="card price-monitor-status">
+          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Revisión manual cada 14 días</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente.</p></div>
+          <div class="price-monitor-flags"><span class="monitor-flag warning">● Automatización desactivada</span><span class="monitor-flag">La Gallega · principal</span><span class="monitor-flag warning">Coto · pendiente</span></div>
+        </article>
+
+        <div class="price-monitor-summary" id="priceMonitorSummary"></div>
+        <div class="monitor-service-message" id="priceMonitorServiceMessage" role="status" hidden></div>
+        <div class="price-monitor-toolbar">
+          <label class="search-field"><span>⌕</span><input id="priceMonitorSearch" type="search" placeholder="Buscar producto o supermercado..." autocomplete="off" /></label>
+          <select id="priceMonitorStatusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="pending">Pendientes de revisión</option><option value="matched">Coincidencia exacta</option><option value="ambiguous">Coincidencia a revisar</option><option value="not_found">Sin coincidencia</option><option value="source_error">Error de fuente</option><option value="reviewed">Revisados</option></select>
+          <button class="secondary" id="priceMonitorRefreshBtn" type="button">Actualizar consultas</button>
+        </div>
+        <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
 
       <section class="view" id="reports">
@@ -2482,7 +2508,7 @@ async function shareReceiptPdf(s){
 }
 
 const state = {
-  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],accessInvites:[],accessMembers:[],channel:null,
+  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
   reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,promoSelectedProductIds:[],scannerStream:null,scannerDetector:null,scannerMode:null,scannerFrame:null,scannerBusy:false,
   reportPeriod:localStorage.getItem('zenhogar_report_period')||'30d',
   reportMarginTarget:Number(localStorage.getItem('zenhogar_report_margin_target')||45)
@@ -2505,11 +2531,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,at:new Date().toISOString()})); }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,priceMonitorSettings:state.priceMonitorSettings,priceMonitorRuns:state.priceMonitorRuns,priceMonitorFindings:state.priceMonitorFindings,priceMonitorCatalog:state.priceMonitorCatalog,at:new Date().toISOString()})); }
 function loadCache(){
   const key=cacheKey(); if(!key)return false;
   const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; renderAll(); return true;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; state.priceMonitorSettings=data.priceMonitorSettings||null;state.priceMonitorRuns=data.priceMonitorRuns||[];state.priceMonitorFindings=data.priceMonitorFindings||[];state.priceMonitorCatalog=data.priceMonitorCatalog||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function canOwner(){ return state.role==='owner'; }
@@ -2530,7 +2556,7 @@ function applyOrganizationUI(){
   document.title=`${name} · Gestión Cloud`;
 }
 function clearOrganizationState(){
-  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
+  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.priceMonitorSettings=null;state.priceMonitorRuns=[];state.priceMonitorFindings=[];state.priceMonitorCatalog=[];state.priceMonitorError='';state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
 }
 async function refreshOrganizations(){
   const {data,error}=await state.client.rpc('list_my_organizations');if(error)throw error;
@@ -2599,6 +2625,7 @@ const MOBILE_NAV_ITEMS={
   expenses:{label:'Gastos',icon:'−',desc:'Registrar egresos'},
   fixedExpenses:{label:'Gastos fijos',icon:'▦',desc:'Pagos mensuales'},
   pricing:{label:'Costos y precios',icon:'%',desc:'Márgenes y rentabilidad'},
+  priceIntelligence:{label:'Precios',icon:'◎',desc:'Inteligencia de Precios'},
   replenishment:{label:'Reposición',icon:'↻',desc:'Stock a reponer'},
   promotions:{label:'Promociones',icon:'%',desc:'Ofertas activas'},
   reports:{label:'Reportes',icon:'⌁',desc:'Ventas y resultados'},
@@ -2653,7 +2680,7 @@ function setView(id){
     $$('.desktop-nav-group').forEach(group=>{if(group.querySelector('.nav-btn.active'))group.open=true;});
   }
   renderMobileNavigation();
-  const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',reports:'Reportes',settings:'Configuración'};
+  const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',priceIntelligence:'Inteligencia de Precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',reports:'Reportes',settings:'Configuración'};
   $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet();
   if(supplierAnchor){
     requestAnimationFrame(()=>$('#purchaseSuppliersSection')?.scrollIntoView({behavior:'smooth',block:'start'}));
@@ -3456,7 +3483,52 @@ function renderSettings(){
   $('#teamCard').hidden=!canOwner();renderAccessControl();
 }
 
-function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
+function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto'})[source]||'Sin fuente';}
+function monitorMatchLabel(status){return ({matched:'Coincidencia exacta',ambiguous:'Revisar coincidencia',not_found:'Sin coincidencia',source_error:'Error de fuente'})[status]||'Sin estado';}
+function monitorReviewLabel(f){if(f.reviewStatus==='rejected'||f.reviewChoice==='discarded')return 'Sugerencia descartada';if(f.reviewChoice==='market')return 'Alternativa competitiva elegida';if(f.reviewChoice==='profitable')return 'Alternativa rentable elegida';return 'Pendiente de decisión';}
+function safeExternalUrl(value){try{const url=new URL(String(value||''));return url.protocol==='https:'?url.href:'';}catch(_e){return '';}}
+function renderPriceIntelligence(){
+  const summary=$('#priceMonitorSummary'),list=$('#priceMonitorList');if(!summary||!list)return;
+  const serviceMessage=$('#priceMonitorServiceMessage');if(serviceMessage){serviceMessage.hidden=!state.priceMonitorError;serviceMessage.innerHTML=state.priceMonitorError?`<strong>No se pudieron actualizar las comparaciones</strong>${esc(state.priceMonitorError)} · El resto de Zen Hogar Gestión continúa funcionando normalmente.`:'';}
+  const findings=state.priceMonitorFindings||[],settings=state.priceMonitorSettings||{},runs=state.priceMonitorRuns||[];
+  const pending=findings.filter(f=>f.reviewStatus==='pending').length,exact=findings.filter(f=>f.matchStatus==='matched').length,lastRun=runs[0]||null;
+  summary.innerHTML=`<div class="monitor-metric"><span>Pendientes</span><strong>${pending}</strong></div><div class="monitor-metric"><span>Coincidencias exactas</span><strong>${exact}</strong></div><div class="monitor-metric"><span>Última consulta</span><strong>${lastRun?.completedAt?esc(fmtDate(lastRun.completedAt)):'Sin completar'}</strong></div><div class="monitor-metric"><span>Próxima revisión</span><strong>${settings.nextRunAt?esc(fmtDate(settings.nextRunAt)):`Cada ${Number(settings.intervalDays||14)} días`}</strong></div>`;
+  const q=String($('#priceMonitorSearch')?.value||'').trim().toLowerCase(),filter=$('#priceMonitorStatusFilter')?.value||'all';
+  const visible=findings.filter(f=>{
+    const text=`${f.productName} ${f.sourceProductName} ${monitorSourceLabel(f.source)}`.toLowerCase();
+    const statusOk=filter==='all'||(filter==='pending'&&f.reviewStatus==='pending')||(filter==='reviewed'&&f.reviewStatus!=='pending')||f.matchStatus===filter;
+    return statusOk&&(!q||text.includes(q));
+  });
+  if(!visible.length){list.innerHTML=`<div class="monitor-empty">${findings.length?'No hay resultados para este filtro.':'Todavía no hay consultas registradas. No se muestran precios de demostración.'}</div>`;return;}
+  list.innerHTML=visible.map(f=>{
+    const url=safeExternalUrl(f.sourceUrl),canChoose=canAdmin()&&f.matchStatus==='matched',reviewed=f.reviewStatus!=='pending';
+    const sourcePrice=f.sourcePrice==null?'No disponible':money(f.sourcePrice),market=f.suggestionMarket==null?'No calculada':money(f.suggestionMarket),profitable=f.suggestionProfitable==null?'No calculada':money(f.suggestionProfitable);
+    return `<article class="monitor-finding">
+      <div class="monitor-finding-head"><div><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(monitorMatchLabel(f.matchStatus))}</span></div>
+      <div class="monitor-prices">
+        <div class="monitor-price"><span>Zen Hogar · actual</span><strong>${money(f.originalPrice)}</strong><small>Costo registrado: ${money(f.originalCost)}</small></div>
+        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))}</span><strong>${sourcePrice}</strong><small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small></div>
+        <div class="monitor-price"><span>Alternativa competitiva</span><strong>${market}</strong><small>Referencia frente al mercado</small></div>
+        <div class="monitor-price"><span>Alternativa rentable</span><strong>${profitable}</strong><small>${f.suggestedMarginPct==null?'Según costo y margen mínimo':`Margen estimado: ${Number(f.suggestedMarginPct).toFixed(1)}%`}</small></div>
+      </div>
+      <div class="monitor-review"><div class="monitor-review-meta"><strong>${esc(monitorReviewLabel(f))}</strong> · Consulta ${esc(fmtDate(f.createdAt))}${f.reviewedAt?` · Revisado ${esc(fmtDate(f.reviewedAt))}`:''}${!canAdmin()?' · Sólo lectura para tu rol':''}</div>
+        <div class="monitor-actions"><button class="secondary" type="button" ${!canChoose||f.suggestionMarket==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','market')">Elegir competitiva</button><button class="secondary" type="button" ${!canChoose||f.suggestionProfitable==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','profitable')">Elegir rentable</button><button class="secondary" type="button" ${!canAdmin()||reviewed?'disabled':''} onclick="reviewPriceFinding('${f.id}','discarded')">Descartar</button></div>
+      </div>
+    </article>`;
+  }).join('');
+}
+async function reviewPriceFinding(id,choice){
+  if(!canAdmin())return toast('Sólo propietarios y administradores pueden registrar decisiones.','error');if(!requireOnline())return;
+  const finding=state.priceMonitorFindings.find(f=>f.id===id);if(!finding)return;
+  const selected=choice==='market'?finding.suggestionMarket:choice==='profitable'?finding.suggestionProfitable:null;
+  const label=choice==='market'?'competitiva':choice==='profitable'?'rentable':'descartar';
+  if(!confirm(`¿Registrar la decisión “${label}”? Esta acción no modificará precios, stock, costos ni promociones.`))return;
+  const payload={review_choice:choice,review_selected_price:selected,review_status:choice==='discarded'?'rejected':'reviewed',reviewed_at:new Date().toISOString()};
+  try{const {data,error}=await state.client.from('price_monitor_findings').update(payload).eq('id',id).eq('organization_id',state.org.id).select('id').maybeSingle();if(error)throw error;if(!data)throw new Error('La decisión no fue guardada. Verificá tus permisos.');toast('Decisión registrada sin modificar el inventario.','success');await loadPriceMonitorData();saveCache();renderPriceIntelligence();}catch(err){toast(err.message||'No se pudo registrar la decisión.','error');}
+}
+window.reviewPriceFinding=reviewPriceFinding;
+
+function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderPriceIntelligence(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
 
 // V13.3.1 · carga paginada para evitar cortes silenciosos de Supabase/PostgREST.
 async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
@@ -3470,6 +3542,25 @@ async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
     if(batch.length<pageSize)return {data:rows,error:null};
   }
   return {data:null,error:new Error('La carga superó el límite de seguridad de paginación. Revisá el volumen de datos.')};
+}
+
+async function loadPriceMonitorData(){
+  if(!state.org||!navigator.onLine)return;
+  try{
+    const [settingsRes,runsRes,findingsRes,catalogRes]=await Promise.all([
+      state.client.from('price_monitor_settings').select('enabled,interval_days,primary_source,fallback_source,approval_required,dry_run,min_gross_margin_pct,last_run_at,next_run_at,updated_at').eq('organization_id',state.org.id).maybeSingle(),
+      fetchAllPages(()=>state.client.from('price_monitor_runs').select('id,started_at,completed_at,status,run_type,dry_run,products_checked,matches_found,fallback_checked,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('price_monitor_findings').select('id,run_id,product_id,product_name,original_price,original_cost,source,source_url,source_product_name,source_price,match_status,match_confidence,suggestion_market,suggestion_profitable,suggested_margin_pct,review_status,review_choice,review_selected_price,created_at,reviewed_at,products(code)').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('price_monitor_catalog_items').select('retailer,product_url,product_name,observed_price,barcode,observed_at').eq('organization_id',state.org.id).order('observed_at',{ascending:false}))
+    ]);
+    for(const r of [settingsRes,runsRes,findingsRes,catalogRes])if(r.error)throw r.error;
+    state.priceMonitorSettings=settingsRes.data?{enabled:!!settingsRes.data.enabled,intervalDays:Number(settingsRes.data.interval_days||14),primarySource:settingsRes.data.primary_source,fallbackSource:settingsRes.data.fallback_source,approvalRequired:!!settingsRes.data.approval_required,dryRun:!!settingsRes.data.dry_run,minGrossMarginPct:Number(settingsRes.data.min_gross_margin_pct||0),lastRunAt:settingsRes.data.last_run_at,nextRunAt:settingsRes.data.next_run_at,updatedAt:settingsRes.data.updated_at}:null;
+    state.priceMonitorRuns=(runsRes.data||[]).map(r=>({id:r.id,startedAt:r.started_at,completedAt:r.completed_at,status:r.status,runType:r.run_type,dryRun:!!r.dry_run,productsChecked:Number(r.products_checked||0),matchesFound:Number(r.matches_found||0),fallbackChecked:Number(r.fallback_checked||0),errorMessage:r.error_message||''}));
+    state.priceMonitorFindings=(findingsRes.data||[]).map(r=>({id:r.id,runId:r.run_id,productId:r.product_id,productCode:r.products?.code||'',productName:r.product_name,originalPrice:Number(r.original_price||0),originalCost:Number(r.original_cost||0),source:r.source,sourceUrl:r.source_url||'',sourceProductName:r.source_product_name||'',sourcePrice:r.source_price==null?null:Number(r.source_price),matchStatus:r.match_status,matchConfidence:r.match_confidence==null?null:Number(r.match_confidence),suggestionMarket:r.suggestion_market==null?null:Number(r.suggestion_market),suggestionProfitable:r.suggestion_profitable==null?null:Number(r.suggestion_profitable),suggestedMarginPct:r.suggested_margin_pct==null?null:Number(r.suggested_margin_pct),reviewStatus:r.review_status,reviewChoice:r.review_choice||'',reviewSelectedPrice:r.review_selected_price==null?null:Number(r.review_selected_price),createdAt:r.created_at,reviewedAt:r.reviewed_at}));
+    state.priceMonitorCatalog=(catalogRes.data||[]).map(r=>({retailer:r.retailer,productUrl:r.product_url,productName:r.product_name,observedPrice:Number(r.observed_price||0),barcode:r.barcode||'',observedAt:r.observed_at}));
+    state.priceMonitorError='';
+  }catch(err){console.error('Inteligencia de Precios:',err);state.priceMonitorError=err.message||'Error de conexión con el servicio de comparación.';}
+  renderPriceIntelligence();
 }
 
 async function loadAllData({silent=false}={}){
@@ -3507,13 +3598,13 @@ async function loadAllData({silent=false}={}){
       state.accessInvites=(inviteRes.data||[]).map(i=>({id:i.id,email:i.email,role:i.role,expiresAt:i.expires_at,emailSentAt:i.email_sent_at,lastError:i.last_error||'',acceptedAt:i.accepted_at,revokedAt:i.revoked_at,createdAt:i.created_at}));
       state.accessMembers=(memberRes.data||[]).map(m=>({userId:m.user_id,email:m.email||'',fullName:m.full_name||'',role:m.role,joinedAt:m.joined_at}));
     }
-    saveCache();renderAll();updateConnection();
+    await loadPriceMonitorData();saveCache();renderAll();updateConnection();
   }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
 }
 
 function subscribeRealtime(){
   if(state.channel) state.client.removeChannel(state.channel);
-  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),350)};
+  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),350)},reloadMonitor=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(async()=>{await loadPriceMonitorData();saveCache();},350)};
   state.channel=state.client.channel(`zenhogar-${org}`)
     .on('postgres_changes',{event:'*',schema:'public',table:'products',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'sales',filter:`organization_id=eq.${org}`},reload)
@@ -3530,6 +3621,10 @@ function subscribeRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'promotion_products',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'access_invitations',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'memberships',filter:`organization_id=eq.${org}`},reload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'price_monitor_settings',filter:`organization_id=eq.${org}`},reloadMonitor)
+    .on('postgres_changes',{event:'*',schema:'public',table:'price_monitor_runs',filter:`organization_id=eq.${org}`},reloadMonitor)
+    .on('postgres_changes',{event:'*',schema:'public',table:'price_monitor_findings',filter:`organization_id=eq.${org}`},reloadMonitor)
+    .on('postgres_changes',{event:'*',schema:'public',table:'price_monitor_catalog_items',filter:`organization_id=eq.${org}`},reloadMonitor)
     .subscribe();
 }
 
@@ -4204,6 +4299,9 @@ $('#fracProduct').onchange=loadFractionalFromProduct;$('#fracMode').onchange=()=
 $('#reportPeriod').onchange=e=>{state.reportPeriod=e.target.value;localStorage.setItem('zenhogar_report_period',state.reportPeriod);renderReports();};
 $('#reportMarginTarget').oninput=e=>{const v=Math.min(95,Math.max(1,Number(e.target.value||45)));state.reportMarginTarget=v;localStorage.setItem('zenhogar_report_margin_target',String(v));renderReports();};
 $('#exportProfitReportBtn').onclick=exportProfitabilityCsv;
+$('#priceMonitorSearch').oninput=renderPriceIntelligence;
+$('#priceMonitorStatusFilter').onchange=renderPriceIntelligence;
+$('#priceMonitorRefreshBtn').onclick=async()=>{if(!requireOnline())return;const btn=$('#priceMonitorRefreshBtn');btn.disabled=true;try{await loadPriceMonitorData();saveCache();if(state.priceMonitorError)toast('No se pudieron actualizar las comparaciones.','error');else toast('Registros de consultas actualizados.','success');}finally{btn.disabled=false;}};
 $$('[data-frac-size]').forEach(b=>b.onclick=()=>{$('#fracPresentationMl').value=b.dataset.fracSize;loadFractionalFromProduct();renderFractionalCalculator();});$('#fracNoContainerBtn').onclick=()=>{$('#fracContainerCost').value=0;renderFractionalCalculator();};updateFractionalModeUI();
 $$('[data-theme-choice]').forEach(b=>b.onclick=()=>applyTheme(b.dataset.themeChoice));applyTheme(currentTheme(),{persist:false});
 const savedTarget=Number(localStorage.getItem('zenhogar_target_margin'));if(savedTarget>0&&savedTarget<100){$('#pricingTargetMargin').value=savedTarget;$('#fracTargetMargin').value=savedTarget;}
