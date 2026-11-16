@@ -178,6 +178,7 @@ html[data-theme="dark"] .mobile-more-btn.active{background:rgba(22,33,29,.98)}
 .gate-form{display:grid;gap:12px}.gate-form label{font-size:11px;font-weight:800;color:#75837d}.gate-form input{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:#fff;color:var(--ink);min-height:48px}.gate-help{display:block;margin-top:13px;color:var(--muted);line-height:1.5}.gate-help code{padding:2px 5px;border-radius:6px;background:#f0f4f2;color:var(--ink-soft)}
 .text-btn{width:100%;border:0;background:transparent;color:var(--accent-dark);font-weight:800;cursor:pointer;padding:13px 6px 5px}.text-btn.subtle{font-size:11px;color:var(--muted);font-weight:700;padding-top:8px}.gate-message{margin-top:12px;padding:11px 12px;border-radius:13px;background:#f4f7f5;color:var(--ink-soft);font-size:12px;line-height:1.45}.gate-message.error{background:#fbeceb;color:#995454}.gate-message.success{background:#edf7f2;color:#4f7e6f}
 .gate-loading{text-align:center;padding:26px 0 8px;color:var(--muted);font-size:12px}.spinner{display:block;width:28px;height:28px;margin:0 auto 10px;border:3px solid #e5eeea;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.auth-progress{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:9px 11px;border-radius:12px;background:var(--surface-soft);color:var(--muted);font-size:11px}.auth-progress-spinner{width:15px;height:15px;flex:0 0 15px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 .account-lines{display:grid;gap:10px;margin:12px 0 16px}.account-lines>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.account-lines span{font-size:11px;color:var(--muted)}.account-lines strong{font-size:12px;text-align:right}.role-badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--lilac);font-size:10px;font-weight:800}
 .toast{position:fixed;z-index:1200;left:50%;bottom:28px;transform:translateX(-50%);max-width:min(90vw,480px);padding:12px 16px;border-radius:14px;background:#2f4039;color:#fff;box-shadow:0 18px 45px rgba(38,57,50,.22);font-size:12px;font-weight:700;text-align:center}.toast.error{background:#8f5151}.toast.success{background:#4f7e6f}
 button[disabled]{opacity:.55;cursor:not-allowed;transform:none!important}.cloud-readonly-note{padding:9px 12px;border-radius:12px;background:#fbf1e8;color:#8e674e;font-size:11px;margin-bottom:12px}
@@ -1231,6 +1232,7 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
           </div>
           <button class="primary full" id="authSubmit" type="submit">Ingresar</button>
         </form>
+        <div class="auth-progress" id="authProgress" role="status" aria-live="polite" hidden><span class="auth-progress-spinner" aria-hidden="true"></span><span id="authProgressText">Conectando…</span></div>
         <button id="forgotPasswordBtn" class="text-btn" type="button">Olvidé mi contraseña</button>
         <small class="gate-help" id="authHelp">Si recibiste una invitación, usá el correo al que fue enviada.</small>
         <button id="changeCloudConfig" class="text-btn subtle" type="button">Cambiar conexión de nube</button>
@@ -1284,7 +1286,7 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
         <div class="gate-message" id="inviteSetupMessage" hidden></div>
       </div>
 
-      <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p>Conectando de forma segura…</p></div>
+      <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p id="gateLoadingText">Conectando de forma segura…</p></div>
     </div>
   </section>
 
@@ -2526,6 +2528,19 @@ function setGateStep(id){
 function setGateMessage(message,type=''){
   const el=$('#authMessage'); if(!message){el.hidden=true;return;} el.hidden=false; el.className=`gate-message ${type}`.trim(); el.textContent=message;
 }
+function setAuthProgress(message=''){
+  const el=$('#authProgress'),text=$('#authProgressText');if(!el||!text)return;text.textContent=message||'Conectando…';el.hidden=!message;
+}
+function setGateLoadingMessage(message='Conectando de forma segura…'){const el=$('#gateLoadingText');if(el)el.textContent=message;}
+function withTimeout(promise,ms,message){
+  let timer;const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{const err=new Error(message);err.code='AUTH_TIMEOUT';reject(err);},ms);});
+  return Promise.race([Promise.resolve(promise),timeout]).finally(()=>clearTimeout(timer));
+}
+function authErrorMessage(err){
+  if(err?.code==='AUTH_TIMEOUT')return `${err.message} La conexión puede estar limitada por la vista previa integrada. Probá nuevamente o abrí la aplicación en una pestaña independiente de Chrome.`;
+  if(err?.code==='invalid_credentials')return 'El correo o la contraseña no son válidos.';
+  return err?.message||'No se pudo autenticar.';
+}
 function savedConfig(){
   const stored=JSON.parse(localStorage.getItem('zenhogar_cloud_config')||'null');
   if(stored?.supabaseUrl && stored?.supabaseKey) return stored;
@@ -3637,17 +3652,18 @@ async function startApp(){
   setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
 }
 async function handleSignedIn(user){
-  state.user=user;setGateStep('gateLoading');
+  state.user=user;setGateLoadingMessage('Credenciales validadas. Buscando tu empresa…');setGateStep('gateLoading');
   try{
-    if(await resolveBusiness()){await startApp();return;}
+    setAuthProgress('Credenciales validadas. Buscando tu empresa…');
+    if(await withTimeout(resolveBusiness(),15000,'La autenticación fue correcta, pero la empresa tardó demasiado en responder.')){setGateLoadingMessage('Empresa encontrada. Cargando la aplicación…');await startApp();return;}
     const meta=user?.user_metadata||{};
     if(meta.zen_hogar_invite){$('#inviteSetupEmail').textContent=user.email||'—';setGateStep('inviteSetupStep');return;}
-    await refreshPendingOrgInvites();
+    await withTimeout(refreshPendingOrgInvites(),12000,'No se pudieron consultar las invitaciones a tiempo.');
     if(meta.saas_signup&&meta.pending_business_name){
-      try{const {data:newOrg,error:createErr}=await state.client.rpc('create_organization',{p_name:meta.pending_business_name});if(!createErr&&newOrg&&await resolveBusiness(newOrg)){await startApp();return;}}catch(_e){}
+      try{const {data:newOrg,error:createErr}=await withTimeout(state.client.rpc('create_organization',{p_name:meta.pending_business_name}),15000,'La creación de la empresa tardó demasiado.');if(!createErr&&newOrg&&await withTimeout(resolveBusiness(newOrg),15000,'No se pudo abrir la empresa creada a tiempo.')){await startApp();return;}}catch(_e){}
     }
     renderBusinessOnboarding();setGateStep('businessStep');
-  }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo abrir la cuenta: ${err.message}`,'error');}
+  }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo abrir la cuenta: ${authErrorMessage(err)}`,'error');}
 }
 
 function normalizeBarcode(value){return String(value||'').trim().replace(/\s+/g,'');}
@@ -4478,6 +4494,7 @@ async function leavePasswordReset(){
 
 function setAuthMode(mode){
   state.authMode=mode==='signup'?'signup':'signin';const signup=state.authMode==='signup';
+  setAuthProgress('');
   $$('.auth-mode-btn').forEach(b=>{const active=b.dataset.authMode===state.authMode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
   $('#authSignupFields').hidden=!signup;$('#authTitle').textContent=signup?'Crear cuenta':'Ingresar';$('#authIntro').textContent=signup?'Creá una cuenta y tu primera empresa. Los datos quedarán separados del resto.':'Ingresá para abrir las empresas a las que tenés acceso.';$('#authSubmit').textContent=signup?'Crear cuenta y empresa':'Ingresar';$('#authHelp').textContent=signup?'Si ya recibiste una invitación, podés crear tu contraseña desde el enlace del correo.':'Si recibiste una invitación, usá el correo al que fue enviada.';$('#authPassword').autocomplete=signup?'new-password':'current-password';$('#authPassword2').required=signup;$('#authBusinessName').required=signup;
 }
@@ -4517,16 +4534,16 @@ $('#resetPasswordForm').addEventListener('submit',async e=>{
 });
 $('#resetPasswordCancel').addEventListener('click',leavePasswordReset);
 $('#authForm').addEventListener('submit',async e=>{
-  e.preventDefault();setGateMessage('');const email=$('#authEmail').value.trim(),password=$('#authPassword').value;$('#authSubmit').disabled=true;
+  e.preventDefault();setGateMessage('');const email=$('#authEmail').value.trim(),password=$('#authPassword').value;$('#authSubmit').disabled=true;setAuthProgress(state.authMode==='signup'?'Creando la cuenta…':'Verificando correo y contraseña…');
   try{
     if(state.authMode==='signup'){
       const pass2=$('#authPassword2').value,business=$('#authBusinessName').value.trim();if(password.length<8)throw new Error('La contraseña debe tener al menos 8 caracteres.');if(password!==pass2)throw new Error('Las contraseñas no coinciden.');if(!business)throw new Error('Ingresá el nombre de tu empresa.');
-      const {data,error}=await state.client.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname,data:{saas_signup:true,pending_business_name:business}}});if(error)throw error;
+      const {data,error}=await withTimeout(state.client.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname,data:{saas_signup:true,pending_business_name:business}}}),15000,'La creación de la cuenta tardó demasiado en responder.');if(error)throw error;
       if(data.session?.user){state.user=data.session.user;const {data:orgId,error:createError}=await state.client.rpc('create_organization',{p_name:business});if(createError)throw createError;if(!await resolveBusiness(orgId))throw new Error('No se pudo abrir la empresa creada.');await startApp();return;}
       setGateMessage('Cuenta creada. Revisá tu correo para confirmar el email; al ingresar se creará tu empresa automáticamente.','success');return;
     }
-    const {data,error}=await state.client.auth.signInWithPassword({email,password});if(error)throw error;await handleSignedIn(data.user);
-  }catch(err){setGateMessage(err.message||'No se pudo autenticar.','error');}finally{$('#authSubmit').disabled=false;}
+    const {data,error}=await withTimeout(state.client.auth.signInWithPassword({email,password}),15000,'Supabase no respondió al inicio de sesión dentro de 15 segundos.');if(error)throw error;if(!data?.user)throw new Error('Supabase no devolvió un usuario válido.');setAuthProgress('Credenciales validadas. Abriendo tu empresa…');await handleSignedIn(data.user);
+  }catch(err){console.error('Inicio de sesión:',err);setGateStep('authStep');setGateMessage(authErrorMessage(err),'error');}finally{$('#authSubmit').disabled=false;setAuthProgress('');}
 });
 $('#createBusinessForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=$('#createBusinessBtn');btn.disabled=true;try{await createOrganizationByName($('#createBusinessName').value);await startApp();}catch(err){toast(err.message||'No se pudo crear la empresa.','error');}finally{btn.disabled=false;}});
 $('#accessDeniedSignOut').addEventListener('click',async()=>{await state.client.auth.signOut();location.reload();});
@@ -4585,11 +4602,12 @@ async function init(){
     if(event==='PASSWORD_RECOVERY')showPasswordReset(session);
   });
   setGateStep('gateLoading');
+  setGateLoadingMessage('Comprobando la sesión guardada…');
   try{
-    const {data,error}=await state.client.auth.getSession(); if(error)throw error;
+    const {data,error}=await withTimeout(state.client.auth.getSession(),12000,'No se pudo comprobar la sesión guardada dentro de 12 segundos.'); if(error)throw error;
     if(recoveryIntent&&data.session?.user){showPasswordReset(data.session);return;}
     if(data.session?.user)await handleSignedIn(data.session.user); else setGateStep('authStep');
-  }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${err.message}`,'error');}
+  }catch(err){console.error(err);setGateStep('authStep');setGateMessage(`No se pudo conectar: ${authErrorMessage(err)}`,'error');}
 }
 // V13.3.3 · Actualización masiva de precios
 init();
