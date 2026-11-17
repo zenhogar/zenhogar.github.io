@@ -1197,7 +1197,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
-  <link rel="stylesheet" href="./login-neon.css?v=20261117-2" />
+  <link rel="stylesheet" href="./logo-armado.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1294,28 +1294,29 @@ html[data-theme="dark"] .weight-quick-qty button{
   </section>
 
   <!-- Bienvenida visual independiente de la autenticación: solo aparece al abrir el panel. -->
-  <section id="zhNeonWelcome" class="zh-neon-welcome" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status">
-    <div class="zh-neon-content">
-      <svg class="zh-neon-logo" viewBox="0 0 320 320" role="img" aria-label="Logotipo de Zen Hogar: casa y hojas iluminadas">
-        <g class="zh-n-glow" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <circle class="zh-n-path" pathLength="100" cx="160" cy="160" r="132" style="--neon:#a6ecd5;--delay:.07s;--duration:1.58s"/>
-          <circle class="zh-n-path" pathLength="100" cx="99" cy="117" r="18" style="--neon:#c4e8ef;--delay:1.00s;--duration:.85s"/>
-          <path class="zh-n-path" pathLength="100" d="M87 174 160 99 214 153 V125 H238 V175 L248 186" style="--neon:#a9e7eb;--delay:.43s;--duration:1.48s"/>
-          <path class="zh-n-path" pathLength="100" d="M102 187 160 127 219 187 V251 H102 Z" style="--neon:#c2eeef;--delay:.87s;--duration:1.24s"/>
-          <path class="zh-n-path" pathLength="100" d="M118 256 C68 257 32 222 29 166 C82 163 119 195 122 251 Z" style="--neon:#a9eacb;--delay:1.23s;--duration:1.01s"/>
-          <path class="zh-n-path" pathLength="100" d="M202 256 C251 257 288 222 291 166 C239 163 202 195 198 251 Z" style="--neon:#a9eacb;--delay:1.30s;--duration:1.04s"/>
-          <path class="zh-n-path thin" pathLength="100" d="M39 176 Q92 217 118 252" style="--neon:#cfefda;--delay:1.73s;--duration:.58s"/>
-          <path class="zh-n-path thin" pathLength="100" d="M281 176 Q228 217 202 252" style="--neon:#cfefda;--delay:1.79s;--duration:.55s"/>
-          <path class="zh-n-path thin" pathLength="100" d="M137 181 h18 v18 h-18 z M165 181 h18 v18 h-18 z M137 209 h18 v18 h-18 z M165 209 h18 v18 h-18 z" style="--neon:#d1eff4;--delay:1.70s;--duration:.62s"/>
-          <path class="zh-n-path thin" pathLength="100" d="M99 255 Q160 260 221 255" style="--neon:#b9e6e8;--delay:1.81s;--duration:.51s"/>
-        </g>
+  <!-- Armado por capas de la identidad original aportada por el usuario. -->
+  <section id="zhBrandAssembly" class="zh-brand-assembly" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status">
+    <div class="zh-brand-content">
+      <svg class="zh-brand-mark" viewBox="0 0 1000 1000" role="img" aria-label="Logo original de Zen Hogar: casa y hojas entre dos aros">
+        <defs>
+          <linearGradient id="zhAsmMint" x1="0" x2=".75" y1="0" y2="1"><stop stop-color="#56c58f"/><stop offset=".46" stop-color="#64cba0"/><stop offset="1" stop-color="#80dab8"/></linearGradient>
+          <mask id="zhAsmOuter" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000"><circle class="zh-asm-stroke zh-asm-stroke-outer" pathLength="100" cx="500" cy="500" r="426" stroke-width="58"/></mask>
+          <mask id="zhAsmInner" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000"><circle class="zh-asm-stroke zh-asm-stroke-inner" pathLength="100" cx="500" cy="500" r="371" stroke-width="120"/></mask>
+        </defs>
+        <g class="zh-asm-part zh-asm-ring-dark" mask="url(#zhAsmOuter)"><path fill="#033446" fill-rule="evenodd" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66ZM467,87 509,85 549,88 595,96 628,105 664,118 699,135 731,154 768,182 812,225 838,257 863,296 885,343 899,385 910,430 914,463 914,486 915,488 914,528 908,567 899,606 882,653 865,688 846,721 813,764 783,795 763,813 740,830 699,856 654,877 621,889 579,899 529,906 454,904 419,899 376,889 339,876 303,859 268,838 230,809 192,773 160,733 135,694 118,660 102,619 89,569 84,529 85,449 92,410 100,380 117,333 131,303 156,263 183,227 221,190 248,167 292,139 326,122 385,101 419,93Z"/></g>
+        <g class="zh-asm-part zh-asm-ring-mint" mask="url(#zhAsmInner)"><path fill="url(#zhAsmMint)" fill-rule="evenodd" d="M126,536 128,559 136,593 144,618 158,653 174,683 192,712 208,733 239,766 278,799 315,822 346,838 368,847 412,860 447,867 476,869 537,868 566,864 605,855 645,841 678,825 700,812 731,790 763,763 781,743 802,717 824,683 838,656 854,618 863,588 867,553 859,575 848,595 819,634 790,660 763,677 739,708 710,736 669,768 630,789 587,804 544,813 516,816 483,816 432,809 393,799 343,777 305,752 269,720 244,691 234,675 227,673 201,654 166,619 141,582 131,557ZM132,398 132,403 158,403 188,407 192,390 207,355 222,326 242,299 255,283 291,248 308,235 343,213 391,192 432,180 466,175 516,174 552,178 591,187 636,204 673,223 714,255 743,283 760,304 790,352 805,390 809,407 835,403 865,403 863,389 850,351 837,322 819,291 786,248 755,217 739,204 694,173 664,157 639,147 606,136 578,130 513,123 457,125 420,130 391,136 337,156 302,174 276,191 234,225 209,251 186,281 171,303 154,335 144,360Z"/></g>
+        <g class="zh-asm-part zh-asm-house-leaves"><path fill="#033446" fill-rule="evenodd" d="M125,408 119,457 119,484 125,529 132,557 149,593 175,628 192,645 212,661 227,671 253,684 270,691 303,699 351,700 368,696 627,696 652,701 679,701 720,694 753,680 777,667 808,643 826,623 845,598 861,566 868,548 876,509 877,449 873,411 871,406 865,404 821,406 772,416 750,424 718,440 683,466 656,438 656,325 654,324 588,324 585,368 502,286 496,286 312,463 285,444 266,433 225,416 175,406 132,404 126,406ZM848,460 850,462 850,498 843,536 829,574 817,593 804,610 778,635 761,647 742,657 713,667 696,671 677,674 657,674 656,671ZM148,460 339,669 341,671 339,673 304,671 263,660 246,652 225,639 213,630 191,608 173,582 164,563 154,537 149,514 147,489 147,462ZM845,430 846,433 747,533 640,652 639,651 639,611 641,588 647,565 660,533 667,520 683,501 714,473 748,454 774,444 803,436ZM151,430 195,436 223,444 243,451 264,462 286,476 315,502 335,531 346,553 351,570 358,619 358,649 356,651 345,640 230,515 149,432ZM500,337 656,489 635,519 619,558 611,604 611,631 610,632 611,634 611,666 610,667 386,667 385,666 385,610 382,583 377,558 369,535 360,516 341,490Z"/></g>
+        <g class="zh-asm-part zh-asm-leaf-left"><path fill="url(#zhAsmMint)" fill-rule="evenodd" d="M148,462 149,503 157,541 165,563 174,582 192,608 213,628 225,638 263,658 298,669 315,671 339,671ZM152,432 270,557 346,640 356,649 355,601 350,570 345,553 335,533 313,502 286,477 264,463 243,453 195,437Z"/></g>
+        <g class="zh-asm-part zh-asm-leaf-right"><path fill="url(#zhAsmMint)" fill-rule="evenodd" d="M848,462 725,596 657,673 677,673 696,670 713,666 742,656 773,638 803,610 816,593 829,571 841,540 848,498ZM845,432 803,437 757,451 735,462 714,475 686,500 673,515 661,533 648,565 640,611 640,649 746,533Z"/></g>
+        <g class="zh-asm-part zh-asm-sun"><path fill="#033446" fill-rule="evenodd" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/></g>
+        <g class="zh-asm-part zh-asm-windows"><path fill="#033446" fill-rule="evenodd" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/></g>
       </svg>
-      <h2 class="zh-neon-wordmark">Zen Hogar</h2>
-      <p class="zh-neon-subtitle">GESTIÓN</p>
-      <span class="zh-neon-line" aria-hidden="true"></span>
-      <p class="zh-neon-message">Preparando tu espacio de trabajo…</p>
+      <h2 class="zh-brand-wordmark">Zen Hogar</h2>
+      <p class="zh-brand-subtitle">GESTIÓN</p>
+      <span class="zh-brand-divider" aria-hidden="true"></span>
+      <p class="zh-brand-status">Preparando tu espacio de trabajo…</p>
     </div>
-    <button class="zh-neon-skip" type="button" onclick="zhNeonWelcomeDismiss()">Omitir animación</button>
+    <button class="zh-brand-skip" type="button" onclick="zhBrandAssemblyDismiss()">Omitir animación</button>
   </section>
 
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -2133,7 +2134,7 @@ window.ZH_CONFIG = {
   <script src="./stock-v2.js?v=20261117-1"></script>
   <script src="./operaciones-v2.js?v=20261117-1"></script>
   <script src="./panel-inteligente.js?v=20261117-1"></script>
-  <script src="./login-neon.js?v=20261117-2"></script>
+  <script src="./logo-armado.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -3716,7 +3717,7 @@ function subscribeRealtime(){
 
 async function startApp(){
   // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.
-  zhNeonWelcomeStart();
+  zhBrandAssemblyStart();
   try{
     $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
     const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
@@ -3724,7 +3725,7 @@ async function startApp(){
     setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
   }finally{
     // Ante éxito o error, la animación no deja la aplicación bloqueada.
-    await zhNeonWelcomeFinish();
+    await zhBrandAssemblyFinish();
   }
 }
 async function handleSignedIn(user){
