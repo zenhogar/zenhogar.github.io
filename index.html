@@ -1193,6 +1193,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./dashboard-premium.css?v=20261117-1" />
   <link rel="stylesheet" href="./reportes-visual.css?v=20261117-compacto" />
   <link rel="stylesheet" href="./reportes-v2.css?v=20261117-1" />
+  <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1522,6 +1523,16 @@ html[data-theme="dark"] .weight-quick-qty button{
             <option value="stockDesc">Mayor stock primero</option>
           </select>
           <button class="primary" id="addProductBtn">+ Agregar producto</button>
+        </div>
+        <div id="zhStockFilterBar" class="zh-stock-tools" aria-label="Filtros rápidos de inventario">
+          <div class="zh-stock-filters" role="group" aria-label="Estado de stock">
+            <button type="button" class="zh-stock-chip active" data-stock-filter="all" onclick="zhStockSetFilter('all')">Todos <span data-filter-count>0</span></button>
+            <button type="button" class="zh-stock-chip" data-stock-filter="out" onclick="zhStockSetFilter('out')">Sin stock <span data-filter-count>0</span></button>
+            <button type="button" class="zh-stock-chip" data-stock-filter="low" onclick="zhStockSetFilter('low')">Stock bajo <span data-filter-count>0</span></button>
+            <button type="button" class="zh-stock-chip" data-stock-filter="target" onclick="zhStockSetFilter('target')">Debajo del objetivo <span data-filter-count>0</span></button>
+            <button type="button" class="zh-stock-chip" data-stock-filter="unset" onclick="zhStockSetFilter('unset')">Sin objetivo válido <span data-filter-count>0</span></button>
+          </div>
+          <div class="zh-stock-foot"><small id="zhStockFilterCount" aria-live="polite">Mostrando productos</small><button type="button" onclick="setView('replenishment')">Abrir reposición ↗</button></div>
         </div>
         <div class="card table-wrap">
           <table>
@@ -2085,6 +2096,7 @@ window.ZH_CONFIG = {
   <script src="./dashboard-premium.js?v=20261117-1"></script>
   <script src="./reportes-charts.js?v=20261117-1"></script>
   <script src="./reportes-v2.js?v=20261117-1"></script>
+  <script src="./stock-v2.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -2968,6 +2980,7 @@ function renderProducts(){
   $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
   populateProductCategoryOptions();
   let rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
+  rows=zhStockFilterRows(rows);
   const sort=$('#productSort')?.value||'recent';
   rows=rows.slice().sort((a,b)=>{
     const at=a.createdAt?new Date(a.createdAt).getTime():0,bt=b.createdAt?new Date(b.createdAt).getTime():0;
@@ -2983,6 +2996,7 @@ function renderProducts(){
   $('#addProductBtn').hidden=!canAdmin();
   renderStockQuery();
   renderInventorySummary();
+  zhStockUpdateControls(rows.length);
 }
 function replenishmentItems(){
   return state.products
