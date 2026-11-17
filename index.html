@@ -1705,20 +1705,16 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
           <button class="secondary" id="priceMonitorRefreshBtn" type="button">Recargar resultados guardados</button>
         </div>
         <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
-        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. Los datos de Coto se consultan por separado; el cruce automático de Coto y la programación cada 14 días siguen pendientes. Ningún precio de venta se modifica.</p>
+        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. La Gallega se consulta en vivo. La lectura oficial de Coto y la programación cada 14 días siguen pendientes. Ningún precio de venta se modifica.</p>
         <article class="card price-monitor-status" id="priceMonitorCotoPanel">
           <div>
-            <span class="section-kicker">Fuente secundaria · Coto</span>
-            <h3>Coto · SEPA Centro</h3>
-            <p>Referencias públicas de precios de Coto para la región Centro. Son valores regionales agregados, no una lectura de Coto Digital. Solo se usarán como respaldo cuando La Gallega no tenga una coincidencia validada.</p>
-            <p id="priceMonitorCotoStatus" aria-live="polite">Consultando estado de la fuente...</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Actualizar datos de Coto</button>
-              <button class="secondary" id="priceMonitorCotoCompareBtn" type="button">Comparar faltantes con Coto</button>
-            </div>
-            <p id="priceMonitorCotoCompareStatus" class="price-monitor-refresh-note">El cruce quedará disponible cuando terminen ambas consultas.</p>
+            <span class="section-kicker">Fuente secundaria · Coto Digital oficial</span>
+            <h3>Coto Digital — Integración pendiente</h3>
+            <p>La Gallega sigue siendo la referencia principal. Coto sólo se consultará en su sitio oficial cuando no encontremos una coincidencia válida. SEPA quedó desactivado y sus precios no se usarán para recomendar precios de venta.</p>
+            <p class="price-monitor-refresh-note">La página de Coto presenta sus precios después de cargar la aplicación en el navegador. El servidor aún no puede leerlos automáticamente de forma confiable; no se muestran precios de Coto sin verificar.</p>
+            <a class="monitor-source-link" href="https://www.coto.com.ar/cdigi" target="_blank" rel="noopener noreferrer">Abrir Coto Digital oficial</a>
           </div>
-          <div class="price-monitor-flags"><span class="monitor-flag">Fuente: SEPA · Región Centro</span><span class="monitor-flag">Comparación manual y protegida</span></div>
+          <div class="price-monitor-flags"><span class="monitor-flag warning">Automatización de Coto pendiente</span><span class="monitor-flag">SEPA fuera del comparador</span></div>
         </article>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
@@ -3516,7 +3512,7 @@ function renderSettings(){
   $('#teamCard').hidden=!canOwner();renderAccessControl();
 }
 
-function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto · SEPA Centro'})[source]||'Sin fuente';}
+function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto Digital (pendiente)'})[source]||'Sin fuente';}
 function monitorMatchLabel(status){return ({matched:'Coincidencia exacta',ambiguous:'Revisar coincidencia',not_found:'Sin coincidencia',source_error:'Error de fuente'})[status]||'Sin estado';}
 function monitorReviewLabel(f){if(f.reviewStatus==='rejected'||f.reviewChoice==='discarded')return 'Sugerencia descartada';if(f.reviewChoice==='market')return 'Alternativa competitiva elegida';if(f.reviewChoice==='profitable')return 'Alternativa rentable elegida';return 'Pendiente de decisión';}
 function safeExternalUrl(value){try{const url=new URL(String(value||''));return url.protocol==='https:'?url.href:'';}catch(_e){return '';}}
@@ -4512,8 +4508,8 @@ setInterval(()=>{
 },15000);
 
 $('#priceMonitorSearch').oninput=renderPriceIntelligence;
-$('#priceMonitorCotoSyncBtn').onclick=startCotoReferenceSync;
-$('#priceMonitorCotoCompareBtn').onclick=compareCotoFallback;
+// SEPA sync is deliberately disabled; source must be the official Coto Digital website.
+// SEPA fallback comparisons are deliberately disabled.
 
 async function compareCotoFallback(){
   if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden comparar precios.','error');
