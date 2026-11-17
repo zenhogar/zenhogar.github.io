@@ -1192,6 +1192,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./modelo13-visual.css?v=20261117-teal" />
   <link rel="stylesheet" href="./dashboard-premium.css?v=20261117-1" />
   <link rel="stylesheet" href="./reportes-visual.css?v=20261117-compacto" />
+  <link rel="stylesheet" href="./reportes-v2.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1729,6 +1730,8 @@ html[data-theme="dark"] .weight-quick-qty button{
         </div>
 
         <div id="reportInsights" class="report-insights"></div>
+        <div id="zhR2Summary" class="zh-r2-comparison" aria-live="polite"></div>
+        <div class="zh-r2-export"><label>Reporte mensual PDF<input id="zhR2Month" type="month" aria-label="Mes a exportar"></label><button id="zhR2PDF" type="button" class="primary" onclick="zhR2ExportPDF()">Descargar reporte PDF</button><small>Informe con facturación, ganancia, gastos, evolución diaria, medios de pago y productos destacados.</small></div>
         <header class="report-visual-heading">
           <div><span class="section-kicker">ANÁLISIS VISUAL</span><h2>Gráficos de rendimiento</h2></div>
           <small>Compará ventas, ganancias, cobros y productos. Todos los gráficos usan el período seleccionado arriba.</small>
@@ -2081,6 +2084,7 @@ window.ZH_CONFIG = {
   </script>
   <script src="./dashboard-premium.js?v=20261117-1"></script>
   <script src="./reportes-charts.js?v=20261117-1"></script>
+  <script src="./reportes-v2.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -3425,6 +3429,7 @@ function renderReports(){
   q('categoryProfitReport').innerHTML=a.categoryRows.slice(0,8).map(x=>`<div class="report-category-row"><div><strong>${esc(x.name)}</strong><small>Ventas ${money(x.revenue)} · costo ${money(x.cost)}</small></div><div><strong>${money(x.profit)}</strong><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></div></div>`).join('')||'<div class="empty">Sin datos por categoría.</div>';
   q('profitabilityTable').innerHTML=a.productRows.map(x=>`<tr><td><strong>${esc(x.name)}</strong><small class="report-product-code">${esc(x.code||'Sin código')} · ${esc(x.category||'Sin categoría')}</small></td><td>${qtyText({unitKind:x.unitKind},x.qty)}</td><td>${money(x.revenue)}</td><td>${money(x.cost)}</td><td class="${x.profit>=0?'positive-text':'negative-text'}"><strong>${money(x.profit)}</strong></td><td><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></td><td>${money(x.discount)}</td></tr>`).join('')||'<tr><td colspan="7"><div class="empty">No hay ventas para mostrar en este período.</div></td></tr>';
   renderReportVisualCharts(a);
+  zhR2Render(a);
 }
 function exportProfitabilityCsv(){
   const a=reportAnalytics(),target=Number(state.reportMarginTarget||45),q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Período',a.range.label],['Margen objetivo',`${target}%`],[],['Producto','Código','Categoría','Cantidad base','Unidad','Ventas netas','Costo efectivo','Ganancia','Margen %','Descuento promociones','Descuento envase','Descuentos totales'],...a.productRows.map(r=>[r.name,r.code,r.category,r.qty,unitLabel(r.unitKind),r.revenue,r.cost,r.profit,Number.isFinite(r.margin)?r.margin.toFixed(2):'',r.promoDiscount,r.containerDiscount,r.discount])];
