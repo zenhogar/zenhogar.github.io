@@ -3591,6 +3591,7 @@ function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); rend
 // Estado de sincronización verificado: la conexión a internet NO equivale a
 // una consulta correcta a la nube. Evitamos mostrar "Nube conectada" si falló.
 let zhCloudSyncStatus='checking';
+let zhLastConnectedOrgId=null;
 let zhLoadVersion=0;
 
 // V13.3.1 · carga paginada para evitar cortes silenciosos de Supabase/PostgREST.
@@ -3611,7 +3612,7 @@ async function loadAllData({silent=false}={}){
   if(!state.org)return;
   const requestedOrg=state.org.id,loadVersion=++zhLoadVersion;
   if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
-  if(zhCloudSyncStatus!=='connected'){zhCloudSyncStatus='checking';updateConnection();}
+  if(zhCloudSyncStatus!=='connected'||zhLastConnectedOrgId!==requestedOrg){zhCloudSyncStatus='checking';updateConnection();}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
       fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
@@ -3651,6 +3652,7 @@ async function loadAllData({silent=false}={}){
       state.accessMembers=(memberRes.data||[]).map(m=>({userId:m.user_id,email:m.email||'',fullName:m.full_name||'',role:m.role,joinedAt:m.joined_at}));
     }
     zhCloudSyncStatus='connected';
+    zhLastConnectedOrgId=requestedOrg;
     saveCache();renderAll();updateConnection();
   }catch(err){
     if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
@@ -4512,7 +4514,9 @@ window.addEventListener('pagehide',()=>{appWentToBackground=true;},{passive:true
 window.addEventListener('pageshow',e=>{if(e.persisted||appWentToBackground){appWentToBackground=false;restoreDialogsAfterAppResume();}},{passive:true});
 
 function updateConnection(){
-  const online=navigator.onLine,status=online?zhCloudSyncStatus:'offline';
+  const online=navigator.onLine;
+  const currentCompanyVerified=!!state.org&&zhLastConnectedOrgId===state.org.id;
+  const status=online?(zhCloudSyncStatus==='connected'&&!currentCompanyVerified?'checking':zhCloudSyncStatus):'offline';
   const label=status==='connected'?'Nube conectada':status==='error'?'Sin sincronizar':status==='offline'?'Sin conexión':'Comprobando nube';
   const detail=status==='connected'?'Última actualización correcta':status==='error'?'No se pudo actualizar desde la nube':status==='offline'?'Podés consultar la última copia local disponible':'Verificando la sincronización';
   const el=$('#connectionStatus');
