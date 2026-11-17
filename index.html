@@ -3657,10 +3657,10 @@ function renderPriceMonitorSearchExplorer(q,findings){
  const products=(state.products||[]).filter(p=>p.active!==false && pmNormalize(p.name).includes(pmNormalize(q))).slice(0,30);
  const results=(state.priceMonitorSearchCatalog||[]).filter(x=>pmNormalize(x.product_name).includes(pmNormalize(q)));
  const searching=state.priceMonitorSearchLoading||pmNormalize(state.priceMonitorSearchQuery)!==pmNormalize(q);
- const gallegaLast=gallegaRuns.find(x=>pmNormalize(x.queryText)===pmNormalize(q))||null;
  const foundIds=new Set(findings.map(f=>f.productId));
  const targetedRuns=state.priceMonitorTargetedRuns||[];
  const gallegaRuns=state.priceMonitorLagallegaSearches||[];
+ const gallegaLast=gallegaRuns.find(x=>pmNormalize(x.queryText)===pmNormalize(q))||null;
  let html='<div class="monitor-explorer-heading"><strong>Productos y referencias de mercado</strong><small>Información orientativa · No son coincidencias confirmadas</small></div>';
  if(searching)html+='<div class="monitor-explorer-notice">Consultando referencias guardadas…</div>';
  if(gallegaLast)html+='<div class="monitor-explorer-notice">La Gallega: '+(gallegaLast.status==='completed'?gallegaLast.itemsSaved+' resultados de la última consulta':gallegaLast.status==='failed'?'No se pudo completar la búsqueda':gallegaLast.status==='queued'||gallegaLast.status==='requested'?'Búsqueda en curso…':'Sin resultados')+' · '+esc(gallegaLast.queryText)+'</div>';
