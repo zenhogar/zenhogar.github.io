@@ -1197,13 +1197,14 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
+  <link rel="stylesheet" href="./login-neon.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
-      <div class="gate-brand"><div class="brand-mark"><span>GC</span></div><div><span class="section-kicker">GESTIÓN CLOUD</span><h1>Gestión comercial en la nube</h1><p>Cada empresa con sus datos, equipo y operación completamente separados.</p></div></div>
+      <div class="gate-brand"><div class="brand-mark zh-gate-logo"><img src="./zen-hogar-neon.svg" alt="Logo de Zen Hogar" width="48" height="48" decoding="async"></div><div><span class="section-kicker">ZEN HOGAR · GESTIÓN</span><h1>Gestión comercial en la nube</h1><p>Cada empresa con sus datos, equipo y operación completamente separados.</p></div></div>
 
       <div id="configStep" class="gate-step" hidden>
         <div class="gate-badge">1 · Conectar nube</div>
@@ -1290,6 +1291,31 @@ html[data-theme="dark"] .weight-quick-qty button{
 
       <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p>Conectando de forma segura…</p></div>
     </div>
+  </section>
+
+  <!-- Bienvenida visual independiente de la autenticación: solo aparece al abrir el panel. -->
+  <section id="zhNeonWelcome" class="zh-neon-welcome" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status">
+    <div class="zh-neon-content">
+      <svg class="zh-neon-logo" viewBox="0 0 320 320" role="img" aria-label="Logotipo de Zen Hogar: casa y hojas iluminadas">
+        <g class="zh-n-glow" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle class="zh-n-path" pathLength="100" cx="160" cy="160" r="132" style="--neon:#a6ecd5;--delay:.05s;--duration:1.2s"/>
+          <circle class="zh-n-path" pathLength="100" cx="99" cy="117" r="18" style="--neon:#c4e8ef;--delay:.57s;--duration:.64s"/>
+          <path class="zh-n-path" pathLength="100" d="M87 174 160 99 214 153 V125 H238 V175 L248 186" style="--neon:#a9e7eb;--delay:.37s;--duration:1.02s"/>
+          <path class="zh-n-path" pathLength="100" d="M102 187 160 127 219 187 V251 H102 Z" style="--neon:#c2eeef;--delay:.66s;--duration:.99s"/>
+          <path class="zh-n-path" pathLength="100" d="M118 256 C68 257 32 222 29 166 C82 163 119 195 122 251 Z" style="--neon:#a9eacb;--delay:.71s;--duration:.95s"/>
+          <path class="zh-n-path" pathLength="100" d="M202 256 C251 257 288 222 291 166 C239 163 202 195 198 251 Z" style="--neon:#a9eacb;--delay:.81s;--duration:.93s"/>
+          <path class="zh-n-path thin" pathLength="100" d="M39 176 Q92 217 118 252" style="--neon:#cfefda;--delay:1.05s;--duration:.65s"/>
+          <path class="zh-n-path thin" pathLength="100" d="M281 176 Q228 217 202 252" style="--neon:#cfefda;--delay:1.09s;--duration:.65s"/>
+          <path class="zh-n-path thin" pathLength="100" d="M137 181 h18 v18 h-18 z M165 181 h18 v18 h-18 z M137 209 h18 v18 h-18 z M165 209 h18 v18 h-18 z" style="--neon:#d1eff4;--delay:1.06s;--duration:.75s"/>
+          <path class="zh-n-path thin" pathLength="100" d="M99 255 Q160 260 221 255" style="--neon:#b9e6e8;--delay:1.10s;--duration:.6s"/>
+        </g>
+      </svg>
+      <h2 class="zh-neon-wordmark">Zen Hogar</h2>
+      <p class="zh-neon-subtitle">GESTIÓN</p>
+      <span class="zh-neon-line" aria-hidden="true"></span>
+      <p class="zh-neon-message">Preparando tu espacio de trabajo…</p>
+    </div>
+    <button class="zh-neon-skip" type="button" onclick="zhNeonWelcomeDismiss()">Omitir animación</button>
   </section>
 
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -2107,6 +2133,7 @@ window.ZH_CONFIG = {
   <script src="./stock-v2.js?v=20261117-1"></script>
   <script src="./operaciones-v2.js?v=20261117-1"></script>
   <script src="./panel-inteligente.js?v=20261117-1"></script>
+  <script src="./login-neon.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -3688,10 +3715,17 @@ function subscribeRealtime(){
 }
 
 async function startApp(){
-  $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
-  const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
-  $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
-  setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
+  // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.
+  zhNeonWelcomeStart();
+  try{
+    $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
+    const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
+    $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
+    setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
+  }finally{
+    // Ante éxito o error, la animación no deja la aplicación bloqueada.
+    await zhNeonWelcomeFinish();
+  }
 }
 async function handleSignedIn(user){
   state.user=user;setGateStep('gateLoading');

@@ -1,0 +1,90 @@
+/* Zen Hogar Gestión · Acceso con firma neón pastel (vectorial, sin GIF ni dependencias). */
+.gate-brand .brand-mark.zh-gate-logo{
+  width:56px;height:56px;flex-shrink:0;padding:5px;
+  border-radius:17px;background:#091419!important;
+  border:1px solid rgba(166,226,218,.3);
+  box-shadow:0 6px 19px rgba(39,100,98,.14)!important;
+}
+.gate-brand .brand-mark.zh-gate-logo img{width:100%;height:100%;object-fit:contain;display:block}
+.zh-neon-welcome[hidden]{display:none!important}
+.zh-neon-welcome{
+  position:fixed;z-index:2100;inset:0;display:flex;
+  flex-direction:column;justify-content:center;align-items:center;
+  background:
+    radial-gradient(ellipse 36% 30% at 50% 47%,rgba(104,178,168,.11),transparent 80%),
+    radial-gradient(ellipse 33% 35% at 22% 14%,rgba(188,171,227,.06),transparent 83%),
+    #070d11;
+  isolation:isolate;overflow:hidden;color:#e7f3f1;
+  padding:calc(22px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
+  opacity:1;transition:opacity .36s ease,visibility .36s ease;
+}
+.zh-neon-welcome.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+.zh-neon-welcome::before{
+  content:"";position:absolute;inset:-30%;
+  background:radial-gradient(circle at 50% 50%,rgba(127,199,194,.07),transparent 45%);
+  pointer-events:none;
+}
+.zh-neon-content{position:relative;width:min(100%,390px);text-align:center;display:grid;justify-items:center;gap:0}
+.zh-neon-logo{display:block;width:clamp(198px,54vw,272px);height:auto;overflow:visible;filter:drop-shadow(0 0 8px rgba(127,199,194,.14));}
+.zh-n-path{
+  fill:none;stroke:var(--neon,#a2e4da);stroke-width:3.2;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:100;stroke-dashoffset:100;
+  filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 9px rgba(127,199,194,.18));
+}
+.zh-n-path.thin{stroke-width:2.5}
+.zh-neon-welcome.is-playing .zh-n-path{
+  animation:zhNeonTrace var(--duration,1s) cubic-bezier(.22,.72,.22,1) var(--delay,0s) both;
+}
+.zh-neon-welcome.is-playing .zh-n-glow{
+  animation:zhNeonBreathe 1.8s ease-in-out 1.6s infinite alternate;
+}
+.zh-neon-wordmark{
+  margin:2px 0 0;font-size:clamp(24px,6.2vw,33px);line-height:1.15;
+  font-weight:730;letter-spacing:-.052em;color:#eef8f5;
+  text-shadow:0 0 14px rgba(186,227,217,.12);
+  opacity:0;transform:translateY(8px);
+}
+.zh-neon-subtitle{
+  margin:9px 0 0;color:#aacbc9;letter-spacing:.22em;font-weight:730;
+  font-size:10px;text-transform:uppercase;opacity:0;
+}
+.zh-neon-line{
+  display:block;width:48px;height:2px;border-radius:5px;
+  background:linear-gradient(90deg,transparent,#b2e6d9,transparent);
+  margin:21px auto 14px;opacity:0;transform:scaleX(.3);
+}
+.zh-neon-message{
+  margin:0;color:#99adb1;font-size:12px;line-height:1.4;
+  letter-spacing:.015em;opacity:0;
+}
+.zh-neon-welcome.is-playing .zh-neon-wordmark{animation:zhNeonAppear .65s ease 1.12s both}
+.zh-neon-welcome.is-playing .zh-neon-subtitle{animation:zhNeonAppear .6s ease 1.34s both}
+.zh-neon-welcome.is-playing .zh-neon-line{animation:zhNeonBar .6s ease 1.45s both}
+.zh-neon-welcome.is-playing .zh-neon-message{animation:zhNeonFade .6s ease 1.5s both}
+.zh-neon-skip{
+  position:absolute;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;
+  transform:translateX(-50%);
+  border:1px solid rgba(150,190,185,.25);
+  border-radius:999px;background:rgba(255,255,255,.035);
+  color:#a9c9c7;padding:9px 15px;min-height:38px;
+  font-size:11px;font-weight:640;cursor:pointer;white-space:nowrap;
+}
+.zh-neon-skip:hover{background:rgba(127,199,194,.11);color:#e3f5f2}
+.zh-neon-skip:focus-visible{outline:2px solid #9ed9d0;outline-offset:3px}
+@keyframes zhNeonTrace{from{stroke-dashoffset:100;opacity:.14}65%{opacity:1}to{stroke-dashoffset:0;opacity:1}}
+@keyframes zhNeonBreathe{from{filter:drop-shadow(0 0 3px rgba(180,234,218,.32))}to{filter:drop-shadow(0 0 9px rgba(180,234,218,.7))}}
+@keyframes zhNeonAppear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zhNeonFade{from{opacity:0}to{opacity:1}}
+@keyframes zhNeonBar{from{opacity:0;transform:scaleX(.3)}to{opacity:1;transform:scaleX(1)}}
+@media(max-width:500px){
+  .zh-neon-content{margin-top:-20px}
+  .zh-neon-logo{width:min(60vw,255px)}
+  .zh-neon-skip{bottom:calc(17px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){
+  .zh-neon-welcome,.zh-neon-welcome.is-leaving{transition:none!important}
+  .zh-neon-welcome .zh-n-path,.zh-neon-welcome.is-playing .zh-n-path{animation:none!important;stroke-dashoffset:0!important;opacity:1!important;filter:none}
+  .zh-neon-welcome .zh-n-glow,.zh-neon-welcome.is-playing .zh-n-glow{animation:none!important}
+  .zh-neon-welcome .zh-neon-wordmark,.zh-neon-welcome .zh-neon-subtitle,.zh-neon-welcome .zh-neon-line,.zh-neon-welcome .zh-neon-message{animation:none!important;opacity:1!important;transform:none!important}
+}
