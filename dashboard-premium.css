@@ -1,0 +1,89 @@
+/* Zen Hogar Gestión · Analítica premium desktop, 17/11/2026
+   Interfaz exclusivamente visual: la información la calcula index.html
+   con las ventas ya recuperadas para la empresa seleccionada.
+*/
+#dashboard .dashboard-insight-grid{
+  grid-template-columns:minmax(0,1fr) 270px;
+  gap:14px;align-items:start;
+}
+#dashboard .analytics-premium-card{padding:19px 20px 16px!important;min-width:0}
+.analytics-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.analytics-header h2{font-size:19px!important;letter-spacing:-.04em;margin:4px 0 4px!important}
+.analytics-header p{font-size:11px;line-height:1.4;color:var(--muted);margin:0}
+.analytics-header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto}
+.analytics-periods{display:flex;gap:2px;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--surface-soft);white-space:nowrap}
+.analytics-periods button{border:0;background:transparent;color:var(--muted);font-size:10px;font-weight:760;min-height:32px;padding:6px 10px;border-radius:7px;cursor:pointer}
+.analytics-periods button.active{background:var(--surface);color:var(--accent-dark);box-shadow:0 1px 7px rgba(0,0,0,.07)}
+.analytics-periods button:hover:not(.active){color:var(--accent-dark);background:var(--accent-soft)}
+.analytics-open-reports{min-height:38px;padding:8px 11px;border:1px solid var(--line);background:var(--surface);border-radius:9px;color:var(--accent-dark);font-size:11px;font-weight:780}
+.analytics-open-reports:hover{border-color:var(--accent)}
+.analytics-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:13px}
+.analytics-kpi{min-width:0;border:1px solid var(--line);border-radius:11px;background:var(--surface-soft);padding:12px 11px}
+.analytics-kpi .name{display:block;font-size:10px;color:var(--muted);font-weight:700;line-height:1.35}
+.analytics-kpi strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(15px,1.5vw,21px);font-weight:820;letter-spacing:-.04em;margin:7px 0 5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.analytics-kpi small{font-size:9px;color:var(--muted);line-height:1.3;display:block;overflow-wrap:anywhere}
+.analytics-kpi.positive strong{color:var(--accent-dark)}
+.analytics-kpi.negative strong{color:#b75557}
+html[data-theme="dark"] .analytics-kpi.negative strong{color:#f2a4a4}
+.analytics-desktop-chart{display:block}
+.analytics-chart-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 3px 8px;font-size:10px;color:var(--muted)}
+.analytics-chart-top b{color:var(--ink)}
+.analytics-chart-frame{width:100%;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 7px 4px;overflow:hidden;min-height:275px}
+.analytics-chart-frame svg{display:block;width:100%;height:auto;aspect-ratio:900/280}
+.analytics-chart-frame .axis{font-size:11px;fill:var(--muted);font-weight:640}
+.analytics-chart-frame .grid-line{stroke:var(--line);stroke-width:1;stroke-dasharray:3 5}
+.analytics-chart-frame .baseline{stroke:var(--line);stroke-width:1.5}
+.analytics-chart-frame .analytics-bar{fill:var(--accent);opacity:.79;transition:opacity .15s ease}
+.analytics-chart-frame .analytics-day.active .analytics-bar,.analytics-chart-frame .analytics-day:hover .analytics-bar{opacity:1;fill:var(--accent-dark)}
+.analytics-chart-frame .trend-line{stroke:#7FC7C2;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;fill:none;pointer-events:none}
+.analytics-chart-frame .trend-dot{fill:var(--surface);stroke:#70bdb8;stroke-width:3;pointer-events:none}
+.analytics-chart-frame .analytics-day .analytics-hit{fill:transparent;cursor:crosshair}
+.analytics-chart-frame .analytics-day:focus .analytics-hit{stroke:var(--accent);stroke-width:2;stroke-dasharray:4 4}
+.analytics-chart-frame .analytics-area{fill:var(--accent-soft);opacity:.55;pointer-events:none}
+.analytics-tooltip{position:absolute;top:8px;z-index:2;min-width:200px;max-width:240px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 12px;box-shadow:0 8px 26px rgba(12,37,39,.13);pointer-events:none;font-size:10px;line-height:1.5}
+.analytics-tooltip[hidden]{display:none}
+.analytics-tooltip strong{font-size:12px;display:block;margin-bottom:7px;color:var(--ink)}
+.analytics-tooltip .detail{display:flex;justify-content:space-between;gap:12px;margin-top:5px;color:var(--muted)}
+.analytics-tooltip .detail b{font-size:10px;color:var(--ink);text-align:right;font-weight:800}
+.analytics-chart-legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 3px 8px;font-size:10px;color:var(--muted)}
+.analytics-chart-legend i{display:inline-block;height:9px;width:15px;border-radius:3px;background:var(--accent);vertical-align:middle;margin-right:5px}
+.analytics-chart-legend i.line{height:3px;background:#7FC7C2;border-radius:5px}
+.analytics-insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding-top:10px;border-top:1px solid var(--line)}
+.analytics-insight{display:flex;gap:8px;align-items:flex-start;min-width:0}
+.analytics-insight .symbol{display:grid;place-items:center;flex-shrink:0;height:27px;width:27px;border-radius:8px;background:var(--accent-soft);color:var(--accent-dark);font-size:13px}
+.analytics-insight strong{display:block;font-size:11px;line-height:1.35;color:var(--ink)}
+.analytics-insight small{display:block;font-size:9px;line-height:1.4;color:var(--muted);margin-top:3px}
+.analytics-chart-note{font-size:9px;color:var(--muted);line-height:1.5;margin:11px 0 0}
+.analytics-mobile-chart{display:none}
+html[data-theme="dark"] .analytics-chart-frame .analytics-bar{fill:#71b6b1;opacity:.78}
+html[data-theme="dark"] .analytics-chart-frame .analytics-day.active .analytics-bar,
+html[data-theme="dark"] .analytics-chart-frame .analytics-day:hover .analytics-bar{fill:#a1e1db;opacity:1}
+html[data-theme="dark"] .analytics-chart-frame .trend-line{stroke:#9edbd5}
+html[data-theme="dark"] .analytics-chart-frame .trend-dot{stroke:#9edbd5}
+html[data-theme="dark"] .analytics-tooltip{box-shadow:0 9px 26px rgba(0,0,0,.5)}
+@media(max-width:1270px) and (min-width:761px){
+  #dashboard .dashboard-insight-grid{grid-template-columns:1fr}
+  #dashboard .analytics-premium-card{padding:17px!important}
+  .analytics-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .analytics-chart-frame{min-height:240px}
+}
+@media(max-width:900px) and (min-width:761px){
+  .analytics-header-actions{margin-left:0}
+  .analytics-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .analytics-chart-frame{min-height:210px}
+}
+@media(max-width:760px){
+  #dashboard .dashboard-insight-grid{grid-template-columns:1fr}
+  #dashboard .analytics-premium-card{padding:13px!important}
+  .analytics-header{margin-bottom:6px}
+  .analytics-header h2{font-size:15px!important}
+  .analytics-header p{font-size:10px}
+  .analytics-header-actions,.analytics-kpis,.analytics-desktop-chart{display:none!important}
+  .analytics-mobile-chart{display:block}
+  .analytics-mobile-chart .sales-week-chart{min-height:130px!important}
+  .analytics-mobile-chart .sales-week-track{height:92px!important}
+  .analytics-mobile-chart .sales-week-selected{font-size:10px;text-align:right;margin:7px 0 0}
+}
+@media(prefers-reduced-motion:reduce){
+  .analytics-chart-frame .analytics-bar{transition:none!important}
+}
