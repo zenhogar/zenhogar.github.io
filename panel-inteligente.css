@@ -1,0 +1,17 @@
+/* Panel inteligente · tarjetas compactas */
+.zh-smart-wrap{margin:12px 0 14px}
+.zh-smart-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
+.zh-smart-head h2{font-size:16px;letter-spacing:-.03em;margin:0}
+.zh-smart-head small{color:var(--muted);font-size:10px}
+.zh-smart-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.zh-smart-card{display:flex;flex-direction:column;min-width:0;gap:7px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:13px 14px}
+.zh-smart-label{font-size:9px;color:var(--accent-dark);letter-spacing:.08em;text-transform:uppercase;font-weight:860}
+.zh-smart-card strong{font-size:clamp(14px,1.8vw,21px);line-height:1.26;letter-spacing:-.025em;white-space:normal;overflow-wrap:anywhere}
+.zh-smart-card small{color:var(--muted);font-size:10px;line-height:1.45;flex:1}
+.zh-smart-card button{background:var(--accent-soft);border:0;border-radius:9px;color:var(--accent-dark);font-size:10px;font-weight:800;padding:9px 12px;cursor:pointer;align-self:flex-start}
+.zh-smart-card button:hover{outline:1px solid var(--accent)}
+.zh-smart-card.negative strong{color:#b45454}
+.zh-smart-card.attention .zh-smart-label{color:#ae752f}
+html[data-theme="dark"] .zh-smart-card.negative strong{color:#f4a7a7}
+@media(max-width:920px){.zh-smart-grid{grid-template-columns:1fr}.zh-smart-card{padding:11px 12px;gap:5px}.zh-smart-card strong{font-size:16px}}
+@media(min-width:700px) and (max-width:920px){.zh-smart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
