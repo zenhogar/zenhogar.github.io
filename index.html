@@ -1245,6 +1245,30 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
 .monitor-automation-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
 .monitor-automation-copy strong{font-size:14px}.monitor-automation-copy small{font-size:12px;color:var(--muted);line-height:1.4}
 .monitor-automation-strip button{flex-shrink:0;min-height:40px}@media(max-width:370px){.monitor-automation-strip{align-items:flex-start}.monitor-automation-copy strong{font-size:12px}}
+
+.monitor-search-explorer{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:14px;display:grid;gap:11px}
+.monitor-search-explorer[hidden]{display:none}
+.monitor-explorer-heading{display:flex;flex-direction:column;gap:3px}
+.monitor-explorer-heading strong{font-size:15px}
+.monitor-explorer-heading small,.monitor-explorer-notice{font-size:11px;color:var(--muted);line-height:1.5}
+.monitor-explorer-inventory{display:grid;gap:7px}
+.monitor-explorer-inventory>strong{font-size:12px}
+.monitor-explorer-product,.monitor-explorer-market{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--surface-soft)}
+.monitor-explorer-product>summary,.monitor-explorer-market>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;cursor:pointer;list-style:none;font-size:12px}
+.monitor-explorer-product>summary::-webkit-details-marker,.monitor-explorer-market>summary::-webkit-details-marker{display:none}
+.monitor-explorer-product>summary>span:first-child{display:grid;gap:5px}
+.monitor-explorer-product>summary strong{font-size:12px;line-height:1.4}
+.monitor-explorer-product>summary small{font-size:10px;color:var(--muted)}
+.monitor-explorer-product-body{display:grid;gap:9px;padding:0 12px 12px}
+.monitor-explorer-product-body>small{font-size:10px;color:var(--muted)}
+.monitor-explorer-refs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px}
+.monitor-explorer-ref{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);background:var(--surface);padding:10px;border-radius:10px;min-width:0}
+.monitor-explorer-ref>span{font-size:10px;color:var(--muted)}
+.monitor-explorer-ref>strong{font-size:18px}
+.monitor-explorer-ref>small{font-size:10px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.monitor-explorer-ref>a{font-size:11px}
+@media(max-width:440px){.monitor-explorer-refs{grid-template-columns:1fr}.monitor-explorer-ref>strong{font-size:19px}}
+
 .price-monitor-coto-collapsible { display:block; overflow:hidden; }
 .price-monitor-coto-summary { display:flex; align-items:center; gap:12px; cursor:pointer; list-style:none; padding:1px 0; min-height:48px; -webkit-tap-highlight-color:transparent; }
 .price-monitor-coto-summary::-webkit-details-marker { display:none; }
@@ -1801,6 +1825,7 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
             <a class="monitor-source-link" href="https://www.coto.com.ar/cdigi" target="_blank" rel="noopener noreferrer">Abrir Coto Digital oficial</a>
           </div>
         </details>
+        <div class="monitor-search-explorer" id="priceMonitorSearchExplorer" hidden></div>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
 
@@ -2609,7 +2634,7 @@ async function shareReceiptPdf(s){
 }
 
 const state = {
-  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorScanPages:[],priceMonitorCotoRuns:[],priceMonitorCotoShards:[],priceMonitorCotoComparisons:[],priceMonitorCycles:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
+  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorScanPages:[],priceMonitorCotoRuns:[],priceMonitorCotoShards:[],priceMonitorCotoComparisons:[],priceMonitorCycles:[],priceMonitorSearchCatalog:[],priceMonitorSearchLoading:false,priceMonitorSearchQuery:'',priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
   reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,promoSelectedProductIds:[],scannerStream:null,scannerDetector:null,scannerMode:null,scannerFrame:null,scannerBusy:false,
   reportPeriod:localStorage.getItem('zenhogar_report_period')||'30d',
   reportMarginTarget:Number(localStorage.getItem('zenhogar_report_margin_target')||45)
@@ -3601,6 +3626,91 @@ function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto D
 function monitorMatchLabel(status){return ({matched:'Coincidencia exacta',ambiguous:'Revisar coincidencia',not_found:'Sin coincidencia',source_error:'Error de fuente'})[status]||'Sin estado';}
 function monitorReviewLabel(f){if(f.reviewStatus==='rejected'||f.reviewChoice==='discarded')return 'Sugerencia descartada';if(f.reviewChoice==='market')return 'Alternativa competitiva elegida';if(f.reviewChoice==='profitable')return 'Alternativa rentable elegida';return 'Pendiente de decisión';}
 function safeExternalUrl(value){try{const url=new URL(String(value||''));return url.protocol==='https:'?url.href:'';}catch(_e){return '';}}
+// The price-search explorer displays catalogue references even when no exact match
+// has been registered. These are NOT price suggestions or authorized matches.
+function pmNormalize(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+function pmPack(value){
+  const text=pmNormalize(value);
+  const m=text.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(ml|cc|litros?|lts?|lt|kg|grm|gr|g)(?:\s|$)/i);
+  if(!m)return '';
+  let n=Number(m[1].replace(',','.'));let u=m[2].toLowerCase();
+  if(['l','lt','lts','litro','litros'].includes(u)){n*=1000;u='ml';}
+  else if(u==='kg'){n*=1000;u='g';}
+  else if(u==='cc'){u='ml';}
+  else if(['gr','grm'].includes(u)){u='g';}
+  return n+u;
+}
+function renderPriceMonitorSearchExplorer(q,findings){
+ const panel=$('#priceMonitorSearchExplorer');if(!panel)return;
+ if(q.length<2){panel.hidden=true;panel.innerHTML='';return;}
+ panel.hidden=false;
+ const products=(state.products||[]).filter(p=>p.active!==false && pmNormalize(p.name).includes(pmNormalize(q))).slice(0,15);
+ const results=(state.priceMonitorSearchCatalog||[]).filter(x=>pmNormalize(x.product_name).includes(pmNormalize(q)));
+ const searching=state.priceMonitorSearchLoading||pmNormalize(state.priceMonitorSearchQuery)!==pmNormalize(q);
+ const foundIds=new Set(findings.map(f=>f.productId));
+ const uncovered=products.filter(p=>!foundIds.has(p.id));
+ let html='<div class="monitor-explorer-heading"><strong>Productos y referencias de mercado</strong><small>Información orientativa · No son coincidencias confirmadas</small></div>';
+ if(searching)html+='<div class="monitor-explorer-notice">Buscando referencias en La Gallega y Coto Digital…</div>';
+ if(products.length){
+   html+='<div class="monitor-explorer-inventory"><strong>En mi inventario ('+products.length+(products.length===15?'+':'')+')</strong>';
+   html+=products.map(p=>{
+     const size=pmPack(p.name);
+     const comparable=results.filter(x=>size&&pmPack(x.product_name)===size);
+     const similar=comparable.slice(0,8);
+     const otherCount=Math.max(0,comparable.length-similar.length);
+     const found=foundIds.has(p.id);
+     return '<details class="monitor-explorer-product"><summary><span><strong>'+esc(p.name)+'</strong><small>Mi precio: '+money(p.price)+' · '+(found?'Con comparación registrada':'Pendiente de identificar')+'</small></span><span aria-hidden="true">⌄</span></summary><div class="monitor-explorer-product-body">'+
+       (similar.length?'<p class="monitor-explorer-notice">Posibles referencias de '+esc(size)+'; revisá la fórmula, la variedad y el envase antes de comparar.</p><div class="monitor-explorer-refs">'+similar.map(x=>
+         '<div class="monitor-explorer-ref"><span>'+esc(x.retailer==='lagallega'?'La Gallega':'Coto Digital')+'</span><strong>'+money(x.list_price)+'</strong><small>'+esc(x.product_name)+'</small>'+
+         (x.promotional_price!=null?'<small>En promoción a '+money(x.promotional_price)+'</small>':'')+
+         (safeExternalUrl(x.product_url)?'<a class="monitor-source-link" href="'+esc(safeExternalUrl(x.product_url))+'" target="_blank" rel="noopener noreferrer">Ver producto</a>':'')+
+         '</div>').join('')+'</div>'+(otherCount?'<small>Y '+otherCount+' referencias adicionales de la misma medida.</small>':''):
+       '<p class="monitor-explorer-notice">'+(searching?'Consultando catálogo…':'No hay referencias de la misma presentación en la búsqueda guardada.')+'</p>')+
+       '<small>Estas referencias no modifican el inventario ni generan precios sugeridos hasta verificar la identidad.</small></div></details>';
+   }).join('');
+   html+='</div>';
+ }
+ if(results.length){
+   html+='<details class="monitor-explorer-market"><summary>Ver referencias de supermercados ('+results.length+') <span>⌄</span></summary><div class="monitor-explorer-refs">'+results.slice(0,35).map(x=>
+     '<div class="monitor-explorer-ref"><span>'+esc(x.retailer==='lagallega'?'La Gallega':'Coto Digital')+'</span><strong>'+money(x.list_price)+'</strong><small>'+esc(x.product_name)+'</small>'+
+     (x.promotional_price!=null?'<small>En promoción a '+money(x.promotional_price)+'</small>':'')+
+     (safeExternalUrl(x.product_url)?'<a class="monitor-source-link" href="'+esc(safeExternalUrl(x.product_url))+'" target="_blank" rel="noopener noreferrer">Ver producto</a>':'')+'</div>').join('')+'</div></details>';
+ }
+ if(!products.length&&!results.length&&!searching)html+='<div class="monitor-explorer-notice">No se encontraron productos ni referencias con este término.</div>';
+ panel.innerHTML=html;
+}
+let pmSearchTimer=null;
+let pmSearchSequence=0;
+async function pmFindCatalogReferences(value){
+ const q=String(value||'').trim(),seq=++pmSearchSequence;
+ clearTimeout(pmSearchTimer);
+ if(q.length<2){
+   state.priceMonitorSearchCatalog=[];state.priceMonitorSearchLoading=false;state.priceMonitorSearchQuery='';
+   renderPriceIntelligence();return;
+ }
+ state.priceMonitorSearchLoading=true;
+ state.priceMonitorSearchQuery=q;
+ renderPriceIntelligence();
+ pmSearchTimer=setTimeout(async()=>{
+   if(!state.client||!state.org||!navigator.onLine){if(seq===pmSearchSequence){state.priceMonitorSearchLoading=false;renderPriceIntelligence();}return;}
+   try{
+     const {data,error}=await state.client.from('price_monitor_catalog_items')
+       .select('retailer,product_name,product_url,list_price,promotional_price,observed_at,data_provider')
+       .eq('organization_id',state.org.id)
+       .ilike('product_name','%'+q.replace(/[%_]/g,'')+'%')
+       .in('retailer',['lagallega','coto'])
+       .order('observed_at',{ascending:false}).limit(120);
+     if(error)throw error;
+     if(seq!==pmSearchSequence)return;
+     // No SEPA source can enter the explorer, including historical rows.
+     const allowed=(data||[]).filter(x=>x.retailer==='lagallega'||(x.retailer==='coto'&&x.data_provider==='coto_digital_official'));
+     const unique=new Map();
+     for(const row of allowed){const key=row.retailer+'|'+row.product_url;if(!unique.has(key))unique.set(key,row);}
+     state.priceMonitorSearchCatalog=[...unique.values()];
+   }catch(e){if(seq!==pmSearchSequence)return;console.error('Referencia de mercado',e);state.priceMonitorSearchCatalog=[];}
+   finally{if(seq===pmSearchSequence){state.priceMonitorSearchLoading=false;renderPriceIntelligence();}}
+ },300);
+}
 function renderPriceIntelligence(){
   const summary=$('#priceMonitorSummary'),list=$('#priceMonitorList');if(!summary||!list)return;
   const serviceMessage=$('#priceMonitorServiceMessage');if(serviceMessage){serviceMessage.hidden=!state.priceMonitorError;serviceMessage.innerHTML=state.priceMonitorError?`<strong>No se pudieron actualizar las comparaciones</strong>${esc(state.priceMonitorError)} · El resto de Zen Hogar Gestión continúa funcionando normalmente.`:'';}
@@ -3679,6 +3789,7 @@ function renderPriceIntelligence(){
     const statusOk=filter==='all'||(filter==='pending'&&f.reviewStatus==='pending')||(filter==='reviewed'&&f.reviewStatus!=='pending')||f.matchStatus===filter;
     return statusOk&&(!q||text.includes(q));
   });
+  renderPriceMonitorSearchExplorer(q,findings);
   if(!visible.length){list.innerHTML=`<div class="monitor-empty">${findings.length?'No hay resultados para este filtro.':'Todavía no hay consultas registradas. No se muestran precios de demostración.'}</div>`;return;}
   list.innerHTML=visible.map(f=>{
     const url=safeExternalUrl(f.sourceUrl),canChoose=canAdmin()&&f.matchStatus==='matched',reviewed=f.reviewStatus!=='pending';
@@ -4666,6 +4777,7 @@ async function togglePriceMonitorAutomation(){
 }
 $('#priceMonitorAutomationToggle').onclick=togglePriceMonitorAutomation;
 $('#priceMonitorRunBtn').onclick=startPriceMonitorLiveScan;
+$('#priceMonitorSearch').oninput=()=>pmFindCatalogReferences($('#priceMonitorSearch').value);
 $('#priceMonitorStatusFilter').onchange=renderPriceIntelligence;
 $('#priceMonitorShowHistory').onchange=renderPriceIntelligence;
 $('#priceMonitorRefreshBtn').onclick=async()=>{if(!requireOnline())return;const btn=$('#priceMonitorRefreshBtn');btn.disabled=true;try{await loadPriceMonitorData();saveCache();if(state.priceMonitorError)toast('No se pudieron actualizar las comparaciones.','error');else toast('Registros de consultas actualizados.','success');}finally{btn.disabled=false;}};
