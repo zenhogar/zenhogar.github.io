@@ -83,6 +83,8 @@ function rvRenderPayments(a){
   const host=document.getElementById('rvPaymentChart');if(!host)return;
   const entries=Object.entries(a.payments||{}).filter(([,v])=>Number(v)>0).sort((x,y)=>Number(y[1])-Number(x[1]));
   const total=entries.reduce((sum,[,v])=>sum+Number(v),0);
+  // Con un único medio de pago evitamos repetir el importe en un detalle extra.
+  host.classList.toggle('rv-single-payment',entries.length===1&&total>0);
   if(!total){host.innerHTML='<div class="rv-chart-empty">No hubo cobros en este período.</div>';return;}
   const palette=['#2F6F6D','#7FC7C2','#5D8CA2','#BEA06A','#9B8ABE','#7EA99D','#C77F77','#7387AB'];
   const r=60,circ=2*Math.PI*r;
