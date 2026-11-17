@@ -1705,16 +1705,22 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
           <button class="secondary" id="priceMonitorRefreshBtn" type="button">Recargar resultados guardados</button>
         </div>
         <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
-        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. La Gallega se consulta en vivo. La lectura oficial de Coto y la programación cada 14 días siguen pendientes. Ningún precio de venta se modifica.</p>
+        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. La Gallega y Coto Digital se pueden consultar manualmente. La programación automática cada 14 días sigue desactivada. Ningún precio de venta se modifica.</p>
         <article class="card price-monitor-status" id="priceMonitorCotoPanel">
           <div>
             <span class="section-kicker">Fuente secundaria · Coto Digital oficial</span>
-            <h3>Coto Digital — Integración pendiente</h3>
-            <p>La Gallega sigue siendo la referencia principal. Coto sólo se consultará en su sitio oficial cuando no encontremos una coincidencia válida. SEPA quedó desactivado y sus precios no se usarán para recomendar precios de venta.</p>
-            <p class="price-monitor-refresh-note">La página de Coto presenta sus precios después de cargar la aplicación en el navegador. El servidor aún no puede leerlos automáticamente de forma confiable; no se muestran precios de Coto sin verificar.</p>
+            <h3>Coto Digital · búsqueda real</h3>
+            <p>El comparador consulta el catálogo oficial de Coto Digital y conserva La Gallega como fuente principal. En esta primera etapa busca Dove, Ala, Cif y Elvive con la selección web 200.</p>
+            <p class="price-monitor-refresh-note">Cobertura parcial de marcas. Una promoción por cantidad nunca se utiliza como precio unitario habitual. La ejecución automática quincenal sigue desactivada.</p>
+            <p id="priceMonitorCotoStatus" aria-live="polite">Consultando Coto Digital...</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Buscar en Coto Digital</button>
+              <button class="secondary" id="priceMonitorCotoCompareBtn" type="button">Comparar faltantes con Coto</button>
+            </div>
+            <p id="priceMonitorCotoCompareStatus" class="price-monitor-refresh-note">El cruce estará disponible al terminar las dos consultas.</p>
             <a class="monitor-source-link" href="https://www.coto.com.ar/cdigi" target="_blank" rel="noopener noreferrer">Abrir Coto Digital oficial</a>
           </div>
-          <div class="price-monitor-flags"><span class="monitor-flag warning">Automatización de Coto pendiente</span><span class="monitor-flag">SEPA fuera del comparador</span></div>
+          <div class="price-monitor-flags"><span class="monitor-flag">Coto oficial · selección web 200</span><span class="monitor-flag">SEPA fuera del comparador</span></div>
         </article>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
@@ -3512,7 +3518,7 @@ function renderSettings(){
   $('#teamCard').hidden=!canOwner();renderAccessControl();
 }
 
-function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto Digital (pendiente)'})[source]||'Sin fuente';}
+function monitorSourceLabel(source){return ({lagallega:'La Gallega',coto:'Coto Digital oficial'})[source]||'Sin fuente';}
 function monitorMatchLabel(status){return ({matched:'Coincidencia exacta',ambiguous:'Revisar coincidencia',not_found:'Sin coincidencia',source_error:'Error de fuente'})[status]||'Sin estado';}
 function monitorReviewLabel(f){if(f.reviewStatus==='rejected'||f.reviewChoice==='discarded')return 'Sugerencia descartada';if(f.reviewChoice==='market')return 'Alternativa competitiva elegida';if(f.reviewChoice==='profitable')return 'Alternativa rentable elegida';return 'Pendiente de decisión';}
 function safeExternalUrl(value){try{const url=new URL(String(value||''));return url.protocol==='https:'?url.href:'';}catch(_e){return '';}}
@@ -3539,7 +3545,7 @@ function renderPriceIntelligence(){
   }
   const coto=(state.priceMonitorCotoRuns||[])[0]||null;
   const cotoShards=(state.priceMonitorCotoShards||[]).filter(x=>x.runId===coto?.id);
-  const cotoActive=!!coto&&['manifest_requested','running'].includes(coto.status);
+  const cotoActive=!!coto&&coto.status==='running';
   const cotoBtn=$('#priceMonitorCotoSyncBtn'),cotoStatus=$('#priceMonitorCotoStatus');
   if(cotoBtn){cotoBtn.hidden=!canAdmin();cotoBtn.disabled=cotoActive;cotoBtn.textContent=cotoActive?'Actualización en curso…':'Actualizar datos de Coto';}
   if(cotoStatus){
@@ -3547,11 +3553,10 @@ function renderPriceIntelligence(){
     const failed=cotoShards.filter(x=>x.state==='failed').length;
     const count=coto?.itemsSaved||0;
     const date=coto?.sourceDate?coto.sourceDate.split('-').reverse().join('/'):null;
-    cotoStatus.textContent=!coto?'Todavía no se descargó el catálogo regional.':
-      coto.status==='manifest_requested'?'Comprobando fecha y cobertura de la fuente pública…':
-      coto.status==='running'?'Actualizando datos de Coto: '+done+' / '+cotoShards.length+' archivos procesados'+(failed?' · '+failed+' con error':'')+'.':
+    cotoStatus.textContent=!coto?'Todavía no se consultó Coto Digital oficial.':
+      coto.status==='running'?'Consultando Coto Digital: '+done+' / '+cotoShards.length+' páginas procesadas'+(failed?' · '+failed+' con error':'')+'.':
       coto.status==='failed'?'No se pudo actualizar Coto: '+(coto.lastError||'Error de consulta'):
-      'Referencias guardadas: '+count+' productos · Datos del '+(date||'día no indicado')+(coto.status==='partial'?' · Parcial':'')+'. El cruce con tu inventario está pendiente.';
+      'Productos consultados: '+count+' · Selección web 200 · Fecha '+(date||'no indicada')+(coto.status==='partial'?' · Parcial':'')+'.';
   }
   const primaryLastManual=runs.find(r=>r.runType==='manual')||null;
   const lastCotoComparison=(state.priceMonitorCotoComparisons||[])[0]||null;
@@ -3593,7 +3598,7 @@ function renderPriceIntelligence(){
     const profitable=f.suggestionProfitable==null?'No calculada':money(f.suggestionProfitable);
     const promoNote=f.sourcePromotionalPrice!=null?(grouped?'<small>Algunas variedades en promoción desde '+money(f.sourcePromotionalPrice)+'</small>':'<small>En promoción a '+money(f.sourcePromotionalPrice)+'</small>'):'';
     const orientationNote=grouped?'<small>Comparación orientativa: '+Number(f.comparedVariantsCount||0)+' variedades encontradas. Confirmá la variedad antes de aprobar.</small>':'';
-    const sourceAttribution=f.sourceProvider==='sepa_public'?'<small>SEPA · Región '+esc(f.sourceRegion||'Centro')+' · Datos del '+esc(f.sourceDataDate||'fecha no disponible')+'. Valor regional agregado, no precio de Coto Digital.</small>':'';
+    const sourceAttribution=f.sourceProvider==='coto_digital_official'?'<small>Coto Digital oficial · Selección web 200 · Datos del '+esc(f.sourceDataDate||'día no indicado')+'. Promociones por cantidad no incluidas en el precio habitual.</small>':'';
     return `<article class="monitor-finding">
       <div class="monitor-finding-head"><div><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(badge)}</span></div>
       <div class="monitor-prices">
@@ -3645,9 +3650,9 @@ async function loadPriceMonitorData(){
       fetchAllPages(()=>state.client.from('price_monitor_findings').select('id,run_id,product_id,product_name,original_price,original_cost,source,source_url,source_product_name,source_price,source_promotional_price,source_price_basis,source_provider,source_region,source_data_date,comparison_kind,reference_min,reference_max,compared_variants_count,promo_variants_count,match_status,match_confidence,suggestion_market,suggestion_profitable,suggested_margin_pct,review_status,review_choice,review_selected_price,created_at,reviewed_at,products(code)').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
       state.client.from('price_monitor_catalog_items').select('retailer,product_url,product_name,observed_price,list_price,promotional_price,price_was_crossed_out,barcode,observed_at').eq('organization_id',state.org.id).eq('retailer','lagallega').order('observed_at',{ascending:false}).limit(100),
       fetchAllPages(()=>state.client.from('price_monitor_scan_pages').select('run_id,state,category_code,page_no,items_found').eq('organization_id',state.org.id)),
-      state.client.from('price_monitor_coto_sync_runs').select('id,status,source_dataset_date,region,items_saved,last_error,started_at,completed_at').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3),
-      state.client.from('price_monitor_coto_sync_shards').select('run_id,shard,state,items_saved').eq('organization_id',state.org.id).limit(100),
-      state.client.from('price_monitor_coto_comparisons').select('id,scan_run_id,sync_run_id,status,started_at,completed_at,products_checked,findings_created,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3)
+      state.client.from('price_monitor_coto_official_runs').select('id,status,store_code,items_saved,error_message,started_at,completed_at').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3),
+      state.client.from('price_monitor_coto_official_pages').select('run_id,term,page_no,state,item_count').eq('organization_id',state.org.id).limit(100),
+      state.client.from('price_monitor_coto_official_comparisons').select('id,lagallega_run_id,coto_run_id,status,started_at,completed_at,products_checked,findings_created,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3)
     ]);
     for(const r of [settingsRes,runsRes,findingsRes,catalogRes,pagesRes,cotoRunsRes,cotoShardsRes,cotoComparesRes])if(r.error)throw r.error;
     state.priceMonitorSettings=settingsRes.data?{enabled:!!settingsRes.data.enabled,intervalDays:Number(settingsRes.data.interval_days||14),primarySource:settingsRes.data.primary_source,fallbackSource:settingsRes.data.fallback_source,approvalRequired:!!settingsRes.data.approval_required,dryRun:!!settingsRes.data.dry_run,minGrossMarginPct:Number(settingsRes.data.min_gross_margin_pct||0),lastRunAt:settingsRes.data.last_run_at,nextRunAt:settingsRes.data.next_run_at,updatedAt:settingsRes.data.updated_at}:null;
@@ -3655,9 +3660,9 @@ async function loadPriceMonitorData(){
     state.priceMonitorFindings=(findingsRes.data||[]).map(r=>({id:r.id,runId:r.run_id,productId:r.product_id,productCode:r.products?.code||'',productName:r.product_name,originalPrice:Number(r.original_price||0),originalCost:Number(r.original_cost||0),source:r.source,sourceUrl:r.source_url||'',sourceProductName:r.source_product_name||'',sourcePrice:r.source_price==null?null:Number(r.source_price),sourcePromotionalPrice:r.source_promotional_price==null?null:Number(r.source_promotional_price),sourcePriceBasis:r.source_price_basis||'unknown',sourceProvider:r.source_provider||'',sourceRegion:r.source_region||'',sourceDataDate:r.source_data_date||null,comparisonKind:r.comparison_kind||'unresolved',referenceMin:r.reference_min==null?null:Number(r.reference_min),referenceMax:r.reference_max==null?null:Number(r.reference_max),comparedVariantsCount:Number(r.compared_variants_count||0),promoVariantsCount:Number(r.promo_variants_count||0),matchStatus:r.match_status,matchConfidence:r.match_confidence==null?null:Number(r.match_confidence),suggestionMarket:r.suggestion_market==null?null:Number(r.suggestion_market),suggestionProfitable:r.suggestion_profitable==null?null:Number(r.suggestion_profitable),suggestedMarginPct:r.suggested_margin_pct==null?null:Number(r.suggested_margin_pct),reviewStatus:r.review_status,reviewChoice:r.review_choice||'',reviewSelectedPrice:r.review_selected_price==null?null:Number(r.review_selected_price),createdAt:r.created_at,reviewedAt:r.reviewed_at}));
     state.priceMonitorCatalog=(catalogRes.data||[]).map(r=>({retailer:r.retailer,productUrl:r.product_url,productName:r.product_name,observedPrice:Number(r.observed_price||0),listPrice:r.list_price==null?null:Number(r.list_price),promotionalPrice:r.promotional_price==null?null:Number(r.promotional_price),isCrossed:!!r.price_was_crossed_out,barcode:r.barcode||'',observedAt:r.observed_at}));
     state.priceMonitorScanPages=(pagesRes.data||[]).map(r=>({runId:r.run_id,state:r.state,category:r.category_code,pageNo:r.page_no,itemsFound:r.items_found}));
-    state.priceMonitorCotoRuns=(cotoRunsRes.data||[]).map(r=>({id:r.id,status:r.status,sourceDate:r.source_dataset_date,region:r.region,itemsSaved:Number(r.items_saved||0),lastError:r.last_error||'',startedAt:r.started_at,completedAt:r.completed_at}));
-    state.priceMonitorCotoShards=(cotoShardsRes.data||[]).map(r=>({runId:r.run_id,shard:r.shard,state:r.state,itemsSaved:Number(r.items_saved||0)}));
-    state.priceMonitorCotoComparisons=(cotoComparesRes.data||[]).map(r=>({id:r.id,scanRunId:r.scan_run_id,syncRunId:r.sync_run_id,status:r.status,startedAt:r.started_at,completedAt:r.completed_at,productsChecked:Number(r.products_checked||0),findingsCreated:Number(r.findings_created||0),errorMessage:r.error_message||''}));
+    state.priceMonitorCotoRuns=(cotoRunsRes.data||[]).map(r=>({id:r.id,status:r.status,sourceDate:r.completed_at?.slice(0,10)||r.started_at?.slice(0,10),region:r.store_code,itemsSaved:Number(r.items_saved||0),lastError:r.error_message||'',startedAt:r.started_at,completedAt:r.completed_at}));
+    state.priceMonitorCotoShards=(cotoShardsRes.data||[]).map(r=>({runId:r.run_id,term:r.term,pageNo:r.page_no,state:r.state,itemsSaved:Number(r.item_count||0)}));
+    state.priceMonitorCotoComparisons=(cotoComparesRes.data||[]).map(r=>({id:r.id,scanRunId:r.lagallega_run_id,syncRunId:r.coto_run_id,status:r.status,startedAt:r.started_at,completedAt:r.completed_at,productsChecked:Number(r.products_checked||0),findingsCreated:Number(r.findings_created||0),errorMessage:r.error_message||''}));
     state.priceMonitorError='';
   }catch(err){console.error('Inteligencia de Precios:',err);state.priceMonitorError=err.message||'Error de conexión con el servicio de comparación.';}
   renderPriceIntelligence();
@@ -4463,11 +4468,11 @@ setInterval(()=>{
 async function startCotoReferenceSync(){
   if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden actualizar Coto.','error');
   if(!requireOnline())return;
-  if(!confirm('¿Consultar los datos regionales públicos de Coto vía SEPA? Son precios agregados de la región Centro y no sustituyen la información de Coto Digital. No se modificará el inventario.'))return;
+  if(!confirm('¿Buscar precios nuevos en Coto Digital oficial? Primera etapa: Dove, Ala, Cif y Elvive. No se modificará tu inventario.'))return;
   const btn=$('#priceMonitorCotoSyncBtn');
   if(btn){btn.disabled=true;btn.textContent='Iniciando consulta…';}
   try{
-    const {data,error}=await state.client.rpc('price_monitor_start_coto_sync',{p_organization_id:state.org.id});
+    const {data,error}=await state.client.rpc('price_monitor_start_coto_official',{p_organization_id:state.org.id});
     if(error)throw error;
     toast('Actualización de Coto iniciada. Podés cerrar esta pestaña.','success');
     await loadPriceMonitorData();saveCache();
@@ -4477,47 +4482,47 @@ async function startCotoReferenceSync(){
 let pmCotoPolling=false;
 async function refreshCotoSyncProgress(){
   if(pmCotoPolling||!state.client||!state.org)return;
-  const current=state.priceMonitorCotoRuns.find(r=>['manifest_requested','running'].includes(r.status));
+  const current=state.priceMonitorCotoRuns.find(r=>r.status==='running');
   if(!current)return;
   pmCotoPolling=true;
   try{
     const org=state.org.id;
     const [runRes,shardsRes]=await Promise.all([
-      state.client.from('price_monitor_coto_sync_runs').select('id,status,source_dataset_date,items_saved,last_error,completed_at').eq('id',current.id).eq('organization_id',org).single(),
-      state.client.from('price_monitor_coto_sync_shards').select('run_id,shard,state,items_saved').eq('run_id',current.id).eq('organization_id',org)
+      state.client.from('price_monitor_coto_official_runs').select('id,status,store_code,items_saved,error_message,completed_at').eq('id',current.id).eq('organization_id',org).single(),
+      state.client.from('price_monitor_coto_official_pages').select('run_id,term,page_no,state,item_count').eq('run_id',current.id).eq('organization_id',org)
     ]);
     if(runRes.error)throw runRes.error;if(shardsRes.error)throw shardsRes.error;
     if(!state.org||state.org.id!==org)return;
-    current.status=runRes.data.status;current.sourceDate=runRes.data.source_dataset_date;
+    current.status=runRes.data.status;current.sourceDate=runRes.data.completed_at?.slice(0,10)||current.sourceDate;
     current.itemsSaved=Number(runRes.data.items_saved||0);
-    current.lastError=runRes.data.last_error||'';
+    current.lastError=runRes.data.error_message||'';
     current.completedAt=runRes.data.completed_at;
     state.priceMonitorCotoShards=[
       ...state.priceMonitorCotoShards.filter(s=>s.runId!==current.id),
-      ...(shardsRes.data||[]).map(r=>({runId:r.run_id,shard:r.shard,state:r.state,itemsSaved:Number(r.items_saved||0)}))
+      ...(shardsRes.data||[]).map(r=>({runId:r.run_id,term:r.term,pageNo:r.page_no,state:r.state,itemsSaved:Number(r.item_count||0)}))
     ];
-    if(['manifest_requested','running'].includes(current.status))renderPriceIntelligence();
+    if(current.status==='running')renderPriceIntelligence();
     else {await loadPriceMonitorData();saveCache();toast(current.status==='completed'?'Datos regionales de Coto actualizados.':'Coto finalizó con advertencias; revisá el estado.',current.status==='completed'?'success':'');}
   }catch(err){console.error('Actualización de Coto',err);}
   finally{pmCotoPolling=false;}
 }
 setInterval(()=>{
-  if(document.visibilityState==='visible'&&state.org&&state.priceMonitorCotoRuns.some(r=>['manifest_requested','running'].includes(r.status))){
+  if(document.visibilityState==='visible'&&state.org&&state.priceMonitorCotoRuns.some(r=>r.status==='running')){
     refreshCotoSyncProgress().catch(err=>console.error('Coto SEPA',err));
   }
 },15000);
 
 $('#priceMonitorSearch').oninput=renderPriceIntelligence;
-// SEPA sync is deliberately disabled; source must be the official Coto Digital website.
-// SEPA fallback comparisons are deliberately disabled.
+$('#priceMonitorCotoSyncBtn').onclick=startCotoReferenceSync;
+$('#priceMonitorCotoCompareBtn').onclick=compareCotoFallback;
 
 async function compareCotoFallback(){
   if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden comparar precios.','error');
   if(!requireOnline())return;
-  if(!confirm('¿Comparar los productos pendientes con los datos de Coto (SEPA Centro)? Los precios regionales son orientativos. No se modificará el inventario.'))return;
+  if(!confirm('¿Comparar los faltantes con las referencias de Coto Digital oficial? Solo Dove, Ala, Cif y Elvive en esta primera etapa. Ningún precio será modificado.'))return;
   const btn=$('#priceMonitorCotoCompareBtn');if(btn){btn.disabled=true;btn.textContent='Iniciando cruce…';}
   try{
-    const {data,error}=await state.client.rpc('price_monitor_compare_coto_fallback',{p_organization_id:state.org.id});
+    const {data,error}=await state.client.rpc('price_monitor_compare_coto_official',{p_organization_id:state.org.id});
     if(error)throw error;
     toast('Cruce de Coto iniciado. Las referencias se guardarán para revisión.','success');
     await loadPriceMonitorData();saveCache();
@@ -4530,7 +4535,7 @@ async function refreshCotoComparison(){
   if(!live||pmCotoComparisonPolling||!state.client||!state.org)return;
   pmCotoComparisonPolling=true;
   try{
-    const {data,error}=await state.client.from('price_monitor_coto_comparisons')
+    const {data,error}=await state.client.from('price_monitor_coto_official_comparisons')
       .select('id,status,findings_created,error_message,completed_at').eq('id',live.id).eq('organization_id',state.org.id).single();
     if(error)throw error;
     live.status=data.status;live.findingsCreated=Number(data.findings_created||0);
