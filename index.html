@@ -1193,6 +1193,21 @@ html[data-theme="dark"] .weight-quick-qty button{
 html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,var(--mint),var(--blue))}html[data-theme="dark"] .monitor-state.ambiguous,html[data-theme="dark"] .monitor-state.source_error{background:#33281b;color:#e0b36f}
 @media(max-width:800px){.price-monitor-status{grid-template-columns:1fr}.price-monitor-flags{justify-content:flex-start}.price-monitor-summary,.monitor-prices{grid-template-columns:1fr 1fr}.monitor-finding{padding:13px}.monitor-review{align-items:stretch;flex-direction:column}.monitor-actions{display:grid;grid-template-columns:1fr}.monitor-actions button{width:100%}}
 @media(max-width:420px){.price-monitor-summary,.monitor-prices{grid-template-columns:1fr}.price-monitor-toolbar{align-items:stretch;flex-direction:column}.price-monitor-toolbar .search-field,.price-monitor-toolbar select{width:100%}}
+
+/* Inteligencia de precios: el detalle técnico de Coto se repliega de inicio en móvil y escritorio. */
+.price-monitor-coto-collapsible { display:block; overflow:hidden; }
+.price-monitor-coto-summary { display:flex; align-items:center; gap:12px; cursor:pointer; list-style:none; padding:1px 0; min-height:48px; -webkit-tap-highlight-color:transparent; }
+.price-monitor-coto-summary::-webkit-details-marker { display:none; }
+.price-monitor-coto-summary-icon { display:flex; align-items:center; justify-content:center; width:38px; height:38px; flex:0 0 38px; border-radius:12px; background:rgba(53,149,119,.10); font-size:20px; }
+.price-monitor-coto-summary-copy { display:flex; flex:1; min-width:0; flex-direction:column; gap:3px; }
+.price-monitor-coto-summary-copy strong { font-size:16px; line-height:1.2; }
+.price-monitor-coto-summary-copy small { font-size:12px; font-weight:500; opacity:.65; }
+.price-monitor-coto-chevron { font-size:23px; opacity:.65; transition:transform .2s; }
+.price-monitor-coto-collapsible[open] .price-monitor-coto-chevron { transform:rotate(180deg); }
+.price-monitor-coto-details { padding-top:16px; display:grid; gap:10px; }
+.price-monitor-coto-details p { margin:0; }
+.price-monitor-coto-actions { display:flex; gap:8px; flex-wrap:wrap; }
+@media(max-width:650px) { .price-monitor-coto-collapsible { padding:15px 17px !important; } .price-monitor-coto-actions button { flex:1 1 100%; } }
 </style>
 </head>
 <body>
@@ -1706,22 +1721,24 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
         </div>
         <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
         <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. La Gallega y Coto Digital se pueden consultar manualmente. La programación automática cada 14 días sigue desactivada. Ningún precio de venta se modifica.</p>
-        <article class="card price-monitor-status" id="priceMonitorCotoPanel">
-          <div>
-            <span class="section-kicker">Fuente secundaria · Coto Digital oficial</span>
-            <h3>Coto Digital · búsqueda real</h3>
-            <p>El comparador consulta el catálogo oficial de Coto Digital y conserva La Gallega como fuente principal. Ahora consulta 16 marcas verificadas, con la selección web 200: Dove, Ala, Cif, Elvive, Poett, Skip, Woolite, Lysol, Odex, Ace, Blem, Johnson, Duracell, Energizer, Magistral y Saphirus. Se mejoró el reconocimiento de nombres equivalentes sin ignorar fragancias, fórmulas, cantidades ni envases.</p>
-            <p class="price-monitor-refresh-note">Cobertura ampliada a 16 marcas, pero todavía no es todo el catálogo de Coto. Una promoción por cantidad nunca se utiliza como precio unitario habitual. La ejecución automática quincenal sigue desactivada.</p>
+        <details class="card price-monitor-status price-monitor-coto-collapsible" id="priceMonitorCotoPanel">
+          <summary class="price-monitor-coto-summary">
+            <span class="price-monitor-coto-summary-icon" aria-hidden="true">🛒</span>
+            <span class="price-monitor-coto-summary-copy"><strong>Coto Digital</strong><small id="priceMonitorCotoCompactStatus">Fuente secundaria · resultados guardados</small></span>
+            <span class="price-monitor-coto-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="price-monitor-coto-details">
+            <p>Se consultan 16 marcas de Coto Digital. La Gallega tiene prioridad; las coincidencias dudosas se muestran para revisar, sin cambios automáticos.</p>
+            <p class="price-monitor-refresh-note">Las promociones por cantidad se informan por separado. La programación quincenal sigue desactivada.</p>
             <p id="priceMonitorCotoStatus" aria-live="polite">Consultando Coto Digital...</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Buscar en Coto Digital</button>
-              <button class="secondary" id="priceMonitorCotoCompareBtn" type="button">Comparar faltantes con Coto</button>
+            <div class="price-monitor-coto-actions">
+              <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Actualizar precios de Coto</button>
+              <button class="secondary" id="priceMonitorCotoCompareBtn" type="button">Comparar faltantes</button>
             </div>
-            <p id="priceMonitorCotoCompareStatus" class="price-monitor-refresh-note">El cruce estará disponible al terminar las dos consultas.</p>
+            <p id="priceMonitorCotoCompareStatus" class="price-monitor-refresh-note">El cruce estará disponible al terminar las consultas.</p>
             <a class="monitor-source-link" href="https://www.coto.com.ar/cdigi" target="_blank" rel="noopener noreferrer">Abrir Coto Digital oficial</a>
           </div>
-          <div class="price-monitor-flags"><span class="monitor-flag">Coto oficial · selección web 200</span><span class="monitor-flag">SEPA fuera del comparador</span></div>
-        </article>
+        </details>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
 
@@ -3547,6 +3564,9 @@ function renderPriceIntelligence(){
   const cotoShards=(state.priceMonitorCotoShards||[]).filter(x=>x.runId===coto?.id);
   const cotoActive=!!coto&&coto.status==='running';
   const cotoBtn=$('#priceMonitorCotoSyncBtn'),cotoStatus=$('#priceMonitorCotoStatus');
+  const compact=$('#priceMonitorCotoCompactStatus');
+  if(compact)compact.textContent=cotoActive?'Buscando precios…':coto?.status==='completed'?'Última búsqueda: '+Number(coto.itemsSaved||0)+' referencias':coto?.status==='failed'?'Última búsqueda con errores':'Fuente secundaria · Tocá para ver detalles';
+
   if(cotoBtn){cotoBtn.hidden=!canAdmin();cotoBtn.disabled=cotoActive;cotoBtn.textContent=cotoActive?'Actualización en curso…':'Actualizar datos de Coto';}
   if(cotoStatus){
     const done=cotoShards.filter(x=>x.state==='parsed').length;
