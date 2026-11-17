@@ -3900,7 +3900,7 @@ function renderPriceIntelligence(){
     return statusOk&&(!q||text.includes(q));
   });
   renderPriceMonitorSearchExplorer(q,findings);
-  if(!visible.length){list.innerHTML=`<div class="monitor-empty">${findings.length?'No hay resultados para este filtro.':'Todavía no hay consultas registradas. No se muestran precios de demostración.'}</div>`;return;}
+  if(!visible.length){list.innerHTML=`<div class="monitor-empty">${q?'No hay comparaciones exactas registradas para esta búsqueda. Revisá arriba los productos de tu inventario y las referencias de La Gallega y Coto; no implican una coincidencia confirmada.':findings.length?'No hay resultados para este filtro.':'Todavía no hay consultas registradas. No se muestran precios de demostración.'}</div>`;return;}
   list.innerHTML=visible.map(f=>{
     const url=safeExternalUrl(f.sourceUrl),canChoose=canAdmin()&&f.matchStatus==='matched',reviewed=f.reviewStatus!=='pending';
     const groupUniform=f.comparisonKind==='group_uniform',groupRange=f.comparisonKind==='group_range',grouped=groupUniform||groupRange;
