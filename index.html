@@ -1190,6 +1190,7 @@ html[data-theme="dark"] .weight-quick-qty button{
 </style>
   <!-- Modelo 13: evolución visual reversible (solo CSS) -->
   <link rel="stylesheet" href="./modelo13-visual.css?v=20261117-teal" />
+  <link rel="stylesheet" href="./dashboard-premium.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1396,10 +1397,30 @@ html[data-theme="dark"] .weight-quick-qty button{
         </div>
 
         <div class="dashboard-insight-grid">
-          <article class="card surface-card dashboard-chart-card">
-            <div class="card-head"><div><span class="section-kicker">Tendencia</span><h2>Ventas de los últimos 7 días</h2></div></div>
-            <div id="salesWeekChart" class="sales-week-chart" aria-label="Gráfico de ventas de los últimos 7 días"></div>
-             <p id="salesWeekSelected" class="sales-week-selected" aria-live="polite">Tocá una barra para ver el importe</p>
+          <article class="card surface-card dashboard-chart-card analytics-premium-card">
+            <div class="analytics-header">
+              <div><span class="section-kicker">ANÁLISIS COMERCIAL</span><h2>Rendimiento de ventas</h2><p>Facturación diaria y tendencia de tu negocio</p></div>
+              <div class="analytics-header-actions">
+                <div class="analytics-periods" id="dashboardAnalyticsPeriods" role="group" aria-label="Período del gráfico">
+                  <button type="button" data-analytics-period="7d" class="active" aria-pressed="true">7 días</button>
+                  <button type="button" data-analytics-period="30d" aria-pressed="false">30 días</button>
+                  <button type="button" data-analytics-period="month" aria-pressed="false">Este mes</button>
+                </div>
+                <button type="button" id="dashboardAnalyticsReports" class="analytics-open-reports">Ver reportes</button>
+              </div>
+            </div>
+            <div id="dashboardAnalyticsKpis" class="analytics-kpis" aria-label="Indicadores del período"></div>
+            <div class="analytics-desktop-chart">
+              <div class="analytics-chart-top"><b id="dashboardAnalyticsRangeLabel">Evolución diaria</b><span>Pesos argentinos</span></div>
+              <div id="dashboardAnalyticsPlot" class="analytics-chart-frame" aria-label="Gráfico de barras y tendencia"></div>
+              <div class="analytics-chart-legend"><span><i></i> Ventas diarias</span><span><i class="line"></i> Promedio móvil de 3 días</span></div>
+              <div id="dashboardAnalyticsInsights" class="analytics-insights"></div>
+              <p class="analytics-chart-note">Ganancia estimada según los costos cargados, sin descontar gastos generales. Comparación con un período anterior de igual duración.</p>
+            </div>
+            <div class="analytics-mobile-chart">
+              <div id="salesWeekChart" class="sales-week-chart" aria-label="Gráfico de ventas de los últimos 7 días"></div>
+              <p id="salesWeekSelected" class="sales-week-selected" aria-live="polite">Tocá una barra para ver el importe</p>
+            </div>
           </article>
           <article class="card surface-card dashboard-top-card">
             <div class="card-head"><div><span class="section-kicker">Rotación</span><h2>Más vendidos · 7 días</h2></div></div>
@@ -2026,6 +2047,7 @@ window.ZH_CONFIG = {
 };
 
   </script>
+  <script src="./dashboard-premium.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -2754,6 +2776,7 @@ function renderDashboard(){
   v13UpdateDashboardHero(ts.length);
   dashboardRenderComparison();
   dashboardRenderWeekChart();
+  dashboardRenderPremium();
   dashboardRenderTopProducts();
   dashboardRenderStockSummary(low,outOfStock);
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
