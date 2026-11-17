@@ -1712,9 +1712,13 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
             <h3>Coto · SEPA Centro</h3>
             <p>Referencias públicas de precios de Coto para la región Centro. Son valores regionales agregados, no una lectura de Coto Digital. Solo se usarán como respaldo cuando La Gallega no tenga una coincidencia validada.</p>
             <p id="priceMonitorCotoStatus" aria-live="polite">Consultando estado de la fuente...</p>
-            <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Actualizar datos de Coto</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Actualizar datos de Coto</button>
+              <button class="secondary" id="priceMonitorCotoCompareBtn" type="button">Comparar faltantes con Coto</button>
+            </div>
+            <p id="priceMonitorCotoCompareStatus" class="price-monitor-refresh-note">El cruce quedará disponible cuando terminen ambas consultas.</p>
           </div>
-          <div class="price-monitor-flags"><span class="monitor-flag">Fuente: SEPA · Región Centro</span><span class="monitor-flag warning">Cruce con inventario en preparación</span></div>
+          <div class="price-monitor-flags"><span class="monitor-flag">Fuente: SEPA · Región Centro</span><span class="monitor-flag">Comparación manual y protegida</span></div>
         </article>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
@@ -2524,7 +2528,7 @@ async function shareReceiptPdf(s){
 }
 
 const state = {
-  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorScanPages:[],priceMonitorCotoRuns:[],priceMonitorCotoShards:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
+  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorScanPages:[],priceMonitorCotoRuns:[],priceMonitorCotoShards:[],priceMonitorCotoComparisons:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
   reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,promoSelectedProductIds:[],scannerStream:null,scannerDetector:null,scannerMode:null,scannerFrame:null,scannerBusy:false,
   reportPeriod:localStorage.getItem('zenhogar_report_period')||'30d',
   reportMarginTarget:Number(localStorage.getItem('zenhogar_report_margin_target')||45)
@@ -2560,11 +2564,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,priceMonitorSettings:state.priceMonitorSettings,priceMonitorRuns:state.priceMonitorRuns,priceMonitorFindings:state.priceMonitorFindings,priceMonitorCatalog:state.priceMonitorCatalog,priceMonitorScanPages:state.priceMonitorScanPages,priceMonitorCotoRuns:state.priceMonitorCotoRuns,priceMonitorCotoShards:state.priceMonitorCotoShards,at:new Date().toISOString()})); }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,priceMonitorSettings:state.priceMonitorSettings,priceMonitorRuns:state.priceMonitorRuns,priceMonitorFindings:state.priceMonitorFindings,priceMonitorCatalog:state.priceMonitorCatalog,priceMonitorScanPages:state.priceMonitorScanPages,priceMonitorCotoRuns:state.priceMonitorCotoRuns,priceMonitorCotoShards:state.priceMonitorCotoShards,priceMonitorCotoComparisons:state.priceMonitorCotoComparisons,at:new Date().toISOString()})); }
 function loadCache(){
   const key=cacheKey(); if(!key)return false;
   const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; state.priceMonitorSettings=data.priceMonitorSettings||null;state.priceMonitorRuns=data.priceMonitorRuns||[];state.priceMonitorFindings=data.priceMonitorFindings||[];state.priceMonitorCatalog=data.priceMonitorCatalog||[];state.priceMonitorScanPages=data.priceMonitorScanPages||[];state.priceMonitorCotoRuns=data.priceMonitorCotoRuns||[];state.priceMonitorCotoShards=data.priceMonitorCotoShards||[]; renderAll(); return true;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; state.priceMonitorSettings=data.priceMonitorSettings||null;state.priceMonitorRuns=data.priceMonitorRuns||[];state.priceMonitorFindings=data.priceMonitorFindings||[];state.priceMonitorCatalog=data.priceMonitorCatalog||[];state.priceMonitorScanPages=data.priceMonitorScanPages||[];state.priceMonitorCotoRuns=data.priceMonitorCotoRuns||[];state.priceMonitorCotoShards=data.priceMonitorCotoShards||[];state.priceMonitorCotoComparisons=data.priceMonitorCotoComparisons||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function canOwner(){ return state.role==='owner'; }
@@ -2585,7 +2589,7 @@ function applyOrganizationUI(){
   document.title=`${name} · Gestión Cloud`;
 }
 function clearOrganizationState(){
-  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.priceMonitorSettings=null;state.priceMonitorRuns=[];state.priceMonitorFindings=[];state.priceMonitorCatalog=[];state.priceMonitorScanPages=[];state.priceMonitorCotoRuns=[];state.priceMonitorCotoShards=[];state.priceMonitorError='';state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
+  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.priceMonitorSettings=null;state.priceMonitorRuns=[];state.priceMonitorFindings=[];state.priceMonitorCatalog=[];state.priceMonitorScanPages=[];state.priceMonitorCotoRuns=[];state.priceMonitorCotoShards=[];state.priceMonitorCotoComparisons=[];state.priceMonitorError='';state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
 }
 async function refreshOrganizations(){
   const {data,error}=await state.client.rpc('list_my_organizations');if(error)throw error;
@@ -3553,6 +3557,25 @@ function renderPriceIntelligence(){
       coto.status==='failed'?'No se pudo actualizar Coto: '+(coto.lastError||'Error de consulta'):
       'Referencias guardadas: '+count+' productos · Datos del '+(date||'día no indicado')+(coto.status==='partial'?' · Parcial':'')+'. El cruce con tu inventario está pendiente.';
   }
+  const primaryLastManual=runs.find(r=>r.runType==='manual')||null;
+  const lastCotoComparison=(state.priceMonitorCotoComparisons||[])[0]||null;
+  const cotoCanCompare=canAdmin()&&!cotoActive&&coto?.status==='completed'&&primaryLastManual?.status==='completed';
+  const compareBtn=$('#priceMonitorCotoCompareBtn'),compareStatus=$('#priceMonitorCotoCompareStatus');
+  if(compareBtn){
+    compareBtn.hidden=!canAdmin();
+    compareBtn.disabled=!cotoCanCompare||lastCotoComparison?.status==='running'||(
+      lastCotoComparison?.status==='completed'&&
+      lastCotoComparison.syncRunId===coto?.id&&lastCotoComparison.scanRunId===primaryLastManual?.id
+    );
+    compareBtn.textContent=lastCotoComparison?.status==='running'?'Comparando datos…':'Comparar faltantes con Coto';
+  }
+  if(compareStatus){
+    compareStatus.textContent=lastCotoComparison?.status==='running'?'Cruce de Coto con productos no resueltos por La Gallega en proceso…':
+      lastCotoComparison?.status==='completed'?'Respaldo procesado: '+lastCotoComparison.findingsCreated+' referencias de Coto incorporadas a la revisión.':
+      lastCotoComparison?.status==='failed'?'No se pudo comparar Coto: '+(lastCotoComparison.errorMessage||'Error de comparación'):
+      cotoCanCompare?'Las dos consultas están listas. Podés buscar coincidencias de respaldo en Coto.':
+      'Primero deben completarse las consultas de La Gallega y Coto.';
+  }
   const pending=findings.filter(f=>f.reviewStatus==='pending').length;
   const exact=findings.filter(f=>f.matchStatus==='matched').length;
   const orientative=findings.filter(f=>f.comparisonKind==='group_uniform'||f.comparisonKind==='group_range').length;
@@ -3573,12 +3596,13 @@ function renderPriceIntelligence(){
     const market=f.suggestionMarket==null?'No calculada':money(f.suggestionMarket);
     const profitable=f.suggestionProfitable==null?'No calculada':money(f.suggestionProfitable);
     const promoNote=f.sourcePromotionalPrice!=null?(grouped?'<small>Algunas variedades en promoción desde '+money(f.sourcePromotionalPrice)+'</small>':'<small>En promoción a '+money(f.sourcePromotionalPrice)+'</small>'):'';
-    const orientationNote=grouped?'<small>Comparación orientativa: '+Number(f.comparedVariantsCount||0)+' variedades halladas en el catálogo parcial. Confirmá la variedad antes de aprobar.</small>':'';
+    const orientationNote=grouped?'<small>Comparación orientativa: '+Number(f.comparedVariantsCount||0)+' variedades encontradas. Confirmá la variedad antes de aprobar.</small>':'';
+    const sourceAttribution=f.sourceProvider==='sepa_public'?'<small>SEPA · Región '+esc(f.sourceRegion||'Centro')+' · Datos del '+esc(f.sourceDataDate||'fecha no disponible')+'. Valor regional agregado, no precio de Coto Digital.</small>':'';
     return `<article class="monitor-finding">
       <div class="monitor-finding-head"><div><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(badge)}</span></div>
       <div class="monitor-prices">
         <div class="monitor-price"><span>Zen Hogar · actual</span><strong>${money(f.originalPrice)}</strong><small>Costo registrado: ${money(f.originalCost)}</small></div>
-        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))}</span><strong>${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small>${orientationNote}</div>
+        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))}</span><strong>${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small>${orientationNote}${sourceAttribution}</div>
         <div class="monitor-price"><span>Alternativa competitiva</span><strong>${market}</strong><small>Referencia frente al mercado</small></div>
         <div class="monitor-price"><span>Alternativa rentable</span><strong>${profitable}</strong><small>${f.suggestedMarginPct==null?'Según costo y margen mínimo':`Margen mínimo configurado: ${Number(f.suggestedMarginPct).toFixed(1)}%`}</small></div>
       </div>
@@ -3619,23 +3643,25 @@ async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
 async function loadPriceMonitorData(){
   if(!state.org||!navigator.onLine)return;
   try{
-    const [settingsRes,runsRes,findingsRes,catalogRes,pagesRes,cotoRunsRes,cotoShardsRes]=await Promise.all([
+    const [settingsRes,runsRes,findingsRes,catalogRes,pagesRes,cotoRunsRes,cotoShardsRes,cotoComparesRes]=await Promise.all([
       state.client.from('price_monitor_settings').select('enabled,interval_days,primary_source,fallback_source,approval_required,dry_run,min_gross_margin_pct,last_run_at,next_run_at,updated_at').eq('organization_id',state.org.id).maybeSingle(),
       fetchAllPages(()=>state.client.from('price_monitor_runs').select('id,started_at,completed_at,status,run_type,dry_run,products_checked,matches_found,fallback_checked,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false})),
-      fetchAllPages(()=>state.client.from('price_monitor_findings').select('id,run_id,product_id,product_name,original_price,original_cost,source,source_url,source_product_name,source_price,source_promotional_price,source_price_basis,comparison_kind,reference_min,reference_max,compared_variants_count,promo_variants_count,match_status,match_confidence,suggestion_market,suggestion_profitable,suggested_margin_pct,review_status,review_choice,review_selected_price,created_at,reviewed_at,products(code)').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('price_monitor_findings').select('id,run_id,product_id,product_name,original_price,original_cost,source,source_url,source_product_name,source_price,source_promotional_price,source_price_basis,source_provider,source_region,source_data_date,comparison_kind,reference_min,reference_max,compared_variants_count,promo_variants_count,match_status,match_confidence,suggestion_market,suggestion_profitable,suggested_margin_pct,review_status,review_choice,review_selected_price,created_at,reviewed_at,products(code)').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
       state.client.from('price_monitor_catalog_items').select('retailer,product_url,product_name,observed_price,list_price,promotional_price,price_was_crossed_out,barcode,observed_at').eq('organization_id',state.org.id).order('observed_at',{ascending:false}).limit(100),
       fetchAllPages(()=>state.client.from('price_monitor_scan_pages').select('run_id,state,category_code,page_no,items_found').eq('organization_id',state.org.id)),
       state.client.from('price_monitor_coto_sync_runs').select('id,status,source_dataset_date,region,items_saved,last_error,started_at,completed_at').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3),
-      state.client.from('price_monitor_coto_sync_shards').select('run_id,shard,state,items_saved').eq('organization_id',state.org.id).limit(100)
+      state.client.from('price_monitor_coto_sync_shards').select('run_id,shard,state,items_saved').eq('organization_id',state.org.id).limit(100),
+      state.client.from('price_monitor_coto_comparisons').select('id,scan_run_id,sync_run_id,status,started_at,completed_at,products_checked,findings_created,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false}).limit(3)
     ]);
-    for(const r of [settingsRes,runsRes,findingsRes,catalogRes,pagesRes,cotoRunsRes,cotoShardsRes])if(r.error)throw r.error;
+    for(const r of [settingsRes,runsRes,findingsRes,catalogRes,pagesRes,cotoRunsRes,cotoShardsRes,cotoComparesRes])if(r.error)throw r.error;
     state.priceMonitorSettings=settingsRes.data?{enabled:!!settingsRes.data.enabled,intervalDays:Number(settingsRes.data.interval_days||14),primarySource:settingsRes.data.primary_source,fallbackSource:settingsRes.data.fallback_source,approvalRequired:!!settingsRes.data.approval_required,dryRun:!!settingsRes.data.dry_run,minGrossMarginPct:Number(settingsRes.data.min_gross_margin_pct||0),lastRunAt:settingsRes.data.last_run_at,nextRunAt:settingsRes.data.next_run_at,updatedAt:settingsRes.data.updated_at}:null;
     state.priceMonitorRuns=(runsRes.data||[]).map(r=>({id:r.id,startedAt:r.started_at,completedAt:r.completed_at,status:r.status,runType:r.run_type,dryRun:!!r.dry_run,productsChecked:Number(r.products_checked||0),matchesFound:Number(r.matches_found||0),fallbackChecked:Number(r.fallback_checked||0),errorMessage:r.error_message||''}));
-    state.priceMonitorFindings=(findingsRes.data||[]).map(r=>({id:r.id,runId:r.run_id,productId:r.product_id,productCode:r.products?.code||'',productName:r.product_name,originalPrice:Number(r.original_price||0),originalCost:Number(r.original_cost||0),source:r.source,sourceUrl:r.source_url||'',sourceProductName:r.source_product_name||'',sourcePrice:r.source_price==null?null:Number(r.source_price),sourcePromotionalPrice:r.source_promotional_price==null?null:Number(r.source_promotional_price),sourcePriceBasis:r.source_price_basis||'unknown',comparisonKind:r.comparison_kind||'unresolved',referenceMin:r.reference_min==null?null:Number(r.reference_min),referenceMax:r.reference_max==null?null:Number(r.reference_max),comparedVariantsCount:Number(r.compared_variants_count||0),promoVariantsCount:Number(r.promo_variants_count||0),matchStatus:r.match_status,matchConfidence:r.match_confidence==null?null:Number(r.match_confidence),suggestionMarket:r.suggestion_market==null?null:Number(r.suggestion_market),suggestionProfitable:r.suggestion_profitable==null?null:Number(r.suggestion_profitable),suggestedMarginPct:r.suggested_margin_pct==null?null:Number(r.suggested_margin_pct),reviewStatus:r.review_status,reviewChoice:r.review_choice||'',reviewSelectedPrice:r.review_selected_price==null?null:Number(r.review_selected_price),createdAt:r.created_at,reviewedAt:r.reviewed_at}));
+    state.priceMonitorFindings=(findingsRes.data||[]).map(r=>({id:r.id,runId:r.run_id,productId:r.product_id,productCode:r.products?.code||'',productName:r.product_name,originalPrice:Number(r.original_price||0),originalCost:Number(r.original_cost||0),source:r.source,sourceUrl:r.source_url||'',sourceProductName:r.source_product_name||'',sourcePrice:r.source_price==null?null:Number(r.source_price),sourcePromotionalPrice:r.source_promotional_price==null?null:Number(r.source_promotional_price),sourcePriceBasis:r.source_price_basis||'unknown',sourceProvider:r.source_provider||'',sourceRegion:r.source_region||'',sourceDataDate:r.source_data_date||null,comparisonKind:r.comparison_kind||'unresolved',referenceMin:r.reference_min==null?null:Number(r.reference_min),referenceMax:r.reference_max==null?null:Number(r.reference_max),comparedVariantsCount:Number(r.compared_variants_count||0),promoVariantsCount:Number(r.promo_variants_count||0),matchStatus:r.match_status,matchConfidence:r.match_confidence==null?null:Number(r.match_confidence),suggestionMarket:r.suggestion_market==null?null:Number(r.suggestion_market),suggestionProfitable:r.suggestion_profitable==null?null:Number(r.suggestion_profitable),suggestedMarginPct:r.suggested_margin_pct==null?null:Number(r.suggested_margin_pct),reviewStatus:r.review_status,reviewChoice:r.review_choice||'',reviewSelectedPrice:r.review_selected_price==null?null:Number(r.review_selected_price),createdAt:r.created_at,reviewedAt:r.reviewed_at}));
     state.priceMonitorCatalog=(catalogRes.data||[]).map(r=>({retailer:r.retailer,productUrl:r.product_url,productName:r.product_name,observedPrice:Number(r.observed_price||0),listPrice:r.list_price==null?null:Number(r.list_price),promotionalPrice:r.promotional_price==null?null:Number(r.promotional_price),isCrossed:!!r.price_was_crossed_out,barcode:r.barcode||'',observedAt:r.observed_at}));
     state.priceMonitorScanPages=(pagesRes.data||[]).map(r=>({runId:r.run_id,state:r.state,category:r.category_code,pageNo:r.page_no,itemsFound:r.items_found}));
     state.priceMonitorCotoRuns=(cotoRunsRes.data||[]).map(r=>({id:r.id,status:r.status,sourceDate:r.source_dataset_date,region:r.region,itemsSaved:Number(r.items_saved||0),lastError:r.last_error||'',startedAt:r.started_at,completedAt:r.completed_at}));
     state.priceMonitorCotoShards=(cotoShardsRes.data||[]).map(r=>({runId:r.run_id,shard:r.shard,state:r.state,itemsSaved:Number(r.items_saved||0)}));
+    state.priceMonitorCotoComparisons=(cotoComparesRes.data||[]).map(r=>({id:r.id,scanRunId:r.scan_run_id,syncRunId:r.sync_run_id,status:r.status,startedAt:r.started_at,completedAt:r.completed_at,productsChecked:Number(r.products_checked||0),findingsCreated:Number(r.findings_created||0),errorMessage:r.error_message||''}));
     state.priceMonitorError='';
   }catch(err){console.error('Inteligencia de Precios:',err);state.priceMonitorError=err.message||'Error de conexión con el servicio de comparación.';}
   renderPriceIntelligence();
@@ -4487,6 +4513,43 @@ setInterval(()=>{
 
 $('#priceMonitorSearch').oninput=renderPriceIntelligence;
 $('#priceMonitorCotoSyncBtn').onclick=startCotoReferenceSync;
+$('#priceMonitorCotoCompareBtn').onclick=compareCotoFallback;
+
+async function compareCotoFallback(){
+  if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden comparar precios.','error');
+  if(!requireOnline())return;
+  if(!confirm('¿Comparar los productos pendientes con los datos de Coto (SEPA Centro)? Los precios regionales son orientativos. No se modificará el inventario.'))return;
+  const btn=$('#priceMonitorCotoCompareBtn');if(btn){btn.disabled=true;btn.textContent='Iniciando cruce…';}
+  try{
+    const {data,error}=await state.client.rpc('price_monitor_compare_coto_fallback',{p_organization_id:state.org.id});
+    if(error)throw error;
+    toast('Cruce de Coto iniciado. Las referencias se guardarán para revisión.','success');
+    await loadPriceMonitorData();saveCache();
+  }catch(err){toast('No se pudo comparar Coto: '+(err.message||String(err)),'error');}
+  finally{renderPriceIntelligence();}
+}
+let pmCotoComparisonPolling=false;
+async function refreshCotoComparison(){
+  const live=state.priceMonitorCotoComparisons.find(c=>c.status==='running');
+  if(!live||pmCotoComparisonPolling||!state.client||!state.org)return;
+  pmCotoComparisonPolling=true;
+  try{
+    const {data,error}=await state.client.from('price_monitor_coto_comparisons')
+      .select('id,status,findings_created,error_message,completed_at').eq('id',live.id).eq('organization_id',state.org.id).single();
+    if(error)throw error;
+    live.status=data.status;live.findingsCreated=Number(data.findings_created||0);
+    live.errorMessage=data.error_message||'';live.completedAt=data.completed_at;
+    if(data.status==='running')renderPriceIntelligence();
+    else {await loadPriceMonitorData();saveCache();toast(data.status==='completed'?'Respaldo de Coto comparado. Revisá los resultados.':'El cruce de Coto terminó con errores.',data.status==='completed'?'success':'error');}
+  }catch(err){console.error('Cruce Coto',err);}
+  finally{pmCotoComparisonPolling=false;}
+}
+setInterval(()=>{
+  if(document.visibilityState==='visible'&&state.org&&state.priceMonitorCotoComparisons.some(c=>c.status==='running')){
+    refreshCotoComparison().catch(err=>console.error('Cruce Coto',err));
+  }
+},15000);
+
 $('#priceMonitorRunBtn').onclick=startPriceMonitorLiveScan;
 $('#priceMonitorStatusFilter').onchange=renderPriceIntelligence;
 $('#priceMonitorShowHistory').onchange=renderPriceIntelligence;
