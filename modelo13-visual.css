@@ -1,0 +1,261 @@
+/* Zen Hogar Gestión · Modelo 13 — Evolución Visual
+   Capa exclusivamente visual. No modifica lógica, tablas ni persistencia.
+   Paleta Zen refinada; las otras paletas permanecen disponibles.
+   Reversible quitando este enlace del <head>. */
+
+/* 1. Sistema visual: superficies sobrias y un único acento. */
+html[data-palette="zen"]:not([data-theme="dark"]) {
+  --bg:#f5f7f5; --app-bg-1:#f7f9f7; --app-bg-2:#f3f6f4;
+  --panel:#fff; --panel-solid:#fff; --surface:#fff; --surface-soft:#f7f9f7;
+  --ink:#202b26; --ink-soft:#415148; --muted:#708077; --line:#e2e8e3;
+  --accent:#527d55; --accent-dark:#335e3e; --accent-soft:#e7f1e6;
+  --mint:#f0f7ef; --secondary-bg:#f0f5f0; --field-bg:#fff; --nav-active:#e5f0e4;
+  --sidebar-bg:#173629; --topbar-bg:rgba(247,249,247,.96);
+  --hero-1:#f2f7f1; --hero-2:#f5f8f3; --hero-3:#f6f8f6;
+  --stat-mint-1:#fff; --stat-mint-2:#fff;
+  --stat-blue-1:#fff; --stat-blue-2:#fff;
+  --stat-lilac-1:#fff; --stat-lilac-2:#fff;
+  --stat-peach-1:#fff; --stat-peach-2:#fff;
+}
+html[data-theme="dark"][data-palette="zen"] {
+  --bg:#101714; --app-bg-1:#101714; --app-bg-2:#101714;
+  --panel:#19221d; --panel-solid:#19221d; --surface:#19221d;
+  --surface-soft:#151d18; --field-bg:#171f1a; --sidebar-bg:#101a14;
+  --topbar-bg:rgba(16,23,20,.97); --ink:#edf2ee; --ink-soft:#c5d2c7;
+  --muted:#94a99c; --line:#2c3b30; --accent:#81be84;
+  --accent-dark:#a5d7a5; --accent-soft:#263f2b; --secondary-bg:#202d24;
+  --hero-1:#1c2a20; --hero-2:#1d2a22; --hero-3:#1b2720;
+  --stat-mint-1:#1b2920; --stat-mint-2:#1b2920;
+  --stat-blue-1:#1a2520; --stat-blue-2:#1a2520;
+  --stat-lilac-1:#1a2520; --stat-lilac-2:#1a2520;
+  --stat-peach-1:#2b2320; --stat-peach-2:#2b2320;
+}
+:root{
+  --radius-xl:20px; --radius-lg:16px; --radius-md:12px;
+  --shadow:0 7px 28px rgba(30,50,37,.055);
+  --shadow-soft:0 3px 15px rgba(30,50,37,.035);
+  --v13-shadow:0 2px 12px rgba(30,50,37,.035);
+  --v13-shadow-hover:0 6px 20px rgba(30,50,37,.065);
+}
+body{font-family:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;letter-spacing:-.015em}
+.ambient{display:none!important}
+.app-shell{grid-template-columns:230px minmax(0,1fr)}
+.main{max-width:1620px;padding:25px clamp(18px,2.8vw,38px) 42px}
+h1,h2,h3{letter-spacing:-.035em}
+.topbar{min-height:64px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.topbar h1{font-size:clamp(23px,2.2vw,29px);font-weight:720}
+.topbar p{line-height:1.45}
+.eyebrow,.section-kicker,.hero-kicker{letter-spacing:.09em}
+.card,.surface-card,.product-create-card,.stock-query-card,.inventory-summary-card{
+  border-radius:16px!important;box-shadow:var(--shadow-soft)!important;
+  backdrop-filter:none!important;
+}
+.card{padding:17px}
+.card h2{font-size:17px}
+.section-intro{margin:2px 0 16px}
+.section-intro h2{font-size:23px}
+.section-intro p{line-height:1.5}
+.grid.two,.dashboard-grid{gap:14px}
+.primary,.secondary,.file-btn,.action-btn,.icon-btn{border-radius:11px!important;box-shadow:none!important}
+.primary{font-weight:700;min-height:42px}
+.primary:hover,.secondary:hover{box-shadow:0 4px 14px rgba(34,67,42,.10)!important}
+input,select,textarea,.search-field{border-radius:11px!important}
+.search-field{min-height:43px}
+.search-field input{min-height:41px}
+:where(button,input,select,textarea):focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px}
+
+/* 2. Menú escritorio, más silencioso y fácil de recorrer. */
+.sidebar{padding:23px 13px 17px;gap:22px;backdrop-filter:none!important}
+.brand{padding:3px 6px}
+.brand-mark{width:43px;height:43px;border-radius:13px;box-shadow:none!important}
+.brand-copy strong{font-size:15px;font-weight:750}
+.brand-copy small{font-size:11px}
+.desktop-nav-v1327 .nav-btn{font-size:12px;min-height:42px}
+.desktop-nav-v1327 .nav-icon{background:transparent;border-radius:9px}
+.desktop-nav-section-label{font-size:9px;opacity:.85}
+.desktop-nav-group-toggle{font-size:12px}
+.sidebar-status{border-radius:12px;padding:11px;box-shadow:none}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar{
+  background:linear-gradient(180deg,#173b2c 0%,#112b21 100%)!important;
+  border-color:#254535!important
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .brand-copy strong,
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .brand-copy small{color:#eff6ed}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .nav-btn,
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .desktop-nav-group-toggle,
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .desktop-nav-section-label{color:#d4e5d9}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .nav-btn:hover,
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .desktop-nav-group-toggle:hover{
+  background:rgba(255,255,255,.09)!important;color:#fff!important
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .nav-btn.active,
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .desktop-nav-group:has(.nav-btn.active)>.desktop-nav-group-toggle{
+  background:#d6ead0!important;color:#214d2b!important;border-color:transparent!important;
+  box-shadow:none!important
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .nav-btn.active .nav-icon{
+  background:rgba(54,103,59,.11)!important;color:#214d2b!important
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .sidebar-status{
+  background:rgba(255,255,255,.06)!important;border-color:#385546!important;color:#edf5ee
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .sidebar-status small{color:#b6cebf}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .tenant-switch-mini{
+  background:rgba(255,255,255,.09)!important;border-color:#496557;color:#fff
+}
+html[data-palette="zen"]:not([data-theme="dark"]) .sidebar .desktop-nav-divider{background:#375445}
+
+/* 3. Inicio: menos adornos, más información. */
+.v13-hero{
+  min-height:100px!important;padding:19px 23px!important;margin-bottom:14px;
+  border-radius:16px!important;box-shadow:none!important
+}
+.v13-hero:before{display:none!important;animation:none!important}
+.v13-hero h2{font-size:clamp(21px,2vw,26px)!important;margin:6px 0}
+.v13-hero p{font-size:12px;margin:3px 0}
+.v13-hero-status-row{margin-top:8px}
+.dashboard-quick-actions{
+  max-width:none;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;margin:0 0 14px
+}
+.dashboard-quick-btn{
+  min-height:57px;padding:10px 12px;border-radius:13px;
+  box-shadow:none!important;transition:background .15s,border-color .15s,transform .15s
+}
+.dashboard-quick-icon{width:33px;height:33px;border-radius:10px}
+.dashboard-quick-btn strong{font-size:12px}
+.dashboard-quick-btn small{font-size:10px}
+body:has(#dashboard.active) #quickSaleBtn{display:none!important}
+.cards.four.stat-grid{gap:12px;margin-bottom:14px}
+.stat{min-height:110px;padding:15px 17px!important}
+.stat:before{display:none!important}
+.stat strong{font-size:clamp(23px,2.4vw,29px);margin:6px 0 2px}
+.stat span{font-size:11px}
+.stat small{font-size:10px;line-height:1.4}
+.mini-icon{width:30px;height:30px;border-radius:10px}
+.dashboard-insight-grid{gap:14px;margin:12px 0}
+.dashboard-chart-card,.dashboard-top-card{min-width:0}
+.sales-week-chart{min-height:160px}
+.card-head{gap:10px}
+.card-head h2{margin-bottom:2px}
+
+/* 4. Productos: protagonismo del contenido y tablas sin efectos. */
+#products .section-intro{margin-bottom:11px}
+#products .product-create-card{
+  padding:12px 15px!important;min-height:66px;
+  background:var(--panel)!important;gap:12px
+}
+#products .product-create-copy h3{font-size:15px;margin:2px 0}
+#products .product-create-copy p{font-size:11px;max-width:550px}
+#products .product-create-btn{min-height:42px}
+#products .stock-query-card{
+  padding:15px 17px!important;background:var(--panel)!important;margin-bottom:12px
+}
+#products .stock-query-head{margin-bottom:10px}
+#products .stock-query-head h3{font-size:15px}
+#products .stock-query-head p{font-size:11px}
+#products .stock-query-icon{display:none}
+#products .stock-query-metric{padding:10px 12px;border-radius:12px}
+#products .inventory-summary-card{padding:13px 15px;margin-bottom:12px}
+#products .inventory-summary-item{border-radius:11px}
+#products .toolbar{gap:9px;margin-bottom:12px}
+#products .table-wrap{border-radius:14px!important}
+
+/* 5. Tablas en PC: legibilidad y densidad equilibrada. */
+@media(min-width:701px){
+  .table-wrap{border:1px solid var(--line)!important;overflow-x:auto}
+  table{border-collapse:separate;border-spacing:0}
+  th{position:relative;background:var(--surface-soft)!important;color:var(--ink-soft)!important;
+    font-size:10px;letter-spacing:.025em;text-transform:none;font-weight:750;
+    padding:12px 13px;border-color:var(--line)!important
+  }
+  td{font-size:12px;padding:11px 13px;border-color:var(--line)!important}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent-soft) 32%,var(--surface))!important}
+  td .badge{font-size:10px}
+}
+.badge{border-radius:7px;padding:5px 8px;font-weight:750}
+.badge.low{background:#fff0d7!important;color:#8d611b!important}
+.badge.out{background:#fbe7e6!important;color:#a84040!important}
+html[data-theme="dark"] .badge.low{background:#4a361e!important;color:#ffd798!important}
+html[data-theme="dark"] .badge.out{background:#4a2728!important;color:#ffaaa6!important}
+
+/* 6. Ventas, compras y reportes: misma jerarquía. */
+#sales .sales-filter-panel,.promo-toolbar,.report-products-card,.pricing-card{
+  box-shadow:var(--shadow-soft)!important;border-radius:15px!important
+}
+.sales-filter-panel{gap:9px;padding:12px}
+.ops-actions{gap:8px}
+.report-table-head h2,.pricing-card-head h3{letter-spacing:-.02em}
+
+/* 7. Móvil: una columna clara, lista de productos y accesos táctiles. */
+@media(max-width:1080px){
+  .app-shell{grid-template-columns:1fr}
+  .main{padding:20px}
+}
+@media(max-width:700px){
+  :root{--nav-h:69px}
+  body{background:var(--bg)!important}
+  .main{padding:0 13px 20px}
+  .topbar{
+    min-height:62px;margin:0 -13px 13px;padding:9px 13px;
+    box-shadow:none!important;border-bottom:1px solid var(--line);
+    background:var(--topbar-bg)!important
+  }
+  .topbar h1{font-size:20px;line-height:1.2;margin-top:3px}
+  .topbar p{font-size:11px}
+  .section-intro{margin:3px 0 11px}
+  .section-intro h2{font-size:21px}
+  .card{padding:13px;border-radius:13px!important}
+  .v13-hero{
+    min-height:86px!important;padding:14px 16px!important;
+    border-radius:13px!important;margin-bottom:10px
+  }
+  .v13-hero h2{font-size:20px!important;max-width:none}
+  .v13-hero p{font-size:11px;max-width:none}
+  .dashboard-quick-actions{grid-template-columns:1fr;gap:7px;margin-bottom:11px}
+  #dashboard .dashboard-quick-btn:not(.primary-quick){display:none}
+  #dashboard .dashboard-quick-btn.primary-quick{
+    min-height:48px;display:flex;justify-content:center;gap:10px;
+    background:var(--accent-dark)!important;color:#fff!important;
+    border-color:transparent!important
+  }
+  #dashboard .dashboard-quick-btn.primary-quick strong{font-size:13px;color:#fff}
+  #dashboard .dashboard-quick-btn.primary-quick .dashboard-quick-icon{
+    background:rgba(255,255,255,.16)!important;color:#fff!important;
+    width:28px;height:28px
+  }
+  .cards.four.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .stat{min-height:97px!important;padding:12px!important;border-radius:13px!important}
+  .stat strong{font-size:23px;margin:4px 0}
+  .stat span{font-size:10px}
+  .stat small{font-size:9px}
+  .mini-icon{width:25px;height:25px}
+  .dashboard-insight-grid{grid-template-columns:1fr;gap:10px}
+  .dashboard-grid{gap:10px}
+  #products .product-create-card{align-items:stretch;padding:12px!important;gap:10px}
+  #products .product-create-copy p{display:none}
+  #products .product-create-actions{gap:7px}
+  #products .stock-query-card{padding:13px!important}
+  #products .stock-query-head p{display:none}
+  #products .stock-query-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  #products .inventory-summary-card{padding:12px}
+  .toolbar{gap:8px}
+  .table-wrap{border:0!important;background:transparent!important;box-shadow:none!important}
+  tbody{gap:7px}
+  tr{border-radius:12px!important;box-shadow:none!important;
+     background:var(--surface)!important;padding:11px 12px!important}
+  td{font-size:12px;padding:5px 0}
+  td[data-label="Producto"]{font-size:13px;font-weight:700}
+  td::before{font-size:9px;letter-spacing:.025em}
+  .mobile-nav{
+    left:8px!important;right:8px!important;bottom:max(6px,env(safe-area-inset-bottom))!important;
+    height:65px!important;border-radius:16px!important;
+    box-shadow:0 3px 22px rgba(0,0,0,.08)!important
+  }
+  .mobile-nav button{font-size:10px}
+  .mobile-nav button .ico{width:32px;height:29px}
+  .mobile-fab{border-radius:15px!important;box-shadow:0 5px 18px rgba(23,54,35,.15)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .view.active,.dashboard-quick-btn,.stat,.nav-btn{animation:none!important;transition:none!important}
+}
