@@ -11,10 +11,11 @@ function rvBuckets(a,period){
     for(let h=0;h<24;h++)buckets.push(make(String(h),String(h).padStart(2,'0')+':00',new Date(base.getFullYear(),base.getMonth(),base.getDate(),h)));
   }else if(kind==='month'){
     if(allDates.length){
-      const oldest=new Date(Math.min(...allDates.map(d=>d.getTime()))),latest=new Date(Math.max(...allDates.map(d=>d.getTime())));
+      const limits=allDates.reduce((acc,d)=>({min:Math.min(acc.min,d.getTime()),max:Math.max(acc.max,d.getTime())}),{min:Infinity,max:-Infinity});
+      const oldest=new Date(limits.min),latest=new Date(limits.max);
       const d=new Date(oldest.getFullYear(),oldest.getMonth(),1);
       const end=new Date(latest.getFullYear(),latest.getMonth(),1);
-      while(d<=end&&buckets.length<240){const dt=new Date(d);buckets.push(make(monthKey(dt),dt.toLocaleDateString('es-AR',{month:'short',year:'2-digit'}),dt));d.setMonth(d.getMonth()+1);}
+      while(d<=end){const dt=new Date(d);buckets.push(make(monthKey(dt),dt.toLocaleDateString('es-AR',{month:'short',year:'2-digit'}),dt));d.setMonth(d.getMonth()+1);}
     }
   }else{
     const n=period==='7d'?7:period==='30d'?30:base.getDate(),start=new Date(base);start.setDate(start.getDate()-n+1);
