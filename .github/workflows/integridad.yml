@@ -24,3 +24,4 @@ jobs:
         run: |
           node tests/regresion.cjs
           node tests/optimizacion.cjs
+          node tests/login-neon.cjs
