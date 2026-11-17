@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · Bienvenida neón pastel.
+/* Zen Hogar Gestión · Bienvenida neón pastel (edición pausada).
    Se ejecuta únicamente cuando el flujo original de autenticación abre el panel.
    Sin Supabase, rastreadores, acceso a datos ni librerías. */
 let zhNeonWelcomeToken=0;
@@ -32,13 +32,13 @@ async function zhNeonWelcomeFinish(){
   if(!overlay)return;
   const token=zhNeonWelcomeToken;
   const reduced=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  const minDuration=reduced?0:1950;
+  const minDuration=reduced?0:3300;
   const remaining=Math.max(0,minDuration-(Date.now()-zhNeonWelcomeStartedAt));
   if(remaining>0)await new Promise(resolve=>setTimeout(resolve,remaining));
   if(token!==zhNeonWelcomeToken||!zhNeonWelcomeActive)return;
   if(!reduced){
     overlay.classList.add('is-leaving');
-    await new Promise(resolve=>setTimeout(resolve,370));
+    await new Promise(resolve=>setTimeout(resolve,360));
     if(token!==zhNeonWelcomeToken||!zhNeonWelcomeActive)return;
   }
   zhNeonWelcomeDismiss();

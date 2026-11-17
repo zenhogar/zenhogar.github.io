@@ -31,8 +31,10 @@ function fixture(reduced=false){
     assert.equal((css.match(/{/g)||[]).length,(css.match(/}/g)||[]).length);
     assert.ok(svg.startsWith('<svg'));
     assert.ok(svg.includes('viewBox="0 0 320 320"'));
-    for(const filename of ['login-neon.css','login-neon.js','zen-hogar-neon.svg'])
+    for(const filename of ['login-neon.css','login-neon.js'])
       assert.ok(html.includes(filename),'No se incluye '+filename);
+    assert.ok(!html.includes('class="brand-mark zh-gate-logo"'),'El logo no debe mostrarse en la tarjeta de ingreso');
+    assert.ok(!html.includes('src="./zen-hogar-neon.svg"'),'El logo no debe cargarse en el formulario de login');
     assert.equal((html.match(/id="zhNeonWelcome"/g)||[]).length,1);
     assert.ok(html.includes('async function startApp(){\n  // Mostrar la firma visual al entrar'));
     assert.ok(html.includes('await zhNeonWelcomeFinish();'));
@@ -44,10 +46,10 @@ function fixture(reduced=false){
     assert.equal(normal.overlay.attrs['aria-hidden'],'false');
     assert.ok(normal.overlay.classList.contains('is-playing'));
     await normal.api.finish();
-    assert.deepEqual(normal.delays,[1950,370]);
+    assert.deepEqual(normal.delays,[3300,360]);
     assert.equal(normal.overlay.hidden,true);
     assert.equal(normal.api.info().active,false);
-    console.log('✓ Trazo animado y cierre automático');
+    console.log('✓ Trazo más lento, pausa final y cierre automático');
     const skip=fixture();
     skip.api.start();skip.api.dismiss();
     assert.equal(skip.overlay.hidden,true);
