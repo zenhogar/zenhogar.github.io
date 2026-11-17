@@ -1,0 +1,24 @@
+name: Zen Hogar · QA estática
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  integridad:
+    name: Validar código y cálculos
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comprobar el sistema
+        run: node tests/regresion.cjs

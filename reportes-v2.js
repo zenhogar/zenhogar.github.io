@@ -93,22 +93,43 @@ function zhR2ExportPDF(){
   doc.addPage();
   fill(teal);doc.rect(0,0,W,28,'F');label('DETALLE DEL MES',15,13,14,white,true);label(titleMonth,15,21,9,white);
   let cursor=37;
+  const nextDetailPage=()=>{
+    footer(doc.internal.getNumberOfPages());
+    doc.addPage();
+    fill(teal);doc.rect(0,0,W,27,'F');label('DETALLE · CONTINUACION',15,16,13,white,true);
+    cursor=37;
+  };
+  const enoughSpace=(height=12)=>{if(cursor+height>269)nextDetailPage();};
   const ranking=(heading,rows,render)=>{
-    label(heading,15,cursor,12,ink,true);cursor+=7;
-    if(!rows.length){label('Sin registros.',17,cursor,8,muted);cursor+=10;return;}
-    rows.slice(0,8).forEach((row,i)=>{const pair=render(row);if(i%2===0)rect(15,cursor-5,180,10,[248,250,249]);const name=String(pair[0]).slice(0,56);label(`${i+1}. ${name}`,18,cursor+1,8,ink);const amount=String(pair[1]);doc.setFontSize(8);doc.setFont('helvetica','bold');textColor(ink);doc.text(amount,192,cursor+1,{align:'right'});cursor+=11;});cursor+=10;
+    enoughSpace(17);
+    label(heading,15,cursor,12,ink,true);cursor+=9;
+    if(!rows.length){enoughSpace(11);label('Sin registros.',17,cursor,8,muted);cursor+=12;return;}
+    rows.slice(0,8).forEach((row,i)=>{
+      enoughSpace(13);
+      const pair=render(row);
+      if(i%2===0)rect(15,cursor-5,180,10,[248,250,249]);
+      const name=String(pair[0]).slice(0,43);
+      label(`${i+1}. ${name}`,18,cursor+1,8,ink);
+      doc.setFontSize(8);doc.setFont('helvetica','bold');textColor(ink);
+      doc.text(String(pair[1]),192,cursor+1,{align:'right'});
+      cursor+=11;
+    });
+    cursor+=8;
   };
   ranking('Medios de pago',m.methods,([name,value])=>[name,fmt(value)]);
   ranking('Categorias con mayor ganancia bruta',m.categories,r=>[r.name,fmt(r.profit)]);
   ranking('Productos por facturacion',m.products,r=>[r.name,fmt(r.revenue)]);
-  if(cursor>255){doc.addPage();cursor=35;fill(teal);doc.rect(0,0,W,27,'F');label('ANEXO',15,16,13,white,true);}
-  label('Criterios',15,cursor,11,ink,true);cursor+=7;
+  enoughSpace(19);
+  label('Criterios',15,cursor,11,ink,true);cursor+=8;
   for(const txt of [
     'Ventas: importe neto efectivamente registrado para las operaciones completadas.',
     'Ganancia bruta: total de lineas vendidas menos costos efectivos registrados.',
     'Resultado estimado: ganancia bruta menos gastos operativos registrados.',
     'El PDF es una copia informativa y no modifica datos ni genera movimientos.'
-  ]){const rows=doc.splitTextToSize(txt,180);for(const row of rows){label(row,15,cursor,8,muted);cursor+=5;}}
+  ]){
+    const rows=doc.splitTextToSize(txt,180);
+    for(const row of rows){enoughSpace(7);label(row,15,cursor,8,muted);cursor+=5;}
+  }
   footer(doc.internal.getNumberOfPages());
   doc.save(`zen-hogar-reporte-${key}.pdf`);
 }
