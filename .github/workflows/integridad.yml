@@ -21,4 +21,6 @@ jobs:
         with:
           node-version: '22'
       - name: Comprobar el sistema
-        run: node tests/regresion.cjs
+        run: |
+          node tests/regresion.cjs
+          node tests/optimizacion.cjs

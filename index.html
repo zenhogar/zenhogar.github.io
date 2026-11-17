@@ -3010,11 +3010,16 @@ function renderInventorySummary(){
   if($('#inventorySummaryLow'))$('#inventorySummaryLow').textContent=new Intl.NumberFormat('es-AR').format(low);
 }
 
-function renderProducts(){
+function renderProducts({tableOnly=false}={}){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
-  const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})); const cur=$('#categoryFilter').value;
-  $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
-  populateProductCategoryOptions();
+  // Al buscar u ordenar sólo actualizamos la tabla. Los selectores de los formularios
+  // se regeneran únicamente cuando cambian los datos, no en cada pulsación del teclado.
+  if(!tableOnly){
+    const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
+    const cur=$('#categoryFilter').value;
+    $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+    populateProductCategoryOptions();
+  }
   let rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
   rows=zhStockFilterRows(rows);
   const sort=$('#productSort')?.value||'recent';
@@ -3027,11 +3032,13 @@ function renderProducts(){
     return String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
   });
   $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span>${canAdmin()&&p.unitKind==='unit'?`<span class="stock-quick"><button type="button" title="Restar 1 unidad y revisar antes de guardar" aria-label="Restar una unidad a ${esc(p.name)}" onclick="quickAdjustProductStock('${p.id}',-1)">−</button><button type="button" title="Sumar 1 unidad y revisar antes de guardar" aria-label="Sumar una unidad a ${esc(p.name)}" onclick="quickAdjustProductStock('${p.id}',1)">+</button></span>`:''}</td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
-  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
-  $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
-  $('#addProductBtn').hidden=!canAdmin();
-  renderStockQuery();
-  renderInventorySummary();
+  if(!tableOnly){
+    $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
+    $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+    $('#addProductBtn').hidden=!canAdmin();
+    renderStockQuery();
+    renderInventorySummary();
+  }
   zhStockUpdateControls(rows.length);
 }
 function replenishmentItems(){
@@ -3581,6 +3588,12 @@ function renderSettings(){
 
 function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
 
+// Estado de sincronización verificado: la conexión a internet NO equivale a
+// una consulta correcta a la nube. Evitamos mostrar "Nube conectada" si falló.
+let zhCloudSyncStatus='checking';
+let zhLastConnectedOrgId=null;
+let zhLoadVersion=0;
+
 // V13.3.1 · carga paginada para evitar cortes silenciosos de Supabase/PostgREST.
 async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
   const rows=[];
@@ -3596,7 +3609,10 @@ async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
 }
 
 async function loadAllData({silent=false}={}){
-  if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
+  if(!state.org)return;
+  const requestedOrg=state.org.id,loadVersion=++zhLoadVersion;
+  if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
+  if(zhCloudSyncStatus!=='connected'||zhLastConnectedOrgId!==requestedOrg){zhCloudSyncStatus='checking';updateConnection();}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
       fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
@@ -3609,7 +3625,11 @@ async function loadAllData({silent=false}={}){
       fetchAllPages(()=>state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false}))
-    ]);for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
+    ]);
+    // Si cambió la empresa, o comenzó una carga más reciente, descartamos
+    // esta respuesta ANTES de tocar inventario, caja o ventas.
+    if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
+    for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
     state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),createdAt:r.created_at||null}));
     state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),promotionDiscountTotal:Number(r.promotion_discount_total||0),containerDiscountTotal:Number(r.container_discount_total||0),containerCostSavingTotal:Number(r.container_cost_saving_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionDiscountAmount:Number(i.promotion_discount_amount||0),containerDiscountAmount:Number(i.container_discount_amount||0),containerCostSaving:Number(i.container_cost_saving||0),ownContainerCount:Number(i.own_container_count||0),promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
@@ -3626,17 +3646,27 @@ async function loadAllData({silent=false}={}){
         state.client.from('access_invitations').select('id,email,role,expires_at,email_sent_at,last_error,accepted_at,revoked_at,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(30),
         state.client.rpc('list_org_members',{p_org_id:state.org.id})
       ]);
+      if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
       if(inviteRes.error)throw inviteRes.error; if(memberRes.error)throw memberRes.error;
       state.accessInvites=(inviteRes.data||[]).map(i=>({id:i.id,email:i.email,role:i.role,expiresAt:i.expires_at,emailSentAt:i.email_sent_at,lastError:i.last_error||'',acceptedAt:i.accepted_at,revokedAt:i.revoked_at,createdAt:i.created_at}));
       state.accessMembers=(memberRes.data||[]).map(m=>({userId:m.user_id,email:m.email||'',fullName:m.full_name||'',role:m.role,joinedAt:m.joined_at}));
     }
+    zhCloudSyncStatus='connected';
+    zhLastConnectedOrgId=requestedOrg;
     saveCache();renderAll();updateConnection();
-  }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
+  }catch(err){
+    if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
+    console.error(err);
+    zhCloudSyncStatus='error';
+    if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia local.','error');
+    else toast('Error al cargar datos: '+(err.message||err),'error');
+    updateConnection();
+  }
 }
 
 function subscribeRealtime(){
   if(state.channel) state.client.removeChannel(state.channel);
-  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),350)};
+  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),700)};
   state.channel=state.client.channel(`zenhogar-${org}`)
     .on('postgres_changes',{event:'*',schema:'public',table:'products',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'sales',filter:`organization_id=eq.${org}`},reload)
@@ -4381,7 +4411,16 @@ $('#mobileMoreClose').onclick=closeMobileMoreSheet; $('#mobileMoreOverlay').oncl
 $$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNavSlot(Number(s.dataset.mobileNavSlot),s.value)));
 $('#resetMobileNavBtn').onclick=resetMobileNavigation;
 $$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); // Buscar con una pausa mínima evita reconstruir cientos de filas mientras
+// el usuario todavía está escribiendo. Filtrar y ordenar permanecen instantáneos.
+let zhStockSearchDebounce=0;
+function zhQueueStockSearch(){
+  clearTimeout(zhStockSearchDebounce);
+  zhStockSearchDebounce=setTimeout(()=>{zhStockSearchDebounce=0;renderProducts({tableOnly:true});},90);
+}
+$('#productSearch').oninput=zhQueueStockSearch;
+$('#categoryFilter').onchange=()=>renderProducts({tableOnly:true});
+$('#productSort').onchange=()=>renderProducts({tableOnly:true}); $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
 $('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',()=>{savePurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';});$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$$('[data-weight-qty]').forEach(b=>b.onclick=()=>{const p=state.products.find(x=>x.id===$('#saleProduct').value);if(!p||p.unitKind!=='weight')return;$('#saleQty').value=b.dataset.weightQty;updateSaleUnit();$('#saleQty').dispatchEvent(new Event('input',{bubbles:true}));});$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#whatsappReceiptBtn').onclick=()=>shareReceiptWhatsApp(state.activeReceipt);$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
@@ -4475,10 +4514,23 @@ window.addEventListener('pagehide',()=>{appWentToBackground=true;},{passive:true
 window.addEventListener('pageshow',e=>{if(e.persisted||appWentToBackground){appWentToBackground=false;restoreDialogsAfterAppResume();}},{passive:true});
 
 function updateConnection(){
-  const online=navigator.onLine,el=$('#connectionStatus'); if(el){el.classList.toggle('offline',!online);el.innerHTML=`<span></span> ${online?'Nube conectada':'Sin conexión'}`;}
-  if($('#cloudStatusTitle'))$('#cloudStatusTitle').textContent=online?'Nube conectada':'Modo offline'; if($('#cloudStatusText'))$('#cloudStatusText').textContent=online?'Sincronización activa':'Mostrando caché local'; if($('#settingsSyncState'))$('#settingsSyncState').textContent=online?'Conectada':'Offline';
+  const online=navigator.onLine;
+  const currentCompanyVerified=!!state.org&&zhLastConnectedOrgId===state.org.id;
+  const status=online?(zhCloudSyncStatus==='connected'&&!currentCompanyVerified?'checking':zhCloudSyncStatus):'offline';
+  const label=status==='connected'?'Nube conectada':status==='error'?'Sin sincronizar':status==='offline'?'Sin conexión':'Comprobando nube';
+  const detail=status==='connected'?'Última actualización correcta':status==='error'?'No se pudo actualizar desde la nube':status==='offline'?'Podés consultar la última copia local disponible':'Verificando la sincronización';
+  const el=$('#connectionStatus');
+  if(el){
+    el.classList.toggle('offline',status==='offline'||status==='error');
+    el.innerHTML=`<span></span> ${label}`;
+  }
+  if($('#cloudStatusTitle'))$('#cloudStatusTitle').textContent=label;
+  if($('#cloudStatusText'))$('#cloudStatusText').textContent=detail;
+  if($('#settingsSyncState'))$('#settingsSyncState').textContent=status==='connected'?'Conectada':status==='error'?'Error de sincronización':status==='offline'?'Offline':'Comprobando';
 }
-window.addEventListener('online',()=>{updateConnection(); if(state.org)loadAllData({silent:true});}); window.addEventListener('offline',updateConnection); updateConnection();
+window.addEventListener('online',()=>{zhCloudSyncStatus='checking';updateConnection();if(state.org)loadAllData({silent:true});});
+window.addEventListener('offline',updateConnection);
+updateConnection();
 
 // PWA
 // Service worker disabled in single-file GitHub Pages build.
