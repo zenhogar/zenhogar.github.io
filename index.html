@@ -1710,8 +1710,8 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
           <div>
             <span class="section-kicker">Fuente secundaria · Coto Digital oficial</span>
             <h3>Coto Digital · búsqueda real</h3>
-            <p>El comparador consulta el catálogo oficial de Coto Digital y conserva La Gallega como fuente principal. En esta primera etapa busca Dove, Ala, Cif y Elvive con la selección web 200.</p>
-            <p class="price-monitor-refresh-note">Cobertura parcial de marcas. Una promoción por cantidad nunca se utiliza como precio unitario habitual. La ejecución automática quincenal sigue desactivada.</p>
+            <p>El comparador consulta el catálogo oficial de Coto Digital y conserva La Gallega como fuente principal. Ahora consulta 16 marcas verificadas, con la selección web 200: Dove, Ala, Cif, Elvive, Poett, Skip, Woolite, Lysol, Odex, Ace, Blem, Johnson, Duracell, Energizer, Magistral y Saphirus.</p>
+            <p class="price-monitor-refresh-note">Cobertura ampliada a 16 marcas, pero todavía no es todo el catálogo de Coto. Una promoción por cantidad nunca se utiliza como precio unitario habitual. La ejecución automática quincenal sigue desactivada.</p>
             <p id="priceMonitorCotoStatus" aria-live="polite">Consultando Coto Digital...</p>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="secondary" id="priceMonitorCotoSyncBtn" type="button">Buscar en Coto Digital</button>
@@ -4468,7 +4468,7 @@ setInterval(()=>{
 async function startCotoReferenceSync(){
   if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden actualizar Coto.','error');
   if(!requireOnline())return;
-  if(!confirm('¿Buscar precios nuevos en Coto Digital oficial? Primera etapa: Dove, Ala, Cif y Elvive. No se modificará tu inventario.'))return;
+  if(!confirm('¿Buscar precios nuevos en Coto Digital oficial? Se revisarán 16 marcas del catálogo oficial, sin modificar tu inventario.'))return;
   const btn=$('#priceMonitorCotoSyncBtn');
   if(btn){btn.disabled=true;btn.textContent='Iniciando consulta…';}
   try{
@@ -4519,7 +4519,7 @@ $('#priceMonitorCotoCompareBtn').onclick=compareCotoFallback;
 async function compareCotoFallback(){
   if(!canAdmin()||!state.org)return toast('Sólo propietarios o administradores pueden comparar precios.','error');
   if(!requireOnline())return;
-  if(!confirm('¿Comparar los faltantes con las referencias de Coto Digital oficial? Solo Dove, Ala, Cif y Elvive en esta primera etapa. Ningún precio será modificado.'))return;
+  if(!confirm('¿Comparar los faltantes con las referencias de Coto Digital oficial? Incluye las 16 marcas verificadas; ninguna modificación de precios será automática.'))return;
   const btn=$('#priceMonitorCotoCompareBtn');if(btn){btn.disabled=true;btn.textContent='Iniciando cruce…';}
   try{
     const {data,error}=await state.client.rpc('price_monitor_compare_coto_official',{p_organization_id:state.org.id});
