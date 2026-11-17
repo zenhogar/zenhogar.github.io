@@ -1,0 +1,89 @@
+/* Zen Hogar Gestión · Armado de marca original (trazado del logo aportado).
+   SIN neón: tintas originales, luz natural, ensamblaje por etapas y transición suave. */
+.zh-brand-assembly[hidden]{display:none!important}
+.zh-brand-assembly{
+  position:fixed;inset:0;z-index:2100;
+  display:grid;place-items:center;
+  isolation:isolate;overflow:hidden;
+  padding:calc(20px + env(safe-area-inset-top)) 22px calc(28px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(ellipse 37% 28% at 50% 47%,rgba(96,191,149,.08),transparent 86%),
+    linear-gradient(155deg,#fefbf4 0%,#f7faf6 52%,#fdfbf6 100%);
+  color:#033446;
+  opacity:1;visibility:visible;transition:opacity .43s ease,visibility .43s ease;
+}
+.zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+.zh-brand-content{
+  width:min(100%,390px);display:flex;flex-direction:column;
+  align-items:center;text-align:center;position:relative;
+  transform:translateY(-5px);
+}
+.zh-brand-mark{
+  display:block;width:clamp(218px,63vw,300px);height:auto;
+  overflow:visible;
+  filter:drop-shadow(0 14px 20px rgba(2,51,68,.045));
+}
+.zh-brand-mark .zh-asm-part{transform-box:fill-box;transform-origin:center;will-change:opacity,transform}
+.zh-brand-mark .zh-asm-ring-dark,.zh-brand-mark .zh-asm-ring-mint{opacity:1}
+.zh-brand-mark .zh-asm-house-leaves,
+.zh-brand-mark .zh-asm-leaf-left,
+.zh-brand-mark .zh-asm-leaf-right,
+.zh-brand-mark .zh-asm-sun,
+.zh-brand-mark .zh-asm-windows{opacity:0}
+.zh-asm-stroke{stroke-dasharray:100 100;stroke-dashoffset:100;fill:none;stroke:white;stroke-linecap:round;transform-origin:500px 500px;transform:rotate(-90deg)}
+.zh-brand-assembly.is-playing .zh-asm-stroke-outer{animation:zhBrandDraw 1.38s cubic-bezier(.22,.65,.22,1) .08s both}
+.zh-brand-assembly.is-playing .zh-asm-stroke-inner{animation:zhBrandDraw 1.48s cubic-bezier(.22,.65,.22,1) .48s both}
+.zh-brand-assembly.is-playing .zh-asm-house-leaves{animation:zhBrandAssemble .92s cubic-bezier(.16,.8,.22,1) 1.12s both}
+.zh-brand-assembly.is-playing .zh-asm-leaf-left{animation:zhBrandLeafLeft .72s cubic-bezier(.2,.75,.3,1) 1.64s both}
+.zh-brand-assembly.is-playing .zh-asm-leaf-right{animation:zhBrandLeafRight .72s cubic-bezier(.2,.75,.3,1) 1.76s both}
+.zh-brand-assembly.is-playing .zh-asm-sun{animation:zhBrandPop .45s ease-out 2.10s both}
+.zh-brand-assembly.is-playing .zh-asm-windows{animation:zhBrandPop .48s ease-out 2.20s both}
+.zh-brand-wordmark{
+  margin:0;color:#033446;font-size:clamp(25px,6.3vw,32px);line-height:1.13;
+  letter-spacing:-.045em;font-weight:790;opacity:0;transform:translateY(8px);
+}
+.zh-brand-subtitle{
+  color:#3b7b70;font-size:10px;font-weight:750;letter-spacing:.23em;
+  margin:9px 0 0;opacity:0;transform:translateY(5px);
+}
+.zh-brand-divider{
+  display:block;width:45px;height:2px;border-radius:10px;margin:20px auto 14px;
+  background:linear-gradient(90deg,transparent,#6dcaa2,transparent);
+  opacity:0;transform:scaleX(.3);
+}
+.zh-brand-status{color:#728785;font-size:11px;line-height:1.4;margin:0;opacity:0}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{animation:zhBrandAppear .54s ease-out 2.55s both}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{animation:zhBrandAppear .54s ease-out 2.70s both}
+.zh-brand-assembly.is-playing .zh-brand-divider{animation:zhBrandDivider .5s ease 2.79s both}
+.zh-brand-assembly.is-playing .zh-brand-status{animation:zhBrandFade .45s ease 2.84s both}
+.zh-brand-skip{
+  position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%);
+  min-height:40px;padding:9px 16px;border:1px solid rgba(2,51,68,.18);
+  border-radius:999px;background:rgba(255,255,255,.46);
+  color:#456e6b;font-size:11px;font-weight:650;white-space:nowrap;cursor:pointer;
+}
+.zh-brand-skip:hover{background:#e8f5ee;color:#033446}
+.zh-brand-skip:focus-visible{outline:2px solid #368b71;outline-offset:3px}
+@keyframes zhBrandDraw{to{stroke-dashoffset:0}}
+@keyframes zhBrandAssemble{from{opacity:0;transform:translateY(22px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes zhBrandLeafLeft{from{opacity:0;transform:translateX(-24px) rotate(-5deg)}to{opacity:1;transform:translateX(0) rotate(0)}}
+@keyframes zhBrandLeafRight{from{opacity:0;transform:translateX(24px) rotate(5deg)}to{opacity:1;transform:translateX(0) rotate(0)}}
+@keyframes zhBrandPop{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+@keyframes zhBrandAppear{to{opacity:1;transform:translateY(0)}}
+@keyframes zhBrandDivider{to{opacity:1;transform:scaleX(1)}}
+@keyframes zhBrandFade{to{opacity:1}}
+@media(max-width:500px){
+  .zh-brand-content{transform:translateY(-18px)}
+  .zh-brand-mark{width:min(67vw,270px)}
+  .zh-brand-skip{bottom:calc(16px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){
+  .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
+  .zh-brand-mark .zh-asm-stroke{animation:none!important;stroke-dashoffset:0!important}
+  .zh-brand-assembly .zh-asm-part,.zh-brand-assembly.is-playing .zh-asm-part{animation:none!important;opacity:1!important;transform:none!important}
+  .zh-brand-assembly .zh-brand-wordmark,.zh-brand-assembly .zh-brand-subtitle,
+  .zh-brand-assembly .zh-brand-divider,.zh-brand-assembly .zh-brand-status{
+    animation:none!important;opacity:1!important;transform:none!important
+  }
+}
