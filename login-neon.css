@@ -1,11 +1,4 @@
 /* Zen Hogar Gestión · Acceso con firma neón pastel (vectorial, sin GIF ni dependencias). */
-.gate-brand .brand-mark.zh-gate-logo{
-  width:56px;height:56px;flex-shrink:0;padding:5px;
-  border-radius:17px;background:#091419!important;
-  border:1px solid rgba(166,226,218,.3);
-  box-shadow:0 6px 19px rgba(39,100,98,.14)!important;
-}
-.gate-brand .brand-mark.zh-gate-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .zh-neon-welcome[hidden]{display:none!important}
 .zh-neon-welcome{
   position:fixed;z-index:2100;inset:0;display:flex;
@@ -37,7 +30,7 @@
   animation:zhNeonTrace var(--duration,1s) cubic-bezier(.22,.72,.22,1) var(--delay,0s) both;
 }
 .zh-neon-welcome.is-playing .zh-n-glow{
-  animation:zhNeonBreathe 1.8s ease-in-out 1.6s infinite alternate;
+  animation:zhNeonBreathe 2.1s ease-in-out 2.3s infinite alternate;
 }
 .zh-neon-wordmark{
   margin:2px 0 0;font-size:clamp(24px,6.2vw,33px);line-height:1.15;
@@ -58,10 +51,10 @@
   margin:0;color:#99adb1;font-size:12px;line-height:1.4;
   letter-spacing:.015em;opacity:0;
 }
-.zh-neon-welcome.is-playing .zh-neon-wordmark{animation:zhNeonAppear .65s ease 1.12s both}
-.zh-neon-welcome.is-playing .zh-neon-subtitle{animation:zhNeonAppear .6s ease 1.34s both}
-.zh-neon-welcome.is-playing .zh-neon-line{animation:zhNeonBar .6s ease 1.45s both}
-.zh-neon-welcome.is-playing .zh-neon-message{animation:zhNeonFade .6s ease 1.5s both}
+.zh-neon-welcome.is-playing .zh-neon-wordmark{animation:zhNeonAppear .5s ease 1.97s both}
+.zh-neon-welcome.is-playing .zh-neon-subtitle{animation:zhNeonAppear .5s ease 2.10s both}
+.zh-neon-welcome.is-playing .zh-neon-line{animation:zhNeonBar .47s ease 2.18s both}
+.zh-neon-welcome.is-playing .zh-neon-message{animation:zhNeonFade .48s ease 2.20s both}
 .zh-neon-skip{
   position:absolute;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;
   transform:translateX(-50%);
