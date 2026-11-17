@@ -89,3 +89,72 @@ html[data-theme="dark"] .rv-hrow.negative .rv-hmeta span{color:#f3aaa9}
 }
 @media(max-width:355px){.rv-pay-layout{grid-template-columns:1fr}.rv-donut{width:145px}.rv-payment-legend{max-height:none}}
 @media(prefers-reduced-motion:reduce){.rv-bar-fill,.rv-donut-ring,.rv-trend-svg .rv-sales-bar{transition:none!important}}
+
+
+/* 13C.4 — Cobros compacto: dona y leyenda sin ocupar toda la fila.
+   Se conserva la lectura completa de todos los medios de pago. */
+.report-visual-grid > .rv-payments-card{align-self:start}
+#rvPaymentChart{
+  width:100%;
+  max-width:440px;
+  margin-inline:auto;
+}
+#rvPaymentChart .rv-pay-layout{
+  grid-template-columns:124px minmax(0,250px);
+  justify-content:center;
+  align-items:center;
+  min-height:0;
+  gap:14px;
+  padding:2px 0;
+}
+#rvPaymentChart .rv-donut{width:124px;margin:0 auto}
+#rvPaymentChart .rv-donut-center strong{font-size:17px}
+#rvPaymentChart .rv-donut-center span{font-size:9px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#rvPaymentChart .rv-payment-legend{gap:4px;max-height:158px}
+#rvPaymentChart .rv-payment-row{
+  width:100%;
+  min-height:30px;
+  padding:5px 7px;
+  border-radius:7px;
+}
+#rvPaymentChart .rv-selected-detail{
+  padding:9px 10px;
+  gap:6px 10px;
+  margin-top:9px;
+  min-height:0;
+  font-size:10px;
+}
+#rvPaymentChart.rv-single-payment .rv-selected-detail{display:none}
+#rvPaymentChart.rv-single-payment .rv-pay-layout{
+  grid-template-columns:124px minmax(0,190px);
+}
+#rvPaymentChart.rv-single-payment .rv-payment-legend{max-height:none;overflow:visible}
+@media(min-width:960px) and (max-width:1200px){
+  .report-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .report-visual-card.wide{grid-column:1/-1}
+  #rvPaymentChart .rv-pay-layout{grid-template-columns:110px minmax(0,1fr);gap:9px}
+  #rvPaymentChart .rv-donut{width:110px}
+  #rvPaymentChart.rv-single-payment .rv-pay-layout{grid-template-columns:110px minmax(0,1fr)}
+}
+@media(max-width:700px){
+  #rvPaymentChart{max-width:350px}
+  #rvPaymentChart .rv-pay-layout,
+  #rvPaymentChart.rv-single-payment .rv-pay-layout{
+    grid-template-columns:106px minmax(0,1fr);
+    gap:10px;
+    min-height:0;
+  }
+  #rvPaymentChart .rv-donut{width:106px}
+  #rvPaymentChart .rv-donut-center strong{font-size:14px}
+  #rvPaymentChart .rv-donut-center span{font-size:9px}
+  #rvPaymentChart .rv-payment-legend{max-height:128px}
+  #rvPaymentChart .rv-payment-row{font-size:10px;min-height:28px;padding:4px 5px}
+}
+@media(max-width:355px){
+  #rvPaymentChart .rv-pay-layout,
+  #rvPaymentChart.rv-single-payment .rv-pay-layout{
+    grid-template-columns:94px minmax(0,1fr);
+    gap:8px;
+  }
+  #rvPaymentChart .rv-donut{width:94px}
+}
