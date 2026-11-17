@@ -1,4 +1,4 @@
-/* Armado de logo original Zen Hogar — solo presentación.
+/* Rompecabezas de logo original Zen Hogar — solo presentación.
    No participa en la autenticación, no lee ni modifica ventas o base de datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -33,12 +33,12 @@ async function zhBrandAssemblyFinish(){
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   // La duración se cuenta desde el inicio: no añade demoras a la carga de datos.
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  const remaining=Math.max(0,(reduce?0:3550)-elapsed);
+  const remaining=Math.max(0,(reduce?0:4100)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,430));
+    await new Promise(done=>setTimeout(done,460));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();

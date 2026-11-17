@@ -23,8 +23,9 @@ function fixture(reduced=false){
 (async()=>{
  try{
   new Function(js);
-  const groups=['ring-dark','ring-mint','house-leaves','leaf-left','leaf-right','sun','windows'];
-  for(const group of groups)assert.equal((html.match(new RegExp('zh-asm-'+group+'[\\"]','g'))||[]).length,1,'Grupo duplicado '+group);
+  const pieces=['ring-nw','ring-ne','ring-sw','ring-se','roof','body','outline-left','outline-right','leaf-left','leaf-right','sun','window-tl','window-tr','window-bl','window-br'];
+  for(const piece of pieces)assert.equal((html.match(new RegExp('class="zh-puzzle-piece zh-puzzle-'+piece+'"','g'))||[]).length,1,'Falta pieza '+piece);
+  assert.equal((html.match(/class="zh-puzzle-piece/g)||[]).length,15,'Cantidad de piezas');
   assert.ok(html.includes('viewBox="0 0 1000 1000"'));
   assert.equal((html.match(/id="zhBrandAssembly"/g)||[]).length,1);
   assert.ok(!html.includes('id="zhNeonWelcome"'));
@@ -32,12 +33,12 @@ function fixture(reduced=false){
   assert.ok(html.includes('state.client.auth.signInWithPassword({email,password})'));
   assert.ok(html.includes('async function startApp(){\n  // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.\n  zhBrandAssemblyStart();'));
   assert.ok(html.includes('await zhBrandAssemblyFinish();'));
-  assert.ok(html.includes('logo-armado.css?v=20261117-1'));
-  assert.ok(html.includes('logo-armado.js?v=20261117-1'));
+  assert.ok(html.includes('logo-armado.css?v=20261117-puzzle'));
+  assert.ok(html.includes('logo-armado.js?v=20261117-puzzle'));
   assert.equal((css.match(/{/g)||[]).length,(css.match(/}/g)||[]).length);
   assert.ok(css.includes('prefers-reduced-motion:reduce'));
   assert.ok(css.includes('#033446') && css.includes('#fefbf4'));
-  console.log('✓ Logo original, siete grupos y acceso seguro');
+  console.log('✓ Logo original, quince piezas y acceso seguro');
 
   const normal=fixture();
   normal.api.start();
@@ -45,10 +46,10 @@ function fixture(reduced=false){
   assert.equal(normal.overlay.attributes['aria-hidden'],'false');
   assert.ok(normal.overlay.classList.contains('is-playing'));
   await normal.api.finish();
-  assert.deepEqual(normal.delays,[3550,430]);
+  assert.deepEqual(normal.delays,[4100,460]);
   assert.equal(normal.overlay.hidden,true);
   assert.equal(normal.api.info().active,false);
-  console.log('✓ Secuencia de armado y cierre suave');
+  console.log('✓ Encaje de piezas fluido y cierre suave');
 
   const skip=fixture();
   skip.api.start();skip.api.dismiss();
