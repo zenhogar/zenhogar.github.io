@@ -75,8 +75,12 @@ function rvRenderTrend(a,period){
     el.querySelector('.rv-hit')?.addEventListener('focus',()=>touch(i));
     el.querySelector('.rv-hit')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();touch(i);}});
   });
-  if(buckets.length)touch(buckets.length-1);
-  else detail.textContent='Cambiá el período para explorar los movimientos.';
+  if(buckets.length){
+    // Mostrar el último día con ventas en vez de elegir un día vacío.
+    const selected=buckets.findLastIndex(b=>b.count>0);
+    const withActivity=buckets.findLastIndex(b=>b.amount||b.expense||b.cost);
+    touch(selected>=0?selected:withActivity>=0?withActivity:buckets.length-1);
+  }else detail.textContent='Cambiá el período para explorar los movimientos.';
 }
 
 function rvRenderPayments(a){
