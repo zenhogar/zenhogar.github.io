@@ -1195,6 +1195,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./reportes-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
+  <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1432,6 +1433,10 @@ html[data-theme="dark"] .weight-quick-qty button{
           </article>
         </div>
 
+        <section class="zh-smart-wrap" aria-labelledby="zhSmartTitle">
+          <div class="zh-smart-head"><h2 id="zhSmartTitle">Indicadores inteligentes</h2><small>Calculados con tus datos · sin estimaciones automáticas inventadas</small></div>
+          <div id="zhSmartPanel" class="zh-smart-grid"></div>
+        </section>
         <div class="grid two dashboard-grid">
           <article class="card surface-card">
             <div class="card-head"><div><span class="section-kicker">Actividad</span><h2>Últimas ventas</h2></div></div>
@@ -2100,6 +2105,7 @@ window.ZH_CONFIG = {
   <script src="./reportes-v2.js?v=20261117-1"></script>
   <script src="./stock-v2.js?v=20261117-1"></script>
   <script src="./operaciones-v2.js?v=20261117-1"></script>
+  <script src="./panel-inteligente.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -2831,6 +2837,7 @@ function renderDashboard(){
   dashboardRenderPremium();
   dashboardRenderTopProducts();
   dashboardRenderStockSummary(low,outOfStock);
+  zhSmartRender();
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
   $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
