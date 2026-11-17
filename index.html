@@ -1705,22 +1705,29 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
       <section class="view" id="priceIntelligence">
         <div class="section-intro"><div><span class="section-kicker">Análisis de mercado</span><h2>Inteligencia de Precios</h2><p>Compará referencias externas y registrá decisiones sin modificar el inventario.</p></div></div>
 
-        <article class="card price-monitor-status">
-          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Búsqueda manual de precios</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente.</p></div>
-          <div class="price-monitor-flags"><span class="monitor-flag warning">● Automatización desactivada</span><span class="monitor-flag">La Gallega · principal</span><span class="monitor-flag warning">Coto · pendiente</span></div>
-        </article>
-
         <div class="price-monitor-summary" id="priceMonitorSummary"></div>
         <div class="monitor-service-message" id="priceMonitorServiceMessage" role="status" hidden></div>
-        <div class="price-monitor-toolbar">
+        <div class="price-monitor-toolbar price-monitor-main-filters">
           <label class="search-field"><span>⌕</span><input id="priceMonitorSearch" type="search" placeholder="Buscar producto o supermercado..." autocomplete="off" /></label>
           <select id="priceMonitorStatusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="pending">Pendientes de revisión</option><option value="matched">Coincidencia exacta</option><option value="ambiguous">Coincidencia a revisar</option><option value="not_found">Sin coincidencia</option><option value="source_error">Error de fuente</option><option value="reviewed">Revisados</option></select>
           <label class="monitor-history-switch" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft)"><input type="checkbox" id="priceMonitorShowHistory" /> Ver historial</label>
-          <button class="primary" id="priceMonitorRunBtn" type="button">Buscar precios ahora</button>
-          <button class="secondary" id="priceMonitorRefreshBtn" type="button">Recargar resultados guardados</button>
         </div>
         <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
-        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. La Gallega y Coto Digital se pueden consultar manualmente. La programación automática cada 14 días sigue desactivada. Ningún precio de venta se modifica.</p>
+        <details class="card price-monitor-status price-monitor-coto-collapsible" id="priceMonitorControlsPanel">
+          <summary class="price-monitor-coto-summary">
+            <span class="price-monitor-coto-summary-icon" aria-hidden="true">⚙️</span>
+            <span class="price-monitor-coto-summary-copy"><strong>Actualizar precios · La Gallega</strong><small>Fuente principal · revisión manual y segura</small></span>
+            <span class="price-monitor-coto-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="price-monitor-coto-details">
+            <div class="price-monitor-coto-actions">
+              <button class="primary" id="priceMonitorRunBtn" type="button">Buscar precios ahora</button>
+              <button class="secondary" id="priceMonitorRefreshBtn" type="button">Recargar resultados guardados</button>
+            </div>
+            <p class="price-monitor-refresh-note">Buscar precios ahora consulta nuevamente Limpieza y Perfumería de La Gallega. Recargar resultados muestra las comparaciones guardadas, sin iniciar una búsqueda nueva.</p>
+            <p class="price-monitor-refresh-note">La Gallega tiene prioridad; Coto Digital se consulta cuando faltan coincidencias válidas. El análisis automático cada 14 días está desactivado. Ningún precio de venta se modifica sin tu aprobación.</p>
+          </div>
+        </details>
         <details class="card price-monitor-status price-monitor-coto-collapsible" id="priceMonitorCotoPanel">
           <summary class="price-monitor-coto-summary">
             <span class="price-monitor-coto-summary-icon" aria-hidden="true">🛒</span>
