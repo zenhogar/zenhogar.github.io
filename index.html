@@ -1194,6 +1194,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./reportes-visual.css?v=20261117-compacto" />
   <link rel="stylesheet" href="./reportes-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
+  <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1623,6 +1624,7 @@ html[data-theme="dark"] .weight-quick-qty button{
       <section class="view" id="purchases">
         <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras</h2><p>Registrá el ingreso de mercadería y actualizá el stock automáticamente.</p></div></div>
         <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button></div>
+        <div class="zh-purchase-tip"><span>¿Hay artículos al mínimo? Consultá la reposición sugerida antes de cargar una compra.</span><button type="button" onclick="setView('replenishment')">Ver reposición ↗</button></div>
         <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
         <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></div>
 
@@ -1968,7 +1970,7 @@ html[data-theme="dark"] .weight-quick-qty button{
           <div class="sale-product-selected" id="saleSelectedProduct" hidden></div>
           <select id="saleProduct" aria-label="Producto seleccionado" hidden></select>
         </div>
-        <label class="sale-qty-wrap">Cantidad (<span id="saleQtyUnit">u.</span>)<input id="saleQty" type="number" min="0.001" step="0.001" value="1" /><div class="weight-quick-qty" id="saleWeightQuickQty" hidden><button type="button" data-weight-qty="0.25">250 g</button><button type="button" data-weight-qty="0.5">500 g</button></div></label>
+        <label class="sale-qty-wrap">Cantidad (<span id="saleQtyUnit">u.</span>)<input id="saleQty" type="number" min="0.001" step="0.001" value="1" oninput="zhOpsRenderHint('sale')" /><div class="zh-ops-qty"><button type="button" onclick="zhOpsQtyAdjust('sale',-1)" aria-label="Restar cantidad de venta">−</button><button type="button" onclick="zhOpsQtyAdjust('sale',1)" aria-label="Sumar cantidad de venta">+</button><small>Podés escribir cualquier cantidad.</small></div><small id="zhSaleQtyHint" class="zh-ops-hint" aria-live="polite">Elegí un producto para consultar el stock.</small><div class="weight-quick-qty" id="saleWeightQuickQty" hidden><button type="button" data-weight-qty="0.25">250 g</button><button type="button" data-weight-qty="0.5">500 g</button></div></label>
         <label id="saleOwnContainerWrap" hidden>Envases propios<input id="saleOwnContainerCount" type="number" min="0" step="1" value="0" inputmode="numeric" /><small id="saleOwnContainerHint">Sin descuento configurado</small></label>
         <button class="secondary sale-add-btn" id="saleAddItemBtn" type="button">+ Agregar a la venta</button>
       </div>
@@ -2026,8 +2028,8 @@ html[data-theme="dark"] .weight-quick-qty button{
     <div class="purchase-product-selected" id="purchaseSelectedProduct" hidden></div>
     <div class="purchase-product-results" id="purchaseProductResults" hidden></div>
   </div>
-  <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label>
-  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label>
+  <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" oninput="zhOpsRenderHint('purchase')" /><div class="zh-ops-qty"><button type="button" onclick="zhOpsQtyAdjust('purchase',-1)" aria-label="Restar cantidad de compra">−</button><button type="button" onclick="zhOpsQtyAdjust('purchase',1)" aria-label="Sumar cantidad de compra">+</button><small>Una unidad o 0,25 L / kg por toque.</small></div><small id="zhPurchaseQtyHint" class="zh-ops-hint" aria-live="polite">Elegí un producto para ver el subtotal.</small></label>
+  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" oninput="zhOpsRenderHint('purchase')" /></label>
   <button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button>
 </div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
   <dialog id="promotionDialog">
@@ -2097,6 +2099,7 @@ window.ZH_CONFIG = {
   <script src="./reportes-charts.js?v=20261117-1"></script>
   <script src="./reportes-v2.js?v=20261117-1"></script>
   <script src="./stock-v2.js?v=20261117-1"></script>
+  <script src="./operaciones-v2.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -3771,6 +3774,7 @@ function resetSaleProductPicker(){
   $('#saleOwnContainerCount').value=0;
   $('#saleOwnContainerWrap').hidden=true;
   if($('#saleWeightQuickQty'))$('#saleWeightQuickQty').hidden=true;
+  zhOpsRenderHint('sale');
 }
 function updateSaleUnit(){
   const p=state.products.find(x=>x.id===$('#saleProduct').value), input=$('#saleQty'),wrap=$('#saleOwnContainerWrap'),containerInput=$('#saleOwnContainerCount'),hint=$('#saleOwnContainerHint'),weightQuick=$('#saleWeightQuickQty');
@@ -3778,6 +3782,7 @@ function updateSaleUnit(){
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
   if(weightQuick)weightQuick.hidden=p?.unitKind!=='weight';
+  zhOpsRenderHint('sale');
   // No reponer el valor 1 mientras el usuario está editando: permite borrar y escribir otra cantidad sin que el 1 quede "fijo".
   const eligible=!!p&&(Number(p.ownContainerDiscount||0)>0||Number(p.containerCost||0)>0);
   wrap.hidden=!eligible;
@@ -3818,6 +3823,7 @@ function resetPurchaseProductPicker(){
   $('#purchaseQtyUnit').textContent='u.';
   $('#purchaseCostUnit').textContent='unidad';
   $('#purchaseUnitCost').value='';
+  zhOpsRenderHint('purchase');
 }
 window.selectPurchaseProduct=id=>{
   const p=state.products.find(x=>x.id===id);if(!p)return;
@@ -3838,6 +3844,7 @@ function updatePurchaseUnit(){
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
   if(p){ $('#purchaseUnitCost').value=p.cost; if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1; }
+  zhOpsRenderHint('purchase');
 }
 function promoSelectedProducts(){return state.promoSelectedProductIds.map(id=>state.products.find(p=>p.id===id)).filter(Boolean);}
 function renderPromoProductPicker(){
