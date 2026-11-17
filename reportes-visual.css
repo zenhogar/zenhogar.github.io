@@ -1,0 +1,91 @@
+/* Zen Hogar Gestión | Reportes visuales · 2026-11-17
+   100% presentación. Diseñado para el Modelo 13C Teal y modo oscuro negro.
+*/
+.report-visual-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin:18px 0 12px}
+.report-visual-heading h2{font-size:19px;line-height:1.2;margin:4px 0 0;letter-spacing:-.04em}
+.report-visual-heading small{font-size:11px;line-height:1.45;color:var(--muted);max-width:450px}
+.report-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:18px}
+.report-visual-card{min-width:0;overflow:hidden;padding:17px 18px 15px!important;border:1px solid var(--line)!important;border-radius:15px!important;background:var(--surface)!important}
+.report-visual-card.wide{grid-column:1/-1}
+.report-visual-card .rv-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}
+.report-visual-card .rv-head span.rv-kicker{display:block;font-size:9px;font-weight:830;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.12em}
+.report-visual-card .rv-head h3{font-size:16px;letter-spacing:-.03em;margin:4px 0 0;font-weight:800;line-height:1.24}
+.report-visual-card .rv-head p{font-size:10px;color:var(--muted);margin:5px 0 0;line-height:1.5}
+.rv-pills{display:flex;gap:3px;border:1px solid var(--line);border-radius:9px;background:var(--surface-soft);padding:3px;flex-shrink:0}
+.rv-pills button{font-size:10px;font-weight:750;color:var(--muted);border:0;background:transparent;border-radius:6px;padding:8px 10px;min-height:32px;cursor:pointer}
+.rv-pills button[aria-pressed=true]{color:var(--accent-dark);background:var(--surface);box-shadow:0 1px 7px rgba(0,0,0,.07)}
+.rv-chart-scroll{width:100%;overflow-x:auto;scrollbar-width:thin;padding:4px 2px 0}
+.rv-trend-svg{width:100%;display:block;height:auto;min-height:198px}
+.rv-trend-svg .rv-grid-line{stroke:var(--line);stroke-width:1;stroke-dasharray:3 5}
+.rv-trend-svg .rv-axis-label{fill:var(--muted);font-size:11px;font-weight:640}
+.rv-trend-svg .rv-sales-bar{fill:var(--accent);opacity:.73;transition:opacity .15s}
+.rv-trend-svg .rv-hover.active .rv-sales-bar,.rv-trend-svg .rv-hover:hover .rv-sales-bar{opacity:1}
+.rv-trend-svg .rv-cost-line{stroke:#9caac4;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none;pointer-events:none}
+.rv-trend-svg .rv-profit-line{stroke:#70bcb7;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;fill:none;pointer-events:none}
+.rv-trend-svg .rv-profit-dot{fill:var(--surface);stroke:#70bcb7;stroke-width:2.8;pointer-events:none}
+.rv-trend-svg .rv-hit{fill:transparent;cursor:pointer}
+.rv-trend-svg .rv-hit:focus-visible{stroke:var(--accent);stroke-width:2;stroke-dasharray:3 5}
+.rv-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 15px;margin:9px 0 0;font-size:10px;color:var(--muted)}
+.rv-legend i{width:13px;height:8px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:5px;background:var(--accent)}
+.rv-legend i.line{height:3px;border-radius:3px;background:#9caac4}
+.rv-legend i.profit{background:#70bcb7}
+.rv-selected-detail{background:var(--surface-soft);border:1px solid var(--line);border-radius:10px;margin-top:12px;padding:11px 12px;display:flex;flex-wrap:wrap;gap:10px 15px;align-items:center;min-height:42px;color:var(--muted);font-size:10px}
+.rv-selected-detail strong{color:var(--ink);font-size:11px}
+.rv-selected-detail .rv-main{color:var(--accent-dark);font-size:12px;font-weight:850}
+.rv-selected-detail .rv-text{line-height:1.6}
+.rv-chart-empty{min-height:173px;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;padding:22px}
+.rv-pay-layout{display:grid;grid-template-columns:160px minmax(0,1fr);gap:16px;align-items:center;min-height:184px}
+.rv-donut{width:160px;aspect-ratio:1;position:relative;margin:auto}
+.rv-donut svg{display:block;width:100%;height:100%;transform:rotate(-90deg)}
+.rv-donut-center{position:absolute;left:0;top:0;right:0;bottom:0;display:grid;align-content:center;justify-content:center;text-align:center;pointer-events:none}
+.rv-donut-center strong{font-size:20px;color:var(--ink);letter-spacing:-.05em}
+.rv-donut-center span{font-size:9px;color:var(--muted);font-weight:740;margin-top:4px}
+.rv-donut-ring{fill:none;stroke-width:20;cursor:pointer;transition:stroke-width .15s,opacity .15s}
+.rv-donut-ring:hover,.rv-donut-ring.active{stroke-width:24;opacity:1}
+.rv-donut-ring:focus{stroke-width:24;outline:none}
+.rv-payment-legend{display:grid;gap:6px;max-height:185px;overflow:auto}
+.rv-payment-row{display:grid;grid-template-columns:11px minmax(0,1fr) auto;gap:7px;align-items:center;text-align:left;width:100%;min-height:30px;padding:5px 7px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--ink);font-size:10px;cursor:pointer}
+.rv-payment-row.active,.rv-payment-row:hover{background:var(--surface-soft);border-color:var(--line)}
+.rv-payment-row .dot{width:9px;height:9px;border-radius:50%;background:var(--r-color)}
+.rv-payment-row span.label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-payment-row strong{font-size:10px;font-variant-numeric:tabular-nums}
+.rv-hbars{display:grid;gap:12px;margin:9px 0}
+.rv-hrow{border:0;background:transparent;text-align:left;color:var(--ink);padding:5px 6px;margin:-5px -6px;border-radius:9px;cursor:pointer}
+.rv-hrow:hover,.rv-hrow.active{background:var(--surface-soft)}
+.rv-hrow .rv-hmeta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:11px;line-height:1.5}
+.rv-hrow .rv-hmeta strong{font-weight:770;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-hrow .rv-hmeta span{white-space:nowrap;color:var(--accent-dark);font-weight:840;font-variant-numeric:tabular-nums}
+.rv-bar-bg{height:9px;border-radius:5px;background:var(--surface-soft);margin-top:6px;position:relative;overflow:hidden}
+.rv-bar-fill{height:100%;width:var(--rv-width);background:var(--accent);border-radius:5px;min-width:0;transition:width .2s}
+.rv-hrow .rv-hsub{display:block;font-size:9px;color:var(--muted);margin-top:4px}
+.rv-hrow.negative .rv-hmeta span{color:#bd5454}
+.rv-hrow.negative .rv-bar-fill{background:#cb7e7d}
+.rv-hrow:focus-visible,.rv-payment-row:focus-visible,.rv-pills button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rv-note{margin:10px 0 0;font-size:9px;line-height:1.45;color:var(--muted)}
+html[data-theme="dark"] .rv-trend-svg .rv-sales-bar{fill:#70b8b2}
+html[data-theme="dark"] .rv-trend-svg .rv-cost-line{stroke:#a7b4c8}
+html[data-theme="dark"] .rv-trend-svg .rv-profit-line{stroke:#94ddd6}
+html[data-theme="dark"] .rv-trend-svg .rv-profit-dot{stroke:#94ddd6}
+html[data-theme="dark"] .rv-hrow.negative .rv-bar-fill{background:#d28d8d}
+html[data-theme="dark"] .rv-hrow.negative .rv-hmeta span{color:#f3aaa9}
+@media(max-width:1200px){.report-visual-grid{grid-template-columns:1fr}.report-visual-card.wide{grid-column:auto}}
+@media(max-width:700px){
+  .report-visual-heading{align-items:flex-start;flex-direction:column;gap:4px;margin:13px 0 9px}
+  .report-visual-heading h2{font-size:18px}
+  .report-visual-heading small{font-size:10px}
+  .report-visual-grid{gap:10px;margin-bottom:13px}
+  .report-visual-card{padding:12px 13px!important;border-radius:12px!important}
+  .report-visual-card .rv-head h3{font-size:15px}
+  .rv-chart-scroll{margin:0 -2px;width:calc(100% + 4px)}
+  .rv-trend-svg{min-height:165px}
+  .rv-pay-layout{grid-template-columns:122px minmax(0,1fr);gap:9px}
+  .rv-donut{width:118px}
+  .rv-donut-center strong{font-size:16px}
+  .rv-payment-legend{max-height:180px}
+  .rv-selected-detail{font-size:9px;padding:10px}
+  .rv-selected-detail strong{font-size:10px}
+  .rv-legend{font-size:9px}
+  .rv-pills button{padding:7px 8px;font-size:9px}
+}
+@media(max-width:355px){.rv-pay-layout{grid-template-columns:1fr}.rv-donut{width:145px}.rv-payment-legend{max-height:none}}
+@media(prefers-reduced-motion:reduce){.rv-bar-fill,.rv-donut-ring,.rv-trend-svg .rv-sales-bar{transition:none!important}}
