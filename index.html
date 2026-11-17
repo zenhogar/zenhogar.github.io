@@ -2588,11 +2588,37 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,at:new Date().toISOString()})); }
+function saveCache(){
+  const key=cacheKey();if(!key)return;
+  try{
+    localStorage.setItem(key,JSON.stringify({
+      products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,
+      fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,
+      suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,
+      promotions:state.promotions,at:new Date().toISOString()
+    }));
+  }catch(err){
+    // La memoria llena o restringida no debe detener el funcionamiento en línea.
+    console.warn('No se pudo guardar la copia local. Los datos siguen en la nube.',err?.name||'');
+  }
+}
 function loadCache(){
-  const key=cacheKey(); if(!key)return false;
-  const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; renderAll(); return true;
+  const key=cacheKey();if(!key)return false;
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw)return false;
+    const data=JSON.parse(raw);
+    if(!data||typeof data!=='object'||!Array.isArray(data.products)||!Array.isArray(data.sales))return false;
+    state.products=data.products;state.sales=data.sales;state.closings=data.closings||[];
+    state.expenses=data.expenses||[];state.fixedExpenses=data.fixedExpenses||[];
+    state.fixedExpensePayments=data.fixedExpensePayments||[];state.suppliers=data.suppliers||[];
+    state.purchases=data.purchases||[];state.cashMovements=data.cashMovements||[];
+    state.promotions=data.promotions||[];renderAll();return true;
+  }catch(err){
+    // Una copia vieja o malformada no debe bloquear el acceso al sistema.
+    console.warn('Copia local no disponible:',err?.name||'');
+    return false;
+  }
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function canOwner(){ return state.role==='owner'; }
