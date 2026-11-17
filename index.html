@@ -1195,6 +1195,52 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
 @media(max-width:420px){.price-monitor-summary,.monitor-prices{grid-template-columns:1fr}.price-monitor-toolbar{align-items:stretch;flex-direction:column}.price-monitor-toolbar .search-field,.price-monitor-toolbar select{width:100%}}
 
 /* Inteligencia de precios: el detalle técnico de Coto se repliega de inicio en móvil y escritorio. */
+
+/* Intelligence de Precios: tarjetas legibles y acciones asociadas a cada alternativa. */
+.monitor-finding-v2{display:grid;gap:13px;padding:17px}
+.monitor-finding-v2 .monitor-finding-head{padding-bottom:12px}
+.monitor-finding-v2 .monitor-finding-head h3{font-size:16px;line-height:1.4;overflow-wrap:anywhere}
+.monitor-finding-v2 .monitor-state{font-size:10px;line-height:1.25;white-space:normal;max-width:145px;text-align:center}
+.monitor-price-reference-grid,.monitor-suggestions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.monitor-ref-card,.monitor-suggestion-card{min-width:0;border:1px solid var(--line);border-radius:15px;padding:14px;background:var(--surface-soft);display:flex;flex-direction:column;gap:5px}
+.monitor-ref-current{background:var(--accent-soft);border-color:var(--line)}
+.monitor-ref-source{background:var(--surface)}
+.monitor-ref-label{font-size:10px;letter-spacing:.055em;text-transform:uppercase;font-weight:850;color:var(--muted)}
+.monitor-ref-amount{font-size:clamp(19px,2.8vw,26px);font-weight:850;line-height:1.24;overflow-wrap:anywhere}
+.monitor-ref-card small,.monitor-suggestion-card small{font-size:11px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.monitor-ref-card .monitor-source-link{display:inline;font-size:11px}
+.monitor-suggestions-title{font-size:13px;font-weight:850;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.monitor-suggestions-title small{font-size:10px;color:var(--muted);font-weight:500}
+.monitor-suggestion-card{background:var(--surface);gap:7px}
+.monitor-suggestion-market{border-color:var(--line)}
+.monitor-suggestion-profit{border-color:var(--line)}
+.monitor-suggestion-amount{font-size:clamp(20px,2.8vw,27px);line-height:1.18;overflow-wrap:anywhere}
+.monitor-suggestion-card small{flex:1}
+.monitor-suggestion-card button{width:100%;min-height:43px;padding:10px 7px;font-size:12px;margin-top:6px;line-height:1.2}
+.monitor-review-v2{padding-top:10px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:11px}
+.monitor-review-v2 .monitor-review-meta{display:flex;flex-direction:column;gap:5px;font-size:11px;line-height:1.35}
+.monitor-discard-btn{min-height:39px;white-space:normal;font-size:11px}
+.monitor-decision-note{color:var(--muted);font-size:10px;line-height:1.4}
+html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
+@media(max-width:650px){
+ .monitor-finding-v2{padding:13px;gap:11px}
+ .monitor-price-reference-grid,.monitor-suggestions-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .monitor-ref-card,.monitor-suggestion-card{padding:11px;gap:6px}
+ .monitor-ref-amount{font-size:19px}
+ .monitor-suggestion-amount{font-size:20px}
+ .monitor-suggestion-card button{font-size:11px;padding:9px 5px}
+ .monitor-finding-v2 .monitor-finding-head h3{font-size:14px}
+ .monitor-finding-v2 .monitor-state{font-size:9px;max-width:110px}
+ .monitor-suggestions-title{flex-direction:column;gap:2px}
+ .monitor-review-v2{flex-direction:row;align-items:center}
+ .monitor-discard-btn{width:auto;max-width:44%;font-size:10px}
+}
+@media(max-width:350px){
+ .monitor-price-reference-grid{grid-template-columns:1fr}
+ .monitor-suggestions-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .monitor-ref-amount{font-size:21px}
+}
+
 .price-monitor-coto-collapsible { display:block; overflow:hidden; }
 .price-monitor-coto-summary { display:flex; align-items:center; gap:12px; cursor:pointer; list-style:none; padding:1px 0; min-height:48px; -webkit-tap-highlight-color:transparent; }
 .price-monitor-coto-summary::-webkit-details-marker { display:none; }
@@ -3626,17 +3672,21 @@ function renderPriceIntelligence(){
     const promoNote=f.sourcePromotionalPrice!=null?(grouped?'<small>Algunas variedades en promoción desde '+money(f.sourcePromotionalPrice)+'</small>':'<small>En promoción a '+money(f.sourcePromotionalPrice)+'</small>'):'';
     const orientationNote=grouped?'<small>Comparación orientativa: '+Number(f.comparedVariantsCount||0)+' variedades encontradas. Confirmá la variedad antes de aprobar.</small>':'';
     const sourceAttribution=f.sourceProvider==='coto_digital_official'?'<small>Coto Digital oficial · Selección web 200 · Datos del '+esc(f.sourceDataDate||'día no indicado')+'. Promociones por cantidad no incluidas en el precio habitual.</small>':'';
-    return `<article class="monitor-finding">
-      <div class="monitor-finding-head"><div><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(badge)}</span></div>
-      <div class="monitor-prices">
-        <div class="monitor-price"><span>Zen Hogar · actual</span><strong>${money(f.originalPrice)}</strong><small>Costo registrado: ${money(f.originalCost)}</small></div>
-        <div class="monitor-price"><span>${esc(monitorSourceLabel(f.source))}</span><strong>${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Sin producto verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir enlace</a>`:''}</small>${orientationNote}${sourceAttribution}</div>
-        <div class="monitor-price"><span>Alternativa competitiva</span><strong>${market}</strong><small>Referencia frente al mercado</small></div>
-        <div class="monitor-price"><span>Alternativa rentable</span><strong>${profitable}</strong><small>${f.suggestedMarginPct==null?'Según costo y margen mínimo':`Margen mínimo configurado: ${Number(f.suggestedMarginPct).toFixed(1)}%`}</small></div>
+    const choiceDisabled=!canChoose||reviewed;
+    const marginLabel=f.suggestedMarginPct==null?'Según costo y margen mínimo':`Margen mínimo configurado: ${Number(f.suggestedMarginPct).toFixed(1)}%`;
+    return `<article class="monitor-finding monitor-finding-v2">
+      <div class="monitor-finding-head"><div class="monitor-product-identity"><span class="section-kicker">${esc(f.productCode||'Producto del inventario')}</span><h3>${esc(f.productName)}</h3></div><span class="monitor-state ${esc(f.matchStatus)}">${esc(badge)}</span></div>
+      <div class="monitor-price-reference-grid">
+        <div class="monitor-ref-card monitor-ref-current"><span class="monitor-ref-label">Mi precio actual</span><strong class="monitor-ref-amount">${money(f.originalPrice)}</strong><small>Costo: ${money(f.originalCost)}</small></div>
+        <div class="monitor-ref-card monitor-ref-source"><span class="monitor-ref-label">${esc(monitorSourceLabel(f.source))}</span><strong class="monitor-ref-amount">${sourcePrice}</strong>${promoNote}<small>${f.sourceProductName?esc(f.sourceProductName):'Producto no verificado'}${url?` · <a class="monitor-source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Ver producto</a>`:''}</small>${orientationNote}${sourceAttribution}</div>
       </div>
-      <div class="monitor-review"><div class="monitor-review-meta"><strong>${esc(monitorReviewLabel(f))}</strong> · Consulta ${esc(fmtDate(f.createdAt))}${f.reviewedAt?` · Revisado ${esc(fmtDate(f.reviewedAt))}`:''}${!canAdmin()?' · Sólo lectura para tu rol':''}</div>
-        <div class="monitor-actions"><button class="secondary" type="button" ${!canChoose||f.suggestionMarket==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','market')">Elegir competitiva</button><button class="secondary" type="button" ${!canChoose||f.suggestionProfitable==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','profitable')">Elegir rentable</button><button class="secondary" type="button" ${!canAdmin()||reviewed?'disabled':''} onclick="reviewPriceFinding('${f.id}','discarded')">Descartar</button></div>
+      <div class="monitor-suggestions-title">Precios sugeridos <small>Elegí una alternativa para registrar tu decisión</small></div>
+      <div class="monitor-suggestions-grid">
+        <div class="monitor-suggestion-card monitor-suggestion-market"><span class="monitor-ref-label">Competitiva</span><strong class="monitor-suggestion-amount">${market}</strong><small>Referencia frente al mercado</small><button class="secondary" type="button" ${choiceDisabled||f.suggestionMarket==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','market')">Elegir competitiva</button></div>
+        <div class="monitor-suggestion-card monitor-suggestion-profit"><span class="monitor-ref-label">Rentable</span><strong class="monitor-suggestion-amount">${profitable}</strong><small>${esc(marginLabel)}</small><button class="secondary" type="button" ${choiceDisabled||f.suggestionProfitable==null?'disabled':''} onclick="reviewPriceFinding('${f.id}','profitable')">Elegir rentable</button></div>
       </div>
+      <div class="monitor-review monitor-review-v2"><div class="monitor-review-meta"><strong>${esc(monitorReviewLabel(f))}</strong><span>Consulta: ${esc(fmtDate(f.createdAt))}${f.reviewedAt?` · Revisado: ${esc(fmtDate(f.reviewedAt))}`:''}${!canAdmin()?' · Sólo lectura para tu rol':''}</span></div><button class="secondary monitor-discard-btn" type="button" ${!canAdmin()||reviewed?'disabled':''} onclick="reviewPriceFinding('${f.id}','discarded')">Descartar sugerencia</button></div>
+      <small class="monitor-decision-note">Registrar una decisión no modifica el precio del inventario.</small>
     </article>`;
   }).join('');
 }
