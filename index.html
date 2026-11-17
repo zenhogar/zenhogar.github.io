@@ -1191,6 +1191,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <!-- Modelo 13: evolución visual reversible (solo CSS) -->
   <link rel="stylesheet" href="./modelo13-visual.css?v=20261117-teal" />
   <link rel="stylesheet" href="./dashboard-premium.css?v=20261117-1" />
+  <link rel="stylesheet" href="./reportes-visual.css?v=20261117-1" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1728,6 +1729,37 @@ html[data-theme="dark"] .weight-quick-qty button{
         </div>
 
         <div id="reportInsights" class="report-insights"></div>
+        <header class="report-visual-heading">
+          <div><span class="section-kicker">ANÁLISIS VISUAL</span><h2>Gráficos de rendimiento</h2></div>
+          <small>Compará ventas, ganancias, cobros y productos. Todos los gráficos usan el período seleccionado arriba.</small>
+        </header>
+        <div class="report-visual-grid" id="reportVisualGrid">
+          <article class="card report-visual-card wide">
+            <div class="rv-head"><div><span class="rv-kicker">Finanzas</span><h3>Evolución financiera</h3><p>Ventas netas, costo efectivo vendido y ganancia bruta</p></div></div>
+            <div id="rvFinancialChart" class="rv-chart-scroll" aria-label="Gráfico de evolución financiera"></div>
+            <div class="rv-legend"><span><i></i> Ventas</span><span><i class="line"></i> Costos</span><span><i class="profit"></i> Ganancia bruta</span></div>
+            <div id="rvFinancialDetail" class="rv-selected-detail" aria-live="polite">Elegí un período para consultar sus movimientos.</div>
+            <p class="rv-note">Los costos y la ganancia se calculan con los valores registrados en las ventas. Los gastos operativos se muestran en el detalle al seleccionar una fecha.</p>
+          </article>
+          <article class="card report-visual-card">
+            <div class="rv-head"><div><span class="rv-kicker">Cobros</span><h3>Medios de pago</h3><p>Participación de cada medio en la facturación neta</p></div></div>
+            <div id="rvPaymentChart" aria-label="Gráfico circular por medio de pago"></div>
+          </article>
+          <article class="card report-visual-card">
+            <div class="rv-head"><div><span class="rv-kicker">Rentabilidad</span><h3>Ganancia por categoría</h3><p>Hasta 8 categorías ordenadas por ganancia bruta</p></div></div>
+            <div id="rvCategoryChart" aria-label="Gráfico de ganancia por categoría"></div>
+          </article>
+          <article class="card report-visual-card wide">
+            <div class="rv-head">
+              <div><span class="rv-kicker">Rotación</span><h3>Productos más vendidos</h3><p>Los 8 artículos principales del período seleccionado</p></div>
+              <div class="rv-pills" id="rvProductMode" role="group" aria-label="Ordenar productos por">
+                <button type="button" data-rv-product-mode="revenue" aria-pressed="true">Facturación</button>
+                <button type="button" data-rv-product-mode="quantity" aria-pressed="false">Cantidad</button>
+              </div>
+            </div>
+            <div id="rvProductsChart" aria-label="Gráfico de productos más vendidos"></div>
+          </article>
+        </div>
 
         <div class="grid two report-detail-grid">
           <article class="card surface-card"><span class="section-kicker">Cobros</span><h2>Ventas por medio de pago</h2><div id="paymentReport"></div></article>
@@ -2048,6 +2080,7 @@ window.ZH_CONFIG = {
 
   </script>
   <script src="./dashboard-premium.js?v=20261117-1"></script>
+  <script src="./reportes-charts.js?v=20261117-1"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -3391,6 +3424,7 @@ function renderReports(){
   q('containerReport').innerHTML=a.containerCount?`<div class="list-row"><span>Envases reutilizados</span><strong>${a.containerCount}</strong></div><div class="list-row"><span>Descuento al cliente</span><strong>${money(a.containerDiscount)}</strong></div><div class="list-row"><span>Costo de envases evitado</span><strong>${money(a.containerSaving)}</strong></div><div class="list-row"><span>Impacto estimado en margen</span><strong class="${containerImpact>=0?'positive-text':'negative-text'}">${containerImpact>=0?'+ ':''}${money(containerImpact)}</strong></div>`:'<div class="empty">Todavía no hay ventas con envase propio en este período.</div>';
   q('categoryProfitReport').innerHTML=a.categoryRows.slice(0,8).map(x=>`<div class="report-category-row"><div><strong>${esc(x.name)}</strong><small>Ventas ${money(x.revenue)} · costo ${money(x.cost)}</small></div><div><strong>${money(x.profit)}</strong><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></div></div>`).join('')||'<div class="empty">Sin datos por categoría.</div>';
   q('profitabilityTable').innerHTML=a.productRows.map(x=>`<tr><td><strong>${esc(x.name)}</strong><small class="report-product-code">${esc(x.code||'Sin código')} · ${esc(x.category||'Sin categoría')}</small></td><td>${qtyText({unitKind:x.unitKind},x.qty)}</td><td>${money(x.revenue)}</td><td>${money(x.cost)}</td><td class="${x.profit>=0?'positive-text':'negative-text'}"><strong>${money(x.profit)}</strong></td><td><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></td><td>${money(x.discount)}</td></tr>`).join('')||'<tr><td colspan="7"><div class="empty">No hay ventas para mostrar en este período.</div></td></tr>';
+  renderReportVisualCharts(a);
 }
 function exportProfitabilityCsv(){
   const a=reportAnalytics(),target=Number(state.reportMarginTarget||45),q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Período',a.range.label],['Margen objetivo',`${target}%`],[],['Producto','Código','Categoría','Cantidad base','Unidad','Ventas netas','Costo efectivo','Ganancia','Margen %','Descuento promociones','Descuento envase','Descuentos totales'],...a.productRows.map(r=>[r.name,r.code,r.category,r.qty,unitLabel(r.unitKind),r.revenue,r.cost,r.profit,Number.isFinite(r.margin)?r.margin.toFixed(2):'',r.promoDiscount,r.containerDiscount,r.discount])];
