@@ -1701,9 +1701,11 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
           <label class="search-field"><span>⌕</span><input id="priceMonitorSearch" type="search" placeholder="Buscar producto o supermercado..." autocomplete="off" /></label>
           <select id="priceMonitorStatusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="pending">Pendientes de revisión</option><option value="matched">Coincidencia exacta</option><option value="ambiguous">Coincidencia a revisar</option><option value="not_found">Sin coincidencia</option><option value="source_error">Error de fuente</option><option value="reviewed">Revisados</option></select>
           <label class="monitor-history-switch" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft)"><input type="checkbox" id="priceMonitorShowHistory" /> Ver historial</label>
+          <button class="primary" id="priceMonitorRunBtn" type="button">Buscar precios ahora</button>
           <button class="secondary" id="priceMonitorRefreshBtn" type="button">Recargar resultados guardados</button>
         </div>
-        <p class="price-monitor-refresh-note">Este botón sólo vuelve a leer los resultados ya guardados en Supabase. No inicia una búsqueda nueva: la búsqueda automática quincenal todavía está desactivada.</p>
+        <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
+        <p class="price-monitor-refresh-note">Buscar precios ahora inicia una revisión nueva de las secciones Limpieza y Perfumería de La Gallega. Recargar resultados sólo consulta datos ya guardados. Coto y la programación automática cada 14 días todavía no están activados. Ningún precio de venta se modifica.</p>
         <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
       </section>
 
@@ -2512,7 +2514,7 @@ async function shareReceiptPdf(s){
 }
 
 const state = {
-  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
+  client:null,user:null,org:null,role:null,organizations:[],pendingOrgInvites:[],authMode:'signin',products:[],sales:[],closings:[],expenses:[],fixedExpenses:[],fixedExpensePayments:[],suppliers:[],purchases:[],cashMovements:[],promotions:[],priceMonitorSettings:null,priceMonitorRuns:[],priceMonitorFindings:[],priceMonitorCatalog:[],priceMonitorScanPages:[],priceMonitorError:'',accessInvites:[],accessMembers:[],channel:null,
   reloadTimer:null, saleCart:[],purchaseCart:[],activeReceipt:null,promoSelectedProductIds:[],scannerStream:null,scannerDetector:null,scannerMode:null,scannerFrame:null,scannerBusy:false,
   reportPeriod:localStorage.getItem('zenhogar_report_period')||'30d',
   reportMarginTarget:Number(localStorage.getItem('zenhogar_report_margin_target')||45)
@@ -2548,11 +2550,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,priceMonitorSettings:state.priceMonitorSettings,priceMonitorRuns:state.priceMonitorRuns,priceMonitorFindings:state.priceMonitorFindings,priceMonitorCatalog:state.priceMonitorCatalog,at:new Date().toISOString()})); }
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,priceMonitorSettings:state.priceMonitorSettings,priceMonitorRuns:state.priceMonitorRuns,priceMonitorFindings:state.priceMonitorFindings,priceMonitorCatalog:state.priceMonitorCatalog,priceMonitorScanPages:state.priceMonitorScanPages,at:new Date().toISOString()})); }
 function loadCache(){
   const key=cacheKey(); if(!key)return false;
   const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
-  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; state.priceMonitorSettings=data.priceMonitorSettings||null;state.priceMonitorRuns=data.priceMonitorRuns||[];state.priceMonitorFindings=data.priceMonitorFindings||[];state.priceMonitorCatalog=data.priceMonitorCatalog||[]; renderAll(); return true;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; state.priceMonitorSettings=data.priceMonitorSettings||null;state.priceMonitorRuns=data.priceMonitorRuns||[];state.priceMonitorFindings=data.priceMonitorFindings||[];state.priceMonitorCatalog=data.priceMonitorCatalog||[];state.priceMonitorScanPages=data.priceMonitorScanPages||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function canOwner(){ return state.role==='owner'; }
@@ -2573,7 +2575,7 @@ function applyOrganizationUI(){
   document.title=`${name} · Gestión Cloud`;
 }
 function clearOrganizationState(){
-  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.priceMonitorSettings=null;state.priceMonitorRuns=[];state.priceMonitorFindings=[];state.priceMonitorCatalog=[];state.priceMonitorError='';state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
+  state.products=[];state.sales=[];state.closings=[];state.expenses=[];state.fixedExpenses=[];state.fixedExpensePayments=[];state.suppliers=[];state.purchases=[];state.cashMovements=[];state.promotions=[];state.priceMonitorSettings=null;state.priceMonitorRuns=[];state.priceMonitorFindings=[];state.priceMonitorCatalog=[];state.priceMonitorScanPages=[];state.priceMonitorError='';state.accessInvites=[];state.accessMembers=[];state.saleCart=[];state.purchaseCart=[];state.activeReceipt=null;
 }
 async function refreshOrganizations(){
   const {data,error}=await state.client.rpc('list_my_organizations');if(error)throw error;
@@ -3511,6 +3513,20 @@ function renderPriceIntelligence(){
   const lastRun=runs.find(r=>r.status==='completed'||r.status==='partial')||null;
   const showHistory=!!$('#priceMonitorShowHistory')?.checked;
   const findings=(state.priceMonitorFindings||[]).filter(f=>showHistory||(!lastRun?true:f.runId===lastRun.id));
+  const liveRun=runs.find(r=>r.status==='running'&&r.runType==='manual')||null;
+  const runButton=$('#priceMonitorRunBtn'),liveEl=$('#priceMonitorLiveStatus');
+  if(runButton){runButton.hidden=!canAdmin();runButton.disabled=!!liveRun;runButton.textContent=liveRun?'Búsqueda en curso…':'Buscar precios ahora';}
+  if(liveEl){
+    if(liveRun){
+      const pages=(state.priceMonitorScanPages||[]).filter(p=>p.runId===liveRun.id);
+      const processed=pages.filter(p=>p.state==='parsed').length;
+      const failed=pages.filter(p=>p.state==='failed').length;
+      liveEl.hidden=false;
+      liveEl.innerHTML='<strong>Buscando precios en La Gallega…</strong> '+processed+' de '+pages.length+' páginas revisadas'+(failed?' · '+failed+' con error':'')+'. El proceso continúa aunque cierres esta pestaña. No se modificarán precios.';
+    } else if(runs[0]?.runType==='manual'&&runs[0]?.status==='failed'){
+      liveEl.hidden=false;liveEl.textContent='La última búsqueda no pudo completarse. Revisá los resultados anteriores y volvé a intentar más adelante.';
+    } else { liveEl.hidden=true; liveEl.textContent=''; }
+  }
   const pending=findings.filter(f=>f.reviewStatus==='pending').length;
   const exact=findings.filter(f=>f.matchStatus==='matched').length;
   const orientative=findings.filter(f=>f.comparisonKind==='group_uniform'||f.comparisonKind==='group_range').length;
@@ -3577,17 +3593,19 @@ async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
 async function loadPriceMonitorData(){
   if(!state.org||!navigator.onLine)return;
   try{
-    const [settingsRes,runsRes,findingsRes,catalogRes]=await Promise.all([
+    const [settingsRes,runsRes,findingsRes,catalogRes,pagesRes]=await Promise.all([
       state.client.from('price_monitor_settings').select('enabled,interval_days,primary_source,fallback_source,approval_required,dry_run,min_gross_margin_pct,last_run_at,next_run_at,updated_at').eq('organization_id',state.org.id).maybeSingle(),
       fetchAllPages(()=>state.client.from('price_monitor_runs').select('id,started_at,completed_at,status,run_type,dry_run,products_checked,matches_found,fallback_checked,error_message').eq('organization_id',state.org.id).order('started_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('price_monitor_findings').select('id,run_id,product_id,product_name,original_price,original_cost,source,source_url,source_product_name,source_price,source_promotional_price,source_price_basis,comparison_kind,reference_min,reference_max,compared_variants_count,promo_variants_count,match_status,match_confidence,suggestion_market,suggestion_profitable,suggested_margin_pct,review_status,review_choice,review_selected_price,created_at,reviewed_at,products(code)').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
-      fetchAllPages(()=>state.client.from('price_monitor_catalog_items').select('retailer,product_url,product_name,observed_price,list_price,promotional_price,price_was_crossed_out,barcode,observed_at').eq('organization_id',state.org.id).order('observed_at',{ascending:false}))
+      fetchAllPages(()=>state.client.from('price_monitor_catalog_items').select('retailer,product_url,product_name,observed_price,list_price,promotional_price,price_was_crossed_out,barcode,observed_at').eq('organization_id',state.org.id).order('observed_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('price_monitor_scan_pages').select('run_id,state,category_code,page_no,items_found').eq('organization_id',state.org.id))
     ]);
-    for(const r of [settingsRes,runsRes,findingsRes,catalogRes])if(r.error)throw r.error;
+    for(const r of [settingsRes,runsRes,findingsRes,catalogRes,pagesRes])if(r.error)throw r.error;
     state.priceMonitorSettings=settingsRes.data?{enabled:!!settingsRes.data.enabled,intervalDays:Number(settingsRes.data.interval_days||14),primarySource:settingsRes.data.primary_source,fallbackSource:settingsRes.data.fallback_source,approvalRequired:!!settingsRes.data.approval_required,dryRun:!!settingsRes.data.dry_run,minGrossMarginPct:Number(settingsRes.data.min_gross_margin_pct||0),lastRunAt:settingsRes.data.last_run_at,nextRunAt:settingsRes.data.next_run_at,updatedAt:settingsRes.data.updated_at}:null;
     state.priceMonitorRuns=(runsRes.data||[]).map(r=>({id:r.id,startedAt:r.started_at,completedAt:r.completed_at,status:r.status,runType:r.run_type,dryRun:!!r.dry_run,productsChecked:Number(r.products_checked||0),matchesFound:Number(r.matches_found||0),fallbackChecked:Number(r.fallback_checked||0),errorMessage:r.error_message||''}));
     state.priceMonitorFindings=(findingsRes.data||[]).map(r=>({id:r.id,runId:r.run_id,productId:r.product_id,productCode:r.products?.code||'',productName:r.product_name,originalPrice:Number(r.original_price||0),originalCost:Number(r.original_cost||0),source:r.source,sourceUrl:r.source_url||'',sourceProductName:r.source_product_name||'',sourcePrice:r.source_price==null?null:Number(r.source_price),sourcePromotionalPrice:r.source_promotional_price==null?null:Number(r.source_promotional_price),sourcePriceBasis:r.source_price_basis||'unknown',comparisonKind:r.comparison_kind||'unresolved',referenceMin:r.reference_min==null?null:Number(r.reference_min),referenceMax:r.reference_max==null?null:Number(r.reference_max),comparedVariantsCount:Number(r.compared_variants_count||0),promoVariantsCount:Number(r.promo_variants_count||0),matchStatus:r.match_status,matchConfidence:r.match_confidence==null?null:Number(r.match_confidence),suggestionMarket:r.suggestion_market==null?null:Number(r.suggestion_market),suggestionProfitable:r.suggestion_profitable==null?null:Number(r.suggestion_profitable),suggestedMarginPct:r.suggested_margin_pct==null?null:Number(r.suggested_margin_pct),reviewStatus:r.review_status,reviewChoice:r.review_choice||'',reviewSelectedPrice:r.review_selected_price==null?null:Number(r.review_selected_price),createdAt:r.created_at,reviewedAt:r.reviewed_at}));
     state.priceMonitorCatalog=(catalogRes.data||[]).map(r=>({retailer:r.retailer,productUrl:r.product_url,productName:r.product_name,observedPrice:Number(r.observed_price||0),listPrice:r.list_price==null?null:Number(r.list_price),promotionalPrice:r.promotional_price==null?null:Number(r.promotional_price),isCrossed:!!r.price_was_crossed_out,barcode:r.barcode||'',observedAt:r.observed_at}));
+    state.priceMonitorScanPages=(pagesRes.data||[]).map(r=>({runId:r.run_id,state:r.state,category:r.category_code,pageNo:r.page_no,itemsFound:r.items_found}));
     state.priceMonitorError='';
   }catch(err){console.error('Inteligencia de Precios:',err);state.priceMonitorError=err.message||'Error de conexión con el servicio de comparación.';}
   renderPriceIntelligence();
@@ -4330,7 +4348,33 @@ $('#fracProduct').onchange=loadFractionalFromProduct;$('#fracMode').onchange=()=
 $('#reportPeriod').onchange=e=>{state.reportPeriod=e.target.value;localStorage.setItem('zenhogar_report_period',state.reportPeriod);renderReports();};
 $('#reportMarginTarget').oninput=e=>{const v=Math.min(95,Math.max(1,Number(e.target.value||45)));state.reportMarginTarget=v;localStorage.setItem('zenhogar_report_margin_target',String(v));renderReports();};
 $('#exportProfitReportBtn').onclick=exportProfitabilityCsv;
+
+async function startPriceMonitorLiveScan(){
+  if(!canAdmin()||!state.org) return toast('Sólo propietarios o administradores pueden realizar una búsqueda.','error');
+  if(!requireOnline())return;
+  if(!confirm('¿Buscar precios nuevos en La Gallega (Limpieza y Perfumería)? La búsqueda puede recorrer muchas páginas. Los precios de Zen Hogar NO se modifican.'))return;
+  const button=$('#priceMonitorRunBtn');
+  if(button){button.disabled=true;button.textContent='Iniciando búsqueda…';}
+  try{
+    const {data,error}=await state.client.rpc('price_monitor_start_live_scan',{p_organization_id:state.org.id});
+    if(error)throw error;
+    toast('Búsqueda iniciada. Podés seguir usando Zen Hogar Gestión.','success');
+    await loadPriceMonitorData();saveCache();
+  }catch(err){
+    toast('No se pudo iniciar la búsqueda: '+(err.message||String(err)),'error');
+  }finally{
+    renderPriceIntelligence();
+  }
+}
+// La consulta continúa del lado del servidor; este temporizador sólo refresca la barra de progreso visible.
+setInterval(()=>{
+  if(document.visibilityState==='visible'&&state.client&&state.org&&state.priceMonitorRuns.some(r=>r.status==='running'&&r.runType==='manual')){
+    loadPriceMonitorData().catch(err=>console.error('Monitor de precios',err));
+  }
+},15000);
+
 $('#priceMonitorSearch').oninput=renderPriceIntelligence;
+$('#priceMonitorRunBtn').onclick=startPriceMonitorLiveScan;
 $('#priceMonitorStatusFilter').onchange=renderPriceIntelligence;
 $('#priceMonitorShowHistory').onchange=renderPriceIntelligence;
 $('#priceMonitorRefreshBtn').onclick=async()=>{if(!requireOnline())return;const btn=$('#priceMonitorRefreshBtn');btn.disabled=true;try{await loadPriceMonitorData();saveCache();if(state.priceMonitorError)toast('No se pudieron actualizar las comparaciones.','error');else toast('Registros de consultas actualizados.','success');}finally{btn.disabled=false;}};
