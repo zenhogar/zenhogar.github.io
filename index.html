@@ -1691,7 +1691,7 @@ html[data-theme="dark"] .price-monitor-status{background:linear-gradient(135deg,
         <div class="section-intro"><div><span class="section-kicker">Análisis de mercado</span><h2>Inteligencia de Precios</h2><p>Compará referencias externas y registrá decisiones sin modificar el inventario.</p></div></div>
 
         <article class="card price-monitor-status">
-          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Revisión manual cada 14 días</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente.</p></div>
+          <div><span class="section-kicker">Primera etapa · modo seguro</span><h3>Búsqueda manual de precios</h3><p>La Gallega es la fuente principal. Coto sólo se contempla cuando no existe una coincidencia exacta y su integración completa todavía está pendiente.</p></div>
           <div class="price-monitor-flags"><span class="monitor-flag warning">● Automatización desactivada</span><span class="monitor-flag">La Gallega · principal</span><span class="monitor-flag warning">Coto · pendiente</span></div>
         </article>
 
@@ -4366,10 +4366,44 @@ async function startPriceMonitorLiveScan(){
     renderPriceIntelligence();
   }
 }
-// La consulta continúa del lado del servidor; este temporizador sólo refresca la barra de progreso visible.
+// El bot continúa del lado del servidor aunque cierres el navegador.
+// Mientras esté activo sólo consultamos el avance, sin descargar el catálogo completo cada vez.
+let pmProgressFetching=false;
+async function refreshPriceMonitorProgress(){
+  if(pmProgressFetching||!state.client||!state.org)return;
+  const current=state.priceMonitorRuns.find(r=>r.status==='running'&&r.runType==='manual');
+  if(!current)return;
+  pmProgressFetching=true;
+  try{
+    const org=state.org.id;
+    const [runRes,pageRes]=await Promise.all([
+      state.client.from('price_monitor_runs').select('id,status,completed_at,error_message,products_checked,matches_found').eq('id',current.id).eq('organization_id',org).single(),
+      state.client.from('price_monitor_scan_pages').select('run_id,state,category_code,page_no,items_found').eq('run_id',current.id).eq('organization_id',org)
+    ]);
+    if(runRes.error)throw runRes.error;
+    if(pageRes.error)throw pageRes.error;
+    if(!state.org||state.org.id!==org)return;
+    const updated=runRes.data;
+    current.status=updated.status;
+    current.completedAt=updated.completed_at;
+    current.errorMessage=updated.error_message||'';
+    current.productsChecked=Number(updated.products_checked||0);
+    current.matchesFound=Number(updated.matches_found||0);
+    state.priceMonitorScanPages=[
+      ...state.priceMonitorScanPages.filter(p=>p.runId!==current.id),
+      ...(pageRes.data||[]).map(p=>({runId:p.run_id,state:p.state,category:p.category_code,pageNo:p.page_no,itemsFound:p.items_found}))
+    ];
+    if(updated.status==='running')renderPriceIntelligence();
+    else {
+      await loadPriceMonitorData();saveCache();
+      toast(updated.status==='completed'?'Búsqueda finalizada: revisá las sugerencias.':updated.status==='partial'?'Búsqueda parcial: consultá las páginas con error.':'La búsqueda terminó con errores.','');
+    }
+  }catch(err){console.error('Seguimiento de Inteligencia de Precios',err);}
+  finally{pmProgressFetching=false;}
+}
 setInterval(()=>{
   if(document.visibilityState==='visible'&&state.client&&state.org&&state.priceMonitorRuns.some(r=>r.status==='running'&&r.runType==='manual')){
-    loadPriceMonitorData().catch(err=>console.error('Monitor de precios',err));
+    refreshPriceMonitorProgress().catch(err=>console.error('Monitor de precios',err));
   }
 },15000);
 
