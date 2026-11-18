@@ -1,5 +1,5 @@
-/* Zen Hogar Gestión: animación premium de ensamblaje, duración visual 5,1 s.
-   No participa en la autenticación, no lee ni modifica ventas o base de datos. */
+/* Zen Hogar Gestión · Brand ident por convergencia de aros.
+   Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
 let zhBrandAssemblyActive=false;
@@ -12,7 +12,7 @@ function zhBrandAssemblyStart(){
   layer.classList.remove('is-playing','is-leaving');
   layer.hidden=false;
   layer.setAttribute('aria-hidden','false');
-  // Forzar nuevo ciclo al volver a entrar a una empresa.
+  // Reinicio limpio de los movimientos en cada ingreso.
   void layer.offsetWidth;
   layer.classList.add('is-playing');
 }
@@ -31,14 +31,14 @@ async function zhBrandAssemblyFinish(){
   if(!layer)return;
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  // La duración se cuenta desde el inicio: no añade demoras a la carga de datos.
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  const remaining=Math.max(0,(reduce?0:5100)-elapsed);
+  // Tiempo mínimo solo si la carga es rápida; no bloquea la app si tarda más.
+  const remaining=Math.max(0,(reduce?0:2730)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,400));
+    await new Promise(done=>setTimeout(done,360));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
