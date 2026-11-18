@@ -1,4 +1,4 @@
-/* Armado final del logo original Zen Hogar por capas completas — solo presentación.
+/* Zen Hogar Gestión: animación premium de ensamblaje, duración visual 5,1 s.
    No participa en la autenticación, no lee ni modifica ventas o base de datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -33,12 +33,12 @@ async function zhBrandAssemblyFinish(){
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   // La duración se cuenta desde el inicio: no añade demoras a la carga de datos.
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  const remaining=Math.max(0,(reduce?0:3200)-elapsed);
+  const remaining=Math.max(0,(reduce?0:5100)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,320));
+    await new Promise(done=>setTimeout(done,400));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
