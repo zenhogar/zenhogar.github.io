@@ -1,4 +1,4 @@
-/* Rompecabezas de logo original Zen Hogar — solo presentación.
+/* Armado final del logo original Zen Hogar por capas completas — solo presentación.
    No participa en la autenticación, no lee ni modifica ventas o base de datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
