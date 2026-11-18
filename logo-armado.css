@@ -1,7 +1,7 @@
-/* ZEN HOGAR GESTIÓN · V6 PRECISION MOTION · 18 NOV 2026
-   El trazo usa las MISMAS rutas vectoriales que el logo original.
-   Tres puntos recorren rutas SVG reales; el color aparece por elemento.
-   Sin cortes, máscaras de barrido ni cambios de geometría. */
+/* Zen Hogar Gestión · V7 Precision Flow · noviembre 2026
+   Los puntos y sus trazos comparten una única progresión por ruta SVG.
+   El dibujo se completa, respira y luego gana los colores originales por capas.
+   Sin efectos extra ni modificaciones al sistema comercial. */
 .zh-brand-assembly[hidden]{display:none!important}
 .zh-brand-assembly{
   position:fixed;inset:0;z-index:2100;isolation:isolate;overflow:hidden;
@@ -9,113 +9,100 @@
   padding:calc(24px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
   background:radial-gradient(ellipse 47% 50% at 50% 44%,#103642 0%,#061e28 65%,#03141d 100%);
   color:#f5fff9;opacity:1;visibility:visible;
-  transition:opacity .30s cubic-bezier(.22,.74,.27,1),visibility .30s;
+  transition:opacity .34s cubic-bezier(.22,.74,.27,1),visibility .34s;
 }
 .zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
 .zh-brand-content{
-  position:relative;width:min(100%,460px);
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  transform:translateY(-9px);
+ position:relative;width:min(100%,460px);
+ display:flex;flex-direction:column;align-items:center;text-align:center;
+ transform:translateY(-9px);
 }
 .zh-brand-mark{width:clamp(232px,63vw,340px);height:auto;display:block;overflow:visible}
-.zh-v6-original{pointer-events:none}
-.zh-v6-plate{fill:#fffdf6;opacity:0}
-.zh-v6-original .zh-logo-layer{opacity:0;will-change:opacity}
-.zh-v6-traces,.zh-v6-points{pointer-events:none}
-.zh-v6-trace{
-  fill:none;stroke:#ecfff7;stroke-width:8;stroke-linejoin:round;stroke-linecap:round;
-  stroke-dasharray:100;stroke-dashoffset:100;
-  opacity:0;will-change:opacity,stroke-dashoffset;
+.zh-v7-original{pointer-events:none}
+.zh-v7-plate{fill:#fffdf6;opacity:0}
+.zh-v7-original .zh-logo-layer{opacity:0}
+.zh-v7-traces,.zh-v7-points{pointer-events:none}
+.zh-v7-trace{
+ fill:none;stroke:#eafff6;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;
+ stroke-dasharray:100;stroke-dashoffset:100;opacity:0;
 }
-.zh-v6-trace-ring{stroke:#aadfcf;stroke-width:8}
-.zh-v6-trace-inner{stroke:#c3f2dc;stroke-width:10}
-.zh-v6-trace-house{stroke:#e9fff4;stroke-width:8}
-.zh-v6-trace-leaf{stroke:#b1ebd0;stroke-width:7}
-.zh-v6-trace-sun,.zh-v6-trace-windows{stroke-width:7}
-.zh-brand-assembly.is-playing .zh-v6-trace-ring{animation:zhV6Draw 1.35s cubic-bezier(.25,.63,.29,1) .28s both,zhV6FadeStroke .53s ease 2.88s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-inner{animation:zhV6Draw 1.30s cubic-bezier(.25,.63,.29,1) .52s both,zhV6FadeStroke .48s ease 3.04s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-house{animation:zhV6Draw 1.22s cubic-bezier(.23,.66,.28,1) .98s both,zhV6FadeStroke .51s ease 3.05s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-leaf-left{animation:zhV6Draw .96s cubic-bezier(.23,.66,.28,1) 1.32s both,zhV6FadeStroke .54s ease 3.15s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-leaf-right{animation:zhV6Draw .96s cubic-bezier(.23,.66,.28,1) 1.38s both,zhV6FadeStroke .54s ease 3.15s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-sun{animation:zhV6Draw .52s ease-out 1.68s both,zhV6FadeStroke .40s ease 3.17s forwards}
-.zh-brand-assembly.is-playing .zh-v6-trace-windows{animation:zhV6Draw .52s ease-out 1.88s both,zhV6FadeStroke .46s ease 3.18s forwards}
+.zh-v7-trace-ring{stroke:#a7e2cd;stroke-width:8}
+.zh-v7-trace-inner{stroke:#c1f2db;stroke-width:10}
+.zh-v7-trace-house{stroke:#ebfff6;stroke-width:8}
+.zh-v7-trace-leaf{stroke:#b8edd3;stroke-width:7}
+.zh-v7-trace-sun,.zh-v7-trace-windows{stroke-width:7}
+/* Las tres rutas principales comparten un reloj con sus puntos:
+   el avance de dash y la posición del punto provienen del MISMO porcentaje JS. */
+.zh-brand-assembly.is-playing .zh-v7-trace-ring{animation:zhV7TraceShow .24s ease .18s both,zhV7LineExit .53s ease 3.03s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-inner{animation:zhV7TraceShow .24s ease .48s both,zhV7LineExit .53s ease 3.10s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-house{animation:zhV7TraceShow .24s ease .90s both,zhV7LineExit .50s ease 3.13s forwards}
+/* Detalles secundarios tienen un dibujo breve, sin brillo ni rebotes. */
+.zh-brand-assembly.is-playing .zh-v7-trace-leaf-left{animation:zhV7Draw 1.08s cubic-bezier(.24,.63,.28,1) 1.33s both,zhV7LineExit .51s ease 3.13s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-leaf-right{animation:zhV7Draw 1.08s cubic-bezier(.24,.63,.28,1) 1.40s both,zhV7LineExit .51s ease 3.13s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-sun{animation:zhV7Draw .56s ease-out 1.83s both,zhV7LineExit .44s ease 3.17s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-windows{animation:zhV7Draw .54s ease-out 1.94s both,zhV7LineExit .44s ease 3.17s forwards}
+.zh-v7-css-fallback.is-playing .zh-v7-trace-ring{animation:zhV7Draw 1.48s cubic-bezier(.28,.62,.32,1) .18s both,zhV7LineExit .53s ease 3.03s forwards}
+.zh-v7-css-fallback.is-playing .zh-v7-trace-inner{animation:zhV7Draw 1.40s cubic-bezier(.28,.62,.32,1) .48s both,zhV7LineExit .53s ease 3.10s forwards}
+.zh-v7-css-fallback.is-playing .zh-v7-trace-house{animation:zhV7Draw 1.45s cubic-bezier(.28,.62,.32,1) .90s both,zhV7LineExit .50s ease 3.13s forwards}
 
-/* Color is not a curtain wipe: the exact emblem gently gains its native
-   fills in locally synchronized layers AFTER all outline elements finish. */
-.zh-brand-assembly.is-playing .zh-v6-plate{animation:zhV6Color .68s ease-in-out 2.56s both}
-.zh-brand-assembly.is-playing .zh-logo-outer{animation:zhV6Color .58s ease-in-out 2.61s both}
-.zh-brand-assembly.is-playing .zh-logo-inner{animation:zhV6Color .63s ease-in-out 2.72s both}
-.zh-brand-assembly.is-playing .zh-logo-house{animation:zhV6Color .60s ease-in-out 2.82s both}
+/* Color: primero base y anillos, luego casa y hojas; todas son las formas
+   originales (no aparecen trazados ni siluetas sustitutas). */
+.zh-brand-assembly.is-playing .zh-v7-plate{animation:zhV7Color .78s cubic-bezier(.22,.69,.26,1) 2.74s both}
+.zh-brand-assembly.is-playing .zh-logo-outer{animation:zhV7Color .56s ease-in-out 2.73s both}
+.zh-brand-assembly.is-playing .zh-logo-inner{animation:zhV7Color .60s ease-in-out 2.80s both}
+.zh-brand-assembly.is-playing .zh-logo-house{animation:zhV7Color .58s ease-in-out 2.90s both}
 .zh-brand-assembly.is-playing .zh-logo-leaf-left,
-.zh-brand-assembly.is-playing .zh-logo-leaf-right{animation:zhV6Color .65s ease-in-out 2.93s both}
-.zh-brand-assembly.is-playing .zh-logo-sun{animation:zhV6Color .35s ease-in-out 3.00s both}
-.zh-brand-assembly.is-playing .zh-logo-windows{animation:zhV6Color .35s ease-in-out 3.08s both}
+.zh-brand-assembly.is-playing .zh-logo-leaf-right{animation:zhV7Color .62s ease-in-out 2.98s both}
+.zh-brand-assembly.is-playing .zh-logo-sun,
+.zh-brand-assembly.is-playing .zh-logo-windows{animation:zhV7Color .40s ease-in-out 3.05s both}
 
-/* Motion points are animated along the actual SVG shape, not around a
-   separate approximate circle. SVG animateMotion is started by logo-armado.js. */
-.zh-v6-dot{
-  opacity:0;fill:#f4fff9;will-change:opacity;
-}
-.zh-brand-assembly.is-playing .zh-v6-dot-a{animation:zhV6Dot 1.58s linear .10s both}
-.zh-brand-assembly.is-playing .zh-v6-dot-b{animation:zhV6Dot 1.41s linear .40s both}
-.zh-brand-assembly.is-playing .zh-v6-dot-c{animation:zhV6Dot 1.43s linear .83s both}
-.zh-v6-fallback .zh-v6-dot{
-  transform-box:view-box;transform-origin:500px 496px;will-change:transform,opacity;
-}
-.zh-v6-fallback.is-playing .zh-v6-dot-a{animation:zhV6FallA 1.58s linear .10s both}
-.zh-v6-fallback.is-playing .zh-v6-dot-b{animation:zhV6FallB 1.41s linear .40s both}
-.zh-v6-fallback.is-playing .zh-v6-dot-c{animation:zhV6FallC 1.43s linear .83s both}
+.zh-v7-dot{opacity:0;fill:#f5fff9;will-change:opacity}
+.zh-brand-assembly.is-playing .zh-v7-dot-a{animation:zhV7DotShow 1.48s linear .18s both}
+.zh-brand-assembly.is-playing .zh-v7-dot-b{animation:zhV7DotShow 1.40s linear .48s both}
+.zh-brand-assembly.is-playing .zh-v7-dot-c{animation:zhV7DotShow 1.45s linear .90s both}
+.zh-v7-css-fallback .zh-v7-points{display:none!important}
 
 .zh-brand-wordmark{
-  margin:0;color:#f7fff9;opacity:0;transform:translateY(8px);
-  font-size:clamp(30px,6.5vw,36px);font-weight:780;letter-spacing:-.045em;line-height:1.12;
+ margin:0;color:#f7fff9;opacity:0;transform:translateY(8px);
+ font-size:clamp(30px,6.5vw,36px);font-weight:780;letter-spacing:-.045em;line-height:1.12;
 }
 .zh-brand-subtitle{
-  margin:9px 0 0;color:#b0e4ce;opacity:0;transform:translateY(5px);
-  font-size:11px;font-weight:740;letter-spacing:.27em;
+ margin:9px 0 0;color:#b0e4ce;opacity:0;transform:translateY(5px);
+ font-size:11px;font-weight:740;letter-spacing:.27em;
 }
 .zh-brand-divider,.zh-brand-status{display:none!important}
-.zh-brand-assembly.is-playing .zh-brand-wordmark{
-  animation:zhV6Text .46s cubic-bezier(.22,.75,.26,1) 3.56s both;
-}
-.zh-brand-assembly.is-playing .zh-brand-subtitle{
-  animation:zhV6Text .34s cubic-bezier(.22,.75,.26,1) 3.82s both;
-}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{animation:zhV7Text .42s cubic-bezier(.22,.75,.26,1) 3.62s both}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{animation:zhV7Text .34s cubic-bezier(.22,.75,.26,1) 3.88s both}
 .zh-brand-skip{
-  position:absolute;left:50%;bottom:calc(17px + env(safe-area-inset-bottom));
-  transform:translateX(-50%);min-height:44px;padding:10px 18px;
-  border:1px solid rgba(219,255,243,.19);border-radius:999px;
-  background:rgba(255,255,255,.045);color:#c6d9d3;
-  font-size:11px;font-weight:680;white-space:nowrap;cursor:pointer;
+ position:absolute;left:50%;bottom:calc(17px + env(safe-area-inset-bottom));
+ transform:translateX(-50%);min-height:44px;padding:10px 18px;
+ border:1px solid rgba(219,255,243,.19);border-radius:999px;
+ background:rgba(255,255,255,.045);color:#c6d9d3;
+ font-size:11px;font-weight:680;white-space:nowrap;cursor:pointer;
 }
 .zh-brand-skip:hover{background:rgba(255,255,255,.11);color:#fff}
 .zh-brand-skip:focus-visible{outline:2px solid #9edfc6;outline-offset:3px}
-@keyframes zhV6Draw{
-  0%{stroke-dashoffset:100;opacity:0}
-  10%{opacity:.92}
-  100%{stroke-dashoffset:0;opacity:1}
+@keyframes zhV7TraceShow{
+ 0%{opacity:0}100%{opacity:1}
 }
-@keyframes zhV6FadeStroke{
-  0%{opacity:1}
-  100%{opacity:0}
+@keyframes zhV7Draw{
+ 0%{stroke-dashoffset:100;opacity:0}
+ 12%{opacity:1}
+ 100%{stroke-dashoffset:0;opacity:1}
 }
-@keyframes zhV6Color{
-  0%{opacity:0}
-  100%{opacity:1}
+@keyframes zhV7LineExit{
+ 0%{opacity:1}100%{opacity:0}
 }
-@keyframes zhV6Dot{
-  0%{opacity:0}
-  13%{opacity:1}
-  83%{opacity:1}
-  100%{opacity:0}
+@keyframes zhV7Color{
+ 0%{opacity:0}100%{opacity:1}
 }
-@keyframes zhV6Text{
-  0%{opacity:0;transform:translateY(8px)}
-  100%{opacity:1;transform:translateY(0)}
+@keyframes zhV7DotShow{
+ 0%{opacity:0}11%{opacity:1}84%{opacity:1}100%{opacity:0}
 }
-@keyframes zhV6FallA{0%{opacity:0;transform:rotate(-25deg)}15%{opacity:1}80%{opacity:1}100%{opacity:0;transform:rotate(320deg)}}
-@keyframes zhV6FallB{0%{opacity:0;transform:rotate(95deg)}15%{opacity:1}80%{opacity:1}100%{opacity:0;transform:rotate(440deg)}}
-@keyframes zhV6FallC{0%{opacity:0;transform:rotate(215deg)}15%{opacity:1}80%{opacity:1}100%{opacity:0;transform:rotate(560deg)}}
+@keyframes zhV7Text{
+ 0%{opacity:0;transform:translateY(8px)}
+ 100%{opacity:1;transform:translateY(0)}
+}
 @media(max-width:500px){
  .zh-brand-mark{width:min(78vw,328px)}
  .zh-brand-content{transform:translateY(-13px)}
@@ -123,13 +110,11 @@
 }
 @media(prefers-reduced-motion:reduce){
  .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
- .zh-v6-points,.zh-v6-traces{display:none!important}
- .zh-brand-assembly .zh-v6-plate,.zh-brand-assembly.is-playing .zh-v6-plate,
- .zh-brand-assembly .zh-v6-original .zh-logo-layer,
- .zh-brand-assembly.is-playing .zh-v6-original .zh-logo-layer{
-   opacity:1!important;animation:none!important;
+ .zh-v7-points,.zh-v7-traces{display:none!important}
+ .zh-brand-assembly .zh-v7-plate,.zh-brand-assembly.is-playing .zh-v7-plate,
+ .zh-brand-assembly .zh-v7-original .zh-logo-layer,
+ .zh-brand-assembly.is-playing .zh-v7-original .zh-logo-layer{
+  opacity:1!important;animation:none!important
  }
- .zh-brand-wordmark,.zh-brand-subtitle{
-   opacity:1!important;transform:none!important;animation:none!important;
- }
+ .zh-brand-wordmark,.zh-brand-subtitle{opacity:1!important;transform:none!important;animation:none!important}
 }
