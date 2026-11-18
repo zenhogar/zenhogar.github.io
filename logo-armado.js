@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · Brand ident por convergencia de aros.
+/* Zen Hogar Gestión · Motion de marca Zen Hogar: convergencia de discos y revelación.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -33,12 +33,12 @@ async function zhBrandAssemblyFinish(){
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
   // Tiempo mínimo solo si la carga es rápida; no bloquea la app si tarda más.
-  const remaining=Math.max(0,(reduce?0:2730)-elapsed);
+  const remaining=Math.max(0,(reduce?0:3050)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,360));
+    await new Promise(done=>setTimeout(done,350));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
