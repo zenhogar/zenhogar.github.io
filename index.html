@@ -3641,7 +3641,8 @@ function safeExternalUrl(value){try{const url=new URL(String(value||''));return 
 // has been registered. These are NOT price suggestions or authorized matches.
 function pmNormalize(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
 function pmPack(value){
-  const text=pmNormalize(value);
+  // Preserve decimal separators before normalizing, e.g. 1,5 L or 2.5 kg.
+  const text=String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9.,]+/g,' ');
   const m=text.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(ml|cc|litros?|lts?|lt|kg|grm|gr|g)(?:\s|$)/i);
   if(!m)return '';
   let n=Number(m[1].replace(',','.'));let u=m[2].toLowerCase();
