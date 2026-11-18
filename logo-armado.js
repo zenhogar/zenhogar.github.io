@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · Motion plano inspirado en Spotify: tres puntos revelan el logo original, sin neón.
+/* Zen Hogar Gestión · Motion minimalista: tres puntos discretos revelan el logo original sin efectos adicionales.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // Motion del logo original: 4,0 s de presentación y 0,35 s de salida; sin alterar la carga.
-  const remaining=Math.max(0,(reduce?0:4000)-elapsed);
+  // Intro minimalista: 3,2 s de presentación y 0,3 s de salida; sin alterar la carga.
+  const remaining=Math.max(0,(reduce?0:3200)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,350));
+    await new Promise(done=>setTimeout(done,300));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
