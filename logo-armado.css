@@ -165,3 +165,166 @@
     animation:none!important;opacity:1!important;transform:none!important;filter:none!important
   }
 }
+
+
+/* NEON FLOW v2 · refinamiento de fluidez, sin modificar el logo.
+   Superpone trazos, puntos, iluminación y texto; evita encastres bruscos. */
+.zh-brand-assembly{
+  transition:opacity .34s cubic-bezier(.22,.65,.28,1),visibility .34s;
+}
+.zh-brand-assembly::before{
+  background:radial-gradient(ellipse 23% 25% at 50% 44%,rgba(92,255,195,.095),transparent 95%);
+}
+.zh-brand-assembly.is-playing::before{
+  animation:zhNeonAmbientFlow 4.5s cubic-bezier(.22,.63,.21,1) both;
+}
+.zh-brand-mark{filter:drop-shadow(0 0 7px rgba(94,255,188,.12))}
+.zh-brand-mark .zh-logo-layer{
+  will-change:opacity,transform;
+  filter:drop-shadow(0 0 5px rgba(117,255,207,.69))
+         drop-shadow(0 0 17px rgba(74,255,188,.21));
+}
+.zh-dot{will-change:transform,opacity}
+.zh-brand-assembly.is-playing .zh-dot-a{
+  animation:zhDotGlideA 1.92s linear .06s both;
+}
+.zh-brand-assembly.is-playing .zh-dot-b{
+  animation:zhDotGlideB 1.92s linear .13s both;
+}
+.zh-brand-assembly.is-playing .zh-dot-c{
+  animation:zhDotGlideC 1.92s linear .20s both;
+}
+.zh-brand-assembly.is-playing .zh-trace-outer{
+  animation:zhTraceFlow 1.44s cubic-bezier(.25,.64,.32,1) .33s both,
+            zhTraceDissolve .72s ease-in-out 2.20s forwards;
+}
+.zh-brand-assembly.is-playing .zh-trace-inner{
+  animation:zhTraceFlow 1.34s cubic-bezier(.25,.64,.32,1) .58s both,
+            zhTraceDissolve .70s ease-in-out 2.27s forwards;
+}
+.zh-brand-assembly.is-playing .zh-trace-roof{
+  animation:zhTraceFlow 1.11s cubic-bezier(.25,.64,.32,1) .94s both,
+            zhTraceDissolve .58s ease-in-out 2.37s forwards;
+}
+.zh-brand-assembly.is-playing .zh-trace-leaf{
+  animation:zhTraceFlow 1.06s cubic-bezier(.25,.64,.32,1) 1.19s both,
+            zhTraceDissolve .54s ease-in-out 2.47s forwards;
+}
+.zh-brand-assembly.is-playing .zh-logo-outer{
+  animation:zhNeonRevealed .95s cubic-bezier(.20,.69,.27,1) 1.24s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-inner{
+  animation:zhNeonRevealed .91s cubic-bezier(.20,.69,.27,1) 1.42s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-house{
+  animation:zhNeonRevealed .88s cubic-bezier(.20,.69,.27,1) 1.58s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-leaf-left{
+  animation:zhNeonRevealed .78s cubic-bezier(.20,.69,.27,1) 1.77s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-leaf-right{
+  animation:zhNeonRevealed .78s cubic-bezier(.20,.69,.27,1) 1.86s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-sun{
+  animation:zhNeonRevealed .60s cubic-bezier(.20,.69,.27,1) 2.08s both;
+}
+.zh-brand-assembly.is-playing .zh-logo-windows{
+  animation:zhNeonRevealed .60s cubic-bezier(.20,.69,.27,1) 2.15s both;
+}
+.zh-brand-assembly.is-playing .zh-neon-ripple circle{
+  animation:zhNeonSoftRipple .84s cubic-bezier(.18,.68,.35,1) 2.47s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-mark{
+  animation:zhNeonSoftBreath .84s ease-in-out 2.52s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{
+  animation:zhWordFluid .69s cubic-bezier(.20,.74,.25,1) 2.58s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{
+  animation:zhWordFluid .59s cubic-bezier(.20,.74,.25,1) 2.77s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-divider{
+  animation:zhDividerFluid .49s ease-out 3.00s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-status{
+  animation:zhSoftFade .48s ease 3.10s both;
+}
+@keyframes zhDotGlideA{
+  0%{opacity:0;transform:rotate(-74deg) scale(.85)}
+  12%{opacity:.92}
+  72%{opacity:1}
+  90%{opacity:.62}
+  100%{opacity:0;transform:rotate(274deg) scale(.94)}
+}
+@keyframes zhDotGlideB{
+  0%{opacity:0;transform:rotate(48deg) scale(.84)}
+  12%{opacity:.93}
+  72%{opacity:1}
+  90%{opacity:.60}
+  100%{opacity:0;transform:rotate(396deg) scale(.94)}
+}
+@keyframes zhDotGlideC{
+  0%{opacity:0;transform:rotate(168deg) scale(.84)}
+  12%{opacity:.90}
+  72%{opacity:1}
+  90%{opacity:.60}
+  100%{opacity:0;transform:rotate(516deg) scale(.94)}
+}
+@keyframes zhTraceFlow{
+  0%{opacity:0;stroke-dashoffset:100}
+  13%{opacity:.75}
+  40%{opacity:.98}
+  83%{opacity:1}
+  100%{opacity:1;stroke-dashoffset:0}
+}
+@keyframes zhTraceDissolve{
+  0%{opacity:1}
+  100%{opacity:0}
+}
+@keyframes zhNeonRevealed{
+  0%{opacity:0;transform:translateY(4px) scale(.995)}
+  42%{opacity:.64}
+  83%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:1;transform:none}
+}
+@keyframes zhNeonSoftRipple{
+  0%{opacity:.50;transform:scale(.92)}
+  100%{opacity:0;transform:scale(1.16)}
+}
+@keyframes zhNeonSoftBreath{
+  0%{transform:scale(.997)}
+  47%{transform:scale(1.004)}
+  100%{transform:scale(1)}
+}
+@keyframes zhWordFluid{
+  0%{opacity:0;transform:translateY(12px);filter:blur(5px)}
+  65%{opacity:.88;filter:blur(0.5px)}
+  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+@keyframes zhDividerFluid{
+  0%{opacity:0;transform:scaleX(.44)}
+  100%{opacity:1;transform:scaleX(1)}
+}
+@keyframes zhSoftFade{
+  0%{opacity:0}100%{opacity:1}
+}
+@keyframes zhNeonAmbientFlow{
+  0%{opacity:0;transform:scale(.82)}
+  44%{opacity:.82;transform:scale(1.02)}
+  100%{opacity:.56;transform:scale(1)}
+}
+@media(prefers-reduced-motion:reduce){
+ .zh-brand-assembly.is-playing .zh-neon-points,
+ .zh-brand-assembly.is-playing .zh-neon-traces,
+ .zh-brand-assembly.is-playing .zh-neon-ripple{display:none!important}
+ .zh-brand-assembly.is-playing .zh-logo-layer{
+   animation:none!important;opacity:1!important;transform:none!important
+ }
+ .zh-brand-assembly.is-playing .zh-brand-mark{animation:none!important}
+ .zh-brand-assembly.is-playing .zh-brand-wordmark,
+ .zh-brand-assembly.is-playing .zh-brand-subtitle,
+ .zh-brand-assembly.is-playing .zh-brand-divider,
+ .zh-brand-assembly.is-playing .zh-brand-status{
+   animation:none!important;opacity:1!important;transform:none!important;filter:none!important
+ }
+}
