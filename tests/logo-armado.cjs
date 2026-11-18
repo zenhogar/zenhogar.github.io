@@ -38,11 +38,15 @@ function fixture(reduced=false){
   assert.ok(html.includes('state.client.auth.signInWithPassword({email,password})'));
   assert.ok(html.includes('async function startApp(){\n  // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.\n  zhBrandAssemblyStart();'));
   assert.ok(html.includes('await zhBrandAssemblyFinish();'));
-  assert.ok(html.includes('logo-armado.css?v=20261117-layers-final'));
-  assert.ok(html.includes('logo-armado.js?v=20261117-layers-final'));
+  assert.ok(html.includes('logo-armado.css?v=20261117-dynamic'));
+  assert.ok(html.includes('logo-armado.js?v=20261117-dynamic'));
   assert.equal((css.match(/{/g)||[]).length,(css.match(/}/g)||[]).length);
   assert.ok(css.includes('prefers-reduced-motion:reduce'));
   assert.ok(css.includes('#033446') && css.includes('#fefbf4'));
+  assert.ok(css.includes('--y:-88px') && css.includes('--y:86px'),'Aros y casa deben entrar desde arriba y abajo');
+  assert.ok(css.includes('--x:-88px') && css.includes('--x:88px'),'Las hojas deben entrar desde ambos lados');
+  assert.ok(css.includes('scale(1.027)'),'Cada pieza debe rebotar suavemente al encajar');
+  assert.ok(css.includes('zhCompleteSettle .45s'),'El logo debe asentarse al finalizar');
   console.log('✓ Aros enteros, siete capas completas y acceso seguro');
 
   const normal=fixture();
@@ -51,10 +55,10 @@ function fixture(reduced=false){
   assert.equal(normal.overlay.attributes['aria-hidden'],'false');
   assert.ok(normal.overlay.classList.contains('is-playing'));
   await normal.api.finish();
-  assert.deepEqual(normal.delays,[4100,460]);
+  assert.deepEqual(normal.delays,[3200,320]);
   assert.equal(normal.overlay.hidden,true);
   assert.equal(normal.api.info().active,false);
-  console.log('✓ Armado por superposición y cierre suave');
+  console.log('✓ Animación dinámica rápida y cierre suave');
 
   const skip=fixture();
   skip.api.start();skip.api.dismiss();

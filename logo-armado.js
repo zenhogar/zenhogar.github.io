@@ -33,12 +33,12 @@ async function zhBrandAssemblyFinish(){
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   // La duración se cuenta desde el inicio: no añade demoras a la carga de datos.
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  const remaining=Math.max(0,(reduce?0:4100)-elapsed);
+  const remaining=Math.max(0,(reduce?0:3200)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,460));
+    await new Promise(done=>setTimeout(done,320));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
