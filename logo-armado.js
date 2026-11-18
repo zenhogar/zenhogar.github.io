@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // Neón: 3,97 s de composición y salida de 0,28 s, sin bloquear la carga.
-  const remaining=Math.max(0,(reduce?0:3970)-elapsed);
+  // Neón fluido: 4,15 s de composición y salida suave de 0,32 s; no altera autenticación ni datos.
+  const remaining=Math.max(0,(reduce?0:4150)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,280));
+    await new Promise(done=>setTimeout(done,320));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
