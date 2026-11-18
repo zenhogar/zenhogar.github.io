@@ -1197,7 +1197,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
-  <link rel="stylesheet" href="./logo-armado.css?v=20261118-modelo-60fps" />
+  <link rel="stylesheet" href="./logo-armado.css?v=20261118-v3-original-final" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1297,7 +1297,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <!-- Armado por capas de la identidad original aportada por el usuario. -->
   <section id="zhBrandAssembly" class="zh-brand-assembly" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status">
     <div class="zh-brand-content">
-      <svg class="zh-brand-mark" viewBox="0 0 1000 1000" role="img" aria-label="Logo original de Zen Hogar dibujado con luz verde neón">
+      <svg class="zh-brand-mark" viewBox="0 0 1000 1000" role="img" aria-label="Animación con tres puntos y revelación fiel del logo original de Zen Hogar">
         <defs>
           <linearGradient id="zhLogoMint" x1="0" y1="0" x2="0.75" y2="1"><stop stop-color="#56c58f"/><stop offset=".46" stop-color="#64cba0"/><stop offset="1" stop-color="#80dab8"/></linearGradient>
           <path id="zhLogo-ring-dark" fill-rule="evenodd" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66ZM467,87 509,85 549,88 595,96 628,105 664,118 699,135 731,154 768,182 812,225 838,257 863,296 885,343 899,385 910,430 914,463 914,486 915,488 914,528 908,567 899,606 882,653 865,688 846,721 813,764 783,795 763,813 740,830 699,856 654,877 621,889 579,899 529,906 454,904 419,899 376,889 339,876 303,859 268,838 230,809 192,773 160,733 135,694 118,660 102,619 89,569 84,529 85,449 92,410 100,380 117,333 131,303 156,263 183,227 221,190 248,167 292,139 326,122 385,101 419,93Z"/>
@@ -1307,41 +1307,28 @@ html[data-theme="dark"] .weight-quick-qty button{
           <path id="zhLogo-sun" fill-rule="evenodd" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/>
           <path id="zhLogo-windows" fill-rule="evenodd" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/>
         </defs>
-        <!-- Ícono trazado según las proporciones del video de referencia 323179.mp4. -->
-        <circle class="zh-ref-orbit" cx="500" cy="496" r="474" aria-hidden="true"/>
-        <g class="zh-ref-symbol" aria-hidden="true">
-          <circle class="zh-ref-stroke zh-ref-main zh-ref-ring" cx="500" cy="496" r="385" pathLength="100"/>
-          <circle class="zh-ref-stroke zh-ref-detail zh-ref-sun" cx="337" cy="349" r="56" pathLength="100"/>
-          <path class="zh-ref-stroke zh-ref-main zh-ref-roof" pathLength="100" d="M303 555 L510 351 L679 511"/>
-          <path class="zh-ref-stroke zh-ref-main zh-ref-chimney" pathLength="100" d="M622 425 V384 H687 V538"/>
-          <path class="zh-ref-stroke zh-ref-leaf zh-ref-left" pathLength="100" d="M115 545 Q344 541 376 803 Q150 803 115 545 Z M214 646 L376 803"/>
-          <path class="zh-ref-stroke zh-ref-leaf zh-ref-right" pathLength="100" d="M885 545 Q656 541 624 803 Q850 803 885 545 Z M786 646 L624 803"/>
-          <path class="zh-ref-stroke zh-ref-main zh-ref-bottom" pathLength="100" d="M376 805 H624"/>
-          <path class="zh-ref-stroke zh-ref-detail zh-ref-window" pathLength="100" d="M444 541 H496 V598 H444 Z M521 541 H573 V598 H521 Z M444 616 H496 V673 H444 Z M521 616 H573 V673 H521 Z"/>
+        <!-- V3: esta insignia contiene exactamente los siete elementos del SVG original. -->
+        <circle class="zh-v3-plate" cx="500" cy="496" r="443" aria-hidden="true"/>
+        <g class="zh-v3-original" aria-hidden="true">
+          <g class="zh-logo-layer zh-logo-outer"><use href="#zhLogo-ring-dark" fill="#033446"/></g>
+          <g class="zh-logo-layer zh-logo-inner"><circle cx="500" cy="496" r="346" stroke="url(#zhLogoMint)" stroke-width="51" fill="none"/></g>
+          <g class="zh-logo-layer zh-logo-house"><use href="#zhLogo-house-leaves" fill="#033446"/></g>
+          <g class="zh-logo-layer zh-logo-leaf-left"><use href="#zhLogo-leaf-left" fill="url(#zhLogoMint)"/></g>
+          <g class="zh-logo-layer zh-logo-leaf-right"><use href="#zhLogo-leaf-right" fill="url(#zhLogoMint)"/></g>
+          <g class="zh-logo-layer zh-logo-sun"><use href="#zhLogo-sun" fill="#033446"/></g>
+          <g class="zh-logo-layer zh-logo-windows"><use href="#zhLogo-windows" fill="#033446"/></g>
         </g>
-        <g class="zh-ref-points" aria-hidden="true">
-          <circle class="zh-ref-dot zh-ref-dot-a" cx="500" cy="22" r="11"/>
-          <circle class="zh-ref-dot zh-ref-dot-b" cx="500" cy="22" r="11"/>
-          <circle class="zh-ref-dot zh-ref-dot-c" cx="500" cy="22" r="11"/>
+        <g class="zh-v3-traces" aria-hidden="true">
+          <circle class="zh-v3-trace zh-v3-outer" cx="500" cy="496" r="426" pathLength="100"/>
+          <circle class="zh-v3-trace zh-v3-inner" cx="500" cy="496" r="346" pathLength="100"/>
+          <path class="zh-v3-trace zh-v3-roof" pathLength="100" d="M312 463 L500 286 L586 367 L588 325 L656 325 L656 438"/>
+          <path class="zh-v3-trace zh-v3-leaf" pathLength="100" d="M126 408 Q286 406 346 553 Q357 594 357 649 M873 411 Q714 406 653 553 Q641 594 641 649"/>
         </g>
-
-        <!-- Tres puntos trazan un círculo y revelan el logotipo original sin adornos. -->
-        <g class="zh-flat-traces" aria-hidden="true">
-          <circle class="zh-flat-trace zh-flat-trace-outer" cx="500" cy="496" r="426" pathLength="100"/>
-          </g>
-        <g class="zh-flat-points" aria-hidden="true">
-          <circle class="zh-flat-dot zh-flat-dot-a" cx="500" cy="70" r="9"/>
-          <circle class="zh-flat-dot zh-flat-dot-b" cx="500" cy="70" r="9"/>
-          <circle class="zh-flat-dot zh-flat-dot-c" cx="500" cy="70" r="9"/>
+        <g class="zh-v3-points" aria-hidden="true">
+          <circle class="zh-v3-dot zh-v3-dot-a" cx="500" cy="70" r="11"/>
+          <circle class="zh-v3-dot zh-v3-dot-b" cx="500" cy="70" r="11"/>
+          <circle class="zh-v3-dot zh-v3-dot-c" cx="500" cy="70" r="11"/>
         </g>
-        <!-- Los aros son enteros; las otras partes se superponen sin cortes o máscaras. -->
-        <g class="zh-logo-layer zh-logo-outer"><use href="#zhLogo-ring-dark" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-inner"><circle cx="500" cy="496" r="346" stroke="url(#zhLogoMint)" stroke-width="51" fill="none"/></g>
-        <g class="zh-logo-layer zh-logo-house"><use href="#zhLogo-house-leaves" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-leaf-left"><use href="#zhLogo-leaf-left" fill="url(#zhLogoMint)"/></g>
-        <g class="zh-logo-layer zh-logo-leaf-right"><use href="#zhLogo-leaf-right" fill="url(#zhLogoMint)"/></g>
-        <g class="zh-logo-layer zh-logo-sun"><use href="#zhLogo-sun" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-windows"><use href="#zhLogo-windows" fill="#033446"/></g>
       </svg>
       <h2 class="zh-brand-wordmark">Zen Hogar</h2>
       <p class="zh-brand-subtitle">GESTIÓN</p>
@@ -2166,7 +2153,7 @@ window.ZH_CONFIG = {
   <script src="./stock-v2.js?v=20261117-1"></script>
   <script src="./operaciones-v2.js?v=20261117-1"></script>
   <script src="./panel-inteligente.js?v=20261117-1"></script>
-  <script src="./logo-armado.js?v=20261118-modelo-60fps"></script>
+  <script src="./logo-armado.js?v=20261118-v3-original-final"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
