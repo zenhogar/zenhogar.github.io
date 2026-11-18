@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · V3 definitiva: tres puntos fluidos, logo vectorial original y cierre sin cortes.
+/* Zen Hogar Gestión · V4: primero se dibuja el emblema completo; después aparecen los colores originales.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // V3: composición de 4,2 s y salida suave de 0,3 s; autenticación y datos sin cambios.
-  const remaining=Math.max(0,(reduce?0:4200)-elapsed);
+  // V4: composición de 4,95 s y salida de 0,33 s; autenticación y datos intactos.
+  const remaining=Math.max(0,(reduce?0:4950)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,300));
+    await new Promise(done=>setTimeout(done,330));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
