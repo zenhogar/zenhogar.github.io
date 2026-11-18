@@ -134,3 +134,12 @@
  }
  .zh-brand-wordmark,.zh-brand-subtitle{opacity:1!important;transform:none!important;animation:none!important}
 }
+
+/* Validación responsive: evita corte del nombre en celular horizontal. */
+@media (max-height:480px) and (max-width:950px) and (orientation:landscape){
+ .zh-brand-content{transform:translateY(-13px)}
+ .zh-brand-mark{width:min(48vh,210px)}
+ .zh-brand-wordmark{font-size:clamp(20px,4vh,25px)}
+ .zh-brand-subtitle{font-size:9px;margin-top:4px}
+ .zh-brand-skip{bottom:calc(8px + env(safe-area-inset-bottom))}
+}
