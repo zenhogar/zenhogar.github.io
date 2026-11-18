@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · V2 Premium Limpio: armado de siete capas completas y revelación suave.
+/* Zen Hogar Gestión · Neón inspirado en motion Spotify: tres puntos de luz revelan el logo original.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // V2: 3,58 s de composición y 0,22 s de salida (~3,8 s); si la carga tarda, no se añade espera.
-  const remaining=Math.max(0,(reduce?0:3580)-elapsed);
+  // Neón: 3,97 s de composición y salida de 0,28 s, sin bloquear la carga.
+  const remaining=Math.max(0,(reduce?0:3970)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,220));
+    await new Promise(done=>setTimeout(done,280));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
