@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · V7 Precision Flow
+/* Zen Hogar Gestión · V8 Clean Orbit
    Tres puntos recorren exactamente las mismas rutas que dibujan.
    La animación solo es una bienvenida visual: no accede a auth ni a datos. */
 let zhBrandAssemblyToken=0;
@@ -20,13 +20,13 @@ function zhBrandAssemblyStart(){
   zhBrandAssemblyStopFrames();
   zhBrandAssemblyStartedAt=Date.now();
   zhBrandAssemblyActive=true;
-  layer.classList.remove('is-playing','is-leaving','zh-v7-css-fallback');
+  layer.classList.remove('is-playing','is-leaving','zh-v8-css-fallback');
   layer.hidden=false;
   layer.setAttribute('aria-hidden','false');
 
   const reducedMotion=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const svg=layer.querySelector('svg.zh-brand-mark');
-  const dots=[...(svg?.querySelectorAll('.zh-v7-dot[data-route]')||[])];
+  const dots=[...(svg?.querySelectorAll('.zh-v8-dot[data-route]')||[])];
   let routes=[];
   if(!reducedMotion){
     try{
@@ -49,7 +49,7 @@ function zhBrandAssemblyStart(){
       routes=[];
     }
     if(routes.length!==3){
-      layer.classList.add('zh-v7-css-fallback');
+      layer.classList.add('zh-v8-css-fallback');
     }
   }
 
@@ -84,7 +84,7 @@ function zhBrandAssemblyDismiss(){
   zhBrandAssemblyActive=false;
   zhBrandAssemblyStopFrames();
   if(!layer)return;
-  layer.classList.remove('is-playing','is-leaving','zh-v7-css-fallback');
+  layer.classList.remove('is-playing','is-leaving','zh-v8-css-fallback');
   layer.hidden=true;
   layer.setAttribute('aria-hidden','true');
 }
@@ -95,8 +95,8 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // V7: 4.58s de bienvenida y 0.34s de salida. Nunca bloquea el sistema.
-  const remaining=Math.max(0,(reduce?0:4580)-elapsed);
+  // V8: 4.55s de bienvenida y 0.34s de salida. Nunca bloquea el sistema.
+  const remaining=Math.max(0,(reduce?0:4550)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
