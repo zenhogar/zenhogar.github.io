@@ -141,3 +141,122 @@
     animation:none!important;opacity:1!important;transform:none!important
   }
 }
+
+
+/* Zen Hogar Gestión · V2 Premium Limpio (2026-11-17)
+   Ensamblaje del emblema original por capas completas. Sin modificar la geometría SVG. */
+.zh-brand-assembly{
+  color:#033446;
+  background:
+    radial-gradient(ellipse 34% 30% at 50% 42%,rgba(102,199,157,.12),transparent 93%),
+    linear-gradient(150deg,#fffcf7 0%,#f5faf7 55%,#fdfbf6 100%);
+  transition:opacity .22s cubic-bezier(.22,.72,.22,1),visibility .22s;
+}
+.zh-brand-content{z-index:1;transform:translateY(-9px)}
+.zh-brand-mark{width:clamp(225px,63vw,300px);filter:drop-shadow(0 10px 17px rgba(3,52,70,.035))}
+.zh-brand-mark .zh-logo-layer{transform-box:view-box;transform-origin:center center;will-change:opacity,transform}
+.zh-brand-disc,.zh-brand-plate{display:none!important} /* No se agregan discos ajenos al logotipo. */
+.zh-logo-outer{
+  --x:0px;--y:-72px;--angle:-4deg;--scale:.94;
+  --over-x:0px;--over-y:4px;--over-scale:1.014;
+  --delay:.02s;--dur:.72s;
+}
+.zh-logo-inner{
+  --x:0px;--y:18px;--angle:2deg;--scale:.82;
+  --over-x:0px;--over-y:-2px;--over-scale:1.02;
+  --delay:.18s;--dur:.78s;
+}
+.zh-logo-house{
+  --x:0px;--y:72px;--angle:-2deg;--scale:.90;
+  --over-x:0px;--over-y:-5px;--over-scale:1.018;
+  --delay:.72s;--dur:.74s;
+}
+.zh-logo-leaf-left{
+  --x:-52px;--y:8px;--angle:-8deg;--scale:.95;
+  --over-x:3px;--over-y:0px;--over-scale:1.018;
+  --delay:1.18s;--dur:.58s;
+}
+.zh-logo-leaf-right{
+  --x:52px;--y:8px;--angle:8deg;--scale:.95;
+  --over-x:-3px;--over-y:0px;--over-scale:1.018;
+  --delay:1.28s;--dur:.58s;
+}
+.zh-logo-sun{
+  --x:0px;--y:-14px;--angle:0deg;--scale:.72;
+  --over-x:0px;--over-y:0px;--over-scale:1.03;
+  --delay:1.74s;--dur:.34s;
+}
+.zh-logo-windows{
+  --x:0px;--y:12px;--angle:0deg;--scale:.78;
+  --over-x:0px;--over-y:0px;--over-scale:1.03;
+  --delay:1.84s;--dur:.34s;
+}
+.zh-brand-assembly.is-playing .zh-logo-layer{
+  animation:zhLayerFitV2 var(--dur,.7s) cubic-bezier(.22,.74,.22,1) var(--delay,0s) both;
+}
+.zh-brand-assembly.is-playing .zh-brand-mark{
+  animation:zhLogoSettleV2 .28s ease-out 2.12s both,zhLogoGlowV2 .46s ease-out 2.26s both;
+}
+.zh-brand-wordmark{color:#033446;opacity:0;transform:translateY(10px);font-weight:790}
+.zh-brand-subtitle{color:#397e6f;opacity:0;transform:translateY(8px)}
+.zh-brand-divider{background:linear-gradient(90deg,transparent,#67c69d,transparent)}
+.zh-brand-status{color:#748981;opacity:0}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{
+  animation:zhWordRevealV2 .46s cubic-bezier(.2,.8,.2,1) 2.28s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{
+  animation:zhWordRevealV2 .38s cubic-bezier(.2,.8,.2,1) 2.46s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-divider{
+  animation:zhDividerRevealV2 .29s ease-out 2.59s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-status{
+  animation:zhFadeRevealV2 .28s ease-out 2.69s both;
+}
+.zh-brand-skip{
+  color:#49756a;background:rgba(255,255,255,.62);
+  border-color:rgba(3,52,70,.16);
+}
+.zh-brand-skip:hover{background:#e8f6ef;color:#033446}
+.zh-brand-skip:focus-visible{outline-color:#388b71}
+@keyframes zhLayerFitV2{
+  0%{opacity:0;transform:translate(var(--x,0px),var(--y,0px)) rotate(var(--angle,0deg)) scale(var(--scale,.95))}
+  45%{opacity:1}
+  78%{opacity:1;transform:translate(var(--over-x,0px),var(--over-y,0px)) rotate(0deg) scale(var(--over-scale,1.018))}
+  100%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
+}
+@keyframes zhLogoSettleV2{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.01)}
+  100%{transform:scale(1)}
+}
+@keyframes zhLogoGlowV2{
+  0%{filter:drop-shadow(0 10px 17px rgba(3,52,70,.035))}
+  50%{filter:drop-shadow(0 13px 22px rgba(85,187,143,.17))}
+  100%{filter:drop-shadow(0 10px 17px rgba(3,52,70,.05))}
+}
+@keyframes zhWordRevealV2{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes zhDividerRevealV2{
+  from{opacity:0;transform:scaleX(.55)}
+  to{opacity:1;transform:scaleX(1)}
+}
+@keyframes zhFadeRevealV2{
+  from{opacity:0}to{opacity:1}
+}
+@media(max-width:500px){
+ .zh-brand-content{transform:translateY(-14px)}
+ .zh-brand-mark{width:min(68vw,276px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .zh-brand-assembly .zh-logo-layer,.zh-brand-assembly.is-playing .zh-logo-layer,
+ .zh-brand-assembly .zh-brand-mark,.zh-brand-assembly.is-playing .zh-brand-mark{
+   animation:none!important;transform:none!important;opacity:1!important;
+ }
+ .zh-brand-assembly .zh-brand-wordmark,.zh-brand-assembly .zh-brand-subtitle,
+ .zh-brand-assembly .zh-brand-divider,.zh-brand-assembly .zh-brand-status{
+   animation:none!important;transform:none!important;opacity:1!important
+ }
+}
