@@ -1,7 +1,7 @@
-/* Zen Hogar Gestión · V8 Clean Orbit · noviembre 2026
+/* Zen Hogar Gestión · V8.1 Fine Motion · noviembre 2026
    Corrección: SOLO dos círculos de dibujo (contorno exterior y aro interior).
    Quitados el segundo arco circular duplicado y la placa blanca sobresaliente.
-   Los puntos siguen el mismo SVG real que cada línea (sin neón añadido). */
+   Los puntos siguen el mismo SVG real que cada línea. Microajustes en salida, color y replay. */
 .zh-brand-assembly[hidden]{display:none!important}
 .zh-brand-assembly{
  position:fixed;inset:0;z-index:2100;isolation:isolate;overflow:hidden;
@@ -9,7 +9,7 @@
  padding:calc(24px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
  background:radial-gradient(ellipse 47% 50% at 50% 44%,#103642 0%,#061e28 65%,#03141d 100%);
  color:#f5fff9;opacity:1;visibility:visible;
- transition:opacity .34s cubic-bezier(.22,.74,.27,1),visibility .34s;
+ transition:opacity .33s cubic-bezier(.25,.73,.27,1),visibility .33s;
 }
 .zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
 .zh-brand-content{
@@ -90,10 +90,10 @@
 }
 .zh-brand-divider,.zh-brand-status{display:none!important}
 .zh-brand-assembly.is-playing .zh-brand-wordmark{
- animation:zhV8Text .44s cubic-bezier(.22,.74,.26,1) 3.61s both;
+ animation:zhV8Text .49s cubic-bezier(.22,.74,.26,1) 3.58s both;
 }
 .zh-brand-assembly.is-playing .zh-brand-subtitle{
- animation:zhV8Text .35s cubic-bezier(.22,.74,.26,1) 3.91s both;
+ animation:zhV8Text .40s cubic-bezier(.22,.74,.26,1) 3.87s both;
 }
 .zh-brand-skip{
  position:absolute;left:50%;bottom:calc(17px + env(safe-area-inset-bottom));
@@ -108,8 +108,8 @@
 @keyframes zhV8Draw{0%{stroke-dashoffset:100;opacity:0}12%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes zhV8LineFade{0%{opacity:1}100%{opacity:0}}
 @keyframes zhV8Color{0%{opacity:0}100%{opacity:1}}
-@keyframes zhV8DotAppear{0%{opacity:0}11%{opacity:1}84%{opacity:1}100%{opacity:0}}
-@keyframes zhV8Text{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes zhV8DotAppear{0%{opacity:0}10%{opacity:1}91%{opacity:1}100%{opacity:0}}
+@keyframes zhV8Text{0%{opacity:0;transform:translateY(7px)}100%{opacity:1;transform:translateY(0)}}
 @media(max-width:500px){
  .zh-brand-mark{width:min(78vw,328px)}
  .zh-brand-content{transform:translateY(-13px)}
