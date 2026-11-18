@@ -1,138 +1,127 @@
-/* Zen Hogar Gestión · Minimal Motion V2 · 2026-11-18
-   La identidad original permanece intacta. Inspiración en el movimiento
-   de tres puntos de Spotify, con un solo trazo y sin ornamentación extra. */
+/* Zen Hogar Gestión · Reference Motion 60 · 18-11-2026
+   Reproduce composición y secuencia del MP4 323179.mp4 (4,47 s / 60 fps).
+   Misma escala de círculos. Tres puntos, trazo fino, icono completo y texto.
+   No altera autenticación, inventario ni ventas. */
 .zh-brand-assembly[hidden]{display:none!important}
 .zh-brand-assembly{
-  position:fixed;inset:0;z-index:2100;isolation:isolate;overflow:hidden;
+  position:fixed;inset:0;z-index:2100;overflow:hidden;isolation:isolate;
   display:grid;place-items:center;
-  padding:calc(22px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
-  background:#f7faf7;color:#033446;
-  opacity:1;visibility:visible;
-  transition:opacity .30s ease,visibility .30s ease;
+  padding:calc(24px + env(safe-area-inset-top)) 20px calc(30px + env(safe-area-inset-bottom));
+  background:radial-gradient(ellipse 41% 63% at 50% 43%,#09232b 0%,#04131b 76%,#031016 100%);
+  color:#f2fff9;opacity:1;visibility:visible;
+  transition:opacity .30s cubic-bezier(.26,.64,.24,1),visibility .30s;
 }
 .zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
 .zh-brand-content{
-  width:min(100%,390px);position:relative;
+  width:min(100%,480px);position:relative;
   display:flex;flex-direction:column;align-items:center;text-align:center;
-  transform:translateY(-10px);
+  transform:translateY(-8px);
 }
-.zh-brand-mark{
-  display:block;width:clamp(215px,59vw,288px);
-  height:auto;overflow:visible;
+.zh-brand-mark{width:clamp(232px,63vw,342px);height:auto;display:block;overflow:visible}
+.zh-brand-mark .zh-logo-layer,
+.zh-flat-traces,.zh-flat-points,.zh-flat-plate{display:none!important}
+.zh-ref-orbit{fill:none;stroke:#8edcca;stroke-width:2;opacity:0}
+.zh-ref-stroke{
+  fill:none;stroke:#effffb;stroke-width:8;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:100;stroke-dashoffset:100;opacity:0;
+  filter:drop-shadow(0 0 4px rgba(183,255,239,.72)) drop-shadow(0 0 12px rgba(102,242,197,.30));
+  will-change:stroke-dashoffset,opacity;
 }
-.zh-brand-mark .zh-logo-layer{
-  opacity:0;transform-box:view-box;transform-origin:500px 496px;
-  will-change:opacity,transform;
-}
-/* Se quitó el gran disco blanco y los trazos adicionales de techo/hojas. */
-.zh-flat-plate,.zh-flat-trace-inner,.zh-flat-trace-roof,.zh-flat-trace-leaf,
-.zh-brand-divider,.zh-brand-status{display:none!important}
-.zh-flat-traces,.zh-flat-points{pointer-events:none}
-.zh-flat-trace{
-  opacity:0;fill:none;stroke-dasharray:100;stroke-dashoffset:100;
-  stroke:#61ba99;stroke-width:13;
-  stroke-linecap:round;will-change:opacity,stroke-dashoffset;
-}
-.zh-flat-dot{
-  opacity:0;fill:#286d66;
+.zh-ref-stroke.zh-ref-main{stroke-width:7}
+.zh-ref-stroke.zh-ref-detail{stroke-width:8}
+.zh-ref-stroke.zh-ref-leaf{stroke-width:7.5}
+.zh-ref-dot{
+  fill:#e0fff4;opacity:0;
   transform-box:view-box;transform-origin:500px 496px;
+  filter:drop-shadow(0 0 9px #a6ffdd);
   will-change:transform,opacity;
 }
-.zh-brand-assembly.is-playing .zh-flat-dot-a{
-  animation:zhMiniOrbitA 1.42s linear .06s both;
-}
-.zh-brand-assembly.is-playing .zh-flat-dot-b{
-  animation:zhMiniOrbitB 1.42s linear .12s both;
-}
-.zh-brand-assembly.is-playing .zh-flat-dot-c{
-  animation:zhMiniOrbitC 1.42s linear .18s both;
-}
-.zh-brand-assembly.is-playing .zh-flat-trace-outer{
-  animation:zhMiniDraw 1.13s cubic-bezier(.24,.63,.29,1) .18s both,
-            zhMiniTraceOut .38s ease 1.42s forwards;
-}
-.zh-brand-assembly.is-playing .zh-logo-outer{
-  animation:zhMiniAppear .66s cubic-bezier(.22,.75,.26,1) 1.02s both;
-}
-.zh-brand-assembly.is-playing .zh-logo-inner{
-  animation:zhMiniAppear .66s cubic-bezier(.22,.75,.26,1) 1.17s both;
-}
-.zh-brand-assembly.is-playing .zh-logo-house,
-.zh-brand-assembly.is-playing .zh-logo-leaf-left,
-.zh-brand-assembly.is-playing .zh-logo-leaf-right{
-  animation:zhMiniAppear .77s cubic-bezier(.22,.75,.26,1) 1.43s both;
-}
-.zh-brand-assembly.is-playing .zh-logo-sun,
-.zh-brand-assembly.is-playing .zh-logo-windows{
-  animation:zhMiniAppear .55s cubic-bezier(.22,.75,.26,1) 1.62s both;
+.zh-brand-assembly.is-playing .zh-ref-dot-a{animation:zhRefOrbitA 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-dot-b{animation:zhRefOrbitB 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-dot-c{animation:zhRefOrbitC 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-orbit{animation:zhRefOrbitGhost 2.25s ease .3s both}
+.zh-brand-assembly.is-playing .zh-ref-ring{animation:zhRefDraw 1.28s cubic-bezier(.18,.75,.22,1) .53s both}
+.zh-brand-assembly.is-playing .zh-ref-sun{animation:zhRefDraw .6s ease .89s both}
+.zh-brand-assembly.is-playing .zh-ref-roof{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.06s both}
+.zh-brand-assembly.is-playing .zh-ref-chimney{animation:zhRefDraw .58s ease 1.35s both}
+.zh-brand-assembly.is-playing .zh-ref-left{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.40s both}
+.zh-brand-assembly.is-playing .zh-ref-right{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.47s both}
+.zh-brand-assembly.is-playing .zh-ref-bottom{animation:zhRefDraw .7s ease 1.69s both}
+.zh-brand-assembly.is-playing .zh-ref-window{animation:zhRefDraw .65s ease 1.92s both}
+.zh-brand-assembly.is-playing .zh-ref-symbol{
+  animation:zhRefBreathe .56s ease-in-out 2.58s both;
+  transform-box:view-box;transform-origin:500px 496px;
 }
 .zh-brand-wordmark{
-  margin:0;color:#033446;letter-spacing:-.044em;
-  font-size:clamp(27px,6.2vw,33px);font-weight:770;line-height:1.11;
-  opacity:0;transform:translateY(10px);
+  margin:0;color:#f3fff9;opacity:0;
+  font-size:clamp(31px,6.4vw,37px);font-weight:760;letter-spacing:-.045em;
+  line-height:1.15;transform:translateY(11px);
 }
 .zh-brand-subtitle{
-  margin:9px 0 0;color:#418875;letter-spacing:.25em;
-  font-size:10px;font-weight:750;
-  opacity:0;transform:translateY(6px);
+  margin:7px 0 0;opacity:0;transform:translateY(6px);
+  font-size:11px;letter-spacing:.27em;font-weight:700;color:#acd9c6;
 }
+.zh-brand-divider,.zh-brand-status{display:none!important}
 .zh-brand-assembly.is-playing .zh-brand-wordmark{
-  animation:zhMiniText .58s cubic-bezier(.22,.76,.24,1) 2.12s both;
+  animation:zhRefText .61s cubic-bezier(.22,.73,.24,1) 2.66s both;
 }
 .zh-brand-assembly.is-playing .zh-brand-subtitle{
-  animation:zhMiniText .53s cubic-bezier(.22,.76,.24,1) 2.31s both;
+  animation:zhRefText .58s cubic-bezier(.22,.73,.24,1) 2.9s both;
 }
 .zh-brand-skip{
-  position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));
-  transform:translateX(-50%);min-height:43px;padding:10px 17px;
-  border:1px solid rgba(37,92,79,.17);border-radius:999px;
-  background:rgba(255,255,255,.65);color:#63847a;
-  font-size:11px;font-weight:650;white-space:nowrap;cursor:pointer;
+  position:absolute;bottom:calc(18px + env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%);
+  border:1px solid rgba(216,255,241,.19);background:rgba(255,255,255,.035);
+  min-height:43px;padding:10px 18px;border-radius:999px;
+  color:#b6cfc7;cursor:pointer;white-space:nowrap;font-size:11px;font-weight:680;
 }
-.zh-brand-skip:hover{background:#e9f4ee;color:#033446}
-.zh-brand-skip:focus-visible{outline:2px solid #429a79;outline-offset:3px}
-@keyframes zhMiniOrbitA{
-  0%{opacity:0;transform:rotate(-85deg)}
-  17%{opacity:1}76%{opacity:1}
-  100%{opacity:0;transform:rotate(220deg)}
+.zh-brand-skip:hover{background:rgba(255,255,255,.09);color:#fff}
+.zh-brand-skip:focus-visible{outline:2px solid #8edcc0;outline-offset:3px}
+@keyframes zhRefOrbitA{
+  0%{opacity:0;transform:rotate(-7deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(351deg)}
 }
-@keyframes zhMiniOrbitB{
-  0%{opacity:0;transform:rotate(35deg)}
-  17%{opacity:1}76%{opacity:1}
-  100%{opacity:0;transform:rotate(340deg)}
+@keyframes zhRefOrbitB{
+  0%{opacity:0;transform:rotate(113deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(471deg)}
 }
-@keyframes zhMiniOrbitC{
-  0%{opacity:0;transform:rotate(155deg)}
-  17%{opacity:1}76%{opacity:1}
-  100%{opacity:0;transform:rotate(460deg)}
+@keyframes zhRefOrbitC{
+  0%{opacity:0;transform:rotate(233deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(591deg)}
 }
-@keyframes zhMiniDraw{
-  from{opacity:0;stroke-dashoffset:100}
-  18%{opacity:.8}
-  to{opacity:.88;stroke-dashoffset:0}
+@keyframes zhRefOrbitGhost{
+  0%{opacity:0}24%{opacity:.22}77%{opacity:.20}100%{opacity:0}
 }
-@keyframes zhMiniTraceOut{
-  from{opacity:.88}to{opacity:0}
+@keyframes zhRefDraw{
+  0%{opacity:0;stroke-dashoffset:100}
+  18%{opacity:.72}
+  64%{opacity:.93}
+  100%{opacity:1;stroke-dashoffset:0}
 }
-@keyframes zhMiniAppear{
-  0%{opacity:0;transform:translateY(4px) scale(.994)}
-  70%{opacity:.9}
-  100%{opacity:1;transform:none}
+@keyframes zhRefBreathe{
+  0%{transform:scale(.996)}55%{transform:scale(1.006)}100%{transform:scale(1)}
 }
-@keyframes zhMiniText{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
+@keyframes zhRefText{
+  0%{opacity:0;transform:translateY(11px)}
+  100%{opacity:1;transform:translateY(0)}
 }
 @media(max-width:500px){
-  .zh-brand-content{transform:translateY(-15px)}
-  .zh-brand-mark{width:min(65vw,270px)}
-  .zh-brand-skip{bottom:calc(14px + env(safe-area-inset-bottom))}
+  .zh-brand-mark{width:min(78vw,340px)}
+  .zh-brand-content{transform:translateY(-14px)}
+  .zh-brand-skip{bottom:calc(13px + env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){
-  .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
-  .zh-brand-assembly .zh-flat-traces,.zh-brand-assembly .zh-flat-points{display:none!important}
-  .zh-brand-assembly .zh-logo-layer,.zh-brand-assembly.is-playing .zh-logo-layer,
-  .zh-brand-assembly .zh-brand-wordmark,.zh-brand-assembly .zh-brand-subtitle{
-    opacity:1!important;transform:none!important;animation:none!important
-  }
+ .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
+ .zh-ref-dot,.zh-ref-orbit{display:none!important}
+ .zh-brand-assembly .zh-ref-stroke,.zh-brand-assembly.is-playing .zh-ref-stroke{
+  opacity:1!important;stroke-dashoffset:0!important;animation:none!important;
+ }
+ .zh-brand-assembly .zh-ref-symbol,.zh-brand-assembly.is-playing .zh-ref-symbol{animation:none!important;transform:none!important}
+ .zh-brand-wordmark,.zh-brand-subtitle{
+  opacity:1!important;transform:none!important;animation:none!important;
+ }
 }
