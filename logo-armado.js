@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · Motion minimalista: tres puntos discretos revelan el logo original sin efectos adicionales.
+/* Zen Hogar Gestión · Presentación fiel al video de referencia a 60 fps, tres puntos y contorno del emblema.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // Intro minimalista: 3,2 s de presentación y 0,3 s de salida; sin alterar la carga.
-  const remaining=Math.max(0,(reduce?0:3200)-elapsed);
+  // Presentación referencia: 4,15 s y transición de 0,32 s; no modifica ni bloquea los datos.
+  const remaining=Math.max(0,(reduce?0:4150)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,300));
+    await new Promise(done=>setTimeout(done,320));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
