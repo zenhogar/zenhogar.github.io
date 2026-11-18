@@ -1197,7 +1197,7 @@ html[data-theme="dark"] .weight-quick-qty button{
   <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
   <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
-  <link rel="stylesheet" href="./logo-armado.css?v=20261118-minimal-flat-v2" />
+  <link rel="stylesheet" href="./logo-armado.css?v=20261118-modelo-60fps" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
@@ -1307,6 +1307,24 @@ html[data-theme="dark"] .weight-quick-qty button{
           <path id="zhLogo-sun" fill-rule="evenodd" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/>
           <path id="zhLogo-windows" fill-rule="evenodd" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/>
         </defs>
+        <!-- Ícono trazado según las proporciones del video de referencia 323179.mp4. -->
+        <circle class="zh-ref-orbit" cx="500" cy="496" r="474" aria-hidden="true"/>
+        <g class="zh-ref-symbol" aria-hidden="true">
+          <circle class="zh-ref-stroke zh-ref-main zh-ref-ring" cx="500" cy="496" r="385" pathLength="100"/>
+          <circle class="zh-ref-stroke zh-ref-detail zh-ref-sun" cx="337" cy="349" r="56" pathLength="100"/>
+          <path class="zh-ref-stroke zh-ref-main zh-ref-roof" pathLength="100" d="M303 555 L510 351 L679 511"/>
+          <path class="zh-ref-stroke zh-ref-main zh-ref-chimney" pathLength="100" d="M622 425 V384 H687 V538"/>
+          <path class="zh-ref-stroke zh-ref-leaf zh-ref-left" pathLength="100" d="M115 545 Q344 541 376 803 Q150 803 115 545 Z M214 646 L376 803"/>
+          <path class="zh-ref-stroke zh-ref-leaf zh-ref-right" pathLength="100" d="M885 545 Q656 541 624 803 Q850 803 885 545 Z M786 646 L624 803"/>
+          <path class="zh-ref-stroke zh-ref-main zh-ref-bottom" pathLength="100" d="M376 805 H624"/>
+          <path class="zh-ref-stroke zh-ref-detail zh-ref-window" pathLength="100" d="M444 541 H496 V598 H444 Z M521 541 H573 V598 H521 Z M444 616 H496 V673 H444 Z M521 616 H573 V673 H521 Z"/>
+        </g>
+        <g class="zh-ref-points" aria-hidden="true">
+          <circle class="zh-ref-dot zh-ref-dot-a" cx="500" cy="22" r="11"/>
+          <circle class="zh-ref-dot zh-ref-dot-b" cx="500" cy="22" r="11"/>
+          <circle class="zh-ref-dot zh-ref-dot-c" cx="500" cy="22" r="11"/>
+        </g>
+
         <!-- Tres puntos trazan un círculo y revelan el logotipo original sin adornos. -->
         <g class="zh-flat-traces" aria-hidden="true">
           <circle class="zh-flat-trace zh-flat-trace-outer" cx="500" cy="496" r="426" pathLength="100"/>
@@ -2148,7 +2166,7 @@ window.ZH_CONFIG = {
   <script src="./stock-v2.js?v=20261117-1"></script>
   <script src="./operaciones-v2.js?v=20261117-1"></script>
   <script src="./panel-inteligente.js?v=20261117-1"></script>
-  <script src="./logo-armado.js?v=20261118-minimal-flat-v2"></script>
+  <script src="./logo-armado.js?v=20261118-modelo-60fps"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
