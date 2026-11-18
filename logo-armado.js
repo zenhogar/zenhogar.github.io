@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · Presentación fiel al video de referencia a 60 fps, tres puntos y contorno del emblema.
+/* Zen Hogar Gestión · V3 definitiva: tres puntos fluidos, logo vectorial original y cierre sin cortes.
    Solo presentación; no participa en autenticación ni modifica datos. */
 let zhBrandAssemblyToken=0;
 let zhBrandAssemblyStartedAt=0;
@@ -32,13 +32,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // Presentación referencia: 4,15 s y transición de 0,32 s; no modifica ni bloquea los datos.
-  const remaining=Math.max(0,(reduce?0:4150)-elapsed);
+  // V3: composición de 4,2 s y salida suave de 0,3 s; autenticación y datos sin cambios.
+  const remaining=Math.max(0,(reduce?0:4200)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,320));
+    await new Promise(done=>setTimeout(done,300));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
