@@ -23,9 +23,14 @@ function fixture(reduced=false){
 (async()=>{
  try{
   new Function(js);
-  const pieces=['ring-nw','ring-ne','ring-sw','ring-se','roof','body','outline-left','outline-right','leaf-left','leaf-right','sun','window-tl','window-tr','window-bl','window-br'];
-  for(const piece of pieces)assert.equal((html.match(new RegExp('class="zh-puzzle-piece zh-puzzle-'+piece+'"','g'))||[]).length,1,'Falta pieza '+piece);
-  assert.equal((html.match(/class="zh-puzzle-piece/g)||[]).length,15,'Cantidad de piezas');
+  const pieces=['outer','inner','house','leaf-left','leaf-right','sun','windows'];
+  for(const piece of pieces)assert.equal((html.match(new RegExp('class="zh-logo-layer zh-logo-'+piece+'"','g'))||[]).length,1,'Falta capa completa '+piece);
+  assert.equal((html.match(/class="zh-logo-layer /g)||[]).length,7,'Cantidad de capas');
+  const svg=html.match(/<svg class="zh-brand-mark"[\s\S]*?<\/svg>/)?.[0]||'';
+  assert.ok(svg.includes('<circle cx="500" cy="496" r="346"'),'El aro verde debe ser una pieza circular completa');
+  assert.ok(svg.includes('href="#zhLogo-ring-dark"'),'El aro exterior debe estar entero');
+  assert.ok(!/<clipPath\b|<mask\b/.test(svg),'El logo no debe tener piezas recortadas o máscaras');
+  assert.ok(!svg.includes('zh-puzzle-'),'Se deben eliminar los fragmentos antiguos');
   assert.ok(html.includes('viewBox="0 0 1000 1000"'));
   assert.equal((html.match(/id="zhBrandAssembly"/g)||[]).length,1);
   assert.ok(!html.includes('id="zhNeonWelcome"'));
@@ -33,12 +38,12 @@ function fixture(reduced=false){
   assert.ok(html.includes('state.client.auth.signInWithPassword({email,password})'));
   assert.ok(html.includes('async function startApp(){\n  // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.\n  zhBrandAssemblyStart();'));
   assert.ok(html.includes('await zhBrandAssemblyFinish();'));
-  assert.ok(html.includes('logo-armado.css?v=20261117-puzzle'));
-  assert.ok(html.includes('logo-armado.js?v=20261117-puzzle'));
+  assert.ok(html.includes('logo-armado.css?v=20261117-layers-final'));
+  assert.ok(html.includes('logo-armado.js?v=20261117-layers-final'));
   assert.equal((css.match(/{/g)||[]).length,(css.match(/}/g)||[]).length);
   assert.ok(css.includes('prefers-reduced-motion:reduce'));
   assert.ok(css.includes('#033446') && css.includes('#fefbf4'));
-  console.log('✓ Logo original, quince piezas y acceso seguro');
+  console.log('✓ Aros enteros, siete capas completas y acceso seguro');
 
   const normal=fixture();
   normal.api.start();
@@ -49,7 +54,7 @@ function fixture(reduced=false){
   assert.deepEqual(normal.delays,[4100,460]);
   assert.equal(normal.overlay.hidden,true);
   assert.equal(normal.api.info().active,false);
-  console.log('✓ Encaje de piezas fluido y cierre suave');
+  console.log('✓ Armado por superposición y cierre suave');
 
   const skip=fixture();
   skip.api.start();skip.api.dismiss();

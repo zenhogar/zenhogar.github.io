@@ -1,13 +1,15 @@
-/* Zen Hogar Gestión | Ensamblaje fluido estilo rompecabezas.
-   Piezas recortadas del vector original, manteniendo sus colores; sin neón. */
+/* Zen Hogar Gestión · Identidad final: armado por capas enteras, sin cortes.
+   El vector respeta el logo original. Cada aro es UNA pieza completa. */
 .zh-brand-assembly[hidden]{display:none!important}
 .zh-brand-assembly{
-  position:fixed;inset:0;z-index:2100;isolation:isolate;overflow:hidden;
-  display:grid;place-items:center;
+  position:fixed;inset:0;z-index:2100;display:grid;place-items:center;
+  isolation:isolate;overflow:hidden;
   padding:calc(20px + env(safe-area-inset-top)) 22px calc(28px + env(safe-area-inset-bottom));
-  background:radial-gradient(ellipse 41% 33% at 50% 43%,rgba(101,195,157,.075),transparent 90%),
-             linear-gradient(155deg,#fefbf4 0%,#f7faf6 52%,#fdfbf6 100%);
-  color:#033446;opacity:1;visibility:visible;
+  background:
+    radial-gradient(ellipse 40% 34% at 50% 43%,rgba(101,195,157,.085),transparent 88%),
+    linear-gradient(155deg,#fefbf4 0%,#f7faf6 53%,#fdfbf6 100%);
+  color:#033446;
+  opacity:1;visibility:visible;
   transition:opacity .46s ease,visibility .46s ease;
 }
 .zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
@@ -17,22 +19,47 @@
   transform:translateY(-5px);
 }
 .zh-brand-mark{
-  display:block;width:clamp(218px,63vw,300px);height:auto;overflow:visible;
+  width:clamp(218px,63vw,300px);height:auto;display:block;overflow:visible;
   filter:drop-shadow(0 12px 19px rgba(2,51,68,.055));
 }
-.zh-brand-mark .zh-puzzle-piece{
-  opacity:0;transform-box:view-box;transform-origin:50% 50%;
-  backface-visibility:hidden;
+.zh-brand-mark .zh-logo-layer{
+  opacity:0;
+  transform-box:fill-box;transform-origin:center center;
+  will-change:transform,opacity;
 }
-.zh-brand-assembly.is-playing .zh-puzzle-piece{
-  animation-name:zhPuzzlePlace;
-  animation-duration:var(--duration,1s);
-  animation-delay:var(--delay,0s);
-  animation-timing-function:cubic-bezier(.2,.76,.24,1);
-  animation-fill-mode:both;
+.zh-logo-outer{
+  --x:0px;--y:23px;--angle:-4deg;--scale:.90;
+  --over-x:0px;--over-y:-1px;--delay:.10s;--dur:1.18s;
+}
+.zh-logo-inner{
+  --x:0px;--y:0px;--angle:4deg;--scale:.86;
+  --over-x:0px;--over-y:0px;--delay:.52s;--dur:1.07s;
+}
+.zh-logo-house{
+  --x:0px;--y:54px;--angle:-2deg;--scale:.93;
+  --over-x:0px;--over-y:-2px;--delay:1.12s;--dur:1.07s;
+}
+.zh-logo-leaf-left{
+  --x:-55px;--y:7px;--angle:-7deg;--scale:.96;
+  --over-x:2px;--over-y:0px;--delay:1.69s;--dur:.89s;
+}
+.zh-logo-leaf-right{
+  --x:55px;--y:7px;--angle:7deg;--scale:.96;
+  --over-x:-2px;--over-y:0px;--delay:1.82s;--dur:.87s;
+}
+.zh-logo-sun{
+  --x:-17px;--y:-16px;--angle:-10deg;--scale:.74;
+  --over-x:0px;--over-y:0px;--delay:2.34s;--dur:.62s;
+}
+.zh-logo-windows{
+  --x:0px;--y:15px;--angle:0deg;--scale:.80;
+  --over-x:0px;--over-y:-1px;--delay:2.54s;--dur:.60s;
+}
+.zh-brand-assembly.is-playing .zh-logo-layer{
+  animation:zhLayerFit var(--dur,1s) cubic-bezier(.21,.74,.23,1) var(--delay,0s) both;
 }
 .zh-brand-assembly.is-playing .zh-brand-mark{
-  animation:zhPuzzleSettle .72s cubic-bezier(.19,.72,.25,1) 3.18s both;
+  animation:zhCompleteSettle .65s cubic-bezier(.19,.74,.24,1) 3.10s both;
 }
 .zh-brand-wordmark{
   margin:0;color:#033446;font-size:clamp(25px,6.3vw,32px);
@@ -40,8 +67,8 @@
   opacity:0;transform:translateY(8px);
 }
 .zh-brand-subtitle{
-  color:#3b7b70;font-size:10px;font-weight:750;
-  letter-spacing:.23em;margin:9px 0 0;opacity:0;transform:translateY(5px);
+  color:#3b7b70;font-size:10px;font-weight:750;letter-spacing:.23em;
+  margin:9px 0 0;opacity:0;transform:translateY(5px);
 }
 .zh-brand-divider{
   display:block;width:45px;height:2px;border-radius:10px;margin:20px auto 14px;
@@ -49,10 +76,10 @@
   opacity:0;transform:scaleX(.3);
 }
 .zh-brand-status{color:#728785;font-size:11px;line-height:1.4;margin:0;opacity:0}
-.zh-brand-assembly.is-playing .zh-brand-wordmark{animation:zhPuzzleText .52s cubic-bezier(.2,.7,.2,1) 3.11s both}
-.zh-brand-assembly.is-playing .zh-brand-subtitle{animation:zhPuzzleText .50s ease-out 3.29s both}
-.zh-brand-assembly.is-playing .zh-brand-divider{animation:zhPuzzleDivider .5s ease 3.39s both}
-.zh-brand-assembly.is-playing .zh-brand-status{animation:zhPuzzleFade .45s ease 3.45s both}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{animation:zhLayerText .52s ease-out 3.08s both}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{animation:zhLayerText .50s ease-out 3.24s both}
+.zh-brand-assembly.is-playing .zh-brand-divider{animation:zhLayerDivider .5s ease 3.34s both}
+.zh-brand-assembly.is-playing .zh-brand-status{animation:zhLayerFade .45s ease 3.39s both}
 .zh-brand-skip{
   position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));
   left:50%;transform:translateX(-50%);
@@ -62,28 +89,26 @@
 }
 .zh-brand-skip:hover{background:#e8f5ee;color:#033446}
 .zh-brand-skip:focus-visible{outline:2px solid #368b71;outline-offset:3px}
-@keyframes zhPuzzlePlace{
+@keyframes zhLayerFit{
   0%{
     opacity:0;
-    transform:translate(var(--from-x,0px),var(--from-y,0px))
-              rotate(var(--rotate,0deg)) scale(.93);
+    transform:translate(var(--x,0px),var(--y,0px)) rotate(var(--angle,0deg)) scale(var(--scale,.9));
   }
-  54%{opacity:1}
-  80%{
+  57%{opacity:1}
+  82%{
     opacity:1;
-    transform:translate(var(--bounce-x,0px),var(--bounce-y,0px))
-              rotate(0deg) scale(1.014);
+    transform:translate(var(--over-x,0px),var(--over-y,0px)) rotate(0deg) scale(1.009);
   }
   100%{opacity:1;transform:translate(0px,0px) rotate(0deg) scale(1)}
 }
-@keyframes zhPuzzleSettle{
+@keyframes zhCompleteSettle{
   0%{transform:scale(1)}
-  52%{transform:scale(1.015)}
+  54%{transform:scale(1.009)}
   100%{transform:scale(1)}
 }
-@keyframes zhPuzzleText{to{opacity:1;transform:translateY(0)}}
-@keyframes zhPuzzleDivider{to{opacity:1;transform:scaleX(1)}}
-@keyframes zhPuzzleFade{to{opacity:1}}
+@keyframes zhLayerText{to{opacity:1;transform:translateY(0)}}
+@keyframes zhLayerDivider{to{opacity:1;transform:scaleX(1)}}
+@keyframes zhLayerFade{to{opacity:1}}
 @media(max-width:500px){
   .zh-brand-content{transform:translateY(-18px)}
   .zh-brand-mark{width:min(67vw,270px)}
@@ -91,7 +116,7 @@
 }
 @media(prefers-reduced-motion:reduce){
   .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
-  .zh-brand-assembly .zh-puzzle-piece,.zh-brand-assembly.is-playing .zh-puzzle-piece{
+  .zh-brand-assembly .zh-logo-layer,.zh-brand-assembly.is-playing .zh-logo-layer{
     animation:none!important;opacity:1!important;transform:none!important
   }
   .zh-brand-assembly .zh-brand-mark,.zh-brand-assembly.is-playing .zh-brand-mark{
