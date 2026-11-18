@@ -1,0 +1,127 @@
+/* Zen Hogar Gestión · Reference Motion 60 · 18-11-2026
+   Reproduce composición y secuencia del MP4 323179.mp4 (4,47 s / 60 fps).
+   Misma escala de círculos. Tres puntos, trazo fino, icono completo y texto.
+   No altera autenticación, inventario ni ventas. */
+.zh-brand-assembly[hidden]{display:none!important}
+.zh-brand-assembly{
+  position:fixed;inset:0;z-index:2100;overflow:hidden;isolation:isolate;
+  display:grid;place-items:center;
+  padding:calc(24px + env(safe-area-inset-top)) 20px calc(30px + env(safe-area-inset-bottom));
+  background:radial-gradient(ellipse 41% 63% at 50% 43%,#09232b 0%,#04131b 76%,#031016 100%);
+  color:#f2fff9;opacity:1;visibility:visible;
+  transition:opacity .30s cubic-bezier(.26,.64,.24,1),visibility .30s;
+}
+.zh-brand-assembly.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+.zh-brand-content{
+  width:min(100%,480px);position:relative;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  transform:translateY(-8px);
+}
+.zh-brand-mark{width:clamp(232px,63vw,342px);height:auto;display:block;overflow:visible}
+.zh-brand-mark .zh-logo-layer,
+.zh-flat-traces,.zh-flat-points,.zh-flat-plate{display:none!important}
+.zh-ref-orbit{fill:none;stroke:#8edcca;stroke-width:2;opacity:0}
+.zh-ref-stroke{
+  fill:none;stroke:#effffb;stroke-width:8;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:100;stroke-dashoffset:100;opacity:0;
+  filter:drop-shadow(0 0 4px rgba(183,255,239,.72)) drop-shadow(0 0 12px rgba(102,242,197,.30));
+  will-change:stroke-dashoffset,opacity;
+}
+.zh-ref-stroke.zh-ref-main{stroke-width:7}
+.zh-ref-stroke.zh-ref-detail{stroke-width:8}
+.zh-ref-stroke.zh-ref-leaf{stroke-width:7.5}
+.zh-ref-dot{
+  fill:#e0fff4;opacity:0;
+  transform-box:view-box;transform-origin:500px 496px;
+  filter:drop-shadow(0 0 9px #a6ffdd);
+  will-change:transform,opacity;
+}
+.zh-brand-assembly.is-playing .zh-ref-dot-a{animation:zhRefOrbitA 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-dot-b{animation:zhRefOrbitB 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-dot-c{animation:zhRefOrbitC 1.86s linear .1s both}
+.zh-brand-assembly.is-playing .zh-ref-orbit{animation:zhRefOrbitGhost 2.25s ease .3s both}
+.zh-brand-assembly.is-playing .zh-ref-ring{animation:zhRefDraw 1.28s cubic-bezier(.18,.75,.22,1) .53s both}
+.zh-brand-assembly.is-playing .zh-ref-sun{animation:zhRefDraw .6s ease .89s both}
+.zh-brand-assembly.is-playing .zh-ref-roof{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.06s both}
+.zh-brand-assembly.is-playing .zh-ref-chimney{animation:zhRefDraw .58s ease 1.35s both}
+.zh-brand-assembly.is-playing .zh-ref-left{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.40s both}
+.zh-brand-assembly.is-playing .zh-ref-right{animation:zhRefDraw 1.05s cubic-bezier(.18,.75,.22,1) 1.47s both}
+.zh-brand-assembly.is-playing .zh-ref-bottom{animation:zhRefDraw .7s ease 1.69s both}
+.zh-brand-assembly.is-playing .zh-ref-window{animation:zhRefDraw .65s ease 1.92s both}
+.zh-brand-assembly.is-playing .zh-ref-symbol{
+  animation:zhRefBreathe .56s ease-in-out 2.58s both;
+  transform-box:view-box;transform-origin:500px 496px;
+}
+.zh-brand-wordmark{
+  margin:0;color:#f3fff9;opacity:0;
+  font-size:clamp(31px,6.4vw,37px);font-weight:760;letter-spacing:-.045em;
+  line-height:1.15;transform:translateY(11px);
+}
+.zh-brand-subtitle{
+  margin:7px 0 0;opacity:0;transform:translateY(6px);
+  font-size:11px;letter-spacing:.27em;font-weight:700;color:#acd9c6;
+}
+.zh-brand-divider,.zh-brand-status{display:none!important}
+.zh-brand-assembly.is-playing .zh-brand-wordmark{
+  animation:zhRefText .61s cubic-bezier(.22,.73,.24,1) 2.66s both;
+}
+.zh-brand-assembly.is-playing .zh-brand-subtitle{
+  animation:zhRefText .58s cubic-bezier(.22,.73,.24,1) 2.9s both;
+}
+.zh-brand-skip{
+  position:absolute;bottom:calc(18px + env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%);
+  border:1px solid rgba(216,255,241,.19);background:rgba(255,255,255,.035);
+  min-height:43px;padding:10px 18px;border-radius:999px;
+  color:#b6cfc7;cursor:pointer;white-space:nowrap;font-size:11px;font-weight:680;
+}
+.zh-brand-skip:hover{background:rgba(255,255,255,.09);color:#fff}
+.zh-brand-skip:focus-visible{outline:2px solid #8edcc0;outline-offset:3px}
+@keyframes zhRefOrbitA{
+  0%{opacity:0;transform:rotate(-7deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(351deg)}
+}
+@keyframes zhRefOrbitB{
+  0%{opacity:0;transform:rotate(113deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(471deg)}
+}
+@keyframes zhRefOrbitC{
+  0%{opacity:0;transform:rotate(233deg)}
+  12%{opacity:1}76%{opacity:1}
+  100%{opacity:0;transform:rotate(591deg)}
+}
+@keyframes zhRefOrbitGhost{
+  0%{opacity:0}24%{opacity:.22}77%{opacity:.20}100%{opacity:0}
+}
+@keyframes zhRefDraw{
+  0%{opacity:0;stroke-dashoffset:100}
+  18%{opacity:.72}
+  64%{opacity:.93}
+  100%{opacity:1;stroke-dashoffset:0}
+}
+@keyframes zhRefBreathe{
+  0%{transform:scale(.996)}55%{transform:scale(1.006)}100%{transform:scale(1)}
+}
+@keyframes zhRefText{
+  0%{opacity:0;transform:translateY(11px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+@media(max-width:500px){
+  .zh-brand-mark{width:min(78vw,340px)}
+  .zh-brand-content{transform:translateY(-14px)}
+  .zh-brand-skip{bottom:calc(13px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){
+ .zh-brand-assembly,.zh-brand-assembly.is-leaving{transition:none!important}
+ .zh-ref-dot,.zh-ref-orbit{display:none!important}
+ .zh-brand-assembly .zh-ref-stroke,.zh-brand-assembly.is-playing .zh-ref-stroke{
+  opacity:1!important;stroke-dashoffset:0!important;animation:none!important;
+ }
+ .zh-brand-assembly .zh-ref-symbol,.zh-brand-assembly.is-playing .zh-ref-symbol{animation:none!important;transform:none!important}
+ .zh-brand-wordmark,.zh-brand-subtitle{
+  opacity:1!important;transform:none!important;animation:none!important;
+ }
+}
