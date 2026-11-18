@@ -26,7 +26,7 @@
  fill:none;stroke:#eafff6;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;
  stroke-dasharray:100;stroke-dashoffset:100;opacity:0;
 }
-.zh-v7-trace-ring{stroke:#a7e2cd;stroke-width:8}
+.zh-v7-trace-ring,.zh-v7-trace-ring-inset{stroke:#a7e2cd;stroke-width:8}
 .zh-v7-trace-inner{stroke:#c1f2db;stroke-width:10}
 .zh-v7-trace-house{stroke:#ebfff6;stroke-width:8}
 .zh-v7-trace-leaf{stroke:#b8edd3;stroke-width:7}
@@ -34,6 +34,7 @@
 /* Las tres rutas principales comparten un reloj con sus puntos:
    el avance de dash y la posición del punto provienen del MISMO porcentaje JS. */
 .zh-brand-assembly.is-playing .zh-v7-trace-ring{animation:zhV7TraceShow .24s ease .18s both,zhV7LineExit .53s ease 3.03s forwards}
+.zh-brand-assembly.is-playing .zh-v7-trace-ring-inset{animation:zhV7Draw 1.20s cubic-bezier(.24,.62,.30,1) .62s both,zhV7LineExit .53s ease 3.03s forwards}
 .zh-brand-assembly.is-playing .zh-v7-trace-inner{animation:zhV7TraceShow .24s ease .48s both,zhV7LineExit .53s ease 3.10s forwards}
 .zh-brand-assembly.is-playing .zh-v7-trace-house{animation:zhV7TraceShow .24s ease .90s both,zhV7LineExit .50s ease 3.13s forwards}
 /* Detalles secundarios tienen un dibujo breve, sin brillo ni rebotes. */
