@@ -1,4 +1,4 @@
-/* Zen Hogar Gestión · V8 Clean Orbit
+/* Zen Hogar Gestión · V8.1 Fine Motion
    Tres puntos recorren exactamente las mismas rutas que dibujan.
    La animación solo es una bienvenida visual: no accede a auth ni a datos. */
 let zhBrandAssemblyToken=0;
@@ -26,6 +26,10 @@ function zhBrandAssemblyStart(){
 
   const reducedMotion=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const svg=layer.querySelector('svg.zh-brand-mark');
+  // El replay no debe heredar el último fotograma de los trazos animados.
+  svg?.querySelectorAll('.zh-v8-trace').forEach(route=>{
+    route.style.removeProperty('stroke-dashoffset');
+  });
   const dots=[...(svg?.querySelectorAll('.zh-v8-dot[data-route]')||[])];
   let routes=[];
   if(!reducedMotion){
@@ -49,6 +53,10 @@ function zhBrandAssemblyStart(){
       routes=[];
     }
     if(routes.length!==3){
+      // Volver al CSS sin offsets inline residuales si el SVG falla.
+      svg?.querySelectorAll('.zh-v8-trace').forEach(route=>{
+        route.style.removeProperty('stroke-dashoffset');
+      });
       layer.classList.add('zh-v8-css-fallback');
     }
   }
@@ -95,13 +103,13 @@ async function zhBrandAssemblyFinish(){
   const token=zhBrandAssemblyToken;
   const reduce=!!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const elapsed=Date.now()-zhBrandAssemblyStartedAt;
-  // V8: 4.55s de bienvenida y 0.34s de salida. Nunca bloquea el sistema.
-  const remaining=Math.max(0,(reduce?0:4550)-elapsed);
+  // V8.1: 4.65s de bienvenida y 0.33s de salida. Nunca bloquea el sistema.
+  const remaining=Math.max(0,(reduce?0:4650)-elapsed);
   if(remaining)await new Promise(done=>setTimeout(done,remaining));
   if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   if(!reduce){
     layer.classList.add('is-leaving');
-    await new Promise(done=>setTimeout(done,340));
+    await new Promise(done=>setTimeout(done,330));
     if(token!==zhBrandAssemblyToken||!zhBrandAssemblyActive)return;
   }
   zhBrandAssemblyDismiss();
