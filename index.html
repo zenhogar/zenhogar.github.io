@@ -1280,6 +1280,37 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
 @media(max-width:650px){.monitor-live-keyword-button{width:100%;white-space:normal}}
 
 .monitor-explorer-error{border:1px solid #d9a1a1;background:var(--surface-soft);border-radius:10px;padding:9px}
+
+/* Modelo 13: búsqueda protagonista, detalle secundario cuando el usuario lo necesita. */
+.pm-simple-search{display:grid;gap:10px;padding:17px;border:1px solid var(--line);background:var(--surface);border-radius:19px}
+.pm-simple-search-copy{display:flex;flex-direction:column;gap:4px}
+.pm-simple-search-copy strong{font-size:17px;letter-spacing:-.02em}
+.pm-simple-search-copy small,.pm-simple-search-tip{font-size:11px;color:var(--muted);line-height:1.45}
+.pm-simple-search-bar{margin:0;display:flex;align-items:stretch;gap:8px}
+.pm-simple-search-bar .search-field{flex:1;min-width:0}
+.pm-simple-search-bar .search-field input{min-height:46px;font-size:15px}
+.pm-simple-search-bar button{flex-shrink:0;min-height:46px;padding:10px 15px}
+.pm-saved-panel,.pm-tools-panel{border:1px solid var(--line);background:var(--surface);border-radius:16px;overflow:hidden}
+.pm-saved-summary,.pm-tools-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;cursor:pointer;list-style:none}
+.pm-saved-summary::-webkit-details-marker,.pm-tools-summary::-webkit-details-marker{display:none}
+.pm-saved-summary>span:first-child{display:flex;flex-direction:column;gap:3px}
+.pm-saved-summary strong,.pm-tools-summary strong{font-size:13px}
+.pm-saved-summary small{font-size:11px;color:var(--muted)}
+.pm-saved-panel>.price-monitor-list{padding:0 12px 12px}
+.pm-tools-panel>.pm-tools-content{display:grid;gap:12px;padding:0 13px 14px}
+.pm-tools-content>.price-monitor-summary{margin-bottom:0}
+.pm-tools-content>.price-monitor-refresh-note{margin:0}
+.pm-secondary-filters{margin:0;padding:10px;background:var(--surface-soft);border-radius:12px}
+.pm-tools-content .price-monitor-coto-collapsible{margin:0}
+@media(max-width:650px){
+ .pm-simple-search{padding:13px;gap:8px}
+ .pm-simple-search-bar{flex-direction:column}
+ .pm-simple-search-bar .search-field,.pm-simple-search-bar button{width:100%}
+ .pm-simple-search-bar button{font-size:13px}
+ .pm-tools-content>.price-monitor-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .pm-saved-panel>.price-monitor-list{padding:0 8px 8px}
+}
+
 .price-monitor-coto-collapsible { display:block; overflow:hidden; }
 .price-monitor-coto-summary { display:flex; align-items:center; gap:12px; cursor:pointer; list-style:none; padding:1px 0; min-height:48px; -webkit-tap-highlight-color:transparent; }
 .price-monitor-coto-summary::-webkit-details-marker { display:none; }
@@ -1790,6 +1821,22 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
       <section class="view" id="priceIntelligence">
         <div class="section-intro"><div><span class="section-kicker">Análisis de mercado</span><h2>Inteligencia de Precios</h2><p>Compará referencias externas y registrá decisiones sin modificar el inventario.</p></div></div>
 
+
+        <div class="pm-simple-search">
+          <div class="pm-simple-search-copy"><strong>Buscá un producto</strong><small>Encontrá tus artículos y compará referencias de supermercados.</small></div>
+          <div class="price-monitor-toolbar pm-simple-search-bar">
+          <label class="search-field"><span>⌕</span><input id="priceMonitorSearch" type="search" placeholder="Escribí Skip, Dove, vinagre..." autocomplete="off" /></label><button type="button" class="secondary monitor-live-keyword-button" id="priceMonitorLagallegaSearchBtn">Buscar en La Gallega</button>
+          </div>
+          <small class="pm-simple-search-tip">La Gallega se consulta desde el botón. Para Coto, abrí el producto de tu inventario.</small>
+        </div>
+        <div class="monitor-search-explorer" id="priceMonitorSearchExplorer" hidden></div>
+        <details class="pm-saved-panel" id="priceMonitorSavedPanel" open>
+          <summary class="pm-saved-summary"><span><strong>Comparaciones guardadas</strong><small id="priceMonitorSavedCount">Sugerencias listas para revisar</small></span><span aria-hidden="true">⌄</span></summary>
+          <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
+        </details>
+        <details class="pm-tools-panel" id="priceMonitorToolsPanel">
+          <summary class="pm-tools-summary"><span>⚙️</span><strong>Opciones y seguimiento</strong><span aria-hidden="true">⌄</span></summary>
+          <div class="pm-tools-content">
         <div class="price-monitor-summary" id="priceMonitorSummary"></div>
         <div class="monitor-automation-strip">
           <div class="monitor-automation-copy"><strong id="priceMonitorAutomationTitle">Revisión quincenal</strong><small id="priceMonitorAutomationStatus">Consultando programación…</small></div>
@@ -1797,11 +1844,11 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
         </div>
         <p class="price-monitor-refresh-note">La Gallega primero, Coto Digital como respaldo. Las sugerencias se guardan para aprobación; no se modifican precios automáticamente.</p>
         <div class="monitor-service-message" id="priceMonitorServiceMessage" role="status" hidden></div>
-        <div class="price-monitor-toolbar price-monitor-main-filters">
-          <label class="search-field"><span>⌕</span><input id="priceMonitorSearch" type="search" placeholder="Escribí Skip, Dove, vinagre..." autocomplete="off" /></label><button type="button" class="secondary monitor-live-keyword-button" id="priceMonitorLagallegaSearchBtn">Buscar en La Gallega</button>
-          <select id="priceMonitorStatusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="pending">Pendientes de revisión</option><option value="matched">Coincidencia exacta</option><option value="ambiguous">Coincidencia a revisar</option><option value="not_found">Sin coincidencia</option><option value="source_error">Error de fuente</option><option value="reviewed">Revisados</option></select>
-          <label class="monitor-history-switch" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft)"><input type="checkbox" id="priceMonitorShowHistory" /> Ver historial</label>
-        </div>
+
+            <div class="price-monitor-toolbar pm-secondary-filters">
+  <select id="priceMonitorStatusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="pending">Pendientes de revisión</option><option value="matched">Coincidencia exacta</option><option value="ambiguous">Coincidencia a revisar</option><option value="not_found">Sin coincidencia</option><option value="source_error">Error de fuente</option><option value="reviewed">Revisados</option></select>
+  <label class="monitor-history-switch" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft)"><input type="checkbox" id="priceMonitorShowHistory" /> Ver historial</label>
+            </div>
         <div class="monitor-service-message" id="priceMonitorLiveStatus" role="status" aria-live="polite" hidden></div>
         <details class="card price-monitor-status price-monitor-coto-collapsible" id="priceMonitorControlsPanel">
           <summary class="price-monitor-coto-summary">
@@ -1836,8 +1883,9 @@ html[data-theme="dark"] .monitor-ref-current{background:var(--surface-soft)}
             <a class="monitor-source-link" href="https://www.coto.com.ar/cdigi" target="_blank" rel="noopener noreferrer">Abrir Coto Digital oficial</a>
           </div>
         </details>
-        <div class="monitor-search-explorer" id="priceMonitorSearchExplorer" hidden></div>
-        <div class="price-monitor-list" id="priceMonitorList"><div class="monitor-empty">Cargando registros de Inteligencia de Precios…</div></div>
+
+          </div>
+        </details>
       </section>
 
       <section class="view" id="reports">
@@ -3927,8 +3975,15 @@ function renderPriceIntelligence(){
     const statusOk=filter==='all'||(filter==='pending'&&f.reviewStatus==='pending')||(filter==='reviewed'&&f.reviewStatus!=='pending')||f.matchStatus===filter;
     return statusOk&&(!q||text.includes(q));
   });
+  const savedPanel=$('#priceMonitorSavedPanel');
+  const savedCount=$('#priceMonitorSavedCount');
+  if(savedCount)savedCount.textContent=q?'Mostrar '+visible.length+' comparación'+(visible.length===1?'':'es')+' registrada'+(visible.length===1?'':'s'):visible.length+' resultado'+(visible.length===1?'':'s')+' para revisar';
+  if(savedPanel&&savedPanel.dataset.searchMode!==String(q.length>=2)){
+    savedPanel.open=q.length<2;
+    savedPanel.dataset.searchMode=String(q.length>=2);
+  }
   renderPriceMonitorSearchExplorer(q,findings);
-  if(!visible.length){list.innerHTML=`<div class="monitor-empty">${q?'No hay comparaciones exactas registradas para esta búsqueda. Revisá arriba los productos de tu inventario y las referencias de La Gallega y Coto; no implican una coincidencia confirmada.':findings.length?'No hay resultados para este filtro.':'Todavía no hay consultas registradas. No se muestran precios de demostración.'}</div>`;return;}
+  if(!visible.length){list.innerHTML=`<div class="monitor-empty">${q?'Todavía no hay comparaciones confirmadas para esta búsqueda.':findings.length?'No hay resultados para este filtro.':'Todavía no hay comparaciones registradas.'}</div>`;return;}
   list.innerHTML=visible.map(f=>{
     const url=safeExternalUrl(f.sourceUrl),canChoose=canAdmin()&&f.matchStatus==='matched',reviewed=f.reviewStatus!=='pending';
     const groupUniform=f.comparisonKind==='group_uniform',groupRange=f.comparisonKind==='group_range',grouped=groupUniform||groupRange;
