@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Zen Hogar Gestión · Versión oficial v13.4.0 · 17/11/2026 -->
 <!-- Gestión Cloud V13.2.6 · accesos rápidos 250 g y 500 g -->
 <!-- V13.3.1 · filtros de ventas -->
 <html lang="es">
@@ -1188,23 +1187,33 @@ html[data-theme="dark"] .weight-quick-qty button{
 
 /* V13.3.3 · Actualización masiva de precios */
 .bulk-price-card{margin-top:16px;display:grid;gap:14px}.bulk-price-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:10px}.bulk-price-preview{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}.bulk-price-preview-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}.bulk-price-preview-list{max-height:330px;overflow:auto}.bulk-price-row{display:grid;grid-template-columns:minmax(0,1.8fr) .7fr .7fr;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:10px}.bulk-price-row:last-child{border-bottom:0}.bulk-price-row strong{font-size:11px}.bulk-price-row small{display:block;color:var(--muted);margin-top:2px}.bulk-price-old{color:var(--muted);text-align:right}.bulk-price-new{font-weight:850;color:var(--accent-dark);text-align:right}.bulk-price-empty{padding:24px;text-align:center;color:var(--muted);font-size:11px}.bulk-price-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.bulk-price-warning{padding:10px 12px;border-radius:13px;background:var(--peach);color:var(--ink-soft);font-size:10px;line-height:1.45}.bulk-price-summary{font-size:10px;color:var(--muted)}@media(max-width:760px){.bulk-price-grid{grid-template-columns:1fr}.bulk-price-row{grid-template-columns:minmax(0,1fr) auto auto}.bulk-price-actions>*{flex:1}}
+
+/* V13.3.5.3 · Venta móvil compacta */
+.sale-qty-control{display:grid;grid-template-columns:46px minmax(0,1fr) 46px;gap:7px;align-items:center;margin-top:6px}
+.sale-qty-control #saleQty{margin-top:0;text-align:center;font-weight:750;appearance:textfield;-moz-appearance:textfield}
+.sale-qty-control #saleQty::-webkit-outer-spin-button,.sale-qty-control #saleQty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sale-qty-btn{border:1px solid var(--line);background:var(--accent-soft);color:var(--accent-dark);border-radius:13px;min-height:46px;font-size:22px;font-weight:750;cursor:pointer;display:grid;place-items:center}
+.sale-qty-btn:active{transform:scale(.97)}
+@media(max-width:700px){
+  #saleDialog .modal-card{padding-left:16px;padding-right:16px}
+  #saleDialog .sale-builder{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:12px;align-items:stretch}
+  #saleDialog .sale-product-picker,#saleDialog .sale-qty-wrap,#saleDialog #saleOwnContainerWrap,#saleDialog .sale-add-btn{grid-column:1/-1!important;width:100%}
+  #saleDialog .sale-search-scan-row{grid-template-columns:minmax(0,1fr)!important;gap:8px}
+  #saleDialog .sale-scan-btn{width:100%;min-height:46px}
+  #saleDialog .sale-qty-wrap{display:block}
+  #saleDialog .sale-qty-control{grid-template-columns:52px minmax(0,1fr) 52px}
+  #saleDialog .sale-qty-btn{min-height:48px}
+  #saleDialog .sale-add-btn{min-height:50px;margin-top:2px}
+}
+html[data-theme="dark"] .sale-qty-btn{background:var(--surface-soft)!important;color:var(--ink)!important;border-color:var(--line)!important}
 </style>
-  <!-- Modelo 13: evolución visual reversible (solo CSS) -->
-  <link rel="stylesheet" href="./modelo13-visual.css?v=20261117-teal" />
-  <link rel="stylesheet" href="./dashboard-premium.css?v=20261117-1" />
-  <link rel="stylesheet" href="./reportes-visual.css?v=20261117-compacto" />
-  <link rel="stylesheet" href="./reportes-v2.css?v=20261117-1" />
-  <link rel="stylesheet" href="./stock-v2.css?v=20261117-1" />
-  <link rel="stylesheet" href="./operaciones-v2.css?v=20261117-1" />
-  <link rel="stylesheet" href="./panel-inteligente.css?v=20261117-1" />
-  <link rel="stylesheet" href="./logo-armado.css?v=20261118-v81-definitiva" />
 </head>
 <body>
 <!-- Gestión Cloud V12.0 · SaaS multiempresa compatible con Zen Hogar -->
   <section class="cloud-gate" id="cloudGate">
     <div class="gate-orb gate-orb-one"></div><div class="gate-orb gate-orb-two"></div>
     <div class="gate-card">
-      <div class="gate-brand"><div><span class="section-kicker">ZEN HOGAR · GESTIÓN</span><h1>Gestión comercial en la nube</h1><p>Cada empresa con sus datos, equipo y operación completamente separados.</p></div></div>
+      <div class="gate-brand"><div class="brand-mark"><span>GC</span></div><div><span class="section-kicker">GESTIÓN CLOUD</span><h1>Gestión comercial en la nube</h1><p>Cada empresa con sus datos, equipo y operación completamente separados.</p></div></div>
 
       <div id="configStep" class="gate-step" hidden>
         <div class="gate-badge">1 · Conectar nube</div>
@@ -1291,58 +1300,6 @@ html[data-theme="dark"] .weight-quick-qty button{
 
       <div id="gateLoading" class="gate-loading" hidden><span class="spinner"></span><p>Conectando de forma segura…</p></div>
     </div>
-  </section>
-
-  <!-- Bienvenida visual independiente de la autenticación: solo aparece al abrir el panel. -->
-  <!-- Armado por capas de la identidad original aportada por el usuario. -->
-  <!-- PRESENTACIÓN OFICIAL ZEN HOGAR GESTIÓN · V8.1 DEFINITIVA
-       Validada para PC y celular; incluye adaptación horizontal.
-       No modificar sin una solicitud explícita y conservar siempre el respaldo V8.1. -->
-  <section id="zhBrandAssembly" class="zh-brand-assembly" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status">
-  <div class="zh-brand-content">
-    <svg class="zh-brand-mark" viewBox="0 0 1000 1000" role="img" aria-label="Dos círculos y el logo original de Zen Hogar se dibujan con tres puntos, sin círculos duplicados">
-      <defs>
-          <linearGradient id="zhLogoMint" x1="0" y1="0" x2="0.75" y2="1"><stop stop-color="#56c58f"/><stop offset=".46" stop-color="#64cba0"/><stop offset="1" stop-color="#80dab8"/></linearGradient>
-          <path id="zhLogo-ring-dark" fill-rule="evenodd" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66ZM467,87 509,85 549,88 595,96 628,105 664,118 699,135 731,154 768,182 812,225 838,257 863,296 885,343 899,385 910,430 914,463 914,486 915,488 914,528 908,567 899,606 882,653 865,688 846,721 813,764 783,795 763,813 740,830 699,856 654,877 621,889 579,899 529,906 454,904 419,899 376,889 339,876 303,859 268,838 230,809 192,773 160,733 135,694 118,660 102,619 89,569 84,529 85,449 92,410 100,380 117,333 131,303 156,263 183,227 221,190 248,167 292,139 326,122 385,101 419,93Z"/>
-          <path id="zhLogo-house-leaves" fill-rule="evenodd" d="M125,408 119,457 119,484 125,529 132,557 149,593 175,628 192,645 212,661 227,671 253,684 270,691 303,699 351,700 368,696 627,696 652,701 679,701 720,694 753,680 777,667 808,643 826,623 845,598 861,566 868,548 876,509 877,449 873,411 871,406 865,404 821,406 772,416 750,424 718,440 683,466 656,438 656,325 654,324 588,324 585,368 502,286 496,286 312,463 285,444 266,433 225,416 175,406 132,404 126,406ZM848,460 850,462 850,498 843,536 829,574 817,593 804,610 778,635 761,647 742,657 713,667 696,671 677,674 657,674 656,671ZM148,460 339,669 341,671 339,673 304,671 263,660 246,652 225,639 213,630 191,608 173,582 164,563 154,537 149,514 147,489 147,462ZM845,430 846,433 747,533 640,652 639,651 639,611 641,588 647,565 660,533 667,520 683,501 714,473 748,454 774,444 803,436ZM151,430 195,436 223,444 243,451 264,462 286,476 315,502 335,531 346,553 351,570 358,619 358,649 356,651 345,640 230,515 149,432ZM500,337 656,489 635,519 619,558 611,604 611,631 610,632 611,634 611,666 610,667 386,667 385,666 385,610 382,583 377,558 369,535 360,516 341,490Z"/>
-          <path id="zhLogo-leaf-left" fill-rule="evenodd" d="M148,462 149,503 157,541 165,563 174,582 192,608 213,628 225,638 263,658 298,669 315,671 339,671ZM152,432 270,557 346,640 356,649 355,601 350,570 345,553 335,533 313,502 286,477 264,463 243,453 195,437Z"/>
-          <path id="zhLogo-leaf-right" fill-rule="evenodd" d="M848,462 725,596 657,673 677,673 696,670 713,666 742,656 773,638 803,610 816,593 829,571 841,540 848,498ZM845,432 803,437 757,451 735,462 714,475 686,500 673,515 661,533 648,565 640,611 640,649 746,533Z"/>
-          <path id="zhLogo-sun" fill-rule="evenodd" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/>
-          <path id="zhLogo-windows" fill-rule="evenodd" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/>
-      </defs>
-      <g class="zh-v8-original" aria-hidden="true">
-        <!-- La placa clara se mantiene DENTRO del aro exterior: sin halo ni tercer círculo. -->
-        <circle class="zh-v8-plate" cx="500" cy="496" r="418"/>
-        <g class="zh-logo-layer zh-logo-outer"><use href="#zhLogo-ring-dark" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-inner"><circle cx="500" cy="496" r="346" stroke="url(#zhLogoMint)" stroke-width="51" fill="none"/></g>
-        <g class="zh-logo-layer zh-logo-house"><use href="#zhLogo-house-leaves" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-leaf-left"><use href="#zhLogo-leaf-left" fill="url(#zhLogoMint)"/></g>
-        <g class="zh-logo-layer zh-logo-leaf-right"><use href="#zhLogo-leaf-right" fill="url(#zhLogoMint)"/></g>
-        <g class="zh-logo-layer zh-logo-sun"><use href="#zhLogo-sun" fill="#033446"/></g>
-        <g class="zh-logo-layer zh-logo-windows"><use href="#zhLogo-windows" fill="#033446"/></g>
-      </g>
-      <g class="zh-v8-traces" aria-hidden="true">
-        <!-- Solo los dos círculos aprobados: contorno exterior y aro interior. -->
-        <path id="zhV8TraceOuter" class="zh-v8-trace zh-v8-trace-outer" pathLength="100" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66Z"/>
-        <circle id="zhV8TraceInner" class="zh-v8-trace zh-v8-trace-inner" cx="500" cy="496" r="346" pathLength="100"/>
-        <path id="zhV8TraceHouse" class="zh-v8-trace zh-v8-trace-house" pathLength="100" d="M125,408 119,457 119,484 125,529 132,557 149,593 175,628 192,645 212,661 227,671 253,684 270,691 303,699 351,700 368,696 627,696 652,701 679,701 720,694 753,680 777,667 808,643 826,623 845,598 861,566 868,548 876,509 877,449 873,411 871,406 865,404 821,406 772,416 750,424 718,440 683,466 656,438 656,325 654,324 588,324 585,368 502,286 496,286 312,463 285,444 266,433 225,416 175,406 132,404 126,406Z"/>
-        <path class="zh-v8-trace zh-v8-trace-leaf zh-v8-trace-leaf-left" pathLength="100" d="M148,462 149,503 157,541 165,563 174,582 192,608 213,628 225,638 263,658 298,669 315,671 339,671ZM152,432 270,557 346,640 356,649 355,601 350,570 345,553 335,533 313,502 286,477 264,463 243,453 195,437Z"/>
-        <path class="zh-v8-trace zh-v8-trace-leaf zh-v8-trace-leaf-right" pathLength="100" d="M848,462 725,596 657,673 677,673 696,670 713,666 742,656 773,638 803,610 816,593 829,571 841,540 848,498ZM845,432 803,437 757,451 735,462 714,475 686,500 673,515 661,533 648,565 640,611 640,649 746,533Z"/>
-        <path class="zh-v8-trace zh-v8-trace-sun" pathLength="100" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/>
-        <path class="zh-v8-trace zh-v8-trace-windows" pathLength="100" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/>
-      </g>
-      <g class="zh-v8-points" aria-hidden="true">
-        <circle class="zh-v8-dot zh-v8-dot-a" cx="0" cy="0" r="11" data-route="zhV8TraceOuter" data-start="0.16" data-duration="1.5"/>
-        <circle class="zh-v8-dot zh-v8-dot-b" cx="0" cy="0" r="11" data-route="zhV8TraceInner" data-start="0.42" data-duration="1.44"/>
-        <circle class="zh-v8-dot zh-v8-dot-c" cx="0" cy="0" r="11" data-route="zhV8TraceHouse" data-start="0.86" data-duration="1.49"/>
-      </g>
-    </svg>
-      <h2 class="zh-brand-wordmark">Zen Hogar</h2>
-      <p class="zh-brand-subtitle">GESTIÓN</p>
-      <span class="zh-brand-divider" aria-hidden="true"></span>
-      <p class="zh-brand-status">Preparando tu espacio de trabajo…</p>
-    </div>
-    <button class="zh-brand-skip" type="button" onclick="zhBrandAssemblyDismiss()">Omitir animación</button>
   </section>
 
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -1456,30 +1413,9 @@ html[data-theme="dark"] .weight-quick-qty button{
         </div>
 
         <div class="dashboard-insight-grid">
-          <article class="card surface-card dashboard-chart-card analytics-premium-card">
-            <div class="analytics-header">
-              <div><span class="section-kicker">ANÁLISIS COMERCIAL</span><h2>Rendimiento de ventas</h2><p>Facturación diaria y tendencia de tu negocio</p></div>
-              <div class="analytics-header-actions">
-                <div class="analytics-periods" id="dashboardAnalyticsPeriods" role="group" aria-label="Período del gráfico">
-                  <button type="button" data-analytics-period="7d" class="active" aria-pressed="true">7 días</button>
-                  <button type="button" data-analytics-period="30d" aria-pressed="false">30 días</button>
-                  <button type="button" data-analytics-period="month" aria-pressed="false">Este mes</button>
-                </div>
-                <button type="button" id="dashboardAnalyticsReports" class="analytics-open-reports">Ver reportes</button>
-              </div>
-            </div>
-            <div id="dashboardAnalyticsKpis" class="analytics-kpis" aria-label="Indicadores del período"></div>
-            <div class="analytics-desktop-chart">
-              <div class="analytics-chart-top"><b id="dashboardAnalyticsRangeLabel">Evolución diaria</b><span>Pesos argentinos</span></div>
-              <div id="dashboardAnalyticsPlot" class="analytics-chart-frame" aria-label="Gráfico de barras y tendencia"></div>
-              <div class="analytics-chart-legend"><span><i></i> Ventas diarias</span><span><i class="line"></i> Promedio móvil de 3 días</span></div>
-              <div id="dashboardAnalyticsInsights" class="analytics-insights"></div>
-              <p class="analytics-chart-note">Ganancia estimada según los costos cargados, sin descontar gastos generales. Comparación con un período anterior de igual duración.</p>
-            </div>
-            <div class="analytics-mobile-chart">
-              <div id="salesWeekChart" class="sales-week-chart" aria-label="Gráfico de ventas de los últimos 7 días"></div>
-              <p id="salesWeekSelected" class="sales-week-selected" aria-live="polite">Tocá una barra para ver el importe</p>
-            </div>
+          <article class="card surface-card dashboard-chart-card">
+            <div class="card-head"><div><span class="section-kicker">Tendencia</span><h2>Ventas de los últimos 7 días</h2></div></div>
+            <div id="salesWeekChart" class="sales-week-chart" aria-label="Gráfico de ventas de los últimos 7 días"></div>
           </article>
           <article class="card surface-card dashboard-top-card">
             <div class="card-head"><div><span class="section-kicker">Rotación</span><h2>Más vendidos · 7 días</h2></div></div>
@@ -1487,10 +1423,6 @@ html[data-theme="dark"] .weight-quick-qty button{
           </article>
         </div>
 
-        <section class="zh-smart-wrap" aria-labelledby="zhSmartTitle">
-          <div class="zh-smart-head"><h2 id="zhSmartTitle">Indicadores inteligentes</h2><small>Calculados con tus datos · sin estimaciones automáticas inventadas</small></div>
-          <div id="zhSmartPanel" class="zh-smart-grid"></div>
-        </section>
         <div class="grid two dashboard-grid">
           <article class="card surface-card">
             <div class="card-head"><div><span class="section-kicker">Actividad</span><h2>Últimas ventas</h2></div></div>
@@ -1512,7 +1444,7 @@ html[data-theme="dark"] .weight-quick-qty button{
             <h3>Agregar un nuevo producto</h3>
             <p>Cargá código, categoría, costo, precio, stock y proveedor habitual. También podés definir si se vende por unidad, litro o kilogramo.</p>
           </div>
-          <div class="product-create-actions"><button class="secondary" id="exportInventoryCsvBtn" type="button">⇩ Exportar inventario CSV</button><button class="primary product-create-btn" id="addProductTopBtn" type="button">+ Nuevo producto</button></div>
+          <div class="product-create-actions"><button class="primary product-create-btn" id="addProductTopBtn" type="button">+ Nuevo producto</button></div>
         </article>
         <article class="card stock-query-card">
           <div class="stock-query-head">
@@ -1583,16 +1515,6 @@ html[data-theme="dark"] .weight-quick-qty button{
             <option value="stockDesc">Mayor stock primero</option>
           </select>
           <button class="primary" id="addProductBtn">+ Agregar producto</button>
-        </div>
-        <div id="zhStockFilterBar" class="zh-stock-tools" aria-label="Filtros rápidos de inventario">
-          <div class="zh-stock-filters" role="group" aria-label="Estado de stock">
-            <button type="button" class="zh-stock-chip active" data-stock-filter="all" onclick="zhStockSetFilter('all')">Todos <span data-filter-count>0</span></button>
-            <button type="button" class="zh-stock-chip" data-stock-filter="out" onclick="zhStockSetFilter('out')">Sin stock <span data-filter-count>0</span></button>
-            <button type="button" class="zh-stock-chip" data-stock-filter="low" onclick="zhStockSetFilter('low')">Stock bajo <span data-filter-count>0</span></button>
-            <button type="button" class="zh-stock-chip" data-stock-filter="target" onclick="zhStockSetFilter('target')">Debajo del objetivo <span data-filter-count>0</span></button>
-            <button type="button" class="zh-stock-chip" data-stock-filter="unset" onclick="zhStockSetFilter('unset')">Sin objetivo válido <span data-filter-count>0</span></button>
-          </div>
-          <div class="zh-stock-foot"><small id="zhStockFilterCount" aria-live="polite">Mostrando productos</small><button type="button" onclick="setView('replenishment')">Abrir reposición ↗</button></div>
         </div>
         <div class="card table-wrap">
           <table>
@@ -1683,7 +1605,6 @@ html[data-theme="dark"] .weight-quick-qty button{
       <section class="view" id="purchases">
         <div class="section-intro"><div><span class="section-kicker">Abastecimiento</span><h2>Compras</h2><p>Registrá el ingreso de mercadería y actualizá el stock automáticamente.</p></div></div>
         <div class="ops-actions"><button class="primary" id="addPurchaseBtn">+ Nueva compra</button></div>
-        <div class="zh-purchase-tip"><span>¿Hay artículos al mínimo? Consultá la reposición sugerida antes de cargar una compra.</span><button type="button" onclick="setView('replenishment')">Ver reposición ↗</button></div>
         <div class="cards three"><article class="card stat mint"><div class="stat-top"><span>Compras del mes</span><span class="mini-icon">＋</span></div><strong id="purchasesMonth">$0</strong></article><article class="card stat blue"><div class="stat-top"><span>Proveedores activos</span><span class="mini-icon">◇</span></div><strong id="supplierCount">0</strong></article><article class="card stat lilac"><div class="stat-top"><span>Compras registradas</span><span class="mini-icon">▤</span></div><strong id="purchaseCount">0</strong></article></div>
         <div class="card table-wrap compact-table"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Productos</th><th>Medio</th><th>Total</th><th></th></tr></thead><tbody id="purchasesTable"></tbody></table></div>
 
@@ -1802,39 +1723,6 @@ html[data-theme="dark"] .weight-quick-qty button{
         </div>
 
         <div id="reportInsights" class="report-insights"></div>
-        <div id="zhR2Summary" class="zh-r2-comparison" aria-live="polite"></div>
-        <div class="zh-r2-export"><label>Reporte mensual PDF<input id="zhR2Month" type="month" aria-label="Mes a exportar"></label><button id="zhR2PDF" type="button" class="primary" onclick="zhR2ExportPDF()">Descargar reporte PDF</button><small>Informe con facturación, ganancia, gastos, evolución diaria, medios de pago y productos destacados.</small></div>
-        <header class="report-visual-heading">
-          <div><span class="section-kicker">ANÁLISIS VISUAL</span><h2>Gráficos de rendimiento</h2></div>
-          <small>Compará ventas, ganancias, cobros y productos. Todos los gráficos usan el período seleccionado arriba.</small>
-        </header>
-        <div class="report-visual-grid" id="reportVisualGrid">
-          <article class="card report-visual-card wide">
-            <div class="rv-head"><div><span class="rv-kicker">Finanzas</span><h3>Evolución financiera</h3><p>Ventas netas, costo efectivo vendido y ganancia bruta</p></div></div>
-            <div id="rvFinancialChart" class="rv-chart-scroll" aria-label="Gráfico de evolución financiera"></div>
-            <div class="rv-legend"><span><i></i> Ventas</span><span><i class="line"></i> Costos</span><span><i class="profit"></i> Ganancia bruta</span></div>
-            <div id="rvFinancialDetail" class="rv-selected-detail" aria-live="polite">Elegí un período para consultar sus movimientos.</div>
-            <p class="rv-note">Los costos y la ganancia se calculan con los valores registrados en las ventas. Los gastos operativos se muestran en el detalle al seleccionar una fecha.</p>
-          </article>
-          <article class="card report-visual-card rv-payments-card">
-            <div class="rv-head"><div><span class="rv-kicker">Cobros</span><h3>Medios de pago</h3><p>Participación de cada medio en la facturación neta</p></div></div>
-            <div id="rvPaymentChart" aria-label="Gráfico circular por medio de pago"></div>
-          </article>
-          <article class="card report-visual-card">
-            <div class="rv-head"><div><span class="rv-kicker">Rentabilidad</span><h3>Ganancia por categoría</h3><p>Hasta 8 categorías ordenadas por ganancia bruta</p></div></div>
-            <div id="rvCategoryChart" aria-label="Gráfico de ganancia por categoría"></div>
-          </article>
-          <article class="card report-visual-card wide">
-            <div class="rv-head">
-              <div><span class="rv-kicker">Rotación</span><h3>Productos más vendidos</h3><p>Los 8 artículos principales del período seleccionado</p></div>
-              <div class="rv-pills" id="rvProductMode" role="group" aria-label="Ordenar productos por">
-                <button type="button" data-rv-product-mode="revenue" aria-pressed="true">Facturación</button>
-                <button type="button" data-rv-product-mode="quantity" aria-pressed="false">Cantidad</button>
-              </div>
-            </div>
-            <div id="rvProductsChart" aria-label="Gráfico de productos más vendidos"></div>
-          </article>
-        </div>
 
         <div class="grid two report-detail-grid">
           <article class="card surface-card"><span class="section-kicker">Cobros</span><h2>Ventas por medio de pago</h2><div id="paymentReport"></div></article>
@@ -1893,7 +1781,7 @@ html[data-theme="dark"] .weight-quick-qty button{
             <div class="personalization-section">
               <div class="personalization-head"><div><strong>Paleta de colores</strong><small>Se aplica al instante y no modifica tus datos.</small></div></div>
               <div class="palette-options" id="paletteOptions" role="group" aria-label="Paleta de colores">
-                <button type="button" class="palette-option" data-palette-choice="zen" aria-pressed="false"><span class="palette-swatches"><i style="background:#2F6F6D"></i><i style="background:#7FC7C2"></i><i style="background:#E8F4F3"></i></span><span><strong>Teal moderno</strong><small>Azul petróleo y fondos suaves</small></span></button>
+                <button type="button" class="palette-option" data-palette-choice="zen" aria-pressed="false"><span class="palette-swatches"><i style="background:#56aa8d"></i><i style="background:#eaf5ff"></i><i style="background:#f2ebff"></i></span><span><strong>Zen</strong><small>Verde agua y pasteles suaves</small></span></button>
                 <button type="button" class="palette-option" data-palette-choice="ocean" aria-pressed="false"><span class="palette-swatches"><i style="background:#4d9fbb"></i><i style="background:#dff4fa"></i><i style="background:#e8efff"></i></span><span><strong>Océano</strong><small>Azules y turquesas</small></span></button>
                 <button type="button" class="palette-option" data-palette-choice="lavender" aria-pressed="false"><span class="palette-swatches"><i style="background:#8f79b9"></i><i style="background:#f0eaff"></i><i style="background:#e9f3ff"></i></span><span><strong>Lavanda</strong><small>Violeta suave y azul frío</small></span></button>
                 <button type="button" class="palette-option" data-palette-choice="sand" aria-pressed="false"><span class="palette-swatches"><i style="background:#b18462"></i><i style="background:#fff1e5"></i><i style="background:#f4eadf"></i></span><span><strong>Arena</strong><small>Beige cálido y terracota</small></span></button>
@@ -1932,7 +1820,7 @@ html[data-theme="dark"] .weight-quick-qty button{
             <div class="account-lines">
               <div><span>Usuario</span><strong id="settingsUserEmail">—</strong></div>
               <div><span>Rol</span><strong id="settingsUserRole">—</strong></div>
-              <div><span>Sincronización</span><strong id="settingsSyncState">Conectada</strong></div><div><span>Empresa activa</span><strong id="settingsActiveOrg">—</strong></div><div><span>Versión del sistema</span><strong title="Edición estable del 17/11/2026">v13.4.0 · Estable</strong></div>
+              <div><span>Sincronización</span><strong id="settingsSyncState">Conectada</strong></div><div><span>Empresa activa</span><strong id="settingsActiveOrg">—</strong></div>
             </div>
             <button id="settingsSwitchOrgBtn" class="secondary full" type="button">Cambiar empresa</button><button id="signOutBtn" class="secondary full">Cerrar sesión</button>
           </article>
@@ -1943,6 +1831,7 @@ html[data-theme="dark"] .weight-quick-qty button{
             <div class="stack">
               <button id="exportBtn" class="secondary">Exportar copia JSON</button>
               <label class="file-btn">Migrar backup local a la nube<input type="file" id="importFile" accept="application/json" hidden /></label>
+              <button id="exportInventoryCsvBtn" class="secondary" type="button">⇩ Exportar inventario CSV</button>
               <button id="exportCsvBtn" class="secondary">Exportar productos CSV</button>
             </div>
           </article>
@@ -2029,7 +1918,7 @@ html[data-theme="dark"] .weight-quick-qty button{
           <div class="sale-product-selected" id="saleSelectedProduct" hidden></div>
           <select id="saleProduct" aria-label="Producto seleccionado" hidden></select>
         </div>
-        <label class="sale-qty-wrap">Cantidad (<span id="saleQtyUnit">u.</span>)<input id="saleQty" type="number" min="0.001" step="0.001" value="1" oninput="zhOpsRenderHint('sale')" /><div class="zh-ops-qty"><button type="button" onclick="zhOpsQtyAdjust('sale',-1)" aria-label="Restar cantidad de venta">−</button><button type="button" onclick="zhOpsQtyAdjust('sale',1)" aria-label="Sumar cantidad de venta">+</button><small>Podés escribir cualquier cantidad.</small></div><small id="zhSaleQtyHint" class="zh-ops-hint" aria-live="polite">Elegí un producto para consultar el stock.</small><div class="weight-quick-qty" id="saleWeightQuickQty" hidden><button type="button" data-weight-qty="0.25">250 g</button><button type="button" data-weight-qty="0.5">500 g</button></div></label>
+        <label class="sale-qty-wrap">Cantidad (<span id="saleQtyUnit">u.</span>)<div class="sale-qty-control"><button type="button" class="sale-qty-btn" id="saleQtyMinus" aria-label="Disminuir cantidad">−</button><input id="saleQty" type="number" min="0.001" step="0.001" value="1" inputmode="decimal" /><button type="button" class="sale-qty-btn" id="saleQtyPlus" aria-label="Aumentar cantidad">+</button></div><div class="weight-quick-qty" id="saleWeightQuickQty" hidden><button type="button" data-weight-qty="0.25">250 g</button><button type="button" data-weight-qty="0.5">500 g</button></div></label>
         <label id="saleOwnContainerWrap" hidden>Envases propios<input id="saleOwnContainerCount" type="number" min="0" step="1" value="0" inputmode="numeric" /><small id="saleOwnContainerHint">Sin descuento configurado</small></label>
         <button class="secondary sale-add-btn" id="saleAddItemBtn" type="button">+ Agregar a la venta</button>
       </div>
@@ -2087,8 +1976,8 @@ html[data-theme="dark"] .weight-quick-qty button{
     <div class="purchase-product-selected" id="purchaseSelectedProduct" hidden></div>
     <div class="purchase-product-results" id="purchaseProductResults" hidden></div>
   </div>
-  <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" oninput="zhOpsRenderHint('purchase')" /><div class="zh-ops-qty"><button type="button" onclick="zhOpsQtyAdjust('purchase',-1)" aria-label="Restar cantidad de compra">−</button><button type="button" onclick="zhOpsQtyAdjust('purchase',1)" aria-label="Sumar cantidad de compra">+</button><small>Una unidad o 0,25 L / kg por toque.</small></div><small id="zhPurchaseQtyHint" class="zh-ops-hint" aria-live="polite">Elegí un producto para ver el subtotal.</small></label>
-  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" oninput="zhOpsRenderHint('purchase')" /></label>
+  <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label>
+  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label>
   <button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button>
 </div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
   <dialog id="promotionDialog">
@@ -2154,13 +2043,6 @@ window.ZH_CONFIG = {
 };
 
   </script>
-  <script src="./dashboard-premium.js?v=20261117-1"></script>
-  <script src="./reportes-charts.js?v=20261117-1"></script>
-  <script src="./reportes-v2.js?v=20261117-1"></script>
-  <script src="./stock-v2.js?v=20261117-1"></script>
-  <script src="./operaciones-v2.js?v=20261117-1"></script>
-  <script src="./panel-inteligente.js?v=20261117-1"></script>
-  <script src="./logo-armado.js?v=20261118-v81-definitiva"></script>
   <script>
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -2643,37 +2525,11 @@ function savedConfig(){
   const c=window.ZH_CONFIG||{}; return c.supabaseUrl && c.supabaseKey ? c : null;
 }
 function cacheKey(){ return state.org?.id ? `zenhogar_cloud_cache_${state.org.id}` : null; }
-function saveCache(){
-  const key=cacheKey();if(!key)return;
-  try{
-    localStorage.setItem(key,JSON.stringify({
-      products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,
-      fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,
-      suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,
-      promotions:state.promotions,at:new Date().toISOString()
-    }));
-  }catch(err){
-    // La memoria llena o restringida no debe detener el funcionamiento en línea.
-    console.warn('No se pudo guardar la copia local. Los datos siguen en la nube.',err?.name||'');
-  }
-}
+function saveCache(){ const key=cacheKey(); if(key) localStorage.setItem(key,JSON.stringify({products:state.products,sales:state.sales,closings:state.closings,expenses:state.expenses,fixedExpenses:state.fixedExpenses,fixedExpensePayments:state.fixedExpensePayments,suppliers:state.suppliers,purchases:state.purchases,cashMovements:state.cashMovements,promotions:state.promotions,at:new Date().toISOString()})); }
 function loadCache(){
-  const key=cacheKey();if(!key)return false;
-  try{
-    const raw=localStorage.getItem(key);
-    if(!raw)return false;
-    const data=JSON.parse(raw);
-    if(!data||typeof data!=='object'||!Array.isArray(data.products)||!Array.isArray(data.sales))return false;
-    state.products=data.products;state.sales=data.sales;state.closings=data.closings||[];
-    state.expenses=data.expenses||[];state.fixedExpenses=data.fixedExpenses||[];
-    state.fixedExpensePayments=data.fixedExpensePayments||[];state.suppliers=data.suppliers||[];
-    state.purchases=data.purchases||[];state.cashMovements=data.cashMovements||[];
-    state.promotions=data.promotions||[];renderAll();return true;
-  }catch(err){
-    // Una copia vieja o malformada no debe bloquear el acceso al sistema.
-    console.warn('Copia local no disponible:',err?.name||'');
-    return false;
-  }
+  const key=cacheKey(); if(!key)return false;
+  const data=JSON.parse(localStorage.getItem(key)||'null'); if(!data)return false;
+  state.products=data.products||[]; state.sales=data.sales||[]; state.closings=data.closings||[]; state.expenses=data.expenses||[]; state.fixedExpenses=data.fixedExpenses||[]; state.fixedExpensePayments=data.fixedExpensePayments||[]; state.suppliers=data.suppliers||[]; state.purchases=data.purchases||[]; state.cashMovements=data.cashMovements||[]; state.promotions=data.promotions||[]; renderAll(); return true;
 }
 function canAdmin(){ return ['owner','admin'].includes(state.role); }
 function canOwner(){ return state.role==='owner'; }
@@ -2735,7 +2591,7 @@ async function switchOrganization(id){
   try{
     if(state.channel){await state.client.removeChannel(state.channel);state.channel=null;}
     clearOrganizationState();state.org=next;state.role=next.role;localStorage.setItem('zenhogar_active_org_id',next.id);applyOrganizationUI();
-    loadCache();await loadAllData({silent:true});subscribeRealtime();setView('dashboard');$('#organizationDialog')?.close();toast(`Empresa activa: ${next.name}`,'success');
+    loadCache();await loadAllData({silent:true});subscribeRealtime();setView('dashboard',{historyMode:'replace'});$('#organizationDialog')?.close();toast(`Empresa activa: ${next.name}`,'success');
   }catch(err){toast(err.message||'No se pudo cambiar de empresa.','error');}
 }
 window.switchOrganization=switchOrganization;
@@ -2808,9 +2664,32 @@ function closeMobileMoreSheet(){
   overlay.classList.remove('open'); sheet.classList.remove('open'); document.documentElement.classList.remove('mobile-more-open');
   setTimeout(()=>{if(!overlay.classList.contains('open'))overlay.hidden=true;if(!sheet.classList.contains('open'))sheet.hidden=true;},220);
 }
-function setView(id){
+const ZH_APP_VIEWS=new Set(['dashboard','products','pricing','replenishment','promotions','sales','cash','expenses','fixedExpenses','purchases','reports','settings']);
+let zhViewHistoryReady=false;
+function initViewHistory(initialView='dashboard'){
+  if(zhViewHistoryReady)return;
+  zhViewHistoryReady=true;
+  try{
+    history.replaceState({...history.state,zhAppView:initialView,zhAppRoot:true},document.title,location.href);
+    history.pushState({zhAppView:initialView,zhAppGuard:true},document.title,location.href);
+  }catch(_e){}
+}
+function updateViewHistory(id,mode='push'){
+  if(mode==='none')return;
+  try{
+    if(!zhViewHistoryReady)initViewHistory('dashboard');
+    if(mode==='replace'){
+      history.replaceState({...history.state,zhAppView:id},document.title,location.href);
+      return;
+    }
+    if(history.state?.zhAppView===id)return;
+    history.pushState({zhAppView:id},document.title,location.href);
+  }catch(_e){}
+}
+function setView(id,{historyMode='push'}={}){
   const supplierAnchor=id==='suppliers';
   if(supplierAnchor)id='purchases';
+  if(!ZH_APP_VIEWS.has(id))id='dashboard';
   $$('.view').forEach(v=>v.classList.toggle('active',v.id===id));
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   if(window.matchMedia?.('(min-width: 761px)')?.matches){
@@ -2819,12 +2698,25 @@ function setView(id){
   renderMobileNavigation();
   const labels={dashboard:'Inicio',products:'Productos',pricing:'Costos y precios',replenishment:'Reposición',promotions:'Promociones',sales:'Ventas',cash:'Caja diaria',expenses:'Gastos',fixedExpenses:'Gastos fijos',purchases:'Compras',reports:'Reportes',settings:'Configuración'};
   $('#pageTitle').textContent=labels[id]||id; $('#sidebar').classList.remove('open'); closeMobileMoreSheet();
+  updateViewHistory(id,historyMode);
   if(supplierAnchor){
     requestAnimationFrame(()=>$('#purchaseSuppliersSection')?.scrollIntoView({behavior:'smooth',block:'start'}));
   }else{
     window.scrollTo({top:0,behavior:'smooth'});
   }
 }
+window.addEventListener('popstate',e=>{
+  const shell=$('#appShell');
+  if(!shell||shell.hidden)return;
+  let view=e.state?.zhAppView;
+  if(!ZH_APP_VIEWS.has(view))view='dashboard';
+  setView(view,{historyMode:'none'});
+  // Al llegar al inicio base, recreamos un estado protector para que el siguiente
+  // botón Atrás del celular no abandone accidentalmente la aplicación.
+  if(view==='dashboard'&&e.state?.zhAppRoot){
+    try{history.pushState({zhAppView:'dashboard',zhAppGuard:true},document.title,location.href);}catch(_e){}
+  }
+});
 function salesToday(){ return state.sales.filter(s=>saleLocalDate(s)===todayISO()); }
 function saleProfit(s){ return s.items.reduce((a,i)=>a+i.lineTotal-(i.unitCost*(i.qty/i.priceUnitQty))+Number(i.containerCostSaving||0),0); }
 function saleQty(s){ if(s.items.length===1){const i=s.items[0];return qtyText({unitKind:i.unitKind},i.qty);} return `${s.items.length} ítems`; }
@@ -2860,19 +2752,11 @@ function dashboardRenderWeekChart(){
   const host=$('#salesWeekChart');if(!host)return;
   const days=dashboardLastNDays(7).map(d=>({...d,total:dashboardSalesForISO(d.iso).reduce((a,s)=>a+Number(s.total||0),0)}));
   const max=Math.max(1,...days.map(d=>d.total));
-  host.innerHTML=days.map((d,index)=>{
+  host.innerHTML=days.map(d=>{
     const pct=Math.max(d.total>0?4:0,Math.round((d.total/max)*100));
     const label=d.date.toLocaleDateString('es-AR',{weekday:'short'}).replace('.','');
-    return `<button type="button" class="sales-week-col" data-week-index="${index}" aria-pressed="${index===6?'true':'false'}" aria-label="${esc(label)}: ${money(d.total)}"><span class="sales-week-value">${d.total?money(d.total):'$0'}</span><span class="sales-week-track"><span class="sales-week-bar" style="height:${pct}%"></span></span><span class="sales-week-label">${esc(label)}</span></button>`;
+    return `<div class="sales-week-col" title="${esc(label)} · ${money(d.total)}"><span class="sales-week-value">${d.total?money(d.total):'$0'}</span><div class="sales-week-track"><div class="sales-week-bar" style="height:${pct}%"></div></div><span class="sales-week-label">${esc(label)}</span></div>`;
   }).join('');
-  const selected=$('#salesWeekSelected');
-  if(selected)selected.textContent='Hoy · '+money(days[6].total);
-  host.querySelectorAll('[data-week-index]').forEach(btn=>btn.addEventListener('click',()=>{
-    const index=Number(btn.dataset.weekIndex),chosen=days[index];
-    if(!chosen)return;
-    host.querySelectorAll('[data-week-index]').forEach(b=>b.setAttribute('aria-pressed',b===btn?'true':'false'));
-    if(selected)selected.textContent=chosen.date.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'})+' · '+money(chosen.total);
-  }));
 }
 function dashboardRenderTopProducts(){
   const host=$('#dashboardTopProducts');if(!host)return;
@@ -2915,10 +2799,8 @@ function renderDashboard(){
   v13UpdateDashboardHero(ts.length);
   dashboardRenderComparison();
   dashboardRenderWeekChart();
-  dashboardRenderPremium();
   dashboardRenderTopProducts();
   dashboardRenderStockSummary(low,outOfStock);
-  zhSmartRender();
   $('#recentSales').innerHTML=state.sales.slice(0,6).map(s=>`<div class="list-row"><div><strong>${esc(saleProductLabel(s))}</strong><br><small>${fmtDate(s.soldAt)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong></div>`).join('')||'<div class="empty">Todavía no hay ventas.</div>';
   $('#stockAlerts').innerHTML=low.slice(0,8).map(p=>`<div class="list-row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.code)} · mínimo ${qtyText(p,p.minStock)}</small></div><span class="badge ${Number(p.stock||0)<=0?'out':'low'}">${Number(p.stock||0)<=0?'': 'Stock '}${qtyText(p,p.stock)}</span></div>`).join('')||'<div class="empty">Sin alertas de stock.</div>';
 }
@@ -3065,18 +2947,12 @@ function renderInventorySummary(){
   if($('#inventorySummaryLow'))$('#inventorySummaryLow').textContent=new Intl.NumberFormat('es-AR').format(low);
 }
 
-function renderProducts({tableOnly=false}={}){
+function renderProducts(){
   const q=$('#productSearch').value.toLowerCase().trim(), cat=$('#categoryFilter').value;
-  // Al buscar u ordenar sólo actualizamos la tabla. Los selectores de los formularios
-  // se regeneran únicamente cuando cambian los datos, no en cada pulsación del teclado.
-  if(!tableOnly){
-    const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
-    const cur=$('#categoryFilter').value;
-    $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
-    populateProductCategoryOptions();
-  }
+  const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'})); const cur=$('#categoryFilter').value;
+  $('#categoryFilter').innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+  populateProductCategoryOptions();
   let rows=state.products.filter(p=>(!cat||p.category===cat)&&(!q||`${p.code} ${p.barcode||''} ${p.name} ${p.category}`.toLowerCase().includes(q)));
-  rows=zhStockFilterRows(rows);
   const sort=$('#productSort')?.value||'recent';
   rows=rows.slice().sort((a,b)=>{
     const at=a.createdAt?new Date(a.createdAt).getTime():0,bt=b.createdAt?new Date(b.createdAt).getTime():0;
@@ -3086,15 +2962,12 @@ function renderProducts({tableOnly=false}={}){
     if(sort==='stockDesc')return Number(b.stock||0)-Number(a.stock||0)||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
     return String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
   });
-  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span>${canAdmin()&&p.unitKind==='unit'?`<span class="stock-quick"><button type="button" title="Restar 1 unidad y revisar antes de guardar" aria-label="Restar una unidad a ${esc(p.name)}" onclick="quickAdjustProductStock('${p.id}',-1)">−</button><button type="button" title="Sumar 1 unidad y revisar antes de guardar" aria-label="Sumar una unidad a ${esc(p.name)}" onclick="quickAdjustProductStock('${p.id}',1)">+</button></span>`:''}</td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
-  if(!tableOnly){
-    $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
-    $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
-    $('#addProductBtn').hidden=!canAdmin();
-    renderStockQuery();
-    renderInventorySummary();
-  }
-  zhStockUpdateControls(rows.length);
+  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
+  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
+  $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  $('#addProductBtn').hidden=!canAdmin();
+  renderStockQuery();
+  renderInventorySummary();
 }
 function replenishmentItems(){
   return state.products
@@ -3540,8 +3413,6 @@ function renderReports(){
   q('containerReport').innerHTML=a.containerCount?`<div class="list-row"><span>Envases reutilizados</span><strong>${a.containerCount}</strong></div><div class="list-row"><span>Descuento al cliente</span><strong>${money(a.containerDiscount)}</strong></div><div class="list-row"><span>Costo de envases evitado</span><strong>${money(a.containerSaving)}</strong></div><div class="list-row"><span>Impacto estimado en margen</span><strong class="${containerImpact>=0?'positive-text':'negative-text'}">${containerImpact>=0?'+ ':''}${money(containerImpact)}</strong></div>`:'<div class="empty">Todavía no hay ventas con envase propio en este período.</div>';
   q('categoryProfitReport').innerHTML=a.categoryRows.slice(0,8).map(x=>`<div class="report-category-row"><div><strong>${esc(x.name)}</strong><small>Ventas ${money(x.revenue)} · costo ${money(x.cost)}</small></div><div><strong>${money(x.profit)}</strong><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></div></div>`).join('')||'<div class="empty">Sin datos por categoría.</div>';
   q('profitabilityTable').innerHTML=a.productRows.map(x=>`<tr><td><strong>${esc(x.name)}</strong><small class="report-product-code">${esc(x.code||'Sin código')} · ${esc(x.category||'Sin categoría')}</small></td><td>${qtyText({unitKind:x.unitKind},x.qty)}</td><td>${money(x.revenue)}</td><td>${money(x.cost)}</td><td class="${x.profit>=0?'positive-text':'negative-text'}"><strong>${money(x.profit)}</strong></td><td><span class="margin-pill ${marginTone(x.margin,target)}">${pct(x.margin)}</span></td><td>${money(x.discount)}</td></tr>`).join('')||'<tr><td colspan="7"><div class="empty">No hay ventas para mostrar en este período.</div></td></tr>';
-  renderReportVisualCharts(a);
-  zhR2Render(a);
 }
 function exportProfitabilityCsv(){
   const a=reportAnalytics(),target=Number(state.reportMarginTarget||45),q=v=>`"${String(v??'').replaceAll('"','""')}"`,rows=[['Período',a.range.label],['Margen objetivo',`${target}%`],[],['Producto','Código','Categoría','Cantidad base','Unidad','Ventas netas','Costo efectivo','Ganancia','Margen %','Descuento promociones','Descuento envase','Descuentos totales'],...a.productRows.map(r=>[r.name,r.code,r.category,r.qty,unitLabel(r.unitKind),r.revenue,r.cost,r.profit,Number.isFinite(r.margin)?r.margin.toFixed(2):'',r.promoDiscount,r.containerDiscount,r.discount])];
@@ -3643,12 +3514,6 @@ function renderSettings(){
 
 function renderAll(){ renderDashboard(); renderProducts(); renderPricing(); renderReplenishment(); renderPromotions(); renderSales(); renderCash(); renderExpenses(); renderPurchases(); renderSuppliers(); renderReports(); renderSettings(); }
 
-// Estado de sincronización verificado: la conexión a internet NO equivale a
-// una consulta correcta a la nube. Evitamos mostrar "Nube conectada" si falló.
-let zhCloudSyncStatus='checking';
-let zhLastConnectedOrgId=null;
-let zhLoadVersion=0;
-
 // V13.3.1 · carga paginada para evitar cortes silenciosos de Supabase/PostgREST.
 async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
   const rows=[];
@@ -3664,10 +3529,7 @@ async function fetchAllPages(makeQuery,{pageSize=500,maxPages=200}={}){
 }
 
 async function loadAllData({silent=false}={}){
-  if(!state.org)return;
-  const requestedOrg=state.org.id,loadVersion=++zhLoadVersion;
-  if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
-  if(zhCloudSyncStatus!=='connected'||zhLastConnectedOrgId!==requestedOrg){zhCloudSyncStatus='checking';updateConnection();}
+  if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
       fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
@@ -3680,11 +3542,7 @@ async function loadAllData({silent=false}={}){
       fetchAllPages(()=>state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false}))
-    ]);
-    // Si cambió la empresa, o comenzó una carga más reciente, descartamos
-    // esta respuesta ANTES de tocar inventario, caja o ventas.
-    if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
-    for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
+    ]);for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
     state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),createdAt:r.created_at||null}));
     state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),promotionDiscountTotal:Number(r.promotion_discount_total||0),containerDiscountTotal:Number(r.container_discount_total||0),containerCostSavingTotal:Number(r.container_cost_saving_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionDiscountAmount:Number(i.promotion_discount_amount||0),containerDiscountAmount:Number(i.container_discount_amount||0),containerCostSaving:Number(i.container_cost_saving||0),ownContainerCount:Number(i.own_container_count||0),promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
@@ -3701,27 +3559,17 @@ async function loadAllData({silent=false}={}){
         state.client.from('access_invitations').select('id,email,role,expires_at,email_sent_at,last_error,accepted_at,revoked_at,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false}).limit(30),
         state.client.rpc('list_org_members',{p_org_id:state.org.id})
       ]);
-      if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
       if(inviteRes.error)throw inviteRes.error; if(memberRes.error)throw memberRes.error;
       state.accessInvites=(inviteRes.data||[]).map(i=>({id:i.id,email:i.email,role:i.role,expiresAt:i.expires_at,emailSentAt:i.email_sent_at,lastError:i.last_error||'',acceptedAt:i.accepted_at,revokedAt:i.revoked_at,createdAt:i.created_at}));
       state.accessMembers=(memberRes.data||[]).map(m=>({userId:m.user_id,email:m.email||'',fullName:m.full_name||'',role:m.role,joinedAt:m.joined_at}));
     }
-    zhCloudSyncStatus='connected';
-    zhLastConnectedOrgId=requestedOrg;
     saveCache();renderAll();updateConnection();
-  }catch(err){
-    if(zhLoadVersion!==loadVersion||state.org?.id!==requestedOrg)return;
-    console.error(err);
-    zhCloudSyncStatus='error';
-    if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia local.','error');
-    else toast('Error al cargar datos: '+(err.message||err),'error');
-    updateConnection();
-  }
+  }catch(err){console.error(err);if(loadCache())toast('No se pudo actualizar la nube. Se muestra la copia offline.','error');else toast('Error al cargar datos: '+(err.message||err),'error');}
 }
 
 function subscribeRealtime(){
   if(state.channel) state.client.removeChannel(state.channel);
-  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),700)};
+  const org=state.org.id, reload=()=>{clearTimeout(state.reloadTimer);state.reloadTimer=setTimeout(()=>loadAllData({silent:true}),350)};
   state.channel=state.client.channel(`zenhogar-${org}`)
     .on('postgres_changes',{event:'*',schema:'public',table:'products',filter:`organization_id=eq.${org}`},reload)
     .on('postgres_changes',{event:'*',schema:'public',table:'sales',filter:`organization_id=eq.${org}`},reload)
@@ -3742,17 +3590,12 @@ function subscribeRealtime(){
 }
 
 async function startApp(){
-  // Mostrar la firma visual al entrar, mientras se carga la empresa; nunca antes de autenticar.
-  zhBrandAssemblyStart();
-  try{
-    $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
-    const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
-    $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
-    setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
-  }finally{
-    // Ante éxito o error, la animación no deja la aplicación bloqueada.
-    await zhBrandAssemblyFinish();
-  }
+  $('#cloudGate').hidden=true;$('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;applyOrganizationUI();
+  const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
+  $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
+  setupSettingsAccordion();renderSettings();await loadAllData();subscribeRealtime();
+  initViewHistory('dashboard');
+  setView('dashboard',{historyMode:'none'});
 }
 async function handleSignedIn(user){
   state.user=user;setGateStep('gateLoading');
@@ -3899,7 +3742,6 @@ function resetSaleProductPicker(){
   $('#saleOwnContainerCount').value=0;
   $('#saleOwnContainerWrap').hidden=true;
   if($('#saleWeightQuickQty'))$('#saleWeightQuickQty').hidden=true;
-  zhOpsRenderHint('sale');
 }
 function updateSaleUnit(){
   const p=state.products.find(x=>x.id===$('#saleProduct').value), input=$('#saleQty'),wrap=$('#saleOwnContainerWrap'),containerInput=$('#saleOwnContainerCount'),hint=$('#saleOwnContainerHint'),weightQuick=$('#saleWeightQuickQty');
@@ -3907,7 +3749,6 @@ function updateSaleUnit(){
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
   if(weightQuick)weightQuick.hidden=p?.unitKind!=='weight';
-  zhOpsRenderHint('sale');
   // No reponer el valor 1 mientras el usuario está editando: permite borrar y escribir otra cantidad sin que el 1 quede "fijo".
   const eligible=!!p&&(Number(p.ownContainerDiscount||0)>0||Number(p.containerCost||0)>0);
   wrap.hidden=!eligible;
@@ -3948,7 +3789,6 @@ function resetPurchaseProductPicker(){
   $('#purchaseQtyUnit').textContent='u.';
   $('#purchaseCostUnit').textContent='unidad';
   $('#purchaseUnitCost').value='';
-  zhOpsRenderHint('purchase');
 }
 window.selectPurchaseProduct=id=>{
   const p=state.products.find(x=>x.id===id);if(!p)return;
@@ -3969,7 +3809,6 @@ function updatePurchaseUnit(){
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
   if(p){ $('#purchaseUnitCost').value=p.cost; if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1; }
-  zhOpsRenderHint('purchase');
 }
 function promoSelectedProducts(){return state.promoSelectedProductIds.map(id=>state.products.find(p=>p.id===id)).filter(Boolean);}
 function renderPromoProductPicker(){
@@ -4135,19 +3974,6 @@ window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
   $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); $('#pCategoryReference').hidden=true; $('#productDialog').showModal();
-};
-// Ajuste rápido seguro: sólo unidades enteras y con revisión explícita del formulario.
-// Nunca modifica Supabase hasta pulsar "Guardar producto".
-window.quickAdjustProductStock=(id,delta)=>{
-  if(!canAdmin())return toast('Tu rol no permite modificar el inventario.','error');
-  const p=state.products.find(x=>x.id===id);
-  if(!p||p.unitKind!=='unit'||![1,-1].includes(delta))return;
-  const next=Number(p.stock||0)+delta;
-  if(!Number.isSafeInteger(next)||next<0)return toast('El stock no puede quedar en negativo.','error');
-  window.editProduct(id);
-  const input=$('#pStock');
-  if(input){input.value=String(next);input.focus();}
-  $('#productModalTitle').textContent='Revisar ajuste de stock · '+p.name;
 };
 window.deleteProduct=async id=>{
   if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
@@ -4473,16 +4299,21 @@ $('#mobileMoreClose').onclick=closeMobileMoreSheet; $('#mobileMoreOverlay').oncl
 $$('.mobile-nav-slot').forEach(s=>s.addEventListener('change',()=>changeMobileNavSlot(Number(s.dataset.mobileNavSlot),s.value)));
 $('#resetMobileNavBtn').onclick=resetMobileNavigation;
 $$('[data-palette-choice]').forEach(b=>b.addEventListener('click',()=>applyPalette(b.dataset.paletteChoice)));
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); // Buscar con una pausa mínima evita reconstruir cientos de filas mientras
-// el usuario todavía está escribiendo. Filtrar y ordenar permanecen instantáneos.
-let zhStockSearchDebounce=0;
-function zhQueueStockSearch(){
-  clearTimeout(zhStockSearchDebounce);
-  zhStockSearchDebounce=setTimeout(()=>{zhStockSearchDebounce=0;renderProducts({tableOnly:true});},90);
+function adjustSaleQty(direction){
+  const input=$('#saleQty');
+  const p=state.products.find(x=>x.id===$('#saleProduct').value);
+  const whole=p?.unitKind==='unit';
+  const step=whole?1:(p?.unitKind==='weight'?0.25:0.1);
+  const min=whole?1:0.001;
+  let current=Number(input.value);
+  if(!Number.isFinite(current)||current<=0)current=min;
+  let next=current+(direction*step);
+  if(next<min)next=min;
+  if(!whole)next=Math.round(next*1000)/1000;
+  input.value=whole?String(Math.round(next)):String(next);
+  input.dispatchEvent(new Event('input',{bubbles:true}));
 }
-$('#productSearch').oninput=zhQueueStockSearch;
-$('#categoryFilter').onchange=()=>renderProducts({tableOnly:true});
-$('#productSort').onchange=()=>renderProducts({tableOnly:true}); $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQtyMinus').onclick=()=>adjustSaleQty(-1); $('#saleQtyPlus').onclick=()=>adjustSaleQty(1); $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
 $('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',()=>{savePurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';});$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$$('[data-weight-qty]').forEach(b=>b.onclick=()=>{const p=state.products.find(x=>x.id===$('#saleProduct').value);if(!p||p.unitKind!=='weight')return;$('#saleQty').value=b.dataset.weightQty;updateSaleUnit();$('#saleQty').dispatchEvent(new Event('input',{bubbles:true}));});$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#whatsappReceiptBtn').onclick=()=>shareReceiptWhatsApp(state.activeReceipt);$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
@@ -4576,23 +4407,10 @@ window.addEventListener('pagehide',()=>{appWentToBackground=true;},{passive:true
 window.addEventListener('pageshow',e=>{if(e.persisted||appWentToBackground){appWentToBackground=false;restoreDialogsAfterAppResume();}},{passive:true});
 
 function updateConnection(){
-  const online=navigator.onLine;
-  const currentCompanyVerified=!!state.org&&zhLastConnectedOrgId===state.org.id;
-  const status=online?(zhCloudSyncStatus==='connected'&&!currentCompanyVerified?'checking':zhCloudSyncStatus):'offline';
-  const label=status==='connected'?'Nube conectada':status==='error'?'Sin sincronizar':status==='offline'?'Sin conexión':'Comprobando nube';
-  const detail=status==='connected'?'Última actualización correcta':status==='error'?'No se pudo actualizar desde la nube':status==='offline'?'Podés consultar la última copia local disponible':'Verificando la sincronización';
-  const el=$('#connectionStatus');
-  if(el){
-    el.classList.toggle('offline',status==='offline'||status==='error');
-    el.innerHTML=`<span></span> ${label}`;
-  }
-  if($('#cloudStatusTitle'))$('#cloudStatusTitle').textContent=label;
-  if($('#cloudStatusText'))$('#cloudStatusText').textContent=detail;
-  if($('#settingsSyncState'))$('#settingsSyncState').textContent=status==='connected'?'Conectada':status==='error'?'Error de sincronización':status==='offline'?'Offline':'Comprobando';
+  const online=navigator.onLine,el=$('#connectionStatus'); if(el){el.classList.toggle('offline',!online);el.innerHTML=`<span></span> ${online?'Nube conectada':'Sin conexión'}`;}
+  if($('#cloudStatusTitle'))$('#cloudStatusTitle').textContent=online?'Nube conectada':'Modo offline'; if($('#cloudStatusText'))$('#cloudStatusText').textContent=online?'Sincronización activa':'Mostrando caché local'; if($('#settingsSyncState'))$('#settingsSyncState').textContent=online?'Conectada':'Offline';
 }
-window.addEventListener('online',()=>{zhCloudSyncStatus='checking';updateConnection();if(state.org)loadAllData({silent:true});});
-window.addEventListener('offline',updateConnection);
-updateConnection();
+window.addEventListener('online',()=>{updateConnection(); if(state.org)loadAllData({silent:true});}); window.addEventListener('offline',updateConnection); updateConnection();
 
 // PWA
 // Service worker disabled in single-file GitHub Pages build.
