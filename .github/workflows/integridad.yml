@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   integridad:
-    name: Validar código y cálculos
+    name: Validar sistema autocontenido
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -24,4 +24,4 @@ jobs:
         run: |
           node tests/regresion.cjs
           node tests/optimizacion.cjs
-          node tests/logo-armado.cjs
+          node tests/intro.cjs
