@@ -11,21 +11,27 @@ test('SVG completo de Zen Hogar preservado',()=>{
   const svg=html.match(/<svg class="zh-brand-mark"[\s\S]*?<\/svg>/)?.[0]||'';
   assert.ok(svg,'falta SVG de marca');
   for(const name of ['outer','inner','house','leaf-left','leaf-right','sun','windows'])assert.ok(svg.includes('zh-logo-'+name),'falta '+name);
-  assert.equal((svg.match(/class="zh-v8-dot /g)||[]).length,3,'deben existir tres puntos');
+  const classicDots=(svg.match(/class="zh-v8-dot /g)||[]).length;
+  const nativeDots=(svg.match(/class="zh-v8-dot"/g)||[]).length;
+  assert.ok(classicDots===3||nativeDots===3,'deben existir tres puntos');
 });
 
-test('Animación actual es lineal en punto y línea',()=>{
-  assert.ok(html.includes('progress=raw'),'el avance actual debe ser lineal');
-  assert.ok(!html.includes('easeOut*.72+smooth*.28'),'no debe quedar el easing combinado anterior');
+test('Motor de recorrido lineal válido',()=>{
+  const native=(html.match(/<animateMotion\b/g)||[]).length===3 &&
+               (html.match(/attributeName="stroke-dashoffset"/g)||[]).length>=3 &&
+               html.includes('calcMode="linear"');
+  const jsLinear=html.includes('progress=raw')&&!html.includes('easeOut*.72+smooth*.28');
+  assert.ok(native||jsLinear,'la intro debe usar avance lineal nativo o JS lineal');
 });
 
-test('Rutas y puntos comparten reloj requestAnimationFrame',()=>{
-  const start=html.indexOf('function zhBrandAssemblyStart()');
-  assert.ok(start>=0,'falta función de inicio');
-  const chunk=html.slice(start,start+7000);
-  assert.ok(chunk.includes('requestAnimationFrame(update)'),'falta RAF');
-  assert.ok(chunk.includes("item.dot.setAttribute('transform'"),'el punto no se actualiza en el mismo loop');
-  assert.ok(chunk.includes('item.route.style.strokeDashoffset'),'la línea no se actualiza en el mismo loop');
+test('Punto y línea comparten una única referencia temporal',()=>{
+  const native=(html.match(/<animateMotion\b/g)||[]).length===3 &&
+               html.includes('svg.setCurrentTime(0)') &&
+               html.includes('svg.unpauseAnimations()');
+  const js=html.includes("item.dot.setAttribute('transform'") &&
+           html.includes('item.route.style.strokeDashoffset') &&
+           html.includes('requestAnimationFrame(update)');
+  assert.ok(native||js,'punto y línea no comparten el mismo motor temporal');
 });
 
 test('Respeta movimiento reducido',()=>{
