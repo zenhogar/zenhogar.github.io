@@ -257,6 +257,26 @@ dialog{overflow-x:hidden}
 .stock-query-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.stock-query-metric{padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.78);min-width:0}.stock-query-metric span,.stock-query-metric strong,.stock-query-metric small{display:block}.stock-query-metric span{font-size:9px;text-transform:uppercase;letter-spacing:.055em;color:var(--muted);font-weight:850}.stock-query-metric strong{font-size:18px;margin:6px 0 2px;letter-spacing:-.025em;overflow-wrap:anywhere}.stock-query-metric small{font-size:9px;color:var(--muted)}
 .stock-query-detail{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}.stock-query-detail .list-row{padding:9px 1px}.stock-query-detail .empty{padding:10px 2px;text-align:left}.stock-query-more{font-size:10px;color:var(--muted);padding-top:7px}
 @media(max-width:760px){.stock-query-card{padding:17px}.stock-query-row{grid-template-columns:1fr}.stock-query-clear{width:100%}.stock-query-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.stock-query-head p{font-size:11px}}
+/* V13.3.5.21 · Consulta de stock compacta + búsqueda por palabras */
+.stock-query-card.stock-query-compact{padding:14px 16px;margin-bottom:13px;border-radius:18px}
+.stock-query-compact .stock-query-head{margin-bottom:9px;align-items:center}
+.stock-query-compact .stock-query-head h3{font-size:16px;margin:2px 0 0}
+.stock-query-compact .stock-query-head .section-kicker{font-size:9px}
+.stock-query-compact .stock-query-row{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.stock-query-compact .stock-query-row .search-field{min-height:42px}
+.stock-query-compact .stock-query-row input{min-height:42px!important;font-size:13px!important}
+.stock-query-compact .stock-query-clear{min-height:42px;padding:8px 13px;font-size:11px}
+.stock-query-compact .stock-query-quick{margin:8px 0 0;gap:6px}
+.stock-query-compact .stock-query-chip{padding:6px 9px;font-size:9px}
+.stock-query-compact .stock-query-summary{margin-top:10px;gap:7px}
+.stock-query-compact .stock-query-metric{padding:8px 10px;border-radius:12px}
+.stock-query-compact .stock-query-metric span{font-size:8px}
+.stock-query-compact .stock-query-metric strong{font-size:15px;margin:3px 0 0}
+.stock-query-compact .stock-query-detail{margin-top:8px;padding-top:8px}
+.stock-query-compact.is-empty .stock-query-summary,.stock-query-compact.is-empty .stock-query-detail{display:none}
+@media(max-width:760px){.stock-query-card.stock-query-compact{padding:13px 14px}.stock-query-compact .stock-query-row{grid-template-columns:minmax(0,1fr) auto}.stock-query-compact .stock-query-clear{width:auto;min-width:72px}.stock-query-compact .stock-query-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.stock-query-compact .stock-query-clear{padding-inline:10px;min-width:64px}.stock-query-compact .stock-query-chip{font-size:8.5px}}
+
 
 
 
@@ -1492,28 +1512,27 @@ html[data-theme="dark"] .sale-qty-btn{background:var(--surface-soft)!important;c
           </div>
           <div class="product-create-actions"><button class="primary product-create-btn" id="addProductTopBtn" type="button">+ Nuevo producto</button></div>
         </article>
-        <article class="card stock-query-card">
+        <article class="card stock-query-card stock-query-compact is-empty">
           <div class="stock-query-head">
-            <div><span class="section-kicker">Consulta de stock · V12.2.2</span><h3>¿Cuánto tengo de un producto o grupo?</h3><p>Buscá por nombre, marca o categoría. Podés escribir, por ejemplo, “aerosoles Saphirus”, “sahumerios” o el nombre de un producto específico.</p></div>
-            <div class="stock-query-icon" aria-hidden="true">⌕</div>
+            <div><span class="section-kicker">Consulta rápida</span><h3>Consultar stock</h3></div>
           </div>
           <div class="stock-query-row">
-            <label class="search-field"><span>⌕</span><input id="stockQuerySearch" type="search" autocomplete="off" placeholder="Ej.: aerosoles Saphirus, sahumerios, lavandina..." /></label>
-            <button class="secondary stock-query-clear" id="stockQueryClear" type="button">Limpiar consulta</button>
+            <label class="search-field"><span>⌕</span><input id="stockQuerySearch" type="search" autocomplete="off" placeholder="Buscar producto, marca o categoría..." /></label>
+            <button class="secondary stock-query-clear" id="stockQueryClear" type="button">Limpiar</button>
           </div>
           <div class="stock-query-quick" id="stockQueryQuick">
-            <button class="stock-query-chip" type="button" data-stock-query="AEROSOL SAPHIRUS">Aerosoles Saphirus</button>
-            <button class="stock-query-chip" type="button" data-stock-query="DIFUSOR SAPHIRUS">Difusores Saphirus</button>
-            <button class="stock-query-chip" type="button" data-stock-query="PERFUME TEXTIL SAPHIRUS">Perfumes textiles Saphirus</button>
+            <button class="stock-query-chip" type="button" data-stock-query="AEROSOL SAPHIRUS">Aerosoles</button>
+            <button class="stock-query-chip" type="button" data-stock-query="DIFUSOR SAPHIRUS">Difusores</button>
+            <button class="stock-query-chip" type="button" data-stock-query="PERFUME TEXTIL SAPHIRUS">Textiles</button>
             <button class="stock-query-chip" type="button" data-stock-query="SAHUMERIOS">Sahumerios</button>
           </div>
           <div class="stock-query-summary">
-            <div class="stock-query-metric"><span>Stock total</span><strong id="stockQueryUnits">—</strong><small>Unidades o medida disponible</small></div>
-            <div class="stock-query-metric"><span>Productos distintos</span><strong id="stockQueryProducts">—</strong><small>Variantes que coinciden</small></div>
-            <div class="stock-query-metric"><span>Valor de venta</span><strong id="stockQuerySaleValue">—</strong><small>Al precio actual</small></div>
-            <div class="stock-query-metric"><span>Valor a costo</span><strong id="stockQueryCostValue">—</strong><small>Según costos cargados</small></div>
+            <div class="stock-query-metric"><span>Stock</span><strong id="stockQueryUnits">—</strong></div>
+            <div class="stock-query-metric"><span>Productos</span><strong id="stockQueryProducts">—</strong></div>
+            <div class="stock-query-metric"><span>Venta</span><strong id="stockQuerySaleValue">—</strong></div>
+            <div class="stock-query-metric"><span>Costo</span><strong id="stockQueryCostValue">—</strong></div>
           </div>
-          <div class="stock-query-detail" id="stockQueryDetail"><div class="empty">Escribí una consulta o elegí un acceso rápido.</div></div>
+          <div class="stock-query-detail" id="stockQueryDetail"><div class="empty">Escribí para consultar stock.</div></div>
         </article>
 
         <article class="inventory-summary-card" aria-label="Resumen de inventario">
@@ -2855,9 +2874,8 @@ function stockQueryNorm(v){
 }
 function stockQueryToken(v){
   const t=stockQueryNorm(v);
-  const aliases={AEROSOLES:'AEROSOL',DIFUSORES:'DIFUSOR',SAHUMERIOS:'SAHUMERIO',PERFUMES:'PERFUME',TEXTILES:'TEXTIL',LIMPIADORES:'LIMPIADOR',PRODUCTOS:'PRODUCTO',UNIDADES:'UNIDAD'};
+  const aliases={AEROSOLES:'AEROSOL',DIFUSORES:'DIFUSOR',SAHUMERIOS:'SAHUMERIO',PERFUMES:'PERFUME',TEXTILES:'TEXTIL',LIMPIADORES:'LIMPIADOR',PRODUCTOS:'PRODUCTO',UNIDADES:'UNIDAD',ZAFIRUS:'SAPHIRUS',SAFIRUS:'SAPHIRUS',SAPHIRUS:'SAPHIRUS'};
   if(aliases[t])return aliases[t];
-  if(t==='SAPHIRUS')return 'SAPHIRUS';
   return t.endsWith('S')&&t.length>4?t.slice(0,-1):t;
 }
 function stockQueryWords(v){
@@ -2883,11 +2901,12 @@ function stockQueryTotalText(rows){
 function renderStockQuery(){
   const input=$('#stockQuerySearch'); if(!input)return;
   const query=input.value.trim();
-  const detail=$('#stockQueryDetail');
+  const detail=$('#stockQueryDetail'),card=input.closest('.stock-query-card');
+  card?.classList.toggle('is-empty',!query);
   $$('.stock-query-chip').forEach(b=>b.classList.toggle('active',stockQueryNorm(b.dataset.stockQuery)===stockQueryNorm(query)));
   if(!query){
     $('#stockQueryUnits').textContent='—';$('#stockQueryProducts').textContent='—';$('#stockQuerySaleValue').textContent='—';$('#stockQueryCostValue').textContent='—';
-    detail.innerHTML='<div class="empty">Escribí una consulta o elegí un acceso rápido.</div>';return;
+    detail.innerHTML='<div class="empty">Escribí para consultar stock.</div>';return;
   }
   const rows=state.products.filter(p=>stockQueryMatches(p,query));
   const saleValue=rows.reduce((a,p)=>a+Number(p.price||0)*(Number(p.stock||0)/Number(p.priceUnitQty||unitFactor(p.unitKind)||1)),0);
@@ -3763,15 +3782,25 @@ function normalizeSaleSearch(value){
 }
 function saleProductMatches(query){
   const q=normalizeSaleSearch(query);
-  if(!q)return [];
-  return state.products.filter(p=>{
-    if(Number(p.stock||0)<=0)return false;
-    return normalizeSaleSearch(`${p.code} ${p.barcode||''} ${p.name} ${p.category}`).includes(q);
-  }).sort((a,b)=>{
-    const ak=normalizeSaleSearch(`${a.code} ${a.barcode||''} ${a.name}`),bk=normalizeSaleSearch(`${b.code} ${b.barcode||''} ${b.name}`);
-    const as=ak.startsWith(q)?0:1,bs=bk.startsWith(q)?0:1;
-    return as-bs||a.name.localeCompare(b.name,'es');
-  }).slice(0,10);
+  const wanted=stockQueryWords(query);
+  if(!q||!wanted.length)return [];
+  const ranked=[];
+  state.products.forEach(p=>{
+    if(Number(p.stock||0)<=0)return;
+    const raw=`${p.code||''} ${p.barcode||''} ${p.name||''} ${p.category||''}`;
+    const corpus=stockQueryWords(raw),exact=new Set(corpus);
+    const matches=wanted.every(w=>exact.has(w)||(w.length>=3&&corpus.some(c=>c.startsWith(w))));
+    if(!matches)return;
+    const nameWords=stockQueryWords(p.name||''),nameSet=new Set(nameWords);
+    let score=0;
+    wanted.forEach(w=>{if(!nameSet.has(w))score+=1;});
+    const normalizedRaw=normalizeSaleSearch(raw),normalizedName=normalizeSaleSearch(p.name||'');
+    if(normalizedName.startsWith(q))score-=4;
+    else if(normalizedRaw.includes(q))score-=2;
+    score+=Math.max(0,corpus.length-wanted.length)*0.01;
+    ranked.push({p,score});
+  });
+  return ranked.sort((a,b)=>a.score-b.score||a.p.name.localeCompare(b.p.name,'es')).slice(0,10).map(x=>x.p);
 }
 function renderSaleProductSearch(){
   const input=$('#saleProductSearch'),box=$('#saleProductResults');
