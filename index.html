@@ -3636,18 +3636,29 @@ function subscribeRealtime(){
 }
 
 async function startApp(){
-  $('#cloudGate').hidden=true;$('#appShell').hidden=true;$('#mobileSaleBtn').hidden=true;$('#mobileNav').hidden=true;
-  zhBrandAssemblyStart();
+  // V13.3.5.19 · preparar toda la app antes de reproducir la intro.
+  // Evita que carga de Supabase/renderAll compitan con la animación y provoquen micro-trabas.
+  $('#appShell').hidden=true;$('#mobileSaleBtn').hidden=true;$('#mobileNav').hidden=true;
   applyOrganizationUI();
   const locale=state.org?.locale||'es-AR',tz=state.org?.timezone||undefined;
   $('#todayLabel').textContent=new Intl.DateTimeFormat(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz}).format(new Date());$('#cashDate').value=todayISO();$('#cashMovementDate').value=todayISO();
   setupSettingsAccordion();renderSettings();
+
+  // Trabajo pesado primero, mientras sigue visible el estado de carga del acceso.
   await loadAllData();
-  subscribeRealtime();
   initViewHistory('dashboard');
   setView('dashboard',{historyMode:'none'});
+
+  // Dejar que el navegador termine layout/paint antes de iniciar la intro.
+  await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+
+  // Intro en una ventana limpia: sin fetch, renderAll ni realtime en paralelo.
+  zhBrandAssemblyStart();
+  $('#cloudGate').hidden=true;
   await zhBrandAssemblyFinish();
+
   $('#appShell').hidden=false;$('#mobileSaleBtn').hidden=false;$('#mobileNav').hidden=false;
+  subscribeRealtime();
 }
 async function handleSignedIn(user){
   state.user=user;setGateStep('gateLoading');
