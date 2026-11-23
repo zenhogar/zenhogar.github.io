@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.2.6 · accesos rápidos 250 g y 500 g -->
+<!-- Gestión Cloud V13.3.6.2 · comprobantes de presentaciones + precios redondos en Supabase -->
 <!-- V13.3.1 · filtros de ventas -->
 <!-- V13.3.6 · presentaciones y carrito mixto con precios validados en servidor -->
 <html lang="es">
@@ -2279,7 +2279,30 @@ const ZH_LOGO_WATERMARK_DATA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV
 function receiptNumberText(s){ return String(s?.receiptNumber||'SN').padStart(6,'0'); }
 function safeBusinessFileName(){return businessName().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'')||'Empresa';}
 function receiptPdfFilename(s){ return `${safeBusinessFileName()}_Comp_${receiptNumberText(s)}.pdf`; }
-function receiptPdfMoney(v){ const locale=state.org?.locale||'es-AR',currency=state.org?.currency||'ARS';return new Intl.NumberFormat(locale,{style:'currency',currency,maximumFractionDigits:0}).format(Number(v||0)); }
+// En comprobantes el importe se muestra con centavos sólo cuando existen,
+// evitando diferencias aparentes entre los renglones y el total.
+function receiptMoney(v){
+  const num=Number(v||0),cents=Math.abs(num-Math.round(num))>.000001;
+  const locale=state.org?.locale||'es-AR',currency=state.org?.currency||'ARS';
+  return new Intl.NumberFormat(locale,{style:'currency',currency,
+    minimumFractionDigits:cents?2:0,maximumFractionDigits:cents?2:0}).format(num);
+}
+function receiptPdfMoney(v){return receiptMoney(v);}
+function receiptPresentationCount(i){
+  if(!i?.presentationKey || !i?.presentationLabel)return null;
+  const qty=Number(i.qty||0),base=Number(i.priceUnitQty||0),n=qty/base;
+  return base>0 && n>0 && Number.isFinite(n) && Math.abs(n-Math.round(n))<.00001?Math.round(n):null;
+}
+function receiptItemTitle(i){
+  const n=receiptPresentationCount(i);
+  const name=String(i.productName||'Producto');
+  return n!==null?`${name} · ${n} × ${i.presentationLabel}`:name+(i.presentationLabel?' · '+i.presentationLabel:'');
+}
+function receiptItemDetail(i,formatMoney=receiptMoney){
+  const n=receiptPresentationCount(i);
+  if(n!==null)return `${qtyText({unitKind:i.unitKind},i.qty)} total · ${formatMoney(i.unitPrice)} por envase`;
+  return `${qtyText({unitKind:i.unitKind},i.qty)} × ${formatMoney(i.unitPrice)}/${unitLabel(i.unitKind)}`;
+}
 function buildReceiptPdf(s){
   const JsPDF=window.jspdf?.jsPDF;
   if(!JsPDF) throw new Error('El generador de PDF no pudo cargarse. Revisá la conexión e intentá nuevamente.');
@@ -2302,15 +2325,14 @@ function buildReceiptPdf(s){
   doc.setTextColor(...ink); doc.setFontSize(7.5); doc.setFont('helvetica','bold');
   doc.text('DETALLE',6,y); y+=5;
   for(const i of s.items){
-    const name=String(i.productName||'Producto')+(i.presentationLabel?' · '+i.presentationLabel:'');
+    const name=receiptItemTitle(i);
     doc.setTextColor(...ink); doc.setFont('helvetica','bold'); doc.setFontSize(8);
     const nameLines=doc.splitTextToSize(name,48);
     doc.text(nameLines,6,y);
     doc.text(receiptPdfMoney(i.lineTotal),74,y,{align:'right'});
     y+=nameLines.length*4;
     doc.setFont('helvetica','normal'); doc.setFontSize(6.8); doc.setTextColor(...muted);
-    const qty=qtyText({unitKind:i.unitKind},i.qty);
-    doc.text(`${qty} x ${receiptPdfMoney(i.unitPrice)}/${unitLabel(i.unitKind)}`,6,y);
+    doc.text(receiptItemDetail(i,receiptPdfMoney),6,y);
     y+=4;
     if(zhSalePromoLabel(i)){
       doc.setTextColor(...accent); doc.setFont('helvetica','bold'); doc.setFontSize(6.5);
@@ -2353,8 +2375,8 @@ function buildReceiptFallbackBlob(s){
   rows.push({t:fmtDate(s.soldAt),size:7});
   rows.push({t:'--------------------------------',size:7});
   for(const i of s.items){
-    rows.push({t:String(i.productName||'Producto')+(i.presentationLabel?' · '+i.presentationLabel:''),size:8,b:true});
-    rows.push({t:`${qtyText({unitKind:i.unitKind},i.qty)} x ${receiptPdfMoney(i.unitPrice)}/${unitLabel(i.unitKind)}   ${receiptPdfMoney(i.lineTotal)}`,size:7});
+    rows.push({t:receiptItemTitle(i),size:8,b:true});
+    rows.push({t:`${receiptItemDetail(i,receiptPdfMoney)}   ${receiptPdfMoney(i.lineTotal)}`,size:7});
     if(zhSalePromoLabel(i)) rows.push({t:`Promo: ${zhSalePromoLabel(i)}`,size:7,b:true});
     if(Number(i.ownContainerCount||0)>0) rows.push({t:`Envase propio: ${i.ownContainerCount}  - ${receiptPdfMoney(i.containerDiscountAmount||0)}`,size:7,b:true});
     rows.push({t:'--------------------------------',size:7});
@@ -2450,7 +2472,7 @@ function buildReceiptStyledBlob(s){
   const PT_PER_MM=72/25.4, width=80*PT_PER_MM, margin=6*PT_PER_MM;
   const ink=[24,61,53], accent=[102,160,141], accentDark=[72,126,109], muted=[121,135,129], line=[222,230,226], mint=[240,248,244], blue=[239,247,250];
   const itemMetrics=(s.items||[]).map(i=>{
-    const name=receiptPdfWrapText((i.productName||'Producto')+(i.presentationLabel?' · '+i.presentationLabel:''),30);
+    const name=receiptPdfWrapText(receiptItemTitle(i),30);
     const promo=zhSalePromoLabel(i)?receiptPdfWrapText(`Promo: ${zhSalePromoLabel(i)}`,43):[];
     const own=Number(i.ownContainerCount||0)>0?1:0;
     return {i,name,promo,h:name.length*10+11+promo.length*8+own*8+9};
@@ -2491,8 +2513,7 @@ function buildReceiptStyledBlob(s){
       if(idx===0)text(lineTotal,width-margin,top,7.8,true,ink,'right');
       top+=3.8*PT_PER_MM;
     });
-    const qty=qtyText({unitKind:i.unitKind},i.qty);
-    text(`${qty} × ${receiptPdfMoney(i.unitPrice)}/${unitLabel(i.unitKind)}`,margin,top,6.2,false,muted); top+=3.6*PT_PER_MM;
+    text(receiptItemDetail(i,receiptPdfMoney),margin,top,6.2,false,muted); top+=3.6*PT_PER_MM;
     for(const ln of m.promo){text(ln,margin,top,6.1,true,accentDark);top+=3.25*PT_PER_MM;}
     if(Number(i.ownContainerCount||0)>0){
       fillRect(margin,top-2.1*PT_PER_MM,width-margin*2,5.1*PT_PER_MM,blue);
@@ -3207,7 +3228,7 @@ function exportSalesCsv(){
   sales.forEach(s=>{
     const items=(s.items||[]).length?s.items:[{}];
     items.forEach(i=>rows.push([
-      saleLocalDate(s),s.receiptNumber||'',s.payment||'',i.productCode||'',(i.productName||'')+(i.presentationLabel?' · '+i.presentationLabel:''),csvNumber(i.qty||0),unitLabel(i.unitKind||'unit'),csvNumber(i.unitPrice||0),csvNumber(i.lineTotal||0),csvNumber(i.discountAmount||0),csvNumber(s.subtotal||0),csvNumber(s.discountTotal||0),csvNumber(s.total||0),csvNumber(saleProfit(s))
+      saleLocalDate(s),s.receiptNumber||'',s.payment||'',i.productCode||'',receiptItemTitle(i),csvNumber(i.qty||0),unitLabel(i.unitKind||'unit'),csvNumber(i.unitPrice||0),csvNumber(i.lineTotal||0),csvNumber(i.discountAmount||0),csvNumber(s.subtotal||0),csvNumber(s.discountTotal||0),csvNumber(s.total||0),csvNumber(saleProfit(s))
     ]));
   });
   downloadCsv(exportFileName('Ventas'),['Fecha','Comprobante','Medio de pago','Código producto','Producto','Cantidad','Unidad','Precio unitario','Total línea','Descuento línea','Subtotal venta','Descuento venta','Total venta','Ganancia estimada'],rows);
@@ -4288,14 +4309,14 @@ function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>
 function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.unitCost*(i.qty/p.priceUnitQty);total+=sub;return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)}</small></div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${p.id}')">✕</button></div>`;}).join('');preview.innerHTML=`<div class="sale-total-row"><span>${state.purchaseCart.length} productos</span><strong>${money(total)}</strong></div>`;submit.disabled=false;}
 window.openReceipt=id=>{
   const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;
-  const items=s.items.map(i=>`<div class="receipt-line"><div><strong>${esc(i.productName)}${i.presentationLabel?' · '+esc(i.presentationLabel):''}</strong><small>${qtyText({unitKind:i.unitKind},i.qty)} × ${money(i.unitPrice)}/${unitLabel(i.unitKind)}${zhSalePromoLabel(i)?` · ${esc(zhSalePromoLabel(i))}`:''}${Number(i.ownContainerCount||0)>0?` · ♻ ${i.ownContainerCount} envase${i.ownContainerCount===1?'':'s'} propio${i.ownContainerCount===1?'':'s'}`:''}</small>${Number(i.containerDiscountAmount||0)>0?`<small class="discount-note">Descuento envase: - ${money(i.containerDiscountAmount)}</small>`:''}</div><strong>${money(i.lineTotal)}</strong></div>`).join('');
-  const discounts=s.discountTotal>0?`<div class="list-row"><span>Subtotal</span><strong>${money(s.subtotal)}</strong></div>${Number(s.promotionDiscountTotal||0)>0?`<div class="list-row discount-note"><span>Descuento promociones</span><strong>- ${money(s.promotionDiscountTotal)}</strong></div>`:''}${Number(s.containerDiscountTotal||0)>0?`<div class="list-row discount-note"><span>Descuento por envase propio</span><strong>- ${money(s.containerDiscountTotal)}</strong></div>`:''}`:'';
-  const brandVisual=isZenHogarOrg()?`<img class="receipt-preview-watermark" src="${ZH_LOGO_WATERMARK_DATA}" alt=""><img class="receipt-preview-logo" src="${ZH_LOGO_DATA}" alt="${esc(businessName())}">`:`<div class="receipt-preview-business">${esc(orgInitials(businessName()))}</div>`;$('#receiptContent').innerHTML=`<div class="receipt-card">${brandVisual}<div class="receipt-head"><strong>${esc(businessName())}</strong><p>Comprobante no fiscal</p><p>Venta #${receiptNumberText(s)}</p></div><div class="receipt-meta">${fmtDate(s.soldAt)} · ${esc(s.payment)}</div><div class="receipt-lines">${items}</div>${discounts}<div class="receipt-total"><span>Total</span><span>${money(s.total)}</span></div><div class="receipt-footer">Gracias por tu compra · ${esc(businessName())}</div></div>`;$('#receiptDialog').showModal();
+  const items=s.items.map(i=>`<div class="receipt-line"><div><strong>${esc(receiptItemTitle(i))}</strong><small>${esc(receiptItemDetail(i))}${zhSalePromoLabel(i)?` · ${esc(zhSalePromoLabel(i))}`:''}${Number(i.ownContainerCount||0)>0?` · ♻ ${i.ownContainerCount} envase${i.ownContainerCount===1?'':'s'} propio${i.ownContainerCount===1?'':'s'}`:''}</small>${Number(i.containerDiscountAmount||0)>0?`<small class="discount-note">Descuento envase: - ${receiptMoney(i.containerDiscountAmount)}</small>`:''}</div><strong>${receiptMoney(i.lineTotal)}</strong></div>`).join('');
+  const discounts=s.discountTotal>0?`<div class="list-row"><span>Subtotal</span><strong>${receiptMoney(s.subtotal)}</strong></div>${Number(s.promotionDiscountTotal||0)>0?`<div class="list-row discount-note"><span>Descuento promociones</span><strong>- ${receiptMoney(s.promotionDiscountTotal)}</strong></div>`:''}${Number(s.containerDiscountTotal||0)>0?`<div class="list-row discount-note"><span>Descuento por envase propio</span><strong>- ${receiptMoney(s.containerDiscountTotal)}</strong></div>`:''}`:'';
+  const brandVisual=isZenHogarOrg()?`<img class="receipt-preview-watermark" src="${ZH_LOGO_WATERMARK_DATA}" alt=""><img class="receipt-preview-logo" src="${ZH_LOGO_DATA}" alt="${esc(businessName())}">`:`<div class="receipt-preview-business">${esc(orgInitials(businessName()))}</div>`;$('#receiptContent').innerHTML=`<div class="receipt-card">${brandVisual}<div class="receipt-head"><strong>${esc(businessName())}</strong><p>Comprobante no fiscal</p><p>Venta #${receiptNumberText(s)}</p></div><div class="receipt-meta">${fmtDate(s.soldAt)} · ${esc(s.payment)}</div><div class="receipt-lines">${items}</div>${discounts}<div class="receipt-total"><span>Total</span><span>${receiptMoney(s.total)}</span></div><div class="receipt-footer">Gracias por tu compra · ${esc(businessName())}</div></div>`;$('#receiptDialog').showModal();
 };
 function receiptText(s){
-  const lines=s.items.map(i=>qtyText({unitKind:i.unitKind},i.qty)+' x '+i.productName+(i.presentationLabel?' · '+i.presentationLabel:'')+' - '+money(i.lineTotal)+(zhSalePromoLabel(i)?' ('+zhSalePromoLabel(i)+')':'')+(Number(i.ownContainerCount||0)>0?' · '+i.ownContainerCount+' envase(s) propio(s)':'' )).join('\n');
-  const discounts=(Number(s.promotionDiscountTotal||0)>0?'\nDescuento promociones: - '+money(s.promotionDiscountTotal):'')+(Number(s.containerDiscountTotal||0)>0?'\nDescuento envase propio: - '+money(s.containerDiscountTotal):'');
-  return businessName().toUpperCase()+'\nComprobante no fiscal #'+receiptNumberText(s)+'\n'+fmtDate(s.soldAt)+'\n\n'+lines+(s.discountTotal>0?'\n\nSubtotal: '+money(s.subtotal)+discounts:'')+'\nTOTAL: '+money(s.total)+'\nMedio de pago: '+s.payment+'\n\nGracias por tu compra.';
+  const lines=s.items.map(i=>receiptItemTitle(i)+' · '+receiptItemDetail(i)+' - '+receiptMoney(i.lineTotal)+(zhSalePromoLabel(i)?' ('+zhSalePromoLabel(i)+')':'')+(Number(i.ownContainerCount||0)>0?' · '+i.ownContainerCount+' envase(s) propio(s)':'' )).join('\n');
+  const discounts=(Number(s.promotionDiscountTotal||0)>0?'\nDescuento promociones: - '+receiptMoney(s.promotionDiscountTotal):'')+(Number(s.containerDiscountTotal||0)>0?'\nDescuento envase propio: - '+receiptMoney(s.containerDiscountTotal):'');
+  return businessName().toUpperCase()+'\nComprobante no fiscal #'+receiptNumberText(s)+'\n'+fmtDate(s.soldAt)+'\n\n'+lines+(s.discountTotal>0?'\n\nSubtotal: '+receiptMoney(s.subtotal)+discounts:'')+'\nTOTAL: '+receiptMoney(s.total)+'\nMedio de pago: '+s.payment+'\n\nGracias por tu compra.';
 }
 function shareReceiptWhatsApp(s){
   if(!s)return;
