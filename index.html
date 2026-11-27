@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Gestión Cloud V13.3.6.3 · búsqueda por palabras en compras + modo escritorio compacto -->
+<!-- Gestión Cloud V13.3.6.5 · búsqueda por palabras en compras + modo escritorio compacto -->
 <!-- V13.3.1 · filtros de ventas -->
 <!-- V13.3.6 · presentaciones y carrito mixto con precios validados en servidor -->
 <html lang="es">
@@ -1252,6 +1252,15 @@ html[data-theme="dark"] .sale-qty-btn{background:var(--surface-soft)!important;c
 @media(max-width:520px){.zh-startup-stage{width:min(88vw,380px)}.zh-intro-dot.d1{animation-name:zhDotOrbit1m}.zh-intro-dot.d2{animation-name:zhDotOrbit2m}.zh-intro-dot.d3{animation-name:zhDotOrbit3m}@keyframes zhDotOrbit1m{0%{opacity:0;transform:rotate(-95deg) translateX(36vw) scale(.35)}12%{opacity:1}72%{opacity:1;transform:rotate(205deg) translateX(36vw) scale(1)}100%{opacity:0;transform:rotate(265deg) translateX(36vw) scale(.4)}}@keyframes zhDotOrbit2m{0%{opacity:0;transform:rotate(25deg) translateX(33.5vw) scale(.35)}12%{opacity:1}72%{opacity:1;transform:rotate(325deg) translateX(33.5vw) scale(1)}100%{opacity:0;transform:rotate(385deg) translateX(33.5vw) scale(.4)}}@keyframes zhDotOrbit3m{0%{opacity:0;transform:rotate(145deg) translateX(31vw) scale(.35)}12%{opacity:1}72%{opacity:1;transform:rotate(445deg) translateX(31vw) scale(1)}100%{opacity:0;transform:rotate(505deg) translateX(31vw) scale(.4)}}}
 @media(prefers-reduced-motion:reduce){.zh-startup-stage,.zh-startup-logo,.zh-intro-orbit,.zh-intro-dot,.zh-startup-name,.zh-startup-sub,.zh-startup-stage:after{animation-duration:.01ms!important;animation-delay:0ms!important}}
 
+
+/* V13.3.6.5 · Cálculo de IVA en costo con vista previa sin modificar precios de venta. */
+.zh-vat-preview{min-width:0;background:var(--surface,#f4f8f5);border:1px solid var(--border,#dce8e2);border-radius:12px;padding:10px 12px;color:var(--text,#27413c);font-size:.82rem;line-height:1.5;grid-column:1/-1}
+.zh-vat-preview strong{font-weight:800}
+.zh-iva-line{display:block;margin-top:4px;color:var(--muted,#6d827b);font-size:.76rem;line-height:1.4}
+.zh-vat-total-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px;font-size:.83rem;color:var(--muted,#677c75)}
+.zh-vat-total-row strong{font-variant-numeric:tabular-nums;color:var(--text,#27413c)}
+@media(max-width:560px){.zh-vat-preview{font-size:.79rem}}
+
 </style>
 <style id="zh-v81-exact-style">/* V13.3.5.14 · Restauración exacta de la animación V13.3.5.10 */
 #zhStartupIntro{display:none!important}
@@ -1281,7 +1290,7 @@ html[data-theme="dark"] .zh-pres-choice[aria-pressed="true"]{background:var(--ac
 @media(max-width:700px){.zh-pres-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 <style id="zh-v13363-purchases-and-compact-desktop">
-/* V13.3.6.3 · Compra: ayuda visual liviana y listado navegable. */
+/* V13.3.6.5 · Compra: ayuda visual liviana y listado navegable. */
 .purchase-smart-search-hint{display:block;margin:6px 2px 0;font-size:10px;line-height:1.4;color:var(--muted)}
 .purchase-product-results:not([hidden]){max-height:min(330px,42dvh);overflow-y:auto;overscroll-behavior:contain}
 
@@ -1326,7 +1335,33 @@ html[data-theme="dark"] .zh-pres-choice[aria-pressed="true"]{background:var(--ac
 }
 /* No modificar la presentación móvil normal, que conserva su barra inferior. */
 </style>
-  <!-- V13.3.6.3 · buscador de compras inteligente y escritorio compacto -->
+  <!-- V13.3.6.5 · buscador de compras inteligente y escritorio compacto -->
+
+<style id="zhQuickPurchaseStyles">
+.zh-purchase-new-prompt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;margin-top:11px;border:1px dashed #a8cfc0;border-radius:15px;background:linear-gradient(135deg,#f0f9f5,#f8faf9)}
+.zh-purchase-new-prompt[hidden],.zh-similar-products[hidden],#qnpCategoryNewWrap[hidden]{display:none!important}
+.zh-purchase-new-prompt strong{font-size:12px;display:block;color:var(--ink)}
+.zh-purchase-new-prompt small{display:block;color:var(--muted);margin-top:3px;font-size:11px}
+.zh-purchase-new-button{white-space:nowrap;font-size:12px;padding:10px 14px}
+.zh-quick-product-form{max-width:100%}.zh-quick-product-form .form-grid{margin-top:12px}
+.zh-quick-info{display:flex;align-items:start;gap:10px;padding:11px 12px;border:1px solid #d7eae0;border-radius:13px;background:#f1f8f4;color:#386756;font-size:12px;line-height:1.55}
+.zh-quick-icon{font-weight:900;font-size:18px}.zh-quick-grid label{min-width:0}
+.zh-quick-grid .full{grid-column:1/-1}.zh-quick-grid small{line-height:1.4}
+.zh-similar-products{padding:11px 12px;background:#fffaf0;border:1px solid #ebdbb8;border-radius:13px}
+.zh-similar-products strong{font-size:12px;color:#6e5527}.zh-similar-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.zh-similar-row span{min-width:0;flex:1;font-size:12px;color:var(--ink)}.zh-similar-row button{white-space:nowrap;padding:7px 10px;font-size:11px}
+.zh-quick-price-note{color:var(--muted);font-size:11px}.zh-quick-more{border:1px solid var(--line);padding:12px 14px;margin-top:14px;border-radius:13px}
+.zh-quick-more summary{font-size:12px;font-weight:750;cursor:pointer}.zh-quick-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:17px}
+.zh-quick-cart-tag{display:inline-block;padding:3px 7px;margin-top:5px;border-radius:6px;background:#edf6f0;color:#2d7452;font-size:10px;font-weight:800}
+.zh-quick-cart-extra{display:block;color:var(--muted);font-size:11px;line-height:1.3;margin-top:4px}
+.zh-quick-edit-btn{background:transparent;border:0;color:#2b795b;font-weight:800;font-size:11px;padding:5px 3px;cursor:pointer}
+html[data-theme="dark"] .zh-purchase-new-prompt,html[data-theme="dark"] .zh-quick-info{background:#172720;border-color:#2d5944;color:#c0e0ce}
+html[data-theme="dark"] .zh-similar-products{background:#29251a;border-color:#635736}
+html[data-theme="dark"] .zh-similar-products strong{color:#e8cb82}
+html[data-theme="dark"] .zh-quick-cart-tag{background:#1c3b2e;color:#8ed7b1}
+@media(max-width:700px){.zh-purchase-new-prompt{flex-direction:column;align-items:stretch}.zh-purchase-new-button{width:100%}.zh-quick-actions{grid-template-columns:1fr 1fr}.zh-quick-product-form .form-grid{grid-template-columns:1fr 1fr}.zh-quick-product-form .form-grid .full{grid-column:1/-1}}
+@media(max-width:385px){.zh-quick-product-form .form-grid{grid-template-columns:1fr}.zh-quick-product-form .form-grid label{grid-column:1/-1}.zh-quick-actions{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <section id="zhBrandAssembly" class="zh-brand-assembly" hidden aria-hidden="true" aria-label="Bienvenido a Zen Hogar Gestión" role="status"><div class="zh-brand-content"><svg class="zh-brand-mark" viewBox="0 0 1000 1000" role="img" aria-label="Dos círculos y el logo original de Zen Hogar se dibujan con tres puntos"><defs><linearGradient id="zhLogoMint" x1="0" y1="0" x2="0.75" y2="1"><stop stop-color="#56c58f"/><stop offset=".46" stop-color="#64cba0"/><stop offset="1" stop-color="#80dab8"/></linearGradient><radialGradient id="zhDotGlow"><stop offset="0" stop-color="#baffdf" stop-opacity=".90"/><stop offset=".38" stop-color="#8fffd3" stop-opacity=".42"/><stop offset="1" stop-color="#8fffd3" stop-opacity="0"/></radialGradient><path id="zhLogo-ring-dark" fill-rule="evenodd" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66ZM467,87 509,85 549,88 595,96 628,105 664,118 699,135 731,154 768,182 812,225 838,257 863,296 885,343 899,385 910,430 914,463 914,486 915,488 914,528 908,567 899,606 882,653 865,688 846,721 813,764 783,795 763,813 740,830 699,856 654,877 621,889 579,899 529,906 454,904 419,899 376,889 339,876 303,859 268,838 230,809 192,773 160,733 135,694 118,660 102,619 89,569 84,529 85,449 92,410 100,380 117,333 131,303 156,263 183,227 221,190 248,167 292,139 326,122 385,101 419,93Z"/><path id="zhLogo-house-leaves" fill-rule="evenodd" d="M125,408 119,457 119,484 125,529 132,557 149,593 175,628 192,645 212,661 227,671 253,684 270,691 303,699 351,700 368,696 627,696 652,701 679,701 720,694 753,680 777,667 808,643 826,623 845,598 861,566 868,548 876,509 877,449 873,411 871,406 865,404 821,406 772,416 750,424 718,440 683,466 656,438 656,325 654,324 588,324 585,368 502,286 496,286 312,463 285,444 266,433 225,416 175,406 132,404 126,406ZM848,460 850,462 850,498 843,536 829,574 817,593 804,610 778,635 761,647 742,657 713,667 696,671 677,674 657,674 656,671ZM148,460 339,669 341,671 339,673 304,671 263,660 246,652 225,639 213,630 191,608 173,582 164,563 154,537 149,514 147,489 147,462ZM845,430 846,433 747,533 640,652 639,651 639,611 641,588 647,565 660,533 667,520 683,501 714,473 748,454 774,444 803,436ZM151,430 195,436 223,444 243,451 264,462 286,476 315,502 335,531 346,553 351,570 358,619 358,649 356,651 345,640 230,515 149,432ZM500,337 656,489 635,519 619,558 611,604 611,631 610,632 611,634 611,666 610,667 386,667 385,666 385,610 382,583 377,558 369,535 360,516 341,490Z"/><path id="zhLogo-leaf-left" fill-rule="evenodd" d="M148,462 149,503 157,541 165,563 174,582 192,608 213,628 225,638 263,658 298,669 315,671 339,671ZM152,432 270,557 346,640 356,649 355,601 350,570 345,553 335,533 313,502 286,477 264,463 243,453 195,437Z"/><path id="zhLogo-leaf-right" fill-rule="evenodd" d="M848,462 725,596 657,673 677,673 696,670 713,666 742,656 773,638 803,610 816,593 829,571 841,540 848,498ZM845,432 803,437 757,451 735,462 714,475 686,500 673,515 661,533 648,565 640,611 640,649 746,533Z"/><path id="zhLogo-sun" fill-rule="evenodd" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/><path id="zhLogo-windows" fill-rule="evenodd" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/></defs><g class="zh-v8-original" aria-hidden="true"><circle class="zh-v8-plate" cx="500" cy="496" r="418"/><g class="zh-logo-layer zh-logo-outer"><use href="#zhLogo-ring-dark" fill="#033446"/></g><g class="zh-logo-layer zh-logo-inner"><circle cx="500" cy="496" r="346" stroke="url(#zhLogoMint)" stroke-width="51" fill="none"/></g><g class="zh-logo-layer zh-logo-house"><use href="#zhLogo-house-leaves" fill="#033446"/></g><g class="zh-logo-layer zh-logo-leaf-left"><use href="#zhLogo-leaf-left" fill="url(#zhLogoMint)"/></g><g class="zh-logo-layer zh-logo-leaf-right"><use href="#zhLogo-leaf-right" fill="url(#zhLogoMint)"/></g><g class="zh-logo-layer zh-logo-sun"><use href="#zhLogo-sun" fill="#033446"/></g><g class="zh-logo-layer zh-logo-windows"><use href="#zhLogo-windows" fill="#033446"/></g></g><g class="zh-v8-traces" aria-hidden="true"><path id="zhV8TraceOuter" class="zh-v8-trace zh-v8-trace-outer" pathLength="100" d="M511,62 468,63 419,70 380,79 339,92 313,102 257,132 233,149 195,180 169,207 141,240 119,274 98,315 87,343 70,401 62,447 59,485 61,529 66,569 74,605 87,647 101,680 127,727 152,763 173,787 204,819 243,850 282,875 321,894 367,911 402,920 449,928 490,930 533,929 583,923 617,915 653,903 682,891 735,863 772,837 798,815 822,790 856,748 882,708 902,669 915,636 928,591 936,544 938,505 937,462 932,421 923,382 910,342 899,316 875,269 856,242 830,209 792,171 770,153 733,127 690,104 652,88 604,74 561,66Z"><animate attributeName="stroke-dashoffset" from="100" to="0" begin=".10s" dur="1.20s" calcMode="linear" fill="freeze"/></path><path id="zhV8TraceInner" class="zh-v8-trace zh-v8-trace-inner" pathLength="100" d="M846,496 A346,346 0 1 1 154,496 A346,346 0 1 1 846,496"><animate attributeName="stroke-dashoffset" from="100" to="0" begin=".30s" dur="1.16s" calcMode="linear" fill="freeze"/></path><path id="zhV8TraceHouse" class="zh-v8-trace zh-v8-trace-house" pathLength="100" d="M125,408 119,457 119,484 125,529 132,557 149,593 175,628 192,645 212,661 227,671 253,684 270,691 303,699 351,700 368,696 627,696 652,701 679,701 720,694 753,680 777,667 808,643 826,623 845,598 861,566 868,548 876,509 877,449 873,411 871,406 865,404 821,406 772,416 750,424 718,440 683,466 656,438 656,325 654,324 588,324 585,368 502,286 496,286 312,463 285,444 266,433 225,416 175,406 132,404 126,406Z"><animate attributeName="stroke-dashoffset" from="100" to="0" begin=".62s" dur="1.20s" calcMode="linear" fill="freeze"/></path><path class="zh-v8-trace zh-v8-trace-leaf zh-v8-trace-leaf-left" pathLength="100" d="M148,462 149,503 157,541 165,563 174,582 192,608 213,628 225,638 263,658 298,669 C312,673 326,673 339,671ZM152,432 270,557 346,640 356,649 355,601 350,570 345,553 335,533 313,502 286,477 264,463 243,453 195,437Z"/><path class="zh-v8-trace zh-v8-trace-leaf zh-v8-trace-leaf-right" pathLength="100" d="M848,462 725,596 657,673 C664,674 671,674 677,673 696,670 713,666 742,656 773,638 803,610 816,593 829,571 841,540 848,498ZM845,432 803,437 757,451 735,462 714,475 686,500 673,515 661,533 648,565 640,611 640,649 746,533Z"/><path class="zh-v8-trace zh-v8-trace-sun" pathLength="100" d="M334,287 315,294 303,304 295,320 294,333 299,350 309,361 324,368 341,369 356,364 371,351 377,337 378,325 373,307 363,295 350,289Z"/><path class="zh-v8-trace zh-v8-trace-windows" pathLength="100" d="M509,545 509,589 510,591 557,591 558,589 558,545ZM440,545 440,591 488,591 488,545ZM509,479 509,522 510,523 557,523 558,522 558,479 557,477 510,477ZM440,477 440,523 488,523 488,477Z"/></g><g class="zh-v8-points" aria-hidden="true"><g class="zh-v8-mover zh-v8-mover-a"><circle class="zh-v8-dot-glow" cx="0" cy="0" r="27"/><circle class="zh-v8-dot" cx="0" cy="0" r="11"/><animateMotion begin=".10s" dur="1.20s" calcMode="linear" fill="freeze"><mpath href="#zhV8TraceOuter"/></animateMotion></g><g class="zh-v8-mover zh-v8-mover-b"><circle class="zh-v8-dot-glow" cx="0" cy="0" r="27"/><circle class="zh-v8-dot" cx="0" cy="0" r="11"/><animateMotion begin=".30s" dur="1.16s" calcMode="linear" fill="freeze"><mpath href="#zhV8TraceInner"/></animateMotion></g><g class="zh-v8-mover zh-v8-mover-c"><circle class="zh-v8-dot-glow" cx="0" cy="0" r="27"/><circle class="zh-v8-dot" cx="0" cy="0" r="11"/><animateMotion begin=".62s" dur="1.20s" calcMode="linear" fill="freeze"><mpath href="#zhV8TraceHouse"/></animateMotion></g></g></svg><h2 class="zh-brand-wordmark">Zen Hogar</h2><p class="zh-brand-subtitle">GESTIÓN</p></div></section>
@@ -2024,7 +2059,9 @@ html[data-theme="dark"] .zh-pres-choice[aria-pressed="true"]{background:var(--ac
           </div>
         </div>
         <label>Unidad de manejo<select id="pUnitKind"><option value="unit">Unidad</option><option value="volume">Litro</option><option value="weight">Kilogramo</option></select><small class="unit-hint">Los fraccionados se guardan internamente en ml o gramos.</small></label>
-        <label>Costo por <span id="pCostUnitLabel">unidad</span><input id="pCost" type="number" min="0" step="0.01" required /></label>
+        <label>Costo base por <span id="pCostUnitLabel">unidad</span><input id="pCost" type="number" min="0" step="0.01" required placeholder="Importe antes de sumar IVA" /></label>
+        <label>IVA sobre el costo<select id="pCostVatRate"><option value="0">No sumar IVA · costo final</option><option value="21">21 % · general</option><option value="10.5">10,5 %</option><option value="27">27 %</option><option value="5">5 %</option><option value="2.5">2,5 %</option></select></label>
+        <div class="zh-vat-preview full" id="pCostVatPreview" aria-live="polite">El IVA es opcional: si el costo ya lo incluye, dejá «No sumar IVA».</div>
         <label>Precio por <span id="pPriceUnitLabel">unidad</span><input id="pPrice" type="number" min="0" step="0.01" required /></label>
         <label>Stock actual (<span id="pStockUnitLabel">u.</span>)<input id="pStock" type="number" min="0" step="0.001" required /></label>
         <label>Stock mínimo (<span id="pMinUnitLabel">u.</span>)<input id="pMinStock" type="number" min="0" step="0.001" required /></label>
@@ -2112,11 +2149,52 @@ html[data-theme="dark"] .zh-pres-choice[aria-pressed="true"]{background:var(--ac
     <select id="purchaseProduct" hidden></select>
     <div class="purchase-product-selected" id="purchaseSelectedProduct" hidden></div>
     <div class="purchase-product-results" id="purchaseProductResults" hidden></div>
+    <div id="purchaseNewProductPrompt" class="zh-purchase-new-prompt" hidden>
+      <div><strong id="purchaseNewPromptTitle">¿El producto no está registrado?</strong>
+        <small>Crealo aquí y sumalo a esta compra, sin perder tu carrito.</small></div>
+      <button class="secondary zh-purchase-new-button" id="purchaseCreateProductBtn" type="button">＋ Nuevo producto</button>
+    </div>
   </div>
   <label>Cantidad (<span id="purchaseQtyUnit">u.</span>)<input id="purchaseQty" type="number" min="0.001" step="0.001" value="1" /></label>
-  <label>Costo por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" /></label>
+  <label>Costo base por <span id="purchaseCostUnit">unidad</span><input id="purchaseUnitCost" type="number" min="0" step="0.01" placeholder="Sin IVA adicional" /></label>
+  <label>IVA sobre el costo<select id="purchaseVatRate"><option value="0">No sumar IVA · costo final</option><option value="21">21 % · general</option><option value="10.5">10,5 %</option><option value="27">27 %</option><option value="5">5 %</option><option value="2.5">2,5 %</option></select></label>
+  <div class="zh-vat-preview" id="purchaseCostVatPreview" aria-live="polite">Si el precio del proveedor ya incluye IVA, dejá la primera opción.</div>
   <button class="secondary sale-add-btn" id="purchaseAddItemBtn" type="button">+ Agregar</button>
 </div><div class="purchase-cart" id="purchaseCartList"></div><div class="sale-preview" id="purchasePreview"></div><button class="primary full modal-primary" id="purchaseSubmitBtn" value="default" type="submit">Confirmar compra</button></form></dialog>
+
+  <!-- V13.3.6.5: Alta rápida de productos que se registran atómicamente al confirmar la compra. -->
+  <dialog id="quickPurchaseProductDialog">
+    <form method="dialog" id="quickPurchaseProductForm" class="modal-card zh-quick-product-form">
+      <div class="modal-head">
+        <div><span class="section-kicker">Compras · Producto no registrado</span><h2 id="quickProductTitle">Agregar producto nuevo</h2></div>
+        <button class="icon-btn" type="button" id="quickProductCancelX" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="zh-quick-info"><span class="zh-quick-icon">✦</span><span>El artículo quedará <strong>en este carrito</strong>. Se registrará en el inventario y se sumará su stock <strong>recién cuando confirmes la compra</strong>.</span></div>
+      <div class="form-grid zh-quick-grid">
+        <label class="full">Nombre del producto <input id="qnpName" required minlength="3" maxlength="180" placeholder="Ej.: Jabón de tocador Dove 90 g" autocomplete="off"></label>
+        <div id="qnpSimilar" class="zh-similar-products full" hidden></div>
+        <label class="full">Categoría <select id="qnpCategory" required></select></label>
+        <label class="full" id="qnpCategoryNewWrap" hidden>Nueva categoría <input id="qnpCategoryNew" maxlength="100" placeholder="Ej.: HIGIENE PERSONAL"></label>
+        <label>Unidad de manejo <select id="qnpUnitKind"><option value="unit">Unidades / paquetes</option><option value="volume">Litros</option><option value="weight">Kilogramos</option></select></label>
+        <label>Cantidad comprada (<span id="qnpQtyUnit">u.</span>) <input id="qnpQty" type="number" value="1" min="1" step="1" required></label>
+        <label>Costo base por <span id="qnpCostUnit">unidad</span> <input id="qnpCost" type="number" min="0" step="0.01" required placeholder="Ej.: 2300"></label>
+        <label>IVA a sumar<select id="qnpVatRate"><option value="0">No sumar IVA · costo final</option><option value="21">21 % · general</option><option value="10.5">10,5 %</option><option value="27">27 %</option><option value="5">5 %</option><option value="2.5">2,5 %</option></select></label>
+        <div class="zh-vat-preview full" id="qnpCostVatPreview" aria-live="polite">Si el costo ya tiene IVA, elegí «No sumar IVA».</div>
+        <label>Precio de venta por <span id="qnpPriceUnit">unidad</span> <input id="qnpPrice" type="number" min="0" step="0.01" placeholder="Podés definirlo después"></label>
+        <small class="zh-quick-price-note full" id="qnpPriceNote">Opcional. Si no lo completás, quedará pendiente y no podrá venderse hasta definirlo en Inventario.</small>
+      </div>
+      <details class="zh-quick-more"><summary>Datos adicionales (opcionales)</summary>
+        <div class="form-grid zh-quick-grid">
+          <label>Código interno <input id="qnpCode" maxlength="48" placeholder="Se genera automáticamente"></label>
+          <label>Código de barras <input id="qnpBarcode" maxlength="100" placeholder="Opcional" autocomplete="off"></label>
+          <label>Stock mínimo (<span id="qnpMinUnit">u.</span>) <input id="qnpMin" type="number" value="0" min="0" step="1"></label>
+          <label>Stock objetivo (<span id="qnpTargetUnit">u.</span>) <input id="qnpTarget" type="number" value="0" min="0" step="1"></label>
+        </div>
+      </details>
+      <div class="zh-quick-actions"><button class="secondary" id="quickProductCancelBtn" type="button">Cancelar</button><button class="primary" id="quickProductSaveBtn" type="submit">Agregar al carrito</button></div>
+    </form>
+  </dialog>
+
   <dialog id="promotionDialog">
     <form method="dialog" id="promotionForm" class="modal-card promo-modal-card">
       <div class="modal-head"><div><span class="section-kicker">Oferta automática</span><h2 id="promotionModalTitle">Nueva promoción</h2></div><button type="button" class="icon-btn" aria-label="Cerrar" onclick="this.closest('dialog').close()">✕</button></div>
@@ -3120,8 +3198,8 @@ function renderProducts(){
     if(sort==='stockDesc')return Number(b.stock||0)-Number(a.stock||0)||String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
     return String(a.name).localeCompare(String(b.name),'es',{sensitivity:'base'});
   });
-  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${money(p.price)} / ${unitLabel(p.unitKind)}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
-  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
+  $('#productsTable').innerHTML=rows.map(p=>`<tr><td data-label="Código">${esc(p.code)}${p.barcode?`<br><small>▣ ${esc(p.barcode)}</small>`:''}</td><td data-label="Producto"><strong>${esc(p.name)}</strong><br><small>${unitWord(p.unitKind)}${Number(p.ownContainerDiscount||0)>0?` · ♻ ${money(p.ownContainerDiscount)} desc.`:''}</small></td><td data-label="Categoría">${esc(p.category)}</td><td data-label="Costo">${money(p.cost)} / ${unitLabel(p.unitKind)}</td><td data-label="Precio">${p.pricePending?'<span class="badge low">Pendiente</span>':`${money(p.price)} / ${unitLabel(p.unitKind)}`}</td><td data-label="Stock"><span class="badge ${Number(p.stock||0)<=0?'out':(p.stock<=p.minStock?'low':'')}">${qtyText(p,p.stock)}</span></td><td data-label="Mínimo">${qtyText(p,p.minStock)}</td><td data-label="Acciones">${canAdmin()?`<button class="action-btn" aria-label="Editar" onclick="editProduct('${p.id}')">✎</button><button class="action-btn" aria-label="Archivar" onclick="deleteProduct('${p.id}')">⌫</button>`:'<small>Solo lectura</small>'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">No hay productos.</td></tr>';
+  $('#saleProduct').innerHTML='<option value="">Seleccionar producto</option>'+state.products.filter(p=>p.stock>0&&!p.pricePending).map(p=>`<option value="${p.id}">${esc(p.name)} · stock ${qtyText(p,p.stock)} · ${money(p.price)}/${unitLabel(p.unitKind)}</option>`).join('');
   $('#pPreferredSupplier').innerHTML='<option value="">Sin proveedor habitual</option>'+state.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#addProductBtn').hidden=!canAdmin();
   renderStockQuery();
@@ -3690,25 +3768,25 @@ async function loadAllData({silent=false}={}){
   if(!state.org)return;if(!navigator.onLine){if(loadCache()&&!silent)toast('Mostrando la última copia guardada en este dispositivo.');updateConnection();return;}
   try{
     const [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes]=await Promise.all([
-      fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,price,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,sale_presentation_options,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
+      fetchAllPages(()=>state.client.from('products').select('id,code,barcode,name,category,cost,cost_net,cost_vat_rate,price,price_pending,stock,min_stock,target_stock,unit_kind,price_unit_qty,preferred_supplier_id,container_cost,own_container_discount,sale_presentation_options,created_at,suppliers!products_preferred_supplier_id_fkey(name)').eq('organization_id',state.org.id).eq('active',true).order('name')),
       fetchAllPages(()=>state.client.from('sales').select('id,receipt_number,payment,total,subtotal,discount_total,promotion_discount_total,container_discount_total,container_cost_saving_total,sold_at,status,sale_items(id,product_id,presentation_key,presentation_label,combo_promotion_names,quantity,unit_price,unit_cost,price_unit_qty,line_total,discount_amount,promotion_discount_amount,container_discount_amount,container_cost_saving,own_container_count,products(name,code,unit_kind),promotions(name))').eq('organization_id',state.org.id).eq('status','completed').order('sold_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('cash_closings').select('id,business_date,counted,expected,difference,notes').eq('organization_id',state.org.id).order('business_date',{ascending:false})),
       fetchAllPages(()=>state.client.from('expenses').select('id,category,description,amount,payment,expense_at,status').eq('organization_id',state.org.id).eq('status','completed').order('expense_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('fixed_expenses').select('id,name,category,amount,payment,due_day,notes,active,created_at,updated_at').eq('organization_id',state.org.id).eq('active',true).order('due_day').order('name')),
       fetchAllPages(()=>state.client.from('fixed_expense_payments').select('id,fixed_expense_id,period,amount,payment,paid_at,expense_id,created_at').eq('organization_id',state.org.id).order('period',{ascending:false})),
       fetchAllPages(()=>state.client.from('suppliers').select('id,name,phone,email,notes').eq('organization_id',state.org.id).eq('active',true).order('name')),
-      fetchAllPages(()=>state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false})),
+      fetchAllPages(()=>state.client.from('purchases').select('id,supplier_id,payment,total,notes,purchased_at,status,suppliers(name),purchase_items(id,product_id,quantity,unit_cost,net_unit_cost,vat_rate,vat_unit_amount,price_unit_qty,products(name,code,unit_kind))').eq('organization_id',state.org.id).eq('status','completed').order('purchased_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('cash_movements').select('id,business_date,kind,amount,notes,created_at').eq('organization_id',state.org.id).order('created_at',{ascending:false})),
       fetchAllPages(()=>state.client.from('promotions').select('id,product_id,name,rule_type,min_qty,promo_price,payment,starts_at,ends_at,active,created_at,promotion_products(product_id)').eq('organization_id',state.org.id).eq('active',true).order('created_at',{ascending:false}))
     ]);for(const r of [pRes,sRes,cRes,eRes,fxRes,fxPayRes,supRes,purRes,movRes,promoRes])if(r.error)throw r.error;
-    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),price:Number(r.price),stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),salePresentationOptions:Array.isArray(r.sale_presentation_options)?r.sale_presentation_options:[],createdAt:r.created_at||null}));
+    state.products=(pRes.data||[]).map(r=>({id:r.id,code:r.code,barcode:r.barcode||'',name:r.name,category:r.category||'',cost:Number(r.cost),costNet:r.cost_net===null?null:Number(r.cost_net),costVatRate:Number(r.cost_vat_rate||0),price:Number(r.price),pricePending:!!r.price_pending,stock:Number(r.stock),minStock:Number(r.min_stock),targetStock:Number(r.target_stock||0),unitKind:r.unit_kind||'unit',priceUnitQty:Number(r.price_unit_qty||1),preferredSupplierId:r.preferred_supplier_id||null,preferredSupplierName:r.suppliers?.name||'',containerCost:Number(r.container_cost||0),ownContainerDiscount:Number(r.own_container_discount||0),salePresentationOptions:Array.isArray(r.sale_presentation_options)?r.sale_presentation_options:[],createdAt:r.created_at||null}));
     state.sales=(sRes.data||[]).map(r=>({id:r.id,receiptNumber:r.receipt_number,payment:r.payment,total:Number(r.total),subtotal:Number(r.subtotal||r.total),discountTotal:Number(r.discount_total||0),promotionDiscountTotal:Number(r.promotion_discount_total||0),containerDiscountTotal:Number(r.container_discount_total||0),containerCostSavingTotal:Number(r.container_cost_saving_total||0),soldAt:r.sold_at,items:(r.sale_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitPrice:Number(i.unit_price),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),lineTotal:Number(i.line_total||0),discountAmount:Number(i.discount_amount||0),promotionDiscountAmount:Number(i.promotion_discount_amount||0),containerDiscountAmount:Number(i.container_discount_amount||0),containerCostSaving:Number(i.container_cost_saving||0),ownContainerCount:Number(i.own_container_count||0),presentationLabel:i.presentation_label||'',presentationKey:i.presentation_key||'',comboPromotionNames:Array.isArray(i.combo_promotion_names)?i.combo_promotion_names:[],promotionName:i.promotions?.name||'',productName:i.products?.name||'Producto',productCode:i.products?.code||'',unitKind:i.products?.unit_kind||'unit'}))}));
     state.closings=(cRes.data||[]).map(r=>({id:r.id,date:r.business_date,counted:Number(r.counted),expected:Number(r.expected),diff:Number(r.difference),notes:r.notes||''}));
     state.expenses=(eRes.data||[]).map(r=>({id:r.id,category:r.category,description:r.description,amount:Number(r.amount),payment:r.payment,date:r.expense_at}));
     state.fixedExpenses=(fxRes.data||[]).map(r=>({id:r.id,name:r.name,category:r.category,amount:Number(r.amount),payment:r.payment,dueDay:Number(r.due_day),notes:r.notes||'',active:r.active,createdAt:r.created_at,updatedAt:r.updated_at}));
     state.fixedExpensePayments=(fxPayRes.data||[]).map(r=>({id:r.id,fixedExpenseId:r.fixed_expense_id,period:r.period,amount:Number(r.amount),payment:r.payment,paidAt:r.paid_at,expenseId:r.expense_id,createdAt:r.created_at}));
     state.suppliers=(supRes.data||[]).map(r=>({id:r.id,name:r.name,phone:r.phone||'',email:r.email||'',notes:r.notes||''}));
-    state.purchases=(purRes.data||[]).map(r=>({id:r.id,supplierId:r.supplier_id||null,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),priceUnitQty:Number(i.price_unit_qty||1),unitKind:i.products?.unit_kind||'unit',productName:i.products?.name||'Producto'}))}));
+    state.purchases=(purRes.data||[]).map(r=>({id:r.id,supplierId:r.supplier_id||null,payment:r.payment,total:Number(r.total),notes:r.notes||'',date:r.purchased_at,supplierName:r.suppliers?.name||'',items:(r.purchase_items||[]).map(i=>({productId:i.product_id,qty:Number(i.quantity),unitCost:Number(i.unit_cost),netUnitCost:i.net_unit_cost===null?Number(i.unit_cost):Number(i.net_unit_cost),vatRate:Number(i.vat_rate||0),priceUnitQty:Number(i.price_unit_qty||1),unitKind:i.products?.unit_kind||'unit',productName:i.products?.name||'Producto'}))}));
     state.cashMovements=(movRes.data||[]).map(r=>({id:r.id,date:r.business_date,kind:r.kind,amount:Number(r.amount),notes:r.notes||'',createdAt:r.created_at}));
     state.promotions=(promoRes.data||[]).map(r=>({id:r.id,productId:r.product_id,productIds:(r.promotion_products||[]).map(v=>v.product_id),name:r.name,ruleType:r.rule_type,minQty:Number(r.min_qty),promoPrice:Number(r.promo_price),payment:r.payment,startsAt:r.starts_at,endsAt:r.ends_at,active:r.active,createdAt:r.created_at}));
     state.accessInvites=[]; state.accessMembers=[];
@@ -3879,7 +3957,7 @@ function saleProductMatches(query){
   if(!q||!wanted.length)return [];
   const ranked=[];
   state.products.forEach(p=>{
-    if(Number(p.stock||0)<=0)return;
+    if(Number(p.stock||0)<=0||p.pricePending)return;
     const raw=`${p.code||''} ${p.barcode||''} ${p.name||''} ${p.category||''}`;
     const corpus=stockQueryWords(raw),exact=new Set(corpus);
     const matches=wanted.every(w=>exact.has(w)||(w.length>=3&&corpus.some(c=>c.startsWith(w))));
@@ -3907,6 +3985,7 @@ function renderSaleProductSearch(){
 function selectSaleProduct(productId){
   const p=state.products.find(x=>x.id===productId);
   if(!p)return;
+  if(p.pricePending)return toast('Este producto aún no tiene precio de venta. Definilo primero en Inventario.','error');
   $('#saleProduct').value=p.id;
   $('#saleProductSearch').value=`${p.code} · ${p.name}`;
   $('#saleProductResults').hidden=true;
@@ -3978,7 +4057,7 @@ function updateSaleUnit(){
   hint.textContent=disc>0?`${money(disc)} de descuento por envase${cost>0?` · ahorro de costo ${money(cost)}`:''}`:`Registrar envase propio · ahorro de costo ${money(cost)}`;
 }
 
-/* V13.3.6.3 · Búsqueda de compras por términos, sin depender del orden de las palabras.
+/* V13.3.6.5 · Búsqueda de compras por términos, sin depender del orden de las palabras.
    Reutiliza la normalización del inventario: tildes, mayúsculas y plurales. */
 function purchaseProductMatches(value){
   const words=stockQueryWords(value);
@@ -4018,11 +4097,14 @@ function renderPurchaseProductSearch(){
   const input=$('#purchaseProductSearch'),box=$('#purchaseProductResults');
   if(!input||!box)return;
   const q=input.value.trim();
+  const prompt=$('#purchaseNewProductPrompt');
+  if(prompt){prompt.hidden=!q||!!state.purchaseEditingId;$('#purchaseNewPromptTitle').textContent='¿No aparece lo que buscás?';}
   if(!q){box.hidden=true;box.innerHTML='';return;}
   const rows=purchaseProductMatches(q);
   box.hidden=false;
   if(!rows.length){
-    box.innerHTML='<div class="purchase-product-search-empty">No encontramos productos con esa búsqueda.</div>';
+    box.innerHTML='<div class="purchase-product-search-empty">No encontramos productos con esa búsqueda. Podés crearlo desde aquí.</div>';
+    if(prompt&&!state.purchaseEditingId)$('#purchaseNewPromptTitle').textContent='No encontramos este producto';
     return;
   }
   box.innerHTML=rows.map(p=>`<button class="purchase-product-result" type="button" onclick="selectPurchaseProduct('${p.id}')"><span><strong>${esc(p.name)}</strong><small>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')}</small></span><span class="purchase-product-result-cost">${money(p.cost)}/${unitLabel(p.unitKind)}</span></button>`).join('');
@@ -4032,15 +4114,17 @@ function resetPurchaseProductPicker(){
   if($('#purchaseProductSearch'))$('#purchaseProductSearch').value='';
   if($('#purchaseSelectedProduct')){$('#purchaseSelectedProduct').hidden=true;$('#purchaseSelectedProduct').innerHTML='';}
   if($('#purchaseProductResults')){$('#purchaseProductResults').hidden=true;$('#purchaseProductResults').innerHTML='';}
+  if($('#purchaseNewProductPrompt'))$('#purchaseNewProductPrompt').hidden=true;
   $('#purchaseQtyUnit').textContent='u.';
   $('#purchaseCostUnit').textContent='unidad';
-  $('#purchaseUnitCost').value='';
+  $('#purchaseUnitCost').value='';$('#purchaseVatRate').value='0';zhUpdatePurchaseVat();
 }
 window.selectPurchaseProduct=id=>{
   const p=state.products.find(x=>x.id===id);if(!p)return;
   $('#purchaseProduct').value=p.id;
   $('#purchaseProductSearch').value=p.name;
   $('#purchaseProductResults').hidden=true;
+  $('#purchaseNewProductPrompt').hidden=true;
   $('#purchaseSelectedProduct').hidden=false;
   $('#purchaseSelectedProduct').innerHTML=`<strong>${esc(p.name)}</strong><span>${esc(p.code||'Sin código')} · ${esc(p.category||'Sin categoría')} · costo actual ${money(p.cost)}/${unitLabel(p.unitKind)}</span>`;
   updatePurchaseUnit();
@@ -4048,14 +4132,150 @@ window.selectPurchaseProduct=id=>{
   setTimeout(()=>$('#purchaseQty')?.focus(),40);
 };
 
+
+/* V13.3.6.5 · IVA opcional sobre el costo. Un costo preexistente se trata como final si tasa=0. */
+function zhVatRound(v){return Math.round((Number(v)+Number.EPSILON)*100)/100;}
+function zhVatGross(net,rate){
+  // Cálculo en centavos enteros para coincidir con ROUND(numeric,2) de PostgreSQL.
+  const cents=Math.round(Number(net)*100),rateTenths=Math.round(Number(rate)*10);
+  return Math.floor((cents*(1000+rateTenths)+500)/1000)/100;
+}
+function zhVatValidRate(rate){return [0,2.5,5,10.5,21,27].includes(Number(rate));}
+function zhVatInputSummary(costId,rateId,targetId){
+  const baseInput=$('#'+costId),rateSelect=$('#'+rateId),target=$('#'+targetId);
+  if(!baseInput||!rateSelect||!target)return;
+  const raw=String(baseInput.value||'').trim(),base=Number(raw),rate=Number(rateSelect.value);
+  if(!raw||!Number.isFinite(base)||base<0||!zhVatValidRate(rate)){
+    target.textContent='Ingresá el costo base para ver el total con IVA.';return;
+  }
+  const gross=zhVatGross(base,rate),tax=zhVatRound(gross-base);
+  target.innerHTML=rate>0
+    ?`Costo base: <strong>${money(base)}</strong> · IVA ${rate.toLocaleString('es-AR')}%: <strong>${money(tax)}</strong> · Costo final: <strong>${money(gross)}</strong>`
+    :`Costo final: <strong>${money(gross)}</strong> · No se suma IVA. Seleccioná una tasa sólo si ingresaste el importe antes del impuesto.`;
+}
+function zhUpdateProductVat(){zhVatInputSummary('pCost','pCostVatRate','pCostVatPreview');}
+function zhUpdatePurchaseVat(){zhVatInputSummary('purchaseUnitCost','purchaseVatRate','purchaseCostVatPreview');}
+function zhUpdateQuickVat(){zhVatInputSummary('qnpCost','qnpVatRate','qnpCostVatPreview');}
+
 function updatePurchaseUnit(){
   const p=state.products.find(x=>x.id===$('#purchaseProduct').value), input=$('#purchaseQty');
   $('#purchaseQtyUnit').textContent=p?unitLabel(p.unitKind):'u.';
   $('#purchaseCostUnit').textContent=p?unitWord(p.unitKind):'unidad';
   const whole=p?.unitKind==='unit';
   input.min=whole?'1':'0.001'; input.step=whole?'1':'0.001';
-  if(p){ $('#purchaseUnitCost').value=p.cost; if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1; }
+  if(p){ $('#purchaseUnitCost').value=p.costNet??p.cost;$('#purchaseVatRate').value=String(p.costVatRate||0);zhUpdatePurchaseVat(); if(whole && (!Number.isInteger(Number(input.value)) || Number(input.value)<1)) input.value=1; }
 }
+
+/* V13.3.6.5 · Productos nuevos en el carrito de compras: alta pendiente y transacción única. */
+let zhQuickEditingId=null;
+function zhQuickCategoryValue(){
+  const select=$('#qnpCategory');
+  return select.value==='__new__'?($('#qnpCategoryNew').value||'').trim().toUpperCase():String(select.value||'').trim();
+}
+function zhQuickCategoryChange(){
+  const custom=$('#qnpCategory').value==='__new__', wrap=$('#qnpCategoryNewWrap');
+  wrap.hidden=!custom;$('#qnpCategoryNew').required=custom;
+}
+function zhQuickUnitChange(){
+  const kind=$('#qnpUnitKind').value;
+  const u=kind==='unit'?'u.':kind==='volume'?'L':'kg';
+  const word=kind==='unit'?'unidad':kind==='volume'?'litro':'kilogramo';
+  ['qnpQtyUnit','qnpMinUnit','qnpTargetUnit'].forEach(id=>$('#'+id).textContent=u);
+  $('#qnpCostUnit').textContent=word;$('#qnpPriceUnit').textContent=word;
+  ['qnpQty','qnpMin','qnpTarget'].forEach(id=>{$('#'+id).step=kind==='unit'?'1':'0.001';});
+  $('#qnpQty').min=kind==='unit'?'1':'0.001';
+}
+function zhQuickPriceHint(){
+  const value=$('#qnpPrice').value.trim(),box=$('#qnpPriceNote');
+  if(!value||Number(value)===0){box.textContent='Precio pendiente: el producto se comprará normalmente, pero no podrá venderse hasta definirlo en Inventario.';return;}
+  const p=Number(value);
+  if(!Number.isFinite(p)||p<0){box.textContent='Ingresá un precio de venta válido.';return;}
+  const rounded=Math.max(100,Math.round(p/100)*100);
+  box.textContent=`Precio final al confirmar: ${money(rounded)}. Se redondea a centenas según la configuración de Zen Hogar.`;
+}
+function zhQuickSimilarCandidates(name){
+  const words=[...new Set(stockQueryWords(name).filter(w=>w.length>=3&&!['PARA','CON','LAS','LOS','DEL','TIPO','TOCADOR','JABON','NUEVO','NUEVA'].includes(w)))];
+  if(!words.length)return [];
+  const ranked=state.products.map(p=>{
+    const corpus=stockQueryWords(`${p.name||''} ${p.code||''}`);
+    const shared=words.filter(w=>corpus.some(c=>c===w||(w.length>=4&&c.startsWith(w)))).length;
+    return {p,shared,ratio:shared/words.length};
+  }).filter(r=>r.shared>=1&&(r.ratio>=.5||r.shared>=2))
+  .sort((a,b)=>b.shared-a.shared||b.ratio-a.ratio||a.p.name.localeCompare(b.p.name,'es'));
+  return ranked.slice(0,4).map(x=>x.p);
+}
+function zhRenderQuickSimilar(){
+  const box=$('#qnpSimilar');if(!box)return;
+  const name=$('#qnpName').value.trim();
+  if(name.length<3){box.hidden=true;box.innerHTML='';return;}
+  const similar=zhQuickSimilarCandidates(name);
+  box.hidden=!similar.length;
+  box.innerHTML=similar.length?`<strong>¿Ya existe este producto? Revisá antes de duplicarlo:</strong>${similar.map(p=>`<div class="zh-similar-row"><span>${esc(p.name)} <small>· ${esc(p.code)}</small></span><button class="secondary" type="button" onclick="chooseQuickExistingProduct('${p.id}')">Usar</button></div>`).join('')}`:'';
+}
+window.chooseQuickExistingProduct=id=>{
+  const product=state.products.find(x=>x.id===id);if(!product)return;
+  if(zhQuickEditingId&&state.purchaseCart.some(i=>i.productId===zhQuickEditingId)){
+    if(!confirm('¿Quitar el producto nuevo del borrador y usar el producto existente?'))return;
+    state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==zhQuickEditingId);
+  }
+  $('#quickPurchaseProductDialog').close();zhQuickEditingId=null;
+  selectPurchaseProduct(id);renderPurchaseCart();savePurchaseDraft();
+};
+function openQuickPurchaseProduct(editId=null){
+  if(!canAdmin())return toast('Tu rol no permite crear productos.','error');
+  if(state.purchaseEditingId)return toast('En la edición de una compra, agregá productos desde Inventario primero.','error');
+  const old=editId?state.purchaseCart.find(i=>i.productId===editId&&i.newProduct):null;
+  zhQuickEditingId=old?editId:null;
+  const form=$('#quickPurchaseProductForm');form.reset();
+  const cats=[...new Set(state.products.map(p=>String(p.category||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
+  const opts=cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  $('#qnpCategory').innerHTML='<option value="">Elegir categoría...</option>'+opts+'<option value="__new__">＋ Nueva categoría…</option>';
+  const data=old?.newProduct||{};
+  $('#quickProductTitle').textContent=old?'Editar producto pendiente':'Agregar producto nuevo';
+  $('#quickProductSaveBtn').textContent=old?'Guardar cambios':'Agregar al carrito';
+  $('#qnpName').value=data.name||$('#purchaseProductSearch').value.trim();
+  $('#qnpUnitKind').value=data.unit_kind||'unit';
+  const selectedCategory=data.category||'';
+  if(selectedCategory&&cats.includes(selectedCategory))$('#qnpCategory').value=selectedCategory;
+  else if(selectedCategory){$('#qnpCategory').value='__new__';$('#qnpCategoryNew').value=selectedCategory;}
+  $('#qnpQty').value=old?(old.newProduct.unit_kind==='unit'?old.qty:old.qty/1000):($('#purchaseQty').value||'1');
+  $('#qnpCost').value=old?(old.netUnitCost??old.unitCost):($('#purchaseUnitCost').value||'');$('#qnpVatRate').value=String(old?.vatRate??$('#purchaseVatRate').value??0);zhUpdateQuickVat();
+  $('#qnpPrice').value=old?(data.price??''):'';
+  $('#qnpCode').value=data.code||'';$('#qnpBarcode').value=data.barcode||'';
+  $('#qnpMin').value=old?(data.unit_kind==='unit'?data.min_stock||0:(data.min_stock||0)/1000):0;
+  $('#qnpTarget').value=old?(data.unit_kind==='unit'?data.target_stock||0:(data.target_stock||0)/1000):0;
+  zhQuickCategoryChange();zhQuickUnitChange();zhQuickPriceHint();zhRenderQuickSimilar();
+  $('#quickPurchaseProductDialog').showModal();
+  setTimeout(()=>$('#qnpName').focus(),80);
+}
+window.editQuickPurchaseProduct=id=>openQuickPurchaseProduct(id);
+function saveQuickPurchaseProduct(e){
+  e.preventDefault();
+  const name=$('#qnpName').value.trim().toUpperCase(),category=zhQuickCategoryValue(),kind=$('#qnpUnitKind').value;
+  const qty=Number($('#qnpQty').value),cost=Number($('#qnpCost').value),vatRate=Number($('#qnpVatRate').value),priceText=$('#qnpPrice').value.trim();
+  const price=priceText===''?null:Number(priceText),min=Number($('#qnpMin').value||0),target=Number($('#qnpTarget').value||0);
+  const barcode=String($('#qnpBarcode').value||'').trim(),code=String($('#qnpCode').value||'').trim().toUpperCase();
+  if(name.length<3||!category)return toast('Completá el nombre y la categoría.','error');
+  if(!Number.isFinite(qty)||qty<=0||(kind==='unit'&&!Number.isInteger(qty)))return toast('Cantidad inválida para la unidad seleccionada.','error');
+  if(!Number.isFinite(cost)||cost<0||!zhVatValidRate(vatRate))return toast('Costo de compra o IVA inválido.','error');
+  if(price!==null&&(!Number.isFinite(price)||price<0))return toast('Precio de venta inválido.','error');
+  if(!Number.isFinite(min)||!Number.isFinite(target)||min<0||target<0||(kind==='unit'&&(!Number.isInteger(min)||!Number.isInteger(target))))return toast('Stock mínimo u objetivo inválido.','error');
+  const normalizeName=v=>stockQueryNorm(v).replace(/\s+/g,'');
+  if(state.products.some(p=>normalizeName(p.name)===normalizeName(name)))return toast('Ya existe un producto con ese nombre. Elegilo desde el buscador.','error');
+  const otherDrafts=state.purchaseCart.filter(i=>i.newProduct&&i.productId!==zhQuickEditingId);
+  if(otherDrafts.some(i=>normalizeName(i.newProduct.name)===normalizeName(name)))return toast('Ya agregaste ese producto nuevo al carrito. Editalo desde la lista.','error');
+  if(barcode&&(state.products.some(p=>String(p.barcode||'')===barcode)||otherDrafts.some(i=>String(i.newProduct.barcode||'')===barcode)))return toast('Ese código de barras ya está registrado o en este carrito.','error');
+  const factor=kind==='unit'?1:1000;
+  const newProduct={name,category,unit_kind:kind,barcode:barcode||null,code:code||null,price:price===null||price===0?null:price,min_stock:Math.round(min*factor*1000)/1000,target_stock:Math.round(target*factor*1000)/1000};
+  const id=zhQuickEditingId||('nuevo-'+(typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`));
+  const item={productId:id,qty:Math.round(qty*factor*1000)/1000,unitCost:zhVatGross(cost,vatRate),netUnitCost:cost,vatRate,newProduct};
+  if(zhQuickEditingId){const ix=state.purchaseCart.findIndex(i=>i.productId===zhQuickEditingId);if(ix<0)return toast('No encontramos este producto en el borrador.','error');state.purchaseCart[ix]=item;}
+  else state.purchaseCart.push(item);
+  $('#quickPurchaseProductDialog').close();zhQuickEditingId=null;
+  $('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();savePurchaseDraft();
+  toast('Producto agregado al borrador de compra. Se creará al confirmar.','success');
+}
+
 function promoSelectedProducts(){return state.promoSelectedProductIds.map(id=>state.products.find(p=>p.id===id)).filter(Boolean);}
 function renderPromoProductPicker(){
   const box=$('#promoProductOptions'),chips=$('#promoSelectedProducts'),search=$('#promoProductSearch');if(!box||!chips||!search)return;
@@ -4219,7 +4439,7 @@ function prepareAllReorders(){
 window.editProduct=id=>{
   if(!canAdmin())return toast('Tu rol no permite editar productos.','error');
   const p=state.products.find(x=>x.id===id); if(!p)return;
-  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.cost; $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); $('#pCategoryReference').hidden=true; $('#productDialog').showModal();
+  $('#productModalTitle').textContent='Editar producto'; $('#productId').value=p.id; $('#pCode').value=p.code; $('#pBarcode').value=p.barcode||''; $('#pName').value=p.name; populateProductCategoryOptions(p.category); $('#pCategory').value=p.category; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; $('#pCost').value=p.costNet??p.cost;$('#pCostVatRate').value=String(p.costVatRate||0);zhUpdateProductVat(); $('#pPrice').value=p.price; $('#pUnitKind').value=p.unitKind; updateProductUnitLabels(); $('#pStock').value=displayQty(p,p.stock); $('#pMinStock').value=displayQty(p,p.minStock); $('#pTargetStock').value=displayQty(p,p.targetStock); $('#pPreferredSupplier').value=p.preferredSupplierId||''; $('#pContainerCost').value=Number(p.containerCost||0); $('#pOwnContainerDiscount').value=Number(p.ownContainerDiscount||0); $('#pCategoryReference').hidden=true; $('#productDialog').showModal();
 };
 window.deleteProduct=async id=>{
   if(!canAdmin()||!requireOnline())return; if(!confirm('¿Archivar este producto? Dejará de aparecer, pero sus ventas históricas se conservan.'))return;
@@ -4255,12 +4475,12 @@ function purchaseDraftSnapshot(){
     date:$('#purchaseDate')?.value||'',
     updateCost:$('#purchaseUpdateCost')?.value||'true',
     notes:$('#purchaseNotes')?.value||'',
-    cart:(state.purchaseCart||[]).map(i=>({productId:i.productId,qty:Number(i.qty),unitCost:Number(i.unitCost)})),
+    cart:(state.purchaseCart||[]).map(i=>({productId:i.productId,qty:Number(i.qty),unitCost:Number(i.unitCost),netUnitCost:Number(i.netUnitCost??i.unitCost),vatRate:Number(i.vatRate||0),...(i.newProduct?{newProduct:i.newProduct}:{})})),
     pending:{
       productId:$('#purchaseProduct')?.value||'',
       search:$('#purchaseProductSearch')?.value||'',
       qty:$('#purchaseQty')?.value||'1',
-      unitCost:$('#purchaseUnitCost')?.value||''
+      unitCost:$('#purchaseUnitCost')?.value||'',vatRate:$('#purchaseVatRate')?.value||'0'
     }
   };
 }
@@ -4316,8 +4536,8 @@ function restorePurchaseDraft(d){
     if($('#purchaseNotes'))$('#purchaseNotes').value=d.notes||'';
 
     state.purchaseCart=(Array.isArray(d.cart)?d.cart:[])
-      .filter(i=>state.products.some(p=>p.id===i.productId))
-      .map(i=>({productId:i.productId,qty:Number(i.qty||0),unitCost:Number(i.unitCost||0)}))
+      .filter(i=>state.products.some(p=>p.id===i.productId)||(i.newProduct&&String(i.productId||'').startsWith('nuevo-')&&String(i.newProduct.name||'').trim()&&['unit','volume','weight'].includes(i.newProduct.unit_kind)))
+      .map(i=>({productId:i.productId,qty:Number(i.qty||0),unitCost:Number(i.unitCost||0),netUnitCost:Number(i.netUnitCost??i.unitCost??0),vatRate:Number(i.vatRate||0),...(i.newProduct?{newProduct:i.newProduct}:{})}))
       .filter(i=>i.qty>0&&Number.isFinite(i.unitCost));
 
     resetPurchaseProductPicker();
@@ -4330,7 +4550,7 @@ function restorePurchaseDraft(d){
       renderPurchaseProductSearch();
     }
     if($('#purchaseQty'))$('#purchaseQty').value=pending.qty||'1';
-    if($('#purchaseUnitCost')&&pending.unitCost!=='')$('#purchaseUnitCost').value=pending.unitCost;
+    if($('#purchaseUnitCost')&&pending.unitCost!=='')$('#purchaseUnitCost').value=pending.unitCost;if($('#purchaseVatRate'))$('#purchaseVatRate').value=String(pending.vatRate??0);zhUpdatePurchaseVat();
     renderPurchaseCart();
 
     if($('#purchaseDraftStrip')){
@@ -4368,7 +4588,7 @@ window.editPurchase=id=>{
   $('#purchaseDate').value=purchaseDateToLocalInput(p.date);
   $('#purchaseUpdateCost').value='false';
   $('#purchaseNotes').value=p.notes||'';
-  state.purchaseCart=(p.items||[]).map(i=>({productId:i.productId,qty:Number(i.qty),unitCost:Number(i.unitCost)}));
+  state.purchaseCart=(p.items||[]).map(i=>({productId:i.productId,qty:Number(i.qty),unitCost:Number(i.unitCost),netUnitCost:Number(i.netUnitCost??i.unitCost),vatRate:Number(i.vatRate||0)}));
   $('#purchaseQty').value=1;
   resetPurchaseProductPicker();
   $('#purchaseDraftStrip').hidden=true;
@@ -4378,9 +4598,38 @@ window.editPurchase=id=>{
 };
 
 window.openPurchaseForSupplier=id=>{if(!canAdmin())return toast('Sólo administradores pueden registrar compras.','error');openPurchase();setTimeout(()=>{$('#purchaseSupplier').value=id;savePurchaseDraft();},0);};
-function addPurchaseItem(){const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0),cost=Number($('#purchaseUnitCost').value);if(!p)return toast('Seleccioná un producto.','error');if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');if(!Number.isFinite(cost)||cost<0)return toast('Costo inválido.','error');const qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);if(ex){ex.qty+=qty;ex.unitCost=cost;}else state.purchaseCart.push({productId:p.id,qty,unitCost:cost});$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();savePurchaseDraft();setTimeout(()=>$('#purchaseProductSearch')?.focus(),50);}
+function addPurchaseItem(){
+  const p=state.products.find(x=>x.id===$('#purchaseProduct').value),display=Number($('#purchaseQty').value||0);
+  const net=Number($('#purchaseUnitCost').value),rate=Number($('#purchaseVatRate').value);
+  if(!p)return toast('Seleccioná un producto.','error');
+  if(!Number.isFinite(display)||display<=0)return toast('Cantidad inválida.','error');
+  if(p.unitKind==='unit'&&!Number.isInteger(display))return toast('Este producto se compra por unidad entera.','error');
+  if($('#purchaseUnitCost').value===''||!Number.isFinite(net)||net<0||!zhVatValidRate(rate))return toast('Costo o alícuota de IVA inválidos.','error');
+  const cost=zhVatGross(net,rate),qty=toBaseQty(p,display),ex=state.purchaseCart.find(i=>i.productId===p.id);
+  if(ex){
+    if(Math.abs(ex.unitCost-cost)>0.001 || Number(ex.vatRate||0)!==rate || Math.abs(Number(ex.netUnitCost??ex.unitCost)-net)>0.001)
+      return toast('Ese producto ya está en el carrito con otro costo o IVA. Quitalo y agregalo nuevamente con el costo correcto.','error');
+    ex.qty+=qty;
+  }else state.purchaseCart.push({productId:p.id,qty,unitCost:cost,netUnitCost:net,vatRate:rate});
+  $('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();savePurchaseDraft();setTimeout(()=>$('#purchaseProductSearch')?.focus(),50);
+}
 function removePurchaseItem(id){state.purchaseCart=state.purchaseCart.filter(i=>i.productId!==id);renderPurchaseCart();savePurchaseDraft();}window.removePurchaseItem=removePurchaseItem;
-function renderPurchaseCart(){const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}let total=0;list.innerHTML=state.purchaseCart.map(i=>{const p=state.products.find(x=>x.id===i.productId);if(!p)return '';const sub=i.unitCost*(i.qty/p.priceUnitQty);total+=sub;return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)}</small></div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${p.id}')">✕</button></div>`;}).join('');preview.innerHTML=`<div class="sale-total-row"><span>${state.purchaseCart.length} productos</span><strong>${money(total)}</strong></div>`;submit.disabled=false;}
+function renderPurchaseCart(){
+  const list=$('#purchaseCartList'),preview=$('#purchasePreview'),submit=$('#purchaseSubmitBtn');
+  if(!state.purchaseCart.length){list.innerHTML='<div class="sale-cart-empty">Todavía no agregaste productos.</div>';preview.innerHTML='<div class="sale-total-row"><span>0 productos</span><strong>'+money(0)+'</strong></div>';submit.disabled=true;return;}
+  let total=0,totalNet=0,totalIva=0,newCount=0;
+  list.innerHTML=state.purchaseCart.map(i=>{
+    const pending=!!i.newProduct;
+    const p=pending?{name:i.newProduct.name,unitKind:i.newProduct.unit_kind,priceUnitQty:i.newProduct.unit_kind==='unit'?1:1000}:state.products.find(x=>x.id===i.productId);
+    if(!p)return '';
+    const sub=zhVatRound(i.unitCost*(i.qty/p.priceUnitQty)),netSub=zhVatRound(Number(i.netUnitCost??i.unitCost)*(i.qty/p.priceUnitQty)),vatSub=zhVatRound(sub-netSub);total+=sub;totalNet+=netSub;totalIva+=vatSub;
+    if(pending)newCount++;
+    const details=pending?`<span class="zh-quick-cart-tag">NUEVO · se creará al confirmar</span><small class="zh-quick-cart-extra">${i.newProduct.price===null?'Precio de venta pendiente':`Precio de venta: ${money(Math.max(100,Math.round(i.newProduct.price/100)*100))}`}</small><button type="button" class="zh-quick-edit-btn" onclick="editQuickPurchaseProduct('${i.productId}')">✎ Editar datos</button>`:'';
+    return `<div class="purchase-cart-item"><div><strong>${esc(p.name)}</strong><small>${qtyText(p,i.qty)} × ${money(i.unitCost)}/${unitLabel(p.unitKind)} · costo final</small><small class="zh-iva-line">${Number(i.vatRate||0)>0?`Neto ${money(Number(i.netUnitCost??i.unitCost))} + IVA ${Number(i.vatRate).toLocaleString('es-AR')}%`:'Sin IVA adicional'}</small>${details}</div><strong>${money(sub)}</strong><button class="sale-cart-remove" type="button" onclick="removePurchaseItem('${esc(i.productId)}')" aria-label="Quitar producto">✕</button></div>`;
+  }).join('');
+  preview.innerHTML=`<div class="zh-vat-total-row"><span>Subtotal base</span><strong>${money(totalNet)}</strong></div><div class="zh-vat-total-row"><span>IVA agregado</span><strong>${money(totalIva)}</strong></div><div class="sale-total-row"><span>Total compra · ${state.purchaseCart.length} productos ${newCount?`· ${newCount} nuevo${newCount===1?'':'s'}`:''}</span><strong>${money(total)}</strong></div>${newCount?'<small class="zh-quick-cart-extra">Los productos nuevos se incorporarán al inventario al confirmar esta compra; no se sumarán dos veces al stock.</small>':''}`;
+  submit.disabled=false;
+}
 window.openReceipt=id=>{
   const s=state.sales.find(x=>x.id===id);if(!s)return;state.activeReceipt=s;
   const items=s.items.map(i=>`<div class="receipt-line"><div><strong>${esc(receiptItemTitle(i))}</strong><small>${esc(receiptItemDetail(i))}${zhSalePromoLabel(i)?` · ${esc(zhSalePromoLabel(i))}`:''}${Number(i.ownContainerCount||0)>0?` · ♻ ${i.ownContainerCount} envase${i.ownContainerCount===1?'':'s'} propio${i.ownContainerCount===1?'':'s'}`:''}</small>${Number(i.containerDiscountAmount||0)>0?`<small class="discount-note">Descuento envase: - ${receiptMoney(i.containerDiscountAmount)}</small>`:''}</div><strong>${receiptMoney(i.lineTotal)}</strong></div>`).join('');
@@ -4407,7 +4656,7 @@ function shareReceiptWhatsApp(s){
     toast('No se pudo abrir WhatsApp.','error');
   }
 }
-function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; populateProductCategoryOptions(''); $('#pCategory').value=''; $('#pCategoryReference').hidden=true; updateProductUnitLabels(); $('#productDialog').showModal(); }
+function openNewProduct(){ if(!canAdmin())return toast('Tu rol no permite agregar productos.','error'); $('#productModalTitle').textContent='Agregar producto'; $('#productForm').reset(); $('#productId').value=''; $('#pBarcode').value=''; $('#pUnitKind').value='unit'; $('#pTargetStock').value=0; $('#pContainerCost').value=0; $('#pOwnContainerDiscount').value=0; $('#pCategoryNew').value=''; $('#pCategoryNew').hidden=true; $('#pCategoryNew').required=false; populateProductCategoryOptions(''); $('#pCategory').value=''; $('#pCategoryReference').hidden=true; updateProductUnitLabels();zhUpdateProductVat(); $('#productDialog').showModal(); }
 function openSale(){
   if(!state.products.some(p=>p.stock>0)){toast('Primero necesitás cargar stock en algún producto.','error');return;}
   $('#saleForm').reset(); state.saleCart=[]; zhSelectedPresentationKey=null; $('#saleQty').value=1; resetSaleProductPicker(); $('#saleDate').value=nowLocal(); $('#saleDialog').showModal(); renderSaleCart(); setTimeout(()=>$('#saleProductSearch')?.focus(),120);
@@ -4416,6 +4665,7 @@ function openSale(){
 function addSaleItem(){
   const p=state.products.find(x=>x.id===$('#saleProduct').value);
   if(!p)return toast('Seleccioná un producto.','error');
+  if(p.pricePending)return toast('Definí el precio de venta de este producto en Inventario antes de venderlo.','error');
   const display=Number($('#saleQty').value);
   if(!Number.isFinite(display)||display<=0)return toast('Ingresá una cantidad válida.','error');
   const option=zhChosenOption(p),usesPresentation=zhOptions(p).length>0;
@@ -4544,8 +4794,8 @@ function v13ShowSaleSuccess(total){
 $('#productForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return; const kind=$('#pUnitKind').value,factor=unitFactor(kind),category=productCategoryValue();
   if(!category)return toast('Seleccioná una categoría o escribí una nueva.','error');
-  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:category,p_cost:Number($('#pCost').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value)*factor,p_min_stock:Number($('#pMinStock').value)*factor,p_target_stock:Number($('#pTargetStock').value||0)*factor,p_unit_kind:kind,p_preferred_supplier_id:$('#pPreferredSupplier').value||null,p_container_cost:Number($('#pContainerCost').value||0),p_own_container_discount:Number($('#pOwnContainerDiscount').value||0),p_barcode:normalizeBarcode($('#pBarcode').value)||null};
-  const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_product_v4',params);if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#productDialog').close();toast('Producto guardado en la nube.','success');await loadAllData({silent:true});
+  const params={p_org_id:state.org.id,p_product_id:$('#productId').value||null,p_code:$('#pCode').value.trim(),p_name:$('#pName').value.trim(),p_category:category,p_cost:zhVatGross($('#pCost').value,$('#pCostVatRate').value),p_net_cost:Number($('#pCost').value),p_vat_rate:Number($('#pCostVatRate').value),p_price:Number($('#pPrice').value),p_stock:Number($('#pStock').value)*factor,p_min_stock:Number($('#pMinStock').value)*factor,p_target_stock:Number($('#pTargetStock').value||0)*factor,p_unit_kind:kind,p_preferred_supplier_id:$('#pPreferredSupplier').value||null,p_container_cost:Number($('#pContainerCost').value||0),p_own_container_discount:Number($('#pOwnContainerDiscount').value||0),p_barcode:normalizeBarcode($('#pBarcode').value)||null};
+  const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_product_with_vat',params);if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#productDialog').close();toast('Producto guardado en la nube.','success');await loadAllData({silent:true});
 });
 $('#saleForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return;
@@ -4568,7 +4818,40 @@ $('#promotionForm').addEventListener('submit',async e=>{e.preventDefault();if(!c
 $('#expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('create_expense',{p_org_id:state.org.id,p_category:$('#expenseCategory').value,p_description:$('#expenseDescription').value.trim(),p_amount:Number($('#expenseAmount').value),p_payment:$('#expensePayment').value,p_expense_at:new Date($('#expenseDate').value).toISOString()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#expenseDialog').close();toast('Gasto registrado.','success');await loadAllData({silent:true});});
 $('#fixedExpenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const amount=Number($('#fixedExpenseAmount').value),due=Number($('#fixedExpenseDueDay').value);if(!Number.isFinite(amount)||amount<=0)return toast('Ingresá un importe válido.','error');if(!Number.isInteger(due)||due<1||due>31)return toast('El vencimiento debe ser un día entre 1 y 31.','error');const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_fixed_expense',{p_org_id:state.org.id,p_fixed_expense_id:$('#fixedExpenseId').value||null,p_name:$('#fixedExpenseName').value.trim(),p_category:$('#fixedExpenseCategory').value,p_amount:amount,p_payment:$('#fixedExpensePayment').value,p_due_day:due,p_notes:$('#fixedExpenseNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#fixedExpenseDialog').close();toast('Gasto fijo guardado.','success');await loadAllData({silent:true});setView('fixedExpenses');});
 $('#supplierForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('upsert_supplier',{p_org_id:state.org.id,p_supplier_id:$('#supplierId').value||null,p_name:$('#supplierName').value.trim(),p_phone:$('#supplierPhone').value.trim(),p_email:$('#supplierEmail').value.trim(),p_notes:$('#supplierNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');$('#supplierDialog').close();toast('Proveedor guardado.','success');await loadAllData({silent:true});});
-$('#purchaseForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');const btn=e.submitter;if(btn)btn.disabled=true;const editingId=state.purchaseEditingId||$('#purchaseEditId').value||null;const common={p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:new Date($('#purchaseDate').value).toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({product_id:i.productId,quantity:i.qty,unit_cost:i.unitCost}))};let result;if(editingId){result=await state.client.rpc('update_purchase',{p_purchase_id:editingId,...common});}else{result=await state.client.rpc('create_purchase',{p_org_id:state.org.id,...common});}if(btn)btn.disabled=false;if(result.error)return toast(result.error.message,'error');state.purchaseCart=[];if(!editingId)clearPurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';$('#purchaseDialog').close();toast(editingId?'Compra actualizada y stock ajustado.':'Compra registrada y stock actualizado.','success');await loadAllData({silent:true});});
+
+// Vista previa del IVA, en tiempo real en los 3 formularios.
+[['pCost','pCostVatRate',zhUpdateProductVat],
+ ['purchaseUnitCost','purchaseVatRate',zhUpdatePurchaseVat],
+ ['qnpCost','qnpVatRate',zhUpdateQuickVat]].forEach(([cost,rate,handler])=>{
+  $('#'+cost).addEventListener('input',handler);
+  $('#'+rate).addEventListener('change',handler);
+});
+
+$('#purchaseForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!canAdmin()||!requireOnline())return;
+  if(!state.purchaseCart.length)return toast('Agregá productos a la compra.','error');
+  const editingId=state.purchaseEditingId||$('#purchaseEditId').value||null;
+  const hasNew=state.purchaseCart.some(i=>!!i.newProduct);
+  if(editingId&&hasNew)return toast('No se pueden crear productos nuevos al editar una compra registrada.','error');
+  if(hasNew&&state.purchaseCart.some(i=>i.newProduct&&(!i.newProduct.name||!i.newProduct.category)))return toast('Completá los datos de los productos nuevos.','error');
+  const date=new Date($('#purchaseDate').value);if(Number.isNaN(date.getTime()))return toast('Fecha de compra inválida.','error');
+  const btn=e.submitter;if(btn)btn.disabled=true;
+  const common={p_supplier_id:$('#purchaseSupplier').value||null,p_payment:$('#purchasePayment').value,p_purchased_at:date.toISOString(),p_notes:$('#purchaseNotes').value.trim(),p_update_cost:$('#purchaseUpdateCost').value==='true',p_items:state.purchaseCart.map(i=>({...(i.newProduct?{new_product:i.newProduct}:{product_id:i.productId}),quantity:i.qty,unit_cost:i.unitCost,net_unit_cost:Number(i.netUnitCost??i.unitCost),vat_rate:Number(i.vatRate||0)}))};
+  let result;
+  try{
+    if(editingId)result=await state.client.rpc('update_purchase_with_vat',{p_purchase_id:editingId,...common});
+    else result=await state.client.rpc('create_purchase_with_vat',{p_org_id:state.org.id,...common});
+  }catch(err){result={error:err};}
+  if(btn)btn.disabled=false;
+  if(result.error)return toast('No se confirmó la compra: '+result.error.message,'error');
+  const countNew=state.purchaseCart.filter(i=>i.newProduct).length;
+  state.purchaseCart=[];
+  state.purchaseClosingAfterSubmit=true;
+  if(!editingId)clearPurchaseDraft();
+  state.purchaseEditingId=null;$('#purchaseEditId').value='';resetPurchaseProductPicker();$('#purchaseForm').reset();$('#purchaseDialog').close();
+  toast(countNew?`Compra registrada · ${countNew} producto${countNew===1?'':'s'} nuevo${countNew===1?'':'s'} incorporado${countNew===1?'':'s'}.`:(editingId?'Compra actualizada y stock ajustado.':'Compra registrada y stock actualizado.'),'success');
+  await loadAllData({silent:true});
+});
 $('#cashMovementForm').addEventListener('submit',async e=>{e.preventDefault();if(!canAdmin()||!requireOnline())return;const btn=e.submitter;if(btn)btn.disabled=true;const {error}=await state.client.rpc('add_cash_movement',{p_org_id:state.org.id,p_business_date:$('#cashMovementDate').value,p_kind:$('#cashMovementKind').value,p_amount:Number($('#cashMovementAmount').value),p_notes:$('#cashMovementNotes').value.trim()});if(btn)btn.disabled=false;if(error)return toast(error.message,'error');e.target.reset();$('#cashMovementDate').value=todayISO();toast('Movimiento de caja registrado.','success');await loadAllData({silent:true});});
 $('#cashCloseForm').addEventListener('submit',async e=>{
   e.preventDefault(); if(!requireOnline())return;
@@ -4644,7 +4927,7 @@ function adjustSaleQty(direction){
   input.dispatchEvent(new Event('input',{bubbles:true}));
 }
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open'); $('#mobileSettingsBtn').onclick=()=>setView('settings'); $('#mobileSaleBtn').onclick=openSale; $('#addProductBtn').onclick=openNewProduct; $('#addProductTopBtn').onclick=openNewProduct; $('#exportInventoryCsvBtn').onclick=exportInventoryCsv; $('#addSaleBtn').onclick=openSale; $('#exportSalesCsvBtn').onclick=exportSalesCsv; $('#quickSaleBtn').onclick=openSale; $('#salesSearch').oninput=renderSales; $('#salesDateFrom').onchange=renderSales; $('#salesDateTo').onchange=renderSales; $('#salesPaymentFilter').onchange=renderSales; $('#salesClearFilters').onclick=()=>{$('#salesSearch').value='';$('#salesDateFrom').value='';$('#salesDateTo').value='';$('#salesPaymentFilter').value='all';renderSales();$('#salesSearch').focus();}; $('#saleAddItemBtn').onclick=addSaleItem; $('#saleQtyMinus').onclick=()=>adjustSaleQty(-1); $('#saleQtyPlus').onclick=()=>adjustSaleQty(1); $('#saleQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addSaleItem();}}); $('#productSearch').oninput=renderProducts; $('#categoryFilter').onchange=renderProducts; $('#productSort').onchange=renderProducts; $('#pCategory').addEventListener('change',handleProductCategoryChange); $('#pCategoryNew').addEventListener('input',renderProductCategoryReference); $('#useSuggestedProductCode').onclick=()=>{const code=$('#pCategoryNextCode').textContent.trim();if(code&&code!=='—'){$('#pCode').value=code;$('#pCode').focus();}}; $('#stockQuerySearch').oninput=renderStockQuery; $('#stockQueryClear').onclick=()=>{$('#stockQuerySearch').value='';renderStockQuery();$('#stockQuerySearch').focus();}; $$('.stock-query-chip').forEach(b=>b.onclick=()=>{$('#stockQuerySearch').value=b.dataset.stockQuery||'';renderStockQuery();});
-$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',()=>{savePurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';});$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$$('[data-weight-qty]').forEach(b=>b.onclick=()=>{const p=state.products.find(x=>x.id===$('#saleProduct').value);if(!p||p.unitKind!=='weight'||zhOptions(p).length)return;$('#saleQty').value=b.dataset.weightQty;updateSaleUnit();$('#saleQty').dispatchEvent(new Event('input',{bubbles:true}));});$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#whatsappReceiptBtn').onclick=()=>shareReceiptWhatsApp(state.activeReceipt);$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
+$('#addExpenseBtn').onclick=openExpense;$('#addFixedExpenseBtn').onclick=()=>openFixedExpense();$('#addSupplierBtn').onclick=openSupplier;$('#addPurchaseBtn').onclick=openPurchase;$('#supplierSearch').oninput=renderSuppliers;$('#purchaseAddItemBtn').onclick=addPurchaseItem;$('#purchaseCreateProductBtn').onclick=()=>openQuickPurchaseProduct();$('#quickProductCancelBtn').onclick=()=>$('#quickPurchaseProductDialog').close();$('#quickProductCancelX').onclick=()=>$('#quickPurchaseProductDialog').close();$('#qnpCategory').onchange=zhQuickCategoryChange;$('#qnpUnitKind').onchange=zhQuickUnitChange;$('#qnpPrice').oninput=zhQuickPriceHint;$('#qnpName').oninput=zhRenderQuickSimilar;$('#quickPurchaseProductForm').addEventListener('submit',saveQuickPurchaseProduct);$('#purchaseProductSearch').oninput=()=>{$('#purchaseProduct').value='';$('#purchaseSelectedProduct').hidden=true;updatePurchaseUnit();renderPurchaseProductSearch();savePurchaseDraft();};$('#purchaseProductSearch').onfocus=renderPurchaseProductSearch;$('#purchaseProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=purchaseProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectPurchaseProduct(first.id);savePurchaseDraft();}}};$('#purchaseProduct').onchange=()=>{updatePurchaseUnit();savePurchaseDraft();};$('#purchaseForm').addEventListener('input',e=>{if(!e.target.matches('#purchaseProductSearch'))savePurchaseDraft();});$('#purchaseForm').addEventListener('change',savePurchaseDraft);$('#purchaseDialog').addEventListener('close',()=>{if(state.purchaseClosingAfterSubmit){state.purchaseClosingAfterSubmit=false;clearPurchaseDraft();}else savePurchaseDraft();state.purchaseEditingId=null;$('#purchaseEditId').value='';});$('#discardPurchaseDraftBtn').onclick=()=>{if(!confirm('¿Descartar este borrador de compra?'))return;clearPurchaseDraft();state.purchaseCart=[];$('#purchaseForm').reset();$('#purchaseDate').value=nowLocal();$('#purchaseQty').value=1;resetPurchaseProductPicker();renderPurchaseCart();toast('Borrador descartado.','success');};$('#pUnitKind').onchange=updateProductUnitLabels;$('#saleProductSearch').oninput=()=>{$('#saleProduct').value='';$('#saleSelectedProduct').hidden=true;$('#saleOwnContainerCount').value=0;updateSaleUnit();renderSaleProductSearch();};$('#saleProductSearch').onfocus=renderSaleProductSearch;$('#saleProductSearch').onkeydown=e=>{if(e.key==='Enter'){const first=saleProductMatches(e.currentTarget.value)[0];if(first){e.preventDefault();selectSaleProduct(first.id);}}};$$('[data-weight-qty]').forEach(b=>b.onclick=()=>{const p=state.products.find(x=>x.id===$('#saleProduct').value);if(!p||p.unitKind!=='weight'||zhOptions(p).length)return;$('#saleQty').value=b.dataset.weightQty;updateSaleUnit();$('#saleQty').dispatchEvent(new Event('input',{bubbles:true}));});$('#saleProduct').onchange=updateSaleUnit;$('#saleQty').oninput=updateSaleUnit;$('#saleQty').onblur=()=>{if($('#saleQty').value===''){$('#saleQty').value=1;updateSaleUnit();}};$('#salePayment').onchange=renderSaleCart;$('#saleDate').onchange=renderSaleCart;$('#addPromotionBtn').onclick=openPromotion;$('#promoProductSearch').oninput=renderPromoProductPicker;$('#promoRuleType').onchange=updatePromotionUnit;$('#promoMinQty').oninput=updatePromotionUnit;$('#promoPrice').oninput=renderPromotionPreview;$('#promoPayment').onchange=renderPromotionPreview;$('#promoPreset2x').onclick=()=>applyPromoPreset('2x');$('#promoPreset3x').onclick=()=>applyPromoPreset('3x');$('#promoPresetCombo').onclick=()=>applyPromoPreset('combo');$('#promoPresetSpecial').onclick=()=>applyPromoPreset('special');$('#promoGenerateNameBtn').onclick=()=>{const name=suggestedPromotionName();if(name)$('#promoName').value=name;else toast('Completá producto, cantidad y precio para generar el nombre.','error');};$('#promoNoEndBtn').onclick=()=>setPromoEndDays(0);$('#promo7DaysBtn').onclick=()=>setPromoEndDays(7);$('#promo30DaysBtn').onclick=()=>setPromoEndDays(30);$('#promoSearch').oninput=renderPromotions;$('#promoStatusFilter').onchange=renderPromotions;$('#prepareAllReordersBtn').onclick=prepareAllReorders;$('#closeReceiptBtn').onclick=()=>$('#receiptDialog').close();$('#whatsappReceiptBtn').onclick=()=>shareReceiptWhatsApp(state.activeReceipt);$('#downloadPdfBtn').onclick=()=>downloadReceiptPdf(state.activeReceipt);$('#sharePdfBtn').onclick=()=>shareReceiptPdf(state.activeReceipt);$('#printReceiptBtn').onclick=()=>{if(!state.activeReceipt)return;const w=window.open('','_blank','width=420,height=700');w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Comprobante '+esc(businessName())+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#222}.receipt-card{max-width:360px;margin:auto}.receipt-head{text-align:center;border-bottom:1px dashed #999;padding-bottom:12px}.receipt-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ccc;font-size:12px}.receipt-line small{display:block;color:#666}.receipt-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding-top:14px}.receipt-footer{text-align:center;color:#666;font-size:10px;margin-top:18px}</style></head><body>'+$('#receiptContent').innerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),250);};
 
 $('#exportBtn').onclick=()=>{
   const backup={version:3,source:'zenhogar-cloud',exportedAt:new Date().toISOString(),organization:state.org,products:state.products,sales:state.sales,closings:state.closings};
